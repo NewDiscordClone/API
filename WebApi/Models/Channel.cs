@@ -6,4 +6,5 @@ public class Channel
     public string Title { get; set; }
 
     public virtual Chat Chat {get; set; }
+    public virtual Server Server { get; set; }
 }
