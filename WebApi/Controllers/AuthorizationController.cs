@@ -15,7 +15,7 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         public async Task<IActionResult> Register(RegistrationRequest registrationRequest)
         {
             IdentityResult result = await _mediator.Send(registrationRequest);
@@ -29,8 +29,6 @@ namespace WebApi.Controllers
             {
                 return BadRequest(result.Errors.First().Description);
             }
-
-
         }
     }
 }

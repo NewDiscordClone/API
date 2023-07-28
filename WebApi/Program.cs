@@ -2,6 +2,7 @@ using Application;
 using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
+using WebApi;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
@@ -24,6 +25,8 @@ services.AddIdentity<IdentityUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<AuthorizationDbContext>()
     .AddDefaultTokenProviders();
 
+services.AddIdentityServer4();
+
 services.AddSwaggerGen(options =>
 {
     string xmlName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -42,10 +45,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseHttpsRedirection();
+
 app.MapControllers();
 
+app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.Run();
