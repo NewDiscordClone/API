@@ -1,3 +1,4 @@
+using Application;
 using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
@@ -8,6 +9,7 @@ IServiceCollection services = builder.Services;
 services.AddControllers();
 
 services.AddDatabases(builder.Configuration);
+services.AddApplication();
 
 services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
