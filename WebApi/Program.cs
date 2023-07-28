@@ -32,12 +32,20 @@ services.AddSwaggerGen(options =>
 });
 WebApplication app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.MapSwagger();
+    app.UseSwaggerUI(option =>
+    {
+        option.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi");
+        option.RoutePrefix = string.Empty;
+    });
+}
+
 app.MapControllers();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapSwagger();
-app.UseSwaggerUI();
 
 app.Run();
