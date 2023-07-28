@@ -1,3 +1,4 @@
+#nullable enable
 namespace WebApi.Models;
 
 public enum UserStatus
@@ -11,7 +12,6 @@ public class User
 {
     public int Id { get; set; }
     public string? DisplayName { get; set; }
-    public string Username { get; set; }
     public string? AvatarPath { get; set; }
     public UserStatus Status { get; set; }
     public string? TextStatus { get; set; }

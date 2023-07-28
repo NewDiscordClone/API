@@ -1,3 +1,4 @@
+#nullable enable
 namespace WebApi.Models;
 
 public class ServerProfile
