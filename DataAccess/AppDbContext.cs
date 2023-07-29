@@ -13,7 +13,6 @@ public class AppDbContext : DbContext, IAppDbContext
         : base(options)
     {
         _configuration = configuration;
-        Database.EnsureCreated();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

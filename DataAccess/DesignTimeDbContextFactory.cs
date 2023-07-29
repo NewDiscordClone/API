@@ -8,9 +8,16 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
 {
     public AppDbContext CreateDbContext(string[] args)
     {
+        var configurationPath = Path.GetFullPath(
+            Path.Combine(
+                Directory.GetCurrentDirectory(),
+                @"..\WebApi"
+                )
+            );  
+        
         IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(@"D:\DiscordClone\WebApi\appsettings.json", optional: false)
+            .SetBasePath(configurationPath)
+            .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
