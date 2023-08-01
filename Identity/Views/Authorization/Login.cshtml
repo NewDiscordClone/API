@@ -1,0 +1,28 @@
+﻿@using Application.Authentication.Requests.LoginRequest
+@model LoginRequest
+<head>
+    <link href=@Url.Content("~/wwwroot/styles/app.css") rel="stylesheet" type="text/css" />
+</head>
+<form asp-controller="Authorization" asp-action="Login" method="post">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div>Login</div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="input" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="input" />
+        <span asp-validation-for="Password"></span>
+    </div> 
+    <div>
+        <label asp-for="RememberMe"></label>
+        <input asp-for="RememberMe"  />
+    </div>
+    <div>
+        <button type="submit" >Sign In</button>
+    </div>
+    <a asp-controller="Authorization" asp-action="Register"
+       asp-route-returnUrl="@Model.ReturnUrl">Register</a>
+</form>

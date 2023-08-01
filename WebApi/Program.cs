@@ -1,8 +1,6 @@
-using Application;
 using DataAccess;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Reflection;
-using WebApi;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
@@ -10,22 +8,31 @@ IServiceCollection services = builder.Services;
 services.AddControllers();
 
 services.AddDatabases(builder.Configuration);
-services.AddApplication();
+//services.AddApplication();
 
-services.AddIdentity<IdentityUser, IdentityRole>(options =>
+services.AddAuthentication(config =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 8;
-
+    config.DefaultAuthenticateScheme =
+        JwtBearerDefaults.AuthenticationScheme;
+    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddEntityFrameworkStores<AuthorizationDbContext>()
-    .AddDefaultTokenProviders();
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://localhost:7198";
+        options.Audience = "MessageApi";
+        options.RequireHttpsMetadata = false;
+    });
 
-services.AddIdentityServer4();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 services.AddSwaggerGen(options =>
 {
@@ -33,6 +40,7 @@ services.AddSwaggerGen(options =>
     string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlName);
     options.IncludeXmlComments(xmlPath);
 });
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -48,8 +56,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.UseCors();
 
-app.UseIdentityServer();
 app.UseAuthentication();
 app.UseAuthorization();
 
