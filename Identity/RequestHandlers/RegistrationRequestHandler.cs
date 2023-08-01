@@ -1,7 +1,8 @@
-﻿using MediatR;
+﻿using Identity.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Authentication.Requests.RegisterRequest
+namespace Identity.RequestHandlers
 {
     public class RegistrationRequestHandler : IRequestHandler<RegistrationRequest, IdentityResult>
     {

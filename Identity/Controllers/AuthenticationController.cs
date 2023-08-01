@@ -1,25 +1,19 @@
-﻿using Application.Authentication.Requests.LoginRequest;
-using Application.Authentication.Requests.RegisterRequest;
-using IdentityServer4.Services;
+﻿using Identity.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace WebApi.Controllers
+namespace Identity.Controllers
 {
     [Route("[controller]")]
     public class AuthenticationController : Controller
     {
         private readonly IMediator _mediator;
-        private SignInManager<IdentityUser> _signInManager;
-        private readonly IIdentityServerInteractionService _interactionService;
 
-        public AuthenticationController(IMediator mediator, SignInManager<IdentityUser> signInManager, IIdentityServerInteractionService interactionService)
+        public AuthenticationController(IMediator mediator)
         {
             _mediator = mediator;
-            _signInManager = signInManager;
-            _interactionService = interactionService;
         }
 
         [HttpGet("[action]")]
@@ -79,11 +73,13 @@ namespace WebApi.Controllers
 
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Logout(string logoutId)
+        public async Task<IActionResult> Logout([FromQuery] string logoutId)
         {
-            await _signInManager.SignOutAsync();
-            IdentityServer4.Models.LogoutRequest logoutRequest = await _interactionService.GetLogoutContextAsync(logoutId);
-            return Redirect("/");
+            string? returnUrl = await _mediator
+                .Send(new LogoutRequest { LogoutId = logoutId });
+            returnUrl ??= "http://localhost:3000";
+
+            return Redirect(returnUrl);
         }
     }
 }

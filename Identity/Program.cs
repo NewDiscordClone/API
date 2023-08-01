@@ -1,7 +1,7 @@
-using Application;
 using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
+using System.Reflection;
 
 namespace Identity
 {
@@ -17,6 +17,12 @@ namespace Identity
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
+            });
+
+            services.AddMediatR(options =>
+            {
+                options.RegisterServicesFromAssembly(Assembly
+                    .GetExecutingAssembly());
             });
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -37,11 +43,9 @@ namespace Identity
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "Discord.Identity.Cookie";
-                config.LoginPath = "/Authorization/Login";
-                config.LogoutPath = "/Authorization/Logout";
+                config.LoginPath = "/Authentication/Login";
+                config.LogoutPath = "/Authentication/Logout";
             });
-
-            services.AddApplication();
 
             WebApplication app = builder.Build();
 

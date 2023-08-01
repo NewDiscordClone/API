@@ -1,7 +1,8 @@
-﻿using MediatR;
+﻿using Identity.Requests;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Authentication.Requests.LoginRequest
+namespace Identity.RequestHandlers
 {
     public class LoginRequestHandler : IRequestHandler<LoginRequest, SignInResult>
     {
@@ -19,7 +20,7 @@ namespace Application.Authentication.Requests.LoginRequest
         {
             IdentityUser user = await _userManager.FindByEmailAsync(request.Email);
             return await _signInManager
-                .PasswordSignInAsync(user, request.Password, true, true);
+                .PasswordSignInAsync(user, request.Password, request.RememberMe, true);
         }
     }
 }
