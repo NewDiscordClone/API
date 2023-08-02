@@ -39,11 +39,28 @@ namespace Identity.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty,
-                    result.Errors.First().Description);
+                foreach (var error in result.Errors)
+                {
+                    string errorKey = GetErrorKey(error.Code);
+                    ModelState.AddModelError(errorKey, error.Description);
+                }
                 return View(registrationRequest);
             }
         }
+
+        private string GetErrorKey(string code)
+        {
+            if (code.ToLower().Contains("email"))
+            {
+                return "Email";
+            }
+            if (code.ToLower().Contains("username"))
+            {
+                return "Username";
+            }
+            return String.Empty;
+        }
+
         [HttpGet("[action]")]
         public IActionResult Login(string? returnUrl = null)
         {
@@ -66,7 +83,7 @@ namespace Identity.Controllers
             else
             {
                 ModelState.AddModelError(string.Empty,
-                    "Login fail");
+                    "Wrong password or email");
                 return View(loginRequest);
             }
         }

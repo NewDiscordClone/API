@@ -14,7 +14,6 @@ namespace WebApi
 
             services.AddControllers();
 
-            services.AddDatabases(builder.Configuration);
             services.AddApplication();
 
             services.AddAuthentication(config =>

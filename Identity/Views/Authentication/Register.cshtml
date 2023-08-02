@@ -3,26 +3,35 @@
 <head>
     <link href=@Url.Content("~/wwwroot/styles/app.css") rel="stylesheet" type="text/css" />
 </head>
-<form asp-controller="Authorization" asp-action="Register" method="post">
+<form asp-controller="Authentication" asp-action="Register" method="post">
     <input type="hidden" asp-for="ReturnUrl" />
     <div>Register</div>
-    <div>
-        <label asp-for="Username"></label>
-        <input asp-for="Username" class="input" />
-        <span asp-validation-for="Username"></span>
-    </div>
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="input" />
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="input" />
-        <span asp-validation-for="Password"></span>
-    </div>
+   <div>
+    <label asp-for="Username"></label>
+    <input asp-for="Username" class="input" />
+    <span asp-validation-for="Username" class="text-danger"></span>
+</div>
+<div>
+    <label asp-for="Email"></label>
+    <input asp-for="Email" class="input" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
+<div>
+    <label asp-for="Password"></label>
+    <input asp-for="Password" class="input" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+</div>
+<div>
+    <label asp-for="ConfirmPassword"></label>
+    <input asp-for="ConfirmPassword" class="input" />
+    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+</div>
+
     <div>
         <button type="submit">Register</button>
     </div>
-    <a asp-controller="Authorization" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Login</a>
+    <div>
+        @Html.ValidationSummary(true, String.Empty, new { @class = "text-danger" })
+    </div>
+    <a asp-controller="Authentication" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl">Login</a>
 </form>
