@@ -6,11 +6,12 @@ namespace DataAccess
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddDatabases(this IServiceCollection services,
+        public static IServiceCollection AddIdentityDatabase(this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddDbContext<AuthorizationDbContext>(options
-                => options.UseSqlServer(configuration.GetConnectionString("Auth")));
+                => options.UseSqlServer(configuration
+                .GetConnectionString("AuthorizationDbContextConnection")));
 
             services.AddScoped<AuthorizationDbContext>();
 
