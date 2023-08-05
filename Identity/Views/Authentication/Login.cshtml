@@ -3,7 +3,7 @@
 <head>
     <link href=@Url.Content("~/wwwroot/styles/app.css") rel="stylesheet" type="text/css" />
 </head>
-<form asp-controller="Authorization" asp-action="Login" method="post">
+<form asp-controller="Authentication" asp-action="Login" method="post">
     <input type="hidden" asp-for="ReturnUrl" />
     <div>Login</div>
     <div>
@@ -23,6 +23,9 @@
     <div>
         <button type="submit" >Sign In</button>
     </div>
-    <a asp-controller="Authorization" asp-action="Register"
+    <div>
+        @Html.ValidationSummary(true, String.Empty, new { @class = "text-danger" })
+    </div>
+    <a asp-controller="Authentication" asp-action="Register"
        asp-route-returnUrl="@Model.ReturnUrl">Register</a>
 </form>

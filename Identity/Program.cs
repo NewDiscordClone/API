@@ -12,7 +12,7 @@ namespace Identity
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             IServiceCollection services = builder.Services;
 
-            services.AddDatabases(builder.Configuration);
+            services.AddIdentityDatabase(builder.Configuration);
             services.AddControllers();
             services.AddMvc(options =>
             {
@@ -29,10 +29,13 @@ namespace Identity
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Lockout.MaxFailedAccessAttempts = 5;
+
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
+
+                options.User.RequireUniqueEmail = true;
             })
                 .AddEntityFrameworkStores<AuthorizationDbContext>()
                 .AddDefaultTokenProviders();

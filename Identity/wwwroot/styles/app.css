@@ -13,6 +13,10 @@ div:first-child {
     margin-bottom: 20px;
 }
 
+.text-danger {
+    color: red;
+}
+
 div:not(:first-child) {
     margin-bottom: 15px;
 }

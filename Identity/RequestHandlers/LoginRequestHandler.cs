@@ -19,8 +19,10 @@ namespace Identity.RequestHandlers
         public async Task<SignInResult> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
             IdentityUser user = await _userManager.FindByEmailAsync(request.Email);
+            string userName = user?.UserName ?? string.Empty;
+
             return await _signInManager
-                .PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+                .PasswordSignInAsync(userName, request.Password, request.RememberMe, true);
         }
     }
 }
