@@ -2,26 +2,25 @@ using Application;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Reflection;
+using WebApi.Hubs;
 
 namespace WebApi
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             IServiceCollection services = builder.Services;
 
-            services.AddControllers();
-
             services.AddApplication();
 
             services.AddAuthentication(config =>
-            {
-                config.DefaultAuthenticateScheme =
-                    JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+                {
+                    config.DefaultAuthenticateScheme =
+                        JwtBearerDefaults.AuthenticationScheme;
+                    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer("Bearer", options =>
                 {
                     options.Authority = "https://localhost:7198";
@@ -47,27 +46,21 @@ namespace WebApi
                 options.IncludeXmlComments(xmlPath);
             });
 
+            builder.Services.AddSignalR();
+            //builder.Services.AddSingleton<IChatService, ChatService>();
+
             WebApplication app = builder.Build();
-using WebApi.Hubs;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSignalR();
-//builder.Services.AddSingleton<IChatService, ChatService>();
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials()
-            ;
-    });
-});
-WebApplication app = builder.Build();
+            app.UseHttpsRedirection();
 
-app.UseCors();
-app.MapHub<ChatHub>("chat");
+            app.UseCors();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            app.MapHub<ChatHub>("chat");
 
             if (app.Environment.IsDevelopment())
             {
@@ -78,14 +71,6 @@ app.MapHub<ChatHub>("chat");
                     option.RoutePrefix = string.Empty;
                 });
             }
-
-            app.UseHttpsRedirection();
-
-            app.MapControllers();
-            app.UseCors();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.Run();
         }
