@@ -1,24 +1,24 @@
-﻿using System.Security.Claims;
+﻿using Application.Interfaces;
+using Application.Models;
 using DataAccess;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using WebApi.Models;
+using System.Security.Claims;
 
-namespace WebApi.Hubs;
+namespace Application.Hubs;
 
 [Authorize]
 public class ChatHub : Hub
 {
-    
-    private readonly AppDbContext _dbContext;
-    public ChatHub(AppDbContext dbContext)
+    private readonly IAppDbContext _dbContext;
+    public ChatHub(IAppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    
-    private static readonly Dictionary<string, HashSet<string>> _userConnections = new ();
-    private string? _userId = null;
-    private string UserId => _userId ?? (_userId = Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+    private static readonly Dictionary<int, HashSet<string>> _userConnections = new();
+    private int UserId => int.Parse(Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     public override async Task OnConnectedAsync()
     {
         if (!_userConnections.ContainsKey(UserId))
@@ -44,7 +44,7 @@ public class ChatHub : Hub
 
         await base.OnDisconnectedAsync(exception);
     }
-    public void AddMessage(string text, int chatId)
+    public async void AddMessage(string text, int chatId)
     {
         if (!_userConnections.ContainsKey(UserId))
         {
@@ -52,7 +52,7 @@ public class ChatHub : Hub
             return;
         }
 
-        var chat = _dbContext.PrivateChats.Find(chatId);
+        PrivateChat? chat = _dbContext.PrivateChats.Find(chatId);
 
         if (chat == null)
         {
@@ -60,7 +60,7 @@ public class ChatHub : Hub
             return;
         }
 
-        var message = new Message
+        Message message = new()
         {
             Text = text,
             SendTime = DateTime.UtcNow,
@@ -69,7 +69,7 @@ public class ChatHub : Hub
         };
 
         _dbContext.Messages.Add(message);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
 
         foreach (string? connectionId in chat.Users
                      .Where(user => _userConnections.ContainsKey(user.Id))
