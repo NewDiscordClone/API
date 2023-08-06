@@ -1,4 +1,5 @@
-﻿using Identity.Requests;
+﻿using Application.Models;
+using Identity.Requests;
 using IdentityServer4.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -7,11 +8,11 @@ namespace Identity.RequestHandlers
 {
     public class LogoutRequestHandler : IRequestHandler<LogoutRequest, string?>
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IIdentityServerInteractionService _interactionService;
 
         public LogoutRequestHandler(IIdentityServerInteractionService interactionService,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<User> signInManager)
         {
             _interactionService = interactionService;
             _signInManager = signInManager;

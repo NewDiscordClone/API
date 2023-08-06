@@ -1,5 +1,8 @@
 #nullable enable
-namespace WebApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
+namespace Application.Models;
 
 public enum UserStatus
 {
@@ -8,9 +11,8 @@ public enum UserStatus
     DoNotDisturb,
     Offline
 }
-public class User
+public class User : IdentityUser<int>
 {
-    public int Id { get; set; }
     public string? DisplayName { get; set; }
     public string? AvatarPath { get; set; }
     public UserStatus Status { get; set; }
