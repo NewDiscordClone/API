@@ -3,6 +3,7 @@ using Application.Hubs;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Reflection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace Application
@@ -19,7 +20,9 @@ namespace Application
             {
                 // Use camelCase property names in JSON
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                // Other JSON formatting options can be configured here
+               
+                // Convert null values to undefined
+                options.SerializerSettings.Converters.Add(new NullToUndefinedConverter());
             });
             services.AddDatabase(builder.Configuration);
 
