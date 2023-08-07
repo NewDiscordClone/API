@@ -2,6 +2,7 @@ using Application;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Reflection;
+using Newtonsoft.Json.Serialization;
 
 namespace WebApi
 {
@@ -12,7 +13,12 @@ namespace WebApi
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             IServiceCollection services = builder.Services;
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                // Use camelCase property names in JSON
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                // Other JSON formatting options can be configured here
+            });
 
             services.AddApplication();
 
