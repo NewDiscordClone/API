@@ -1,4 +1,5 @@
-﻿using Identity.Requests;
+﻿using Application.Models;
+using Identity.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -6,11 +7,11 @@ namespace Identity.RequestHandlers
 {
     public class LoginRequestHandler : IRequestHandler<LoginRequest, SignInResult>
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
-        public LoginRequestHandler(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager)
+        public LoginRequestHandler(SignInManager<User> signInManager,
+            UserManager<User> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -18,7 +19,7 @@ namespace Identity.RequestHandlers
 
         public async Task<SignInResult> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-            IdentityUser user = await _userManager.FindByEmailAsync(request.Email);
+            User user = await _userManager.FindByEmailAsync(request.Email);
             string userName = user?.UserName ?? string.Empty;
 
             return await _signInManager

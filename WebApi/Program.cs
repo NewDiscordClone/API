@@ -1,10 +1,10 @@
 using Application;
+using Application.Hubs;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Reflection;
-using WebApi.Hubs;
 
-namespace WebApi
+namespace Application
 {
     internal static class Program
     {
@@ -14,6 +14,8 @@ namespace WebApi
             IServiceCollection services = builder.Services;
 
             services.AddApplication();
+            services.AddControllers();
+            services.AddDatabase(builder.Configuration);
 
             services.AddAuthentication(config =>
                 {
