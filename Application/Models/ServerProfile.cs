@@ -1,5 +1,5 @@
 #nullable enable
-namespace WebApi.Models;
+namespace Application.Models;
 
 public class ServerProfile
 {

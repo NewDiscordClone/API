@@ -1,5 +1,5 @@
+using Application.Models;
 using MediatR;
-using WebApi.Models;
 
 namespace Application.RequestModels.PrivateChats
 {

@@ -1,4 +1,4 @@
-namespace WebApi.Models;
+namespace Application.Models;
 
 public class Channel : Chat
 {

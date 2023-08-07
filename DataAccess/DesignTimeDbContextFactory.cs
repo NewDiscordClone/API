@@ -1,10 +1,10 @@
+using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using DataAccess;
 
-public class DesignTimeDbContextFactory : /*IDesignTimeDbContextFactory<AppDbContext>*/ IDesignTimeDbContextFactory<AuthorizationDbContext>
+public class DesignTimeDbContextFactory : /*IDesignTimeDbContextFactory<AppDbContext>*/ IDesignTimeDbContextFactory<AppDbContext>
 {
     // public AppDbContext CreateDbContext(string[] args)
     // {
@@ -25,23 +25,23 @@ public class DesignTimeDbContextFactory : /*IDesignTimeDbContextFactory<AppDbCon
     //
     //     return new AppDbContext(optionsBuilder.Options, configuration);
     // }
-    public AuthorizationDbContext CreateDbContext(string[] args)
+    public AppDbContext CreateDbContext(string[] args)
     {
         var configurationPath = Path.GetFullPath(
             Path.Combine(
                 Directory.GetCurrentDirectory(),
-                @"..\Identity"
-            )
-        );  
+                @"..\WebApi"
+                )
+            );  
         
         IConfiguration configuration = new ConfigurationBuilder()
             .SetBasePath(configurationPath)
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
-        var optionsBuilder = new DbContextOptionsBuilder<AuthorizationDbContext>();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("AuthorizationDbContextConnection"));
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("SqlServer"));
 
-        return new AuthorizationDbContext(optionsBuilder.Options);
+        return new AppDbContext(optionsBuilder.Options);
     }
 }

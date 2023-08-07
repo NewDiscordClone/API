@@ -1,4 +1,5 @@
-﻿using IdentityModel;
+﻿using Application.Models;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Configuration;
 using IdentityServer4.Models;
@@ -35,7 +36,7 @@ namespace Identity
              .AddInMemoryApiResources(ApiResources)
              .AddInMemoryClients(Clients)
              .AddTestUsers(TestUsers)
-             .AddAspNetIdentity<IdentityUser>();
+             .AddAspNetIdentity<User>();
 
             return builder;
         }

@@ -1,4 +1,5 @@
-namespace WebApi.Models;
+#nullable enable
+namespace Application.Models;
 
 public class Message
 {
@@ -10,4 +11,5 @@ public class Message
     public virtual List<Attachment> Attachments { get; set; } = new();
     public virtual User User { get; set; }
     public virtual Chat Chat { get; set; }
+    public virtual Message? Reply { get; set; }
 }

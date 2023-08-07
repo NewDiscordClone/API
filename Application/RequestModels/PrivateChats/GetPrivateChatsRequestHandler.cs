@@ -1,7 +1,7 @@
 using Application.Interfaces;
+using Application.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Models;
 
 namespace Application.RequestModels.PrivateChats
 {
