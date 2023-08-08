@@ -13,10 +13,10 @@ namespace Application.RequestModels.GetUser
         public UserStatus Status { get; init; } = UserStatus.Online;
         public string? TextStatus { get; init; }
         public ServerProfile? Profile { get; set; }
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<User, GetUserDetailsDto>();
         }
+        
     }
 }

@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Application.Exceptions;
 
 namespace WebApi.Controllers
 {
@@ -55,7 +56,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<GetServerLookupDto>>> GetMessages([FromBody] GetMessagesRequest get)
         {
-            List<GetMessageLookupDto> messages = await _mediator.Send(get);
+            List<GetMessageLookUpDto> messages = await _mediator.Send(get);
             return Ok(messages);
         }
     }

@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace Application.RequestModels.GetMessages
 {
-    public record GetMessageLookupDto : IMapWith<Message>
+    public record GetMessageLookUpDto : IMapWith<Message>
     {
         public int Id { get; init; }
         public GetMessageUserDto User { get; init; }
@@ -15,7 +15,7 @@ namespace Application.RequestModels.GetMessages
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Message, GetMessageLookupDto>();
+            profile.CreateMap<Message, GetMessageLookUpDto>();
         }
     }
 }

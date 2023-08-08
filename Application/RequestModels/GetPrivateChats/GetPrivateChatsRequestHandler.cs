@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
