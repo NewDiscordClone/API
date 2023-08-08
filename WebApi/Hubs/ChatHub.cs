@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+using Application.Interfaces;
 using Application.Messages.AddMessageRequest;
 using Application.Models;
 using MediatR;

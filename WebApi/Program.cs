@@ -1,7 +1,9 @@
-using Application;
 using Application.Hubs;
+using Application.Interfaces;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json.Serialization;
+using Notes.Application.Common.Mapping;
 using System.Reflection;
 
 namespace Application
@@ -14,8 +16,22 @@ namespace Application
             IServiceCollection services = builder.Services;
 
             services.AddApplication();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                // Use camelCase property names in JSON
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+                // Convert null values to undefined
+                options.SerializerSettings.Converters.Add(new NullToUndefinedConverter());
+            });
             services.AddDatabase(builder.Configuration);
+
+            services.AddAutoMapper(config =>
+            {
+                config.AddProfile(new AssemblyMappingProfile(
+                    Assembly.GetExecutingAssembly()));
+                config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
+            });
 
             services.AddAuthentication(config =>
                 {

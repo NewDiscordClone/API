@@ -1,4 +1,3 @@
-#nullable enable
 namespace Application.Models;
 
 public enum AttachmentType
