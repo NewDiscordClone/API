@@ -12,7 +12,6 @@ namespace Application.Hubs;
 [Authorize]
 public class ChatHub : Hub
 {
-    private readonly IAppDbContext _dbContext;
     private readonly ILogger<ChatHub> _logger;
     private readonly IMediator _mediator;
 
@@ -20,7 +19,6 @@ public class ChatHub : Hub
     private event Action<Message, Channel> OnChannelMessageReceived;
     public ChatHub(IAppDbContext dbContext, IMediator mediator, ILogger<ChatHub> logger)
     {
-        _dbContext = dbContext;
         _mediator = mediator;
         _logger = logger;
 
