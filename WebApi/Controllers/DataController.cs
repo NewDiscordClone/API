@@ -54,7 +54,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<GetServerLookupDto>>> GetMessages([FromBody] GetMessagesRequest get)
+        public async Task<ActionResult<List<GetMessageLookUpDto>>> GetMessages([FromBody] GetMessagesRequest get)
         {
             List<GetMessageLookUpDto> messages = await _mediator.Send(get);
             return Ok(messages);
