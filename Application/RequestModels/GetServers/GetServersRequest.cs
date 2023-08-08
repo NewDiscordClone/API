@@ -2,7 +2,7 @@
 
 namespace Application.RequestModels.GetServer
 {
-    public class GetServersRequest : IRequest<List<GetServerDto>>
+    public class GetServersRequest : IRequest<List<GetServerLookupDto>>
     {
         public int UserId { get; init; }
     }

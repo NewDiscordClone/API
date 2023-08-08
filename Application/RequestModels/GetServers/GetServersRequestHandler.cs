@@ -7,28 +7,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.RequestModels.GetServer
 {
-    public class GetServersRequestHandler : IRequestHandler<GetServersRequest, List<GetServerDto>>
+    public class GetServersRequestHandler : IRequestHandler<GetServersRequest, List<GetServerLookupDto>>
     {
         private readonly IAppDbContext _appDbContext;
         private readonly IMapper _mapper;
 
-        public GetServersRequestHandler(IAppDbContext appDbContext)
+        public GetServersRequestHandler(IAppDbContext appDbContext, IMapper mapper)
         {
             this._appDbContext = appDbContext;
+            _mapper = mapper;
         }
 
-        public async Task<List<GetServerDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
+        public async Task<List<GetServerLookupDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
         {
-            var user = await _appDbContext.Users.FindAsync(new object[] { request.UserId }, cancellationToken);
-            if (user == null) throw new NoSuchUserException();
-            List<GetServerDto> servers = new();
-            await _appDbContext.Servers
+            User? user = await _appDbContext.Users
+                .FindAsync(new object[] { request.UserId }, cancellationToken)
+                ?? throw new NoSuchUserException();
+
+            List<GetServerLookupDto> servers = await _appDbContext.Servers
                 .Where(server => server.ServerProfiles
-                    .Find(profile => profile.User.Id == user.Id) != null)
-                .ForEachAsync(server => servers.Add(Convertors.Convert(server)), cancellationToken: cancellationToken);
+                .Find(profile => profile.User.Id == user.Id) != null)
+                .ProjectTo<GetServerLookupDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
             return servers;
         }
 
-        
+
     }
 }
