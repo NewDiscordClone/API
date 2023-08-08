@@ -2,8 +2,9 @@
 
 namespace Application.RequestModels.GetUser
 {
-    public class GetUserRequest : IRequest<GetUserDto>
+    public class GetUserDetailsRequest : IRequest<GetUserDetailsDto>
     {
         public int UserId { get; init; }
+        public int? ServerId { get; init; }
     }
 }
