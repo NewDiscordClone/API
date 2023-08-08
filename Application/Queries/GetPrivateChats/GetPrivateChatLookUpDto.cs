@@ -1,9 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Models;
-using Application.RequestModels.GetMessages;
+using Application.Queries.GetMessages;
 using AutoMapper;
 
-namespace Application.RequestModels.GetPrivateChats
+namespace Application.Queries.GetPrivateChats
 {
     public record GetPrivateChatLookUpDto : IMapWith<PrivateChat>
     {

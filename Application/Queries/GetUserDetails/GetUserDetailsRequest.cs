@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.RequestModels.GetUser
+namespace Application.Queries.GetUser
 {
     public class GetUserDetailsRequest : IRequest<GetUserDetailsDto>
     {

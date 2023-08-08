@@ -6,9 +6,9 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.RequestModels.GetServer
+namespace Application.Queries.GetServer
 {
-    public class GetServersRequestHandler : IRequestHandler<GetServersRequest, List<GetServerLookUpDto>>
+    public class GetServersRequestHandler : IRequestHandler<GetServersRequest, List<GetServerLookupDto>>
     {
         private readonly IAppDbContext _appDbContext;
         private readonly IMapper _mapper;
@@ -19,16 +19,16 @@ namespace Application.RequestModels.GetServer
             _mapper = mapper;
         }
 
-        public async Task<List<GetServerLookUpDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
+        public async Task<List<GetServerLookupDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
         {
             User? user = await _appDbContext.Users
                 .FindAsync(new object[] { request.UserId }, cancellationToken)
                 ?? throw new NoSuchUserException();
 
-            List<GetServerLookUpDto> servers = await _appDbContext.Servers
+            List<GetServerLookupDto> servers = await _appDbContext.Servers
                 .Where(server => server.ServerProfiles
                 .Find(profile => profile.User.Id == user.Id) != null)
-                .ProjectTo<GetServerLookUpDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<GetServerLookupDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             return servers;

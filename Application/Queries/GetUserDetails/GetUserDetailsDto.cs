@@ -2,7 +2,7 @@
 using Application.Models;
 using AutoMapper;
 
-namespace Application.RequestModels.GetUser
+namespace Application.Queries.GetUser
 {
     public record GetUserDetailsDto : IMapWith<User>
     {

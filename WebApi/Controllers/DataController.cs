@@ -1,14 +1,12 @@
-using Application.Models;
-using Application.RequestModels;
-using Application.RequestModels.GetMessages;
-using Application.RequestModels.GetPrivateChats;
-using Application.RequestModels.GetServer;
-using Application.RequestModels.GetUser;
+using Application.Exceptions;
+using Application.Queries.GetMessages;
+using Application.Queries.GetPrivateChats;
+using Application.Queries.GetServer;
+using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Application.Exceptions;
 
 namespace WebApi.Controllers
 {

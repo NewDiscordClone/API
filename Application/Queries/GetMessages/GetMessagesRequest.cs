@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.RequestModels.GetMessages
+namespace Application.Queries.GetMessages
 {
     public record GetMessagesRequest : IRequest<List<GetMessageLookUpDto>>
     {

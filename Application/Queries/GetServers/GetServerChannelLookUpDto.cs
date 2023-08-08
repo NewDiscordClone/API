@@ -2,7 +2,7 @@
 using Application.Interfaces;
 using AutoMapper;
 
-namespace Application.RequestModels.GetServer
+namespace Application.Queries.GetServer
 {
     public class GetServerChannelLookUpDto : IMapWith<Channel>
     {

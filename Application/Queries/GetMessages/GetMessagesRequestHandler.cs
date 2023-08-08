@@ -4,7 +4,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.RequestModels.GetMessages
+namespace Application.Queries.GetMessages
 {
     public class GetMessagesRequestHandler : IRequestHandler<GetMessagesRequest, List<GetMessageLookUpDto>>
     {

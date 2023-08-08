@@ -1,7 +1,6 @@
-using Application.Models;
 using MediatR;
 
-namespace Application.RequestModels.GetPrivateChats
+namespace Application.Queries.GetPrivateChats
 {
     public record GetPrivateChatsRequest : IRequest<List<GetPrivateChatLookUpDto>>
     {

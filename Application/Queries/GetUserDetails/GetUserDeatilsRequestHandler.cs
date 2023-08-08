@@ -4,7 +4,7 @@ using Application.Models;
 using AutoMapper;
 using MediatR;
 
-namespace Application.RequestModels.GetUser
+namespace Application.Queries.GetUser
 {
     public class GetUserDeatilsRequestHandler : IRequestHandler<GetUserDetailsRequest, GetUserDetailsDto>
     {

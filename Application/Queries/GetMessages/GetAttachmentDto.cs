@@ -2,7 +2,7 @@
 using Application.Models;
 using AutoMapper;
 
-namespace Application.RequestModels.GetMessages
+namespace Application.Queries.GetMessages
 {
     public record GetAttachmentDto : IMapWith<Attachment>
     {

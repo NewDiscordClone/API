@@ -6,7 +6,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.RequestModels.GetPrivateChats
+namespace Application.Queries.GetPrivateChats
 {
     public class GetPrivateChatsRequestHandler : IRequestHandler<GetPrivateChatsRequest, List<GetPrivateChatLookUpDto>>
     {

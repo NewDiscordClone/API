@@ -2,7 +2,7 @@
 using Application.Models;
 using AutoMapper;
 
-namespace Application.RequestModels.GetServer
+namespace Application.Queries.GetServer
 {
     public class GetServerLookUpDto : IMapWith<Server>
     {
