@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.RequestModels.GetMessages;
 using AutoMapper;
 
 namespace Application.RequestModels.GetPrivateChats
@@ -9,12 +10,12 @@ namespace Application.RequestModels.GetPrivateChats
         public int Id { get; init; }
         public string? Image { get; init; }
         public string? Title { get; init; }
-        public List<string> UsersNames { get; init; } = new();
+        public List<GetPrivateChatUserLookUpDto> Users { get; init; } = new();
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<PrivateChat, GetPrivateChatLookUpDto>()
-                .ForMember(dto => dto.UsersNames,
+                .ForMember(dto => dto.Users,
                 opt => opt.MapFrom(chat => chat.Users
                 .Select(user => user.DisplayName)));
         }
