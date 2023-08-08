@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,14 +7,14 @@ namespace DataAccess
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddIdentityDatabase(this IServiceCollection services,
+        public static IServiceCollection AddDatabase(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<AuthorizationDbContext>(options
+            services.AddDbContext<AppDbContext>(options
                 => options.UseSqlServer(configuration
-                .GetConnectionString("AuthorizationDbContextConnection")));
+                .GetConnectionString("SqlServer") ?? throw new Exception("Connection does`nt exist")));
 
-            services.AddScoped<AuthorizationDbContext>();
+            services.AddScoped<IAppDbContext, AppDbContext>();
 
             return services;
         }

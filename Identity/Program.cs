@@ -1,3 +1,4 @@
+using Application.Models;
 using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
@@ -12,7 +13,7 @@ namespace Identity
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             IServiceCollection services = builder.Services;
 
-            services.AddIdentityDatabase(builder.Configuration);
+            services.AddDatabase(builder.Configuration);
             services.AddControllers();
             services.AddMvc(options =>
             {
@@ -25,7 +26,7 @@ namespace Identity
                     .GetExecutingAssembly());
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<User, Role>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Lockout.MaxFailedAccessAttempts = 5;
@@ -37,7 +38,7 @@ namespace Identity
 
                 options.User.RequireUniqueEmail = true;
             })
-                .AddEntityFrameworkStores<AuthorizationDbContext>()
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer4WithConfiguration()

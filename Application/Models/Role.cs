@@ -1,9 +1,9 @@
-namespace WebApi.Models;
+using Microsoft.AspNetCore.Identity;
 
-public class Role
+namespace Application.Models;
+
+public class Role : IdentityRole<int>
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
     public string Color { get; set; }
 
     public virtual Server Server { get; set; }

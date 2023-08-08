@@ -1,5 +1,4 @@
-#nullable enable
-namespace WebApi.Models;
+namespace Application.Models;
 
 public abstract class Chat
 {
