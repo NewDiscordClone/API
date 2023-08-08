@@ -15,9 +15,9 @@ namespace Application.RequestModels.GetPrivateChats
         public void Mapping(Profile profile)
         {
             profile.CreateMap<PrivateChat, GetPrivateChatLookUpDto>()
-                .ForMember(dto => dto.Users,
-                opt => opt.MapFrom(chat => chat.Users
-                .Select(user => user.DisplayName)));
+                // .ForMember(dto => dto.Users,
+                // opt => opt.MapFrom(chat => chat.Users))
+                ;
         }
     }
 }
