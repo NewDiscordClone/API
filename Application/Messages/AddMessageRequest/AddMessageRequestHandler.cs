@@ -16,8 +16,8 @@ namespace Application.Messages.AddMessageRequest
 
         public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
         {
-            PrivateChat? chat = await _context.PrivateChats
-                .FindAsync(new object[] { request.ChatId }, cancellationToken);
+            Chat? chat = await _context.Chats
+                 .FindAsync(new object[] { request.ChatId }, cancellationToken);
             User? user = await _context.Users.FindAsync(new object[] { request.UserId }, cancellationToken);
 
             if (chat is null || user is null)
@@ -28,7 +28,8 @@ namespace Application.Messages.AddMessageRequest
                 Text = request.Text,
                 Chat = chat,
                 SendTime = DateTime.UtcNow,
-                User = user
+                User = user,
+                Attachments = request.Attachments ?? new()
             };
 
             await _context.Messages.AddAsync(message, cancellationToken);

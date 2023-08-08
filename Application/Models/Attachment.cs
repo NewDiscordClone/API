@@ -3,7 +3,7 @@ namespace Application.Models;
 
 public enum AttachmentType
 {
-    
+
 }
 
 public class Attachment
@@ -12,6 +12,5 @@ public class Attachment
     public AttachmentType Type { get; set; }
     public string Path { get; set; }
     public bool IsSpoiler { get; set; }
-
     public virtual Message? Message { get; set; }
 }

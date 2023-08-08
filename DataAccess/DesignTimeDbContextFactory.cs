@@ -2,13 +2,12 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     public AppDbContext CreateDbContext(string[] args)
     {
-        var configurationPath = Path.GetFullPath(
+        string configurationPath = Path.GetFullPath(
             Path.Combine(
                 Directory.GetCurrentDirectory(),
                 @"..\WebApi"
@@ -20,8 +19,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
-        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("Auth"));
+        DbContextOptionsBuilder<AppDbContext> optionsBuilder = new();
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("SqlServer"));
 
         return new AppDbContext(optionsBuilder.Options);
     }
