@@ -12,7 +12,11 @@ namespace Application.RequestModels.GetUser
         public virtual List<GetUserDetailsRolesDto> Roles { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<ServerProfile, GetUserDetailsServerProfileDto>();
+            profile.CreateMap<ServerProfile, GetUserDetailsServerProfileDto>()
+                // .ForMember(sp => sp.Roles, 
+                //     opt => opt
+                //         .MapFrom(sp => sp.Roles))
+                ;
         }
     }
 }

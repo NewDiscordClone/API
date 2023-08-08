@@ -29,7 +29,7 @@ namespace Application.RequestModels.GetUser
                 ServerProfile? profile = _appDbContext.ServerProfiles
                     .FirstOrDefault(profile => profile.Server.Id == request.ServerId
                     && profile.User.Id == request.UserId);
-                userDto.Profile = profile;
+                userDto.Profile = _mapper.Map<GetUserDetailsServerProfileDto>(profile);
             }
             return userDto;
         }
