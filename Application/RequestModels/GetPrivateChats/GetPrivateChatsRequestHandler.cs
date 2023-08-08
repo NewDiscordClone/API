@@ -1,27 +1,33 @@
 using Application.Interfaces;
 using Application.Models;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.RequestModels.GetPrivateChats
 {
-    public class GetPrivateChatsRequestHandler :  IRequestHandler<GetPrivateChatsRequest, List<GetPrivateChatDto>>
+    public class GetPrivateChatsRequestHandler : IRequestHandler<GetPrivateChatsRequest, List<GetPrivateChatLookUpDto>>
     {
         private readonly IAppDbContext _appDbContext;
+        private readonly IMapper _mapper;
 
-        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext)
+        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext, IMapper mapper)
         {
-            this._appDbContext = appDbContext;
+            _appDbContext = appDbContext;
+            _mapper = mapper;
         }
 
-        public async Task<List<GetPrivateChatDto>> Handle(GetPrivateChatsRequest request, CancellationToken cancellationToken)
+        public async Task<List<GetPrivateChatLookUpDto>> Handle(GetPrivateChatsRequest request, CancellationToken cancellationToken)
         {
-            var user = await _appDbContext.Users.FindAsync(new object[] { request.UserId }, cancellationToken);
-            if (user == null) throw new NoSuchUserException();
-            List<GetPrivateChatDto> privateChat = new();
-            await _appDbContext.PrivateChats
+            User user = await _appDbContext.Users.FindAsync(new object[] { request.UserId }, cancellationToken)
+                ?? throw new NoSuchUserException();
+
+            List<GetPrivateChatLookUpDto> privateChat = await _appDbContext.PrivateChats
                 .Where(chat => chat.Users.Contains(user))
-                .ForEachAsync(pc => privateChat.Add(Convertors.Convert(pc)), cancellationToken: cancellationToken);
+                .ProjectTo<GetPrivateChatLookUpDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
             return privateChat;
         }
     }
