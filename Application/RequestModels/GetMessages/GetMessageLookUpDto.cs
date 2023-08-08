@@ -10,12 +10,16 @@ namespace Application.RequestModels.GetMessages
         public GetMessageUserDto User { get; init; }
         public string Text { get; init; }
         public DateTime SendTime { get; init; }
+        public int ChatId {get; init; }
         public List<GetAttachmentDto> Attachments { get; init; }
         public List<GetReactionDto> Reactions { get; init; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Message, GetMessageLookUpDto>();
+            profile.CreateMap<Message, GetMessageLookUpDto>()
+                .ForMember(gmlud => gmlud.ChatId, 
+                    opt => opt
+                        .MapFrom(m => m.Chat.Id));
         }
     }
 }

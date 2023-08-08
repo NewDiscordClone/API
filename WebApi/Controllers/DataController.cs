@@ -23,7 +23,7 @@ namespace WebApi.Controllers
                                        throw new NoSuchUserException());
 
         [HttpGet]
-        public async Task<ActionResult<List<PrivateChat>>> GetPrivateChats()
+        public async Task<ActionResult<List<GetPrivateChatLookUpDto>>> GetPrivateChats()
         {
 
             GetPrivateChatsRequest get = new() { UserId = UserId };
@@ -46,10 +46,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<GetServerLookupDto>>> GetServers()
+        public async Task<ActionResult<List<GetServerLookUpDto>>> GetServers()
         {
             GetServersRequest get = new() { UserId = UserId };
-            List<GetServerLookupDto> servers = await _mediator.Send(get);
+            List<GetServerLookUpDto> servers = await _mediator.Send(get);
             return Ok(servers);
         }
 

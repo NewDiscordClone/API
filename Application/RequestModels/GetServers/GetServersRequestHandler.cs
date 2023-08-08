@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.RequestModels.GetServer
 {
-    public class GetServersRequestHandler : IRequestHandler<GetServersRequest, List<GetServerLookupDto>>
+    public class GetServersRequestHandler : IRequestHandler<GetServersRequest, List<GetServerLookUpDto>>
     {
         private readonly IAppDbContext _appDbContext;
         private readonly IMapper _mapper;
@@ -19,16 +19,16 @@ namespace Application.RequestModels.GetServer
             _mapper = mapper;
         }
 
-        public async Task<List<GetServerLookupDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
+        public async Task<List<GetServerLookUpDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
         {
             User? user = await _appDbContext.Users
                 .FindAsync(new object[] { request.UserId }, cancellationToken)
                 ?? throw new NoSuchUserException();
 
-            List<GetServerLookupDto> servers = await _appDbContext.Servers
+            List<GetServerLookUpDto> servers = await _appDbContext.Servers
                 .Where(server => server.ServerProfiles
                 .Find(profile => profile.User.Id == user.Id) != null)
-                .ProjectTo<GetServerLookupDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<GetServerLookUpDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
             return servers;
