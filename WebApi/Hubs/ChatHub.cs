@@ -1,8 +1,6 @@
-﻿using Application.Interfaces;
-using Application.Models;
+﻿using Application.Models;
 using DataAccess;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 
@@ -11,8 +9,8 @@ namespace Application.Hubs;
 [Authorize]
 public class ChatHub : Hub
 {
-    private readonly IAppDbContext _dbContext;
-    public ChatHub(IAppDbContext dbContext)
+    private readonly AppDbContext _dbContext;
+    public ChatHub(AppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
