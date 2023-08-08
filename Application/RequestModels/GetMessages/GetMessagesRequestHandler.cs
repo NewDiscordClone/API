@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.RequestModels.GetMessages
 {
-    public class GetMessagesRequestHandler : IRequestHandler<GetMessagesRequest, List<GetMessageDto>>
+    public class GetMessagesRequestHandler : IRequestHandler<GetMessagesRequest, List<GetMessageLookupDto>>
     {
         private const int _pageSize = 25;
         private readonly IAppDbContext _appDbContext;
@@ -18,17 +18,16 @@ namespace Application.RequestModels.GetMessages
             _mapper = mapper;
         }
 
-        public async Task<List<GetMessageDto>> Handle(GetMessagesRequest request, CancellationToken cancellationToken)
+        public async Task<List<GetMessageLookupDto>> Handle(GetMessagesRequest request, CancellationToken cancellationToken)
         {
 
-            List<GetMessageDto> messages = new();
-            await _appDbContext.Messages
+            List<GetMessageLookupDto> messages = await _appDbContext.Messages
                 .Where(m => m.Chat.Id == request.ChatId)
                 .OrderBy(m => m.SendTime)
                 .Skip(request.MessagesCount)
                 .Take(_pageSize)
-                .ProjectTo<GetMessageDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                .ProjectTo<GetMessageLookupDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
             return messages;
         }
     }
