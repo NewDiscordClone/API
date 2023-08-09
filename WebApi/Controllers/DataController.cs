@@ -1,8 +1,6 @@
 using Application.Exceptions;
 using Application.Queries.GetMessages;
 using Application.Queries.GetPrivateChats;
-using Application.Queries.GetServer;
-using Application.Queries.GetServerDetails;
 using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -47,22 +45,6 @@ namespace WebApi.Controllers
             GetUserDetailsDto user = await _mediator
                 .Send(new GetUserDetailsRequest { UserId = UserId });
             return Ok(user);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<List<GetServerLookupDto>>> GetServers()
-        {
-            GetServersRequest get = new() { UserId = UserId };
-            List<GetServerLookupDto> servers = await _mediator.Send(get);
-            return Ok(servers);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<ServerDetailsDto>> GetServer(int serverId)
-        {
-            ServerDetailsDto server = await _mediator
-                .Send(new GetServerDetailsRequest { ServerId = serverId });
-            return Ok(server);
         }
 
         [HttpGet]
