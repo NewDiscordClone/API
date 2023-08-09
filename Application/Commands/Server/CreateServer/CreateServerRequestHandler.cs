@@ -1,5 +1,4 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Models;
 using MediatR;
 
@@ -16,10 +15,7 @@ namespace Application.Commands.Server.CreateServer
 
         public async Task<int> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
-            User user = await _context.Users
-                .FindAsync(new object[] { request.UserId },
-                cancellationToken: cancellationToken)
-                ?? throw new EntityNotFoundException($"User {request.UserId} not found");
+            User user = await _context.FindByIdAsync<User>(request.UserId, cancellationToken);
 
             Models.Server server = new()
             {
@@ -28,8 +24,8 @@ namespace Application.Commands.Server.CreateServer
             };
             server.ServerProfiles.Add(new() { User = user, Server = server });
 
-            await _context.Servers.AddAsync(server);
-            await _context.SaveChangesAsync();
+            await _context.Servers.AddAsync(server, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return server.Id;
         }
     }
