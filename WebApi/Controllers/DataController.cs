@@ -18,6 +18,11 @@ namespace WebApi.Controllers
     {
         private readonly IMediator _mediator;
 
+        public DataController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         protected int UserId => int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
                                        throw new NoSuchUserException());
 
