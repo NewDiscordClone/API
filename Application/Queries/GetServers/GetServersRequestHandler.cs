@@ -1,5 +1,4 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -21,13 +20,11 @@ namespace Application.Queries.GetServer
 
         public async Task<List<GetServerLookupDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
         {
-            User? user = await _appDbContext.Users
-                .FindAsync(new object[] { request.UserId }, cancellationToken)
-                ?? throw new NoSuchUserException();
+            User user = await _appDbContext.FindByIdAsync<User>(request.UserId, cancellationToken);
 
             List<GetServerLookupDto> servers = await _appDbContext.Servers
                 .Where(server => server.ServerProfiles
-                .Find(profile => profile.User.Id == user.Id) != null)
+                .Any(profile => profile.User.Id == request.UserId))
                 .ProjectTo<GetServerLookupDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
 
