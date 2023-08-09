@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -18,5 +19,13 @@ namespace DataAccess
         public DbSet<Reaction> Reactions { get; set; } = null!;
         public DbSet<Server> Servers { get; set; } = null!;
         public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
+
+        public async Task<TResult> FindByIdAsync<TResult>(int id, CancellationToken cancellationToken = default)
+            where TResult : class
+        {
+            DbSet<TResult> dbset = Set<TResult>();
+            return await dbset.FindAsync(new object[] { id }, cancellationToken)
+                ?? throw new EntityNotFoundException($"{typeof(TResult).Name} {id} not found");
+        }
     }
 }
