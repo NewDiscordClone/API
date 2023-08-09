@@ -1,5 +1,5 @@
+using Application.Commands.Messages.AddMessageRequest;
 using Application.Interfaces;
-using Application.Messages.AddMessageRequest;
 using Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

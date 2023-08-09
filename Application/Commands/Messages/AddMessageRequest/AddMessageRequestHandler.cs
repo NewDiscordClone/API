@@ -2,7 +2,7 @@
 using Application.Models;
 using MediatR;
 
-namespace Application.Messages.AddMessageRequest
+namespace Application.Commands.Messages.AddMessageRequest
 {
 
     public class AddMessageRequestHandler : IRequestHandler<AddMessageRequest, Message>
