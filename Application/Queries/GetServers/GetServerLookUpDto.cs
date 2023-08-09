@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace Application.Queries.GetServer
 {
-    public class GetServerLookUpDto : IMapWith<Server>
+    public record GetServerLookupDto : IMapWith<Server>
     {
         public int Id { get; init; }
         public string Title { get; init; }
@@ -12,7 +12,7 @@ namespace Application.Queries.GetServer
         public List<GetServerChannelLookUpDto> Channels { get; init; } = new();
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Server, GetServerLookUpDto>();
+            profile.CreateMap<Server, GetServerLookupDto>();
         }
     }
 }
