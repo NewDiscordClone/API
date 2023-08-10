@@ -24,14 +24,7 @@ namespace WebApi.Controllers
         protected int UserId => int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
                                        throw new NoSuchUserException());
 
-        [HttpGet]
-        public async Task<ActionResult<List<GetPrivateChatLookUpDto>>> GetPrivateChats()
-        {
-
-            GetPrivateChatsRequest get = new() { UserId = UserId };
-            List<GetPrivateChatLookUpDto> list = await _mediator.Send(get);
-            return Ok(list);
-        }
+        
 
         [HttpGet]
         public async Task<ActionResult<GetUserDetailsDto>> GetUser([FromBody] GetUserDetailsRequest getUserDetailsRequest)
