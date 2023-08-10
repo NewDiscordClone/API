@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Application.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,6 @@ public interface IAppDbContext
     DbSet<User> Users { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    Task<TResult> FindByIdAsync<TResult>(int id, CancellationToken cancellationToken = default) where TResult : class;
+    Task<TResult> FindByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
 
 }

@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.PrivateChat.RemovePrivateChatMember
 {
@@ -14,7 +15,7 @@ namespace Application.Commands.PrivateChat.RemovePrivateChatMember
             User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
 
             Models.PrivateChat chat =
-                await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken);
+                await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken, "Users", "Owner");
             if (chat.Owner.Id != user.Id)
                 throw new NoPermissionsException("User is not an owner of the chat");
 

@@ -15,7 +15,7 @@ namespace Application.Commands.PrivateChat.ChangePrivateChatImage
                         ?? throw new NoSuchUserException();
 
             Models.PrivateChat chat =
-                await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken);
+                await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken, "Users");
             if (chat.Users.Find(u => u.Id == user.Id) == null)
                 throw new NoPermissionsException("User is not a member of the chat");
             chat.Image = request.NewImage;
