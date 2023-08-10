@@ -8,6 +8,8 @@ using Newtonsoft.Json.Serialization;
 using Notes.Application.Common.Mapping;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using Application.Providers;
+using WebApi.Providers;
 
 namespace WebApi
 {
@@ -71,6 +73,9 @@ namespace WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
 
             app.MapControllers();
 
