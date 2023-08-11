@@ -21,10 +21,10 @@ namespace Application.Queries.GetPrivateChats
 
         public async Task<List<GetPrivateChatLookUpDto>> Handle(GetPrivateChatsRequest request, CancellationToken cancellationToken)
         {
-            User user = await _appDbContext.Users.FindAsync(new object[] { request.UserId }, cancellationToken)
-                ?? throw new NoSuchUserException();
+            User user = await _appDbContext.FindByIdAsync<User>(request.UserId, cancellationToken);
 
             List<GetPrivateChatLookUpDto> privateChat = await _appDbContext.PrivateChats
+                .Include(chat => chat.Users)
                 .Where(chat => chat.Users.Contains(user))
                 .ProjectTo<GetPrivateChatLookUpDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);

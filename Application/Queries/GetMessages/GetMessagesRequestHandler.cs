@@ -22,6 +22,10 @@ namespace Application.Queries.GetMessages
         {
 
             List<GetMessageLookUpDto> messages = await _appDbContext.Messages
+                .Include(m => m.Chat)
+                .Include(m => m.User)
+                .Include(m => m.Reactions)
+                .Include(m => m.Attachments)
                 .Where(m => m.Chat.Id == request.ChatId)
                 .OrderBy(m => m.SendTime)
                 .Skip(request.MessagesCount)

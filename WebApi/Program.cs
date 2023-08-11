@@ -47,7 +47,10 @@ namespace WebApi
                     options.Audience = "MessageApi";
                     options.RequireHttpsMetadata = false;
                 });
-
+            
+            services.AddHttpContextAccessor();
+            services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
+            
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
@@ -73,9 +76,6 @@ namespace WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            services.AddHttpContextAccessor();
-            services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
 
             app.MapControllers();
 

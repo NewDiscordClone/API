@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Application.Providers;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -18,12 +19,15 @@ namespace WebApi.Controllers
     public class ServerController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IAuthorizedUserProvider _userProvider;
 
-        private int UserId => int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                                       throw new NoSuchUserException());
-        public ServerController(IMediator mediator)
+        private int UserId => _userProvider.GetUserId();
+            // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+            //                            throw new NoSuchUserException());
+        public ServerController(IMediator mediator, IAuthorizedUserProvider userProvider)
         {
             _mediator = mediator;
+            _userProvider = userProvider;
         }
 
         [HttpGet]
@@ -53,7 +57,6 @@ namespace WebApi.Controllers
         {
             CreateServerRequest request = new()
             {
-                UserId = UserId,
                 Title = serverDto.Title,
                 Image = serverDto.Image,
             };

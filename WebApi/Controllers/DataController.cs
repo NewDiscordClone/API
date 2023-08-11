@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Application.Providers;
 
 namespace WebApi.Controllers
 {
@@ -15,14 +16,17 @@ namespace WebApi.Controllers
     public class DataController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IAuthorizedUserProvider _userProvider;
 
-        public DataController(IMediator mediator)
+        public DataController(IMediator mediator, IAuthorizedUserProvider userProvider)
         {
             _mediator = mediator;
+            _userProvider = userProvider;
         }
 
-        protected int UserId => int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                                       throw new NoSuchUserException());
+        protected int UserId => _userProvider.GetUserId();
+            // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+            //                            throw new NoSuchUserException());
 
         
 

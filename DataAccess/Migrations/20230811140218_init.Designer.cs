@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230807120105_Initial")]
-    partial class Initial
+    [Migration("20230811140218_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -82,8 +82,8 @@ namespace DataAccess.Migrations
                     b.Property<int>("ChatId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReplyId")
-                        .HasColumnType("int");
+                    b.Property<bool>("IsPinned")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("SendTime")
                         .HasColumnType("datetime2");
@@ -99,8 +99,6 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("ChatId");
 
-                    b.HasIndex("ReplyId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
@@ -115,12 +113,13 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Emoji")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MessageId")
+                    b.Property<int>("MessageId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -141,6 +140,7 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Color")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -155,7 +155,7 @@ namespace DataAccess.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("ServerId")
+                    b.Property<int>("ServerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -181,11 +181,16 @@ namespace DataAccess.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Servers");
                 });
@@ -229,6 +234,9 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("AvatarPath")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ChatId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -284,6 +292,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -399,21 +409,6 @@ namespace DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PrivateChatUser", b =>
-                {
-                    b.Property<int>("PrivateChatsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PrivateChatsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("PrivateChatUser");
-                });
-
             modelBuilder.Entity("RoleServerProfile", b =>
                 {
                     b.Property<int>("RolesId")
@@ -433,10 +428,11 @@ namespace DataAccess.Migrations
                 {
                     b.HasBaseType("Application.Models.Chat");
 
-                    b.Property<int?>("ServerId")
+                    b.Property<int>("ServerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("ServerId");
@@ -451,9 +447,14 @@ namespace DataAccess.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PrivateChat_Title");
+
+                    b.HasIndex("OwnerId");
 
                     b.HasDiscriminator().HasValue("PrivateChat");
                 });
@@ -475,10 +476,6 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Application.Models.Message", "Reply")
-                        .WithMany()
-                        .HasForeignKey("ReplyId");
-
                     b.HasOne("Application.Models.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
@@ -487,8 +484,6 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Chat");
 
-                    b.Navigation("Reply");
-
                     b.Navigation("User");
                 });
 
@@ -496,11 +491,15 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Application.Models.Message", "Message")
                         .WithMany("Reactions")
-                        .HasForeignKey("MessageId");
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Application.Models.User", "User")
                         .WithMany("Reactions")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Message");
 
@@ -511,9 +510,22 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Application.Models.Server", "Server")
                         .WithMany("Roles")
-                        .HasForeignKey("ServerId");
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Server");
+                });
+
+            modelBuilder.Entity("Application.Models.Server", b =>
+                {
+                    b.HasOne("Application.Models.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Application.Models.ServerProfile", b =>
@@ -533,6 +545,13 @@ namespace DataAccess.Migrations
                     b.Navigation("Server");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Application.Models.User", b =>
+                {
+                    b.HasOne("Application.Models.Chat", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ChatId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -586,21 +605,6 @@ namespace DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PrivateChatUser", b =>
-                {
-                    b.HasOne("Application.Models.PrivateChat", null)
-                        .WithMany()
-                        .HasForeignKey("PrivateChatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Application.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("RoleServerProfile", b =>
                 {
                     b.HasOne("Application.Models.Role", null)
@@ -620,14 +624,29 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Application.Models.Server", "Server")
                         .WithMany("Channels")
-                        .HasForeignKey("ServerId");
+                        .HasForeignKey("ServerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Server");
+                });
+
+            modelBuilder.Entity("Application.Models.PrivateChat", b =>
+                {
+                    b.HasOne("Application.Models.User", "Owner")
+                        .WithMany("PrivateChats")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Application.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Application.Models.Message", b =>
@@ -649,6 +668,8 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Application.Models.User", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("PrivateChats");
 
                     b.Navigation("Reactions");
 

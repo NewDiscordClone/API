@@ -19,7 +19,7 @@ namespace Application.Queries.GetPrivateChatDetails
         public async Task<GetPrivateChatDetailsDto> Handle(GetPrivateChatDetailsRequest request, CancellationToken cancellationToken)
         {
             User user = await _context.FindByIdAsync<User>(request.UserId, cancellationToken);
-            PrivateChat chat = await _context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken);
+            PrivateChat chat = await _context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken, "Users");
             if (chat.Users.Find(u => u.Id == user.Id) == null)
                 throw new NoPermissionsException("User is not a member of the chat");
             return _mapper.Map<GetPrivateChatDetailsDto>(chat);

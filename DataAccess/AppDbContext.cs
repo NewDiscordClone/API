@@ -11,6 +11,8 @@ namespace DataAccess
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
+        
+        
 
         public DbSet<Attachment> Attachments { get; set; } = null!;
         public DbSet<Channel> Channels { get; set; } = null!;
@@ -32,8 +34,12 @@ namespace DataAccess
                 queryable = queryable.Include(property);
             }
 
+            // Define an expression that represents the ID property
+            Expression<Func<TEntity, bool>> predicate = entity =>
+                EF.Property<int>(entity, "Id") == id;
+
             TEntity? entity = await queryable
-                .FirstOrDefaultAsync(e => GetId(e) == id, cancellationToken);
+                .FirstOrDefaultAsync(predicate, cancellationToken);
 
             if (entity == null)
             {

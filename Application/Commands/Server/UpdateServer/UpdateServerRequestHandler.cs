@@ -1,26 +1,30 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
 using MediatR;
 namespace Application.Commands.Server.UpdateServer
 {
-    public class UpdateServerRequestHandler : IRequestHandler<UpdateServerRequest>
+    public class UpdateServerRequestHandler : RequestHandlerBase, IRequestHandler<UpdateServerRequest>
     {
-        private readonly IAppDbContext _context;
-
-        public UpdateServerRequestHandler(IAppDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task Handle(UpdateServerRequest request, CancellationToken cancellationToken)
         {
-            Models.Server server = await _context.FindByIdAsync<Models.Server>
+            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Models.Server server = await Context.FindByIdAsync<Models.Server>
                 (request.ServerId, cancellationToken);
-
+            
+            if (user.Id != server.Owner.Id)
+                throw new NoPermissionsException("You are not the owner of the server");
+            
             server.Title = request.Title ?? server.Title;
             server.Image = request.Image ?? server.Image;
 
-            _context.Servers.Update(server);
-            await _context.SaveChangesAsync(cancellationToken);
+            Context.Servers.Update(server);
+            await Context.SaveChangesAsync(cancellationToken);
+        }
+
+        public UpdateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        {
         }
     }
 }

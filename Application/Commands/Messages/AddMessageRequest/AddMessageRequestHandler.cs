@@ -1,40 +1,46 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
 
 namespace Application.Commands.Messages.AddMessageRequest
 {
 
-    public class AddMessageRequestHandler : IRequestHandler<AddMessageRequest, Message>
+    public class AddMessageRequestHandler : RequestHandlerBase, IRequestHandler<AddMessageRequest, Message>
     {
-        private readonly IAppDbContext _context;
-
-        public AddMessageRequestHandler(IAppDbContext context)
-        {
-            _context = context;
-        }
-
         public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
         {
-            Chat? chat = await _context.Chats
-                 .FindAsync(new object[] { request.ChatId }, cancellationToken);
-            User? user = await _context.Users.FindAsync(new object[] { request.UserId }, cancellationToken);
+            Chat? chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users");
+            User? user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            
+            //TODO: Перевірка на те що цей юзер в чаті
 
-            if (chat is null || user is null)
-                throw new Exception("Chat or user not found");
-
+            List<Attachment> attachments = new List<Attachment>();
+            request.Attachments?.ForEach(a =>
+            {
+                attachments.Add(new Attachment()
+                {
+                    Path = a.Path,
+                    Type = a.Type,
+                    IsSpoiler = a.IsSpoiler
+                });
+            });
+            
             Message message = new()
             {
                 Text = request.Text,
                 Chat = chat,
                 SendTime = DateTime.UtcNow,
                 User = user,
-                Attachments = request.Attachments ?? new()
+                Attachments = attachments
             };
-
-            await _context.Messages.AddAsync(message, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            await Context.Messages.AddAsync(message, cancellationToken);
+            await Context.SaveChangesAsync(cancellationToken);
             return message;
+        }
+
+        public AddMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        {
         }
     }
 }

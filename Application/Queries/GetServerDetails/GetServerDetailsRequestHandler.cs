@@ -1,29 +1,30 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using MediatR;
 
 namespace Application.Queries.GetServerDetails
 {
-    public class GetServerDetailsRequestHandler : IRequestHandler<GetServerDetailsRequest, ServerDetailsDto>
+    public class GetServerDetailsRequestHandler : RequestHandlerBase,
+        IRequestHandler<GetServerDetailsRequest, ServerDetailsDto>
     {
-        private readonly IAppDbContext _context;
-        private readonly IMapper _mapper;
-
-        public GetServerDetailsRequestHandler(IAppDbContext appDbContext, IMapper mapper)
+        public async Task<ServerDetailsDto> Handle(GetServerDetailsRequest request, CancellationToken cancellationToken)
         {
-            _context = appDbContext;
-            _mapper = mapper;
+            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken, 
+                "ServerProfiles",
+                "Channels",
+                "Roles", 
+                "ServerProfiles.User");
+            if (server.ServerProfiles.Find(sp => sp.User.Id == UserId) == null)
+                throw new NoPermissionsException("User are not a member of the Server");
+            return Mapper.Map<ServerDetailsDto>(server);
         }
 
-        public async Task<ServerDetailsDto> Handle(GetServerDetailsRequest request,
-            CancellationToken cancellationToken)
+        public GetServerDetailsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
+            IMapper mapper) : base(context, userProvider, mapper)
         {
-            Server server = await _context.Servers.FindAsync(new object[] { request.ServerId }, cancellationToken)
-                ?? throw new EntityNotFoundException($"Server {request.ServerId} not found");
-
-            return _mapper.Map<ServerDetailsDto>(server);
         }
     }
 }

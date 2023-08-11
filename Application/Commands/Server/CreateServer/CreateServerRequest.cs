@@ -10,8 +10,5 @@ namespace Application.Commands.Server.CreateServer
 
         [DataType(DataType.ImageUrl)]
         public string? Image { get; init; }
-
-        [Range(1, int.MaxValue, ErrorMessage = "UserId must be greater than 0.")]
-        public int UserId { get; init; }
     }
 }

@@ -9,8 +9,8 @@ namespace Application.Queries.GetPrivateChatDetails
         public int Id { get; init; }
         public string? Image { get; init; }
         public string? Title { get; init; }
-        public GetPrivateChatUserLookUpDto Owner { get; init; }
-        public List<GetPrivateChatUserLookUpDto> Users { get; init; } = new();
+        public GetPrivateChatDetailsUserLookUpDto Owner { get; init; }
+        public List<GetPrivateChatDetailsUserLookUpDto> Users { get; init; } = new();
 
         public void Mapping(Profile profile)
         {

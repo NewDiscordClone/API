@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries.GetUser
 {
@@ -27,6 +28,9 @@ namespace Application.Queries.GetUser
             if (request.ServerId is not null)
             {
                 ServerProfile? profile = _appDbContext.ServerProfiles
+                    .Include(sp => sp.Server)
+                    .Include(sp => sp.User)
+                    .Include(sp => sp.Roles)
                     .FirstOrDefault(profile => profile.Server.Id == request.ServerId
                     && profile.User.Id == request.UserId);
                 userDto.Profile = _mapper.Map<GetUserDetailsServerProfileDto>(profile);

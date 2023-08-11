@@ -6,8 +6,7 @@ namespace Application.Commands.Messages.AddMessageRequest
     public record AddMessageRequest : IRequest<Message>
     {
         public string Text { get; init; }
-        public int UserId { get; set; }
         public int ChatId { get; init; }
-        public List<Attachment>? Attachments { get; set; }
+        public List<AddMessageAttachmentDto>? Attachments { get; init; }
     }
 }

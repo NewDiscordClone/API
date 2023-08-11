@@ -1,11 +1,10 @@
 ﻿using Application.Interfaces;
 using Application.Models;
-using Application.Queries.GetMessages;
 using AutoMapper;
 
-namespace Application.Queries.GetPrivateChatDetails
+namespace Application.Queries.GetPinnedMessages
 {
-    public record GetPrivateChatUserLookUpDto : IMapWith<User>
+    public record GetPinnedMessageUserDto : IMapWith<User>
     {
         public int Id { get; init; }
         public string DisplayName { get; init; }
@@ -13,7 +12,7 @@ namespace Application.Queries.GetPrivateChatDetails
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<User, GetMessageUserDto>();
+            profile.CreateMap<User, GetPinnedMessageUserDto>();
         }
     }
 }
