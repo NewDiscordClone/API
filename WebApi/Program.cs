@@ -3,6 +3,8 @@ using Application.Hubs;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Reflection;
+using Application.Interfaces;
+using WebApi.Providers;
 
 namespace Application
 {
@@ -29,7 +31,11 @@ namespace Application
                     options.Audience = "MessageApi";
                     options.RequireHttpsMetadata = false;
                 });
-
+            
+            services.AddHttpContextAccessor();
+            services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
+            services.AddScoped<IHubContextProvider, HubContextProvider>();
+            
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
