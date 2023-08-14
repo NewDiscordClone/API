@@ -1,33 +1,39 @@
-﻿using Application.Interfaces;
-using Application.Messages.AddMessageRequest;
+using Application.Commands.Messages.AddMessage;
+using Application.Interfaces;
 using Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Application.Providers;
+using WebApi.Models;
 
 namespace Application.Hubs;
 
 [Authorize]
 public class ChatHub : Hub
 {
-    private readonly IAppDbContext _dbContext;
     private readonly ILogger<ChatHub> _logger;
     private readonly IMediator _mediator;
+    private readonly IAuthorizedUserProvider _userProvider;
 
-    private event Func<Message, PrivateChat, Task> OnMessageReceived;
-    public ChatHub(IAppDbContext dbContext, IMediator mediator, ILogger<ChatHub> logger)
+    private event Action<Message, Chat> OnChatMessageReceived;
+
+    public ChatHub(IAuthorizedUserProvider userProvider, IMediator mediator, ILogger<ChatHub> logger)
     {
-        _dbContext = dbContext;
         _mediator = mediator;
         _logger = logger;
+        _userProvider = userProvider;
 
-        OnMessageReceived += SendMessageToPrivateChat;
+        OnChatMessageReceived += async (msg, chat) => await SendMessageToChat(msg, chat);
     }
 
     private static readonly Dictionary<int, HashSet<string>> _userConnections = new();
-    private int UserId => int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-        ?? throw new Exception("User not authenticated"));
+
+    private int UserId => _userProvider.GetUserId();
+
+    // int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+    // ?? throw new Exception("User not authenticated"));
     public override async Task OnConnectedAsync()
     {
         if (!_userConnections.ContainsKey(UserId))
@@ -54,35 +60,28 @@ public class ChatHub : Hub
 
         await base.OnDisconnectedAsync(exception);
     }
-    public async Task AddMessage(string text, int chatId)
+
+    public async Task AddMessage(AddMessageRequest messageRequest)
     {
         if (!_userConnections.ContainsKey(UserId))
         {
             return;
         }
-        AddMessageRequest messageRequest = new()
-        {
-            Text = text,
-            ChatId = chatId,
-            UserId = UserId
-        };
+
         try
         {
             Message message = await _mediator.Send(messageRequest);
-            _logger.LogInformation($"User {UserId} sent message to chat {chatId}");
-
-            if (message.Chat is PrivateChat chat)
-            {
-                OnMessageReceived?.Invoke(message, chat);
-            }
+            _logger.LogInformation($"User {UserId} sent message to chat {messageRequest.ChatId}");
+            
+            OnChatMessageReceived?.Invoke(message, message.Chat);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error while user {UserId} tries send message to chat {chatId}");
+            _logger.LogError(ex, $"Error while user {UserId} tries send message to chat {messageRequest.ChatId}");
         }
     }
 
-    private async Task SendMessageToPrivateChat(Message message, PrivateChat chat)
+    private async Task SendMessageToChat(Message message, Chat chat)
     {
         IEnumerable<string> connectedUsers = chat.Users
             .Where(user => _userConnections.ContainsKey(user.Id))

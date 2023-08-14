@@ -1,12 +1,19 @@
 using Application;
 using Application.Hubs;
+using Application.Interfaces;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
+using Notes.Application.Common.Mapping;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using Application.Interfaces;
 using WebApi.Providers;
+using Application.Providers;
+using WebApi.Providers;
 
-namespace Application
+namespace WebApi
 {
     internal static class Program
     {
@@ -16,8 +23,19 @@ namespace Application
             IServiceCollection services = builder.Services;
 
             services.AddApplication();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ContractResolver =
+                    new CamelCasePropertyNamesContractResolver();
+            });
             services.AddDatabase(builder.Configuration);
+
+            services.AddAutoMapper(config =>
+            {
+                config.AddProfile(new AssemblyMappingProfile(
+                    Assembly.GetExecutingAssembly()));
+                config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
+            });
 
             services.AddAuthentication(config =>
                 {
@@ -47,15 +65,11 @@ namespace Application
                 });
             });
 
-            services.AddSwaggerGen(options =>
-            {
-                string xmlName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlName);
-                options.IncludeXmlComments(xmlPath);
-            });
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>,
+                 SwaggerConfigurationOptions>();
+            services.AddSwaggerGen();
 
             builder.Services.AddSignalR();
-            //builder.Services.AddSingleton<IChatService, ChatService>();
 
             WebApplication app = builder.Build();
 
@@ -77,6 +91,7 @@ namespace Application
                 {
                     option.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi");
                     option.RoutePrefix = string.Empty;
+                    option.DisplayRequestDuration();
                 });
             }
 
