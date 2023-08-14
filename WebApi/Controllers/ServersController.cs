@@ -16,7 +16,7 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class ServerController : ControllerBase
+    public class ServersController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IAuthorizedUserProvider _userProvider;
@@ -24,7 +24,7 @@ namespace WebApi.Controllers
         private int UserId => _userProvider.GetUserId();
             // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
             //                            throw new NoSuchUserException());
-        public ServerController(IMediator mediator, IAuthorizedUserProvider userProvider)
+        public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider)
         {
             _mediator = mediator;
             _userProvider = userProvider;

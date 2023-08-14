@@ -13,7 +13,7 @@ namespace Application.Queries.GetPrivateChatDetails
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<User, GetMessageUserDto>();
+            profile.CreateMap<User, GetPrivateChatDetailsUserLookUpDto>();
         }
     }
 }

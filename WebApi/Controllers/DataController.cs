@@ -10,7 +10,7 @@ using Application.Providers;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[action]")]
     [ApiController]
     [Authorize]
     public class DataController : Controller
@@ -30,7 +30,7 @@ namespace WebApi.Controllers
 
         
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult<GetUserDetailsDto>> GetUser([FromBody] GetUserDetailsRequest getUserDetailsRequest)
         {
             GetUserDetailsDto user = await _mediator.Send(getUserDetailsRequest);
@@ -42,13 +42,6 @@ namespace WebApi.Controllers
             GetUserDetailsDto user = await _mediator
                 .Send(new GetUserDetailsRequest { UserId = UserId });
             return Ok(user);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<List<GetMessageLookUpDto>>> GetMessages([FromBody] GetMessagesRequest get)
-        {
-            List<GetMessageLookUpDto> messages = await _mediator.Send(get);
-            return Ok(messages);
         }
     }
 }

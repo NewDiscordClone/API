@@ -2,7 +2,7 @@
 using Application.Models;
 using AutoMapper;
 
-namespace Application.Commands.Messages.AddMessageRequest
+namespace Application.Commands.Messages.AddMessage
 {
     public record AddMessageAttachmentDto
     {

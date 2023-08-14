@@ -23,13 +23,13 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class PrivateChatController : ControllerBase
+    public class PrivateChatsController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IAuthorizedUserProvider _userProvider;
         private int UserId => _userProvider.GetUserId();
             //int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-        public PrivateChatController(IMediator mediator, IAuthorizedUserProvider userProvider)
+        public PrivateChatsController(IMediator mediator, IAuthorizedUserProvider userProvider)
         {
             _mediator = mediator;
             _userProvider = userProvider;

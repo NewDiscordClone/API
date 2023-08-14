@@ -13,10 +13,7 @@ namespace Application.Queries.GetPinnedMessages
         public async Task<List<GetPinnedMessageLookUpDto>> Handle(GetPinnedMessagesRequest request,
             CancellationToken cancellationToken)
         {
-            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users",
-                "PinnedMessages",
-                "PinnedMessages.User",
-                "PinnedMessages.Attachments");
+            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users", "Messages");
             User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
             
             if (!chat.Users.Contains(user)) throw new NoPermissionsException("You are not a member of the Chat");
