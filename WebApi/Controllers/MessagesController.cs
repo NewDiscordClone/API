@@ -7,6 +7,7 @@ using Application.Commands.Messages.RemoveAttachment;
 using Application.Commands.Messages.RemoveMessage;
 using Application.Commands.Messages.RemoveReaction;
 using Application.Commands.Messages.UnpinMessage;
+using Application.Commands.NotifyClients.NotifyChatMembers;
 using Application.Exceptions;
 using Application.Models;
 using Application.Providers;
@@ -53,8 +54,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Message message = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                int messageId = await Mediator.Send(request);
+                await Mediator.Send(new NotifyMessageAddedRequest { MessageId = messageId});
                 return Ok();
             }
             catch (NoPermissionsException e)

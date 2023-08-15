@@ -5,6 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
+using Application.Commands.NotifyClients.OnConnected;
+using Application.Commands.NotifyClients.OnDisconnected;
 using Application.Providers;
 using WebApi.Models;
 
@@ -16,80 +18,23 @@ public class ChatHub : Hub
     private readonly ILogger<ChatHub> _logger;
     private readonly IMediator _mediator;
     private readonly IAuthorizedUserProvider _userProvider;
-
-    private event Action<Message, Chat> OnChatMessageReceived;
-
     public ChatHub(IAuthorizedUserProvider userProvider, IMediator mediator, ILogger<ChatHub> logger)
     {
         _mediator = mediator;
         _logger = logger;
         _userProvider = userProvider;
-
-        OnChatMessageReceived += async (msg, chat) => await SendMessageToChat(msg, chat);
     }
-
-    private static readonly Dictionary<int, HashSet<string>> _userConnections = new();
-
     private int UserId => _userProvider.GetUserId();
-
-    // int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-    // ?? throw new Exception("User not authenticated"));
     public override async Task OnConnectedAsync()
     {
-        if (!_userConnections.ContainsKey(UserId))
-        {
-            _userConnections[UserId] = new HashSet<string>();
-        }
-
-        _userConnections[UserId].Add(Context.ConnectionId);
+        await _mediator.Send(new OnConnectedRequest { ConnectionId = Context.ConnectionId });
         _logger.LogInformation($"User {UserId} connected");
         await base.OnConnectedAsync();
     }
-
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        if (_userConnections.ContainsKey(UserId))
-        {
-            _userConnections[UserId].Remove(Context.ConnectionId);
-            if (_userConnections[UserId].Count == 0)
-            {
-                _userConnections.Remove(UserId);
-                _logger.LogInformation($"User {UserId} disconnected");
-            }
-        }
-
+        await _mediator.Send(new OnDisconnectedRequest { ConnectionId = Context.ConnectionId });
+        _logger.LogInformation($"User {UserId} disconnected");
         await base.OnDisconnectedAsync(exception);
-    }
-
-    public async Task AddMessage(AddMessageRequest messageRequest)
-    {
-        if (!_userConnections.ContainsKey(UserId))
-        {
-            return;
-        }
-
-        try
-        {
-            Message message = await _mediator.Send(messageRequest);
-            _logger.LogInformation($"User {UserId} sent message to chat {messageRequest.ChatId}");
-            
-            OnChatMessageReceived?.Invoke(message, message.Chat);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, $"Error while user {UserId} tries send message to chat {messageRequest.ChatId}");
-        }
-    }
-
-    private async Task SendMessageToChat(Message message, Chat chat)
-    {
-        IEnumerable<string> connectedUsers = chat.Users
-            .Where(user => _userConnections.ContainsKey(user.Id))
-            .SelectMany(user => _userConnections[user.Id]);
-
-        foreach (string connectionId in connectedUsers)
-        {
-            await Clients.Client(connectionId).SendAsync("MessageAdded", message);
-        }
     }
 }

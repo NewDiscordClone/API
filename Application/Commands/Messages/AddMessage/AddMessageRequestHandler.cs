@@ -7,12 +7,12 @@ using MediatR;
 
 namespace Application.Commands.Messages.AddMessage
 {
-    public class AddMessageRequestHandler : RequestHandlerBase, IRequestHandler<AddMessageRequest, Message>
+    public class AddMessageRequestHandler : RequestHandlerBase, IRequestHandler<AddMessageRequest, int>
     {
         
-        public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
+        public async Task<int> Handle(AddMessageRequest request, CancellationToken cancellationToken)
         {
-            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users");
+            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken);
             User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
 
             if (!chat.Users.Contains(user))
@@ -41,7 +41,7 @@ namespace Application.Commands.Messages.AddMessage
             };
             await Context.Messages.AddAsync(message, cancellationToken);
             await Context.SaveChangesAsync(cancellationToken);
-            return message;
+            return message.Id;
         }
 
         public AddMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

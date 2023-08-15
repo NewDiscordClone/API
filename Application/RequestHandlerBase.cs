@@ -6,21 +6,43 @@ namespace Application
 {
     public abstract class RequestHandlerBase
     {
-        protected readonly IAppDbContext Context;
+        private readonly IAppDbContext _context;
         private readonly IAuthorizedUserProvider _userProvider;
         private readonly IMapper? _mapper;
+        
+        protected IAppDbContext Context => _context?? throw new Exception("There is no constructor with IAppDbContext");
+        protected int UserId => _userProvider?.GetUserId() ?? throw new Exception("There is no constructor with IAuthorizedUserProvider");
         protected IMapper Mapper => _mapper ?? throw new Exception("There is no constructor with IMapper");
-        protected int UserId => _userProvider.GetUserId();
-
-        public RequestHandlerBase(IAppDbContext context, IAuthorizedUserProvider userProvider)
+        public RequestHandlerBase(IMapper mapper)
         {
-            Context = context;
+            _mapper = mapper;
+        }
+        public RequestHandlerBase(IAppDbContext context)
+        {
+            _context = context;
+        }
+        public RequestHandlerBase(IAuthorizedUserProvider userProvider)
+        {
             _userProvider = userProvider;
         }
-        
+        public RequestHandlerBase(IAppDbContext context, IMapper mapper)
+        {
+            _mapper = mapper;
+            _context = context;
+        }
+        public RequestHandlerBase(IAuthorizedUserProvider userProvider, IMapper mapper)
+        {
+            _mapper = mapper;
+            _userProvider = userProvider;
+        }
+        public RequestHandlerBase(IAppDbContext context, IAuthorizedUserProvider userProvider)
+        {
+            _context = context;
+            _userProvider = userProvider;
+        }
         public RequestHandlerBase(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
         {
-            Context = context;
+            _context = context;
             _userProvider = userProvider;
             _mapper = mapper;
         }
