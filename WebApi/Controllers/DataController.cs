@@ -1,37 +1,36 @@
-using Application.Models;
-using Application.RequestModels;
-using Application.RequestModels.GetMessages;
-using Application.RequestModels.GetPrivateChats;
-using Application.RequestModels.GetServer;
-using Application.RequestModels.GetUser;
+using Application.Exceptions;
+using Application.Queries.GetMessages;
+using Application.Queries.GetPrivateChats;
+using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Application.Exceptions;
+using Application.Providers;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[action]")]
     [ApiController]
     [Authorize]
     public class DataController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IAuthorizedUserProvider _userProvider;
 
-        protected int UserId => int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                                       throw new NoSuchUserException());
-
-        [HttpGet]
-        public async Task<ActionResult<List<GetPrivateChatLookUpDto>>> GetPrivateChats()
+        public DataController(IMediator mediator, IAuthorizedUserProvider userProvider)
         {
-
-            GetPrivateChatsRequest get = new() { UserId = UserId };
-            List<GetPrivateChatLookUpDto> list = await _mediator.Send(get);
-            return Ok(list);
+            _mediator = mediator;
+            _userProvider = userProvider;
         }
 
-        [HttpGet]
+        protected int UserId => _userProvider.GetUserId();
+            // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+            //                            throw new NoSuchUserException());
+
+        
+
+        [HttpPost]
         public async Task<ActionResult<GetUserDetailsDto>> GetUser([FromBody] GetUserDetailsRequest getUserDetailsRequest)
         {
             GetUserDetailsDto user = await _mediator.Send(getUserDetailsRequest);
@@ -43,21 +42,6 @@ namespace WebApi.Controllers
             GetUserDetailsDto user = await _mediator
                 .Send(new GetUserDetailsRequest { UserId = UserId });
             return Ok(user);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<List<GetServerLookUpDto>>> GetServers()
-        {
-            GetServersRequest get = new() { UserId = UserId };
-            List<GetServerLookUpDto> servers = await _mediator.Send(get);
-            return Ok(servers);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<List<GetMessageLookUpDto>>> GetMessages([FromBody] GetMessagesRequest get)
-        {
-            List<GetMessageLookUpDto> messages = await _mediator.Send(get);
-            return Ok(messages);
         }
     }
 }

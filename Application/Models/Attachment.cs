@@ -2,7 +2,13 @@ namespace Application.Models;
 
 public enum AttachmentType
 {
-
+    Url,
+    UrlImage,
+    UrlGif,
+    Image,
+    Gif,
+    Video,
+    Audio
 }
 
 public class Attachment
