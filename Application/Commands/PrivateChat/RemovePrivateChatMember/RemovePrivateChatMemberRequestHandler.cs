@@ -12,12 +12,12 @@ namespace Application.Commands.PrivateChat.RemovePrivateChatMember
         
         public async Task Handle(RemovePrivateChatMemberRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-
             Models.PrivateChat chat =
                 await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken, "Users", "Owner");
-            if (chat.Owner.Id != user.Id)
-                throw new NoPermissionsException("User is not an owner of the chat");
+            if (chat.Owner.Id != UserId)
+                throw new NoPermissionsException("You are not an owner of the chat");
+            if (UserId == request.MemberId)
+                throw new Exception("You can't remove yourself");
 
             User member = await Context.FindByIdAsync<User>(request.MemberId, cancellationToken);
             if (!chat.Users.Remove(member))

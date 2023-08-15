@@ -11,12 +11,9 @@ namespace Application.Commands.PrivateChat.RenamePrivateChat
 
         public async Task Handle(RenamePrivateChatRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken)
-                        ?? throw new NoSuchUserException();
-
             Models.PrivateChat chat =
                 await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken);
-            if (chat.Users.Find(u => u.Id == user.Id) == null)
+            if (chat.Users.Find(u => u.Id == UserId) == null)
                 throw new NoPermissionsException("User is not a member of the chat");
             chat.Title = request.NewTitle;
 

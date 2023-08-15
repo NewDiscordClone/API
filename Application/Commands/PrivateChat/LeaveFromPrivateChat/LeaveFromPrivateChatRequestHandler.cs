@@ -17,14 +17,12 @@ namespace Application.Commands.PrivateChat.LeaveFromPrivateChat
             if (chat.Users.Find(u => u.Id == user.Id) == null)
                 throw new NoSuchUserException("User is not a member of the chat");
             chat.Users.Remove(user);
-            await Context.SaveChangesAsync(cancellationToken);
-            if (chat.Users.Count == 0)
+            if (chat.Users.Count <= 1)
             {
                 Context.Chats.Remove(chat);
             }
             else if (chat.Owner.Id == UserId)
                 chat.Owner = chat.Users.First();
-
             await Context.SaveChangesAsync(cancellationToken);
         }
 

@@ -49,6 +49,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> AddMessage([FromBody] AddMessageRequest request)
         {
             try
@@ -66,6 +67,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> AddReaction([FromBody] AddReactionRequest request)
         {
             try
@@ -101,6 +103,7 @@ namespace WebApi.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> PinMessage([FromBody] PinMessageRequest request)
         {
             try
@@ -118,6 +121,7 @@ namespace WebApi.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveAllReactions([FromBody] RemoveAllReactionsRequest request)
         {
             try
@@ -135,7 +139,8 @@ namespace WebApi.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
         {
             try
             {
@@ -152,6 +157,7 @@ namespace WebApi.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveMessage([FromBody] RemoveMessageRequest request)
         {
             try
@@ -169,6 +175,7 @@ namespace WebApi.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveReaction([FromBody] RemoveReactionRequest request)
         {
             try
@@ -186,6 +193,7 @@ namespace WebApi.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> UnpinMessage([FromBody] UnpinMessageRequest request)
         {
             try

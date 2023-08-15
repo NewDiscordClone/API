@@ -23,16 +23,10 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class PrivateChatsController : ControllerBase
+    public class PrivateChatsController : ApiControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IAuthorizedUserProvider _userProvider;
-        private int UserId => _userProvider.GetUserId();
-            //int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-        public PrivateChatsController(IMediator mediator, IAuthorizedUserProvider userProvider)
+        public PrivateChatsController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
         {
-            _mediator = mediator;
-            _userProvider = userProvider;
         }
 
         [HttpGet]
@@ -42,7 +36,7 @@ namespace WebApi.Controllers
         {
 
             GetPrivateChatsRequest get = new() { UserId = UserId };
-            List<GetPrivateChatLookUpDto> list = await _mediator.Send(get);
+            List<GetPrivateChatLookUpDto> list = await Mediator.Send(get);
             return Ok(list);
         }
 
@@ -54,13 +48,13 @@ namespace WebApi.Controllers
         {
             try
             {
-                GetPrivateChatDetailsDto chat = await _mediator
+                GetPrivateChatDetailsDto chat = await Mediator
                     .Send(new GetPrivateChatDetailsRequest() { ChatId = chatId });
                 return Ok(chat);
             }
             catch (NoPermissionsException e)
             {
-                return Forbid();
+                return Forbid(e.Message);
             }
         }
 
@@ -69,7 +63,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<int>> Create(CreatePrivateChatRequest chatRequest)
         {
-            PrivateChat chat = await _mediator.Send(chatRequest);
+            PrivateChat chat = await Mediator.Send(chatRequest);
             return Created("https://localhost:7060/api/PrivateChat/GetDetails?chatId="+chat.Id, chat.Id);
         }
 
@@ -81,12 +75,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return Ok();
             }
-            catch (NoPermissionsException)
+            catch (NoPermissionsException e)
             {
-                return Forbid();
+                return Forbid(e.Message);
             }
         }
 
@@ -98,12 +92,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return Ok();
             }
-            catch (NoPermissionsException)
+            catch (NoPermissionsException e)
             {
-                return Forbid();
+                return Forbid(e.Message);
             }
         }
         
@@ -115,12 +109,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return Ok();
             }
-            catch (NoPermissionsException)
+            catch (NoPermissionsException e)
             {
-                return Forbid();
+                return Forbid(e.Message);
             }
         }
         [HttpPut]
@@ -131,12 +125,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return Ok();
             }
-            catch (NoSuchUserException)
+            catch (NoSuchUserException e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
         [HttpPut]
@@ -147,12 +141,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return Ok();
             }
-            catch (NoPermissionsException)
+            catch (NoPermissionsException e)
             {
-                return Forbid();
+                return Forbid(e.Message);
             }
         }
         [HttpPut]
@@ -164,12 +158,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return Ok();
             }
-            catch (NoPermissionsException)
+            catch (NoPermissionsException e)
             {
-                return Forbid();
+                return Forbid(e.Message);
             }
             catch (NoSuchUserException ex)
             {

@@ -12,11 +12,9 @@ namespace Application.Commands.PrivateChat.MakePrivateChatOwner
 
         public async Task Handle(MakePrivateChatOwnerRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-
             Models.PrivateChat chat =
                 await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken, "Users", "Owner");
-            if (chat.Owner.Id != user.Id)
+            if (chat.Owner.Id != UserId)
                 throw new NoPermissionsException("User is not an owner of the chat");
 
             User member = await Context.FindByIdAsync<User>(request.MemberId, cancellationToken);

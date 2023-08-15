@@ -16,19 +16,10 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class ServersController : ControllerBase
+    public class ServersController : ApiControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IAuthorizedUserProvider _userProvider;
-
-        private int UserId => _userProvider.GetUserId();
-            // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-            //                            throw new NoSuchUserException());
-        public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider)
-        {
-            _mediator = mediator;
-            _userProvider = userProvider;
-        }
+        public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
+        {}
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,7 +27,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<List<GetServerLookupDto>>> GetServers()
         {
             GetServersRequest get = new() { UserId = UserId };
-            List<GetServerLookupDto> servers = await _mediator.Send(get);
+            List<GetServerLookupDto> servers = await Mediator.Send(get);
             return Ok(servers);
         }
 
@@ -45,7 +36,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ServerDetailsDto>> GetServer(int serverId)
         {
-            ServerDetailsDto server = await _mediator
+            ServerDetailsDto server = await Mediator
                 .Send(new GetServerDetailsRequest { ServerId = serverId });
             return Ok(server);
         }
@@ -60,7 +51,7 @@ namespace WebApi.Controllers
                 Title = serverDto.Title,
                 Image = serverDto.Image,
             };
-            int id = await _mediator.Send(request);
+            int id = await Mediator.Send(request);
             return Created(string.Empty, id);
         }
 
@@ -72,7 +63,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return NoContent();
             }
             catch (Exception ex)
@@ -89,7 +80,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                await _mediator.Send(request);
+                await Mediator.Send(request);
                 return NoContent();
             }
             catch (Exception ex)

@@ -10,11 +10,9 @@ namespace Application.Commands.PrivateChat.AddMemberToPrivateChat
     {
         public async Task Handle(AddMemberToPrivateChatRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-
             Models.PrivateChat chat =
                 await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken, "Users");
-            if (chat.Users.Find(u => u.Id == user.Id) == null)
+            if (chat.Users.Find(u => u.Id == UserId) == null)
                 throw new NoPermissionsException("User is not a member of the chat");
 
             User NewMember = await Context.FindByIdAsync<User>(request.NewMemberId, cancellationToken);
