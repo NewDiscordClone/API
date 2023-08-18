@@ -1,14 +1,14 @@
 using Application;
 using Application.Hubs;
 using Application.Interfaces;
+using Application.Mapping;
+using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
-using Notes.Application.Common.Mapping;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using Application.Providers;
 using WebApi.Providers;
 
 namespace WebApi
@@ -47,10 +47,10 @@ namespace WebApi
                     options.Audience = "MessageApi";
                     options.RequireHttpsMetadata = false;
                 });
-            
+
             services.AddHttpContextAccessor();
             services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
-            
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
