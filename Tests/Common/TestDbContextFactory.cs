@@ -24,30 +24,52 @@
                 context.Database.EnsureCreated();
 
                 context.Servers.AddRange(
-                     new Server
-                     {
-                         Id = ServerIdForDelete,
-                         Title = "Server 1",
-                         ServerProfiles = new List<ServerProfile>
+                    new Server
                     {
-                        new ServerProfile
+                        Id = ServerIdForDelete,
+                        Title = "Server 1",
+                        ServerProfiles =
                         {
-                            User = new User { Id = UserAId }
+                            new ServerProfile
+                            {
+                                User = new User
+                                {
+                                    Id = UserAId
+                                }
+                            }
+                        },
+                        Channels =
+                        {
+                            new Channel
+                            {
+                                Id = 1,
+                                Title = "Channel 1"
+                            }
                         }
-                    }
-                     },
-                new Server
-                {
-                    Id = ServerIdForUpdate,
-                    Title = "Server 2",
-                    ServerProfiles = new List<ServerProfile>
+                    },
+                    new Server
                     {
-                        new ServerProfile
+                        Id = ServerIdForUpdate,
+                        Title = "Server 2",
+                        ServerProfiles =
                         {
-                            User = new User { Id = UserBId }
+                            new ServerProfile
+                            {
+                                User = new User
+                                {
+                                    Id = UserBId
+                                }
+                            }
+                        },
+                        Channels =
+                        {
+                            new Channel
+                            {
+                                Id = 2,
+                                Title = "Channel 2"
+                            }
                         }
-                    }
-                });
+                    });
                 context.SaveChanges();
                 return context;
             }

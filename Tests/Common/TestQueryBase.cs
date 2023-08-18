@@ -9,6 +9,7 @@ namespace Tests.Common
     {
         protected readonly IAppDbContext Context;
         protected readonly IMapper Mapper;
+        protected readonly CancellationToken CancellationToken = CancellationToken.None;
 
         public TestQueryBase()
         {

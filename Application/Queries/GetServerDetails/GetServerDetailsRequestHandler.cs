@@ -12,10 +12,10 @@ namespace Application.Queries.GetServerDetails
     {
         public async Task<ServerDetailsDto> Handle(GetServerDetailsRequest request, CancellationToken cancellationToken)
         {
-            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken, 
+            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken,
                 "ServerProfiles",
                 "Channels",
-                "Roles", 
+                "Roles",
                 "ServerProfiles.User");
             if (server.ServerProfiles.Find(sp => sp.User.Id == UserId) == null)
                 throw new NoPermissionsException("User are not a member of the Server");
