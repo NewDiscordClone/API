@@ -9,6 +9,8 @@ namespace Tests.Common
     {
         public static int UserAId { get; set; } = 1;
         public static int UserBId { get; set; } = 2;
+        public static int UserCId { get; set; } = 3;
+        public static int UserDId { get; set; } = 4;
 
         public static int ServerIdForDelete { get; set; } = 1;
         public static int ServerIdForUpdate { get; set; } = 2;
@@ -35,8 +37,22 @@ namespace Tests.Common
                 AvatarPath = null,
                 Email = "email@test2.com",
             };
+            User userC = new()
+            {
+                Id = UserCId,
+                UserName = "User C",
+                AvatarPath = null,
+                Email = "email@test3.com",
+            };
+            User userD = new()
+            {
+                Id = UserDId,
+                UserName = "User D",
+                AvatarPath = null,
+                Email = "email@test4.com",
+            };
 
-            context.Users.AddRange(userA, userB);
+            context.Users.AddRange(userA, userB, userC, userD);
 
             context.Servers.AddRange(
               new Server
@@ -81,6 +97,40 @@ namespace Tests.Common
                             }
                     }
                 });
+
+            context.PrivateChats.AddRange(
+                new PrivateChat
+                {
+                    Id = 3,
+                    Owner = userA,
+                    Users = { userA, userB }
+                },
+                new PrivateChat
+                {
+                    Id = 4,
+                    Owner = userA,
+                    Users = { userA, userC }
+                },
+                new PrivateChat
+                {
+                    Id = 5,
+                    Owner = userB,
+                    Users = { userB, userC }
+                },
+                new PrivateChat
+                {
+                    Id = 6,
+                    Owner = userB,
+                    Users = { userA, userB, userC, userD }
+                },
+                new PrivateChat
+                {
+                    Id = 7,
+                    Owner = userB,
+                    Users = { userB, userC, userD }
+                }
+            );
+
             context.SaveChanges();
             return context;
         }
