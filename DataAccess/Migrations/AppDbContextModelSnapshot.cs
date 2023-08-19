@@ -233,9 +233,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("AvatarPath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ChatId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -291,8 +288,6 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -302,6 +297,21 @@ namespace DataAccess.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ChatUser", b =>
+                {
+                    b.Property<int>("PrivateChatsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PrivateChatsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ChatUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -412,12 +422,12 @@ namespace DataAccess.Migrations
                     b.Property<int>("RolesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ServerProfileId")
+                    b.Property<int>("ServerProfilesId")
                         .HasColumnType("int");
 
-                    b.HasKey("RolesId", "ServerProfileId");
+                    b.HasKey("RolesId", "ServerProfilesId");
 
-                    b.HasIndex("ServerProfileId");
+                    b.HasIndex("ServerProfilesId");
 
                     b.ToTable("RoleServerProfile");
                 });
@@ -452,8 +462,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PrivateChat_Title");
 
-                    b.HasIndex("OwnerId");
-
                     b.HasDiscriminator().HasValue("PrivateChat");
                 });
 
@@ -461,7 +469,8 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Application.Models.Message", "Message")
                         .WithMany("Attachments")
-                        .HasForeignKey("MessageId");
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Message");
                 });
@@ -471,13 +480,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Application.Models.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Application.Models.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Chat");
@@ -490,13 +499,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Application.Models.Message", "Message")
                         .WithMany("Reactions")
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Application.Models.User", "User")
                         .WithMany("Reactions")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Message");
@@ -518,9 +527,9 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Application.Models.Server", b =>
                 {
                     b.HasOne("Application.Models.User", "Owner")
-                        .WithMany()
+                        .WithMany("OwnedServers")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -531,13 +540,13 @@ namespace DataAccess.Migrations
                     b.HasOne("Application.Models.Server", "Server")
                         .WithMany("ServerProfiles")
                         .HasForeignKey("ServerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Application.Models.User", "User")
                         .WithMany("ServerProfiles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Server");
@@ -545,11 +554,19 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Application.Models.User", b =>
+            modelBuilder.Entity("ChatUser", b =>
                 {
                     b.HasOne("Application.Models.Chat", null)
-                        .WithMany("Users")
-                        .HasForeignKey("ChatId");
+                        .WithMany()
+                        .HasForeignKey("PrivateChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Application.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -613,7 +630,7 @@ namespace DataAccess.Migrations
 
                     b.HasOne("Application.Models.ServerProfile", null)
                         .WithMany()
-                        .HasForeignKey("ServerProfileId")
+                        .HasForeignKey("ServerProfilesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -629,22 +646,9 @@ namespace DataAccess.Migrations
                     b.Navigation("Server");
                 });
 
-            modelBuilder.Entity("Application.Models.PrivateChat", b =>
-                {
-                    b.HasOne("Application.Models.User", "Owner")
-                        .WithMany("PrivateChats")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("Application.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Application.Models.Message", b =>
@@ -667,7 +671,7 @@ namespace DataAccess.Migrations
                 {
                     b.Navigation("Messages");
 
-                    b.Navigation("PrivateChats");
+                    b.Navigation("OwnedServers");
 
                     b.Navigation("Reactions");
 
