@@ -1,4 +1,10 @@
-﻿namespace Application.Queries.GetServer
+﻿using Application.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Application.Queries.GetServer
 {
     public class GetServersRequestHandler : IRequestHandler<GetServersRequest, List<GetServerLookupDto>>
     {

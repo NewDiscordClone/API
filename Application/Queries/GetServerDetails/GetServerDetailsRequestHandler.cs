@@ -1,4 +1,11 @@
-﻿namespace Application.Queries.GetServerDetails
+﻿using Application.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using AutoMapper;
+using MediatR;
+
+namespace Application.Queries.GetServerDetails
 {
     public class GetServerDetailsRequestHandler : RequestHandlerBase,
         IRequestHandler<GetServerDetailsRequest, ServerDetailsDto>
@@ -16,7 +23,6 @@
 
         public GetServerDetailsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
             IMapper mapper) : base(context, userProvider, mapper)
-        {
-        }
+        { }
     }
 }

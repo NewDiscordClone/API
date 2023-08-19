@@ -1,4 +1,4 @@
-﻿using Application.Commands.PrivateChat.CreatePrivateChat;
+﻿using Application.Commands.PrivateChats.CreatePrivateChat;
 using Application.Models;
 using Tests.Common;
 

@@ -1,4 +1,4 @@
-﻿using Application.Commands.Server.DeleteServer;
+﻿using Application.Commands.Servers.DeleteServer;
 using Application.Exceptions;
 using Application.Providers;
 using Tests.Common;

@@ -1,4 +1,4 @@
-﻿using Application.Commands.Server.CreateServer;
+﻿using Application.Commands.Servers.CreateServer;
 using Application.Providers;
 using Application.Queries.GetServerDetails;
 using Tests.Common;

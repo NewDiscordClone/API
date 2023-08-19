@@ -102,31 +102,31 @@ namespace Tests.Common
                 new PrivateChat
                 {
                     Id = 3,
-                    Owner = userA,
+                    OwnerId = userA.Id,
                     Users = { userA, userB }
                 },
                 new PrivateChat
                 {
                     Id = 4,
-                    Owner = userA,
+                    OwnerId = userA.Id,
                     Users = { userA, userC }
                 },
                 new PrivateChat
                 {
                     Id = 5,
-                    Owner = userB,
+                    OwnerId = userB.Id,
                     Users = { userB, userC }
                 },
                 new PrivateChat
                 {
                     Id = 6,
-                    Owner = userB,
+                    OwnerId = userB.Id,
                     Users = { userA, userB, userC, userD }
                 },
                 new PrivateChat
                 {
                     Id = 7,
-                    Owner = userB,
+                    OwnerId = userB.Id,
                     Users = { userB, userC, userD }
                 }
             );

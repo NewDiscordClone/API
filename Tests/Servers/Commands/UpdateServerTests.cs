@@ -1,4 +1,4 @@
-﻿using Application.Commands.Server.UpdateServer;
+﻿using Application.Commands.Servers.UpdateServer;
 using Application.Exceptions;
 using Application.Models;
 using Application.Providers;

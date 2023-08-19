@@ -1,20 +1,17 @@
+using Application.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using DataAccess.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
 namespace DataAccess
 {
     public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            foreach (IMutableForeignKey? relationship in modelBuilder.Model
-                            .GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
-            }
-
-            base.OnModelCreating(modelBuilder);
-        }
 
         public DbSet<Attachment> Attachments { get; set; } = null!;
         public DbSet<Channel> Channels { get; set; } = null!;
