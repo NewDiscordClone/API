@@ -3,7 +3,7 @@ using Tests.Common;
 
 namespace Tests.Servers.Queries
 {
-    public class GetServerQueryTests : TestQueryBase
+    public class GetServersListQueryTests : TestQueryBase
     {
         [Fact]
         public async Task Handle_ReturnsExpectedServers()
