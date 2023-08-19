@@ -1,85 +1,96 @@
-﻿namespace Tests.Common
+﻿using Application.Interfaces;
+using Application.Models;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
+
+namespace Tests.Common
 {
-    using DataAccess;
-    using global::Application.Interfaces;
-    using global::Application.Models;
-    using Microsoft.EntityFrameworkCore;
-
-    namespace Application.Tests.Common
+    public static class TestDbContextFactory
     {
-        public static class TestDbContextFactory
+        public static int UserAId { get; set; } = 1;
+        public static int UserBId { get; set; } = 2;
+
+        public static int ServerIdForDelete { get; set; } = 1;
+        public static int ServerIdForUpdate { get; set; } = 2;
+
+        public static IAppDbContext Create()
         {
-            public static int UserAId { get; set; } = 1;
-            public static int UserBId { get; set; } = 2;
+            DbContextOptions<AppDbContext> options =
+                new DbContextOptionsBuilder<AppDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+            AppDbContext context = new(options);
+            context.Database.EnsureCreated();
 
-            public static int ServerIdForDelete { get; set; } = 1;
-            public static int ServerIdForUpdate { get; set; } = 2;
-
-            public static IAppDbContext Create()
+            User userA = new()
             {
-                DbContextOptions<AppDbContext> options =
-                    new DbContextOptionsBuilder<AppDbContext>()
-                    .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-                AppDbContext context = new(options);
-                context.Database.EnsureCreated();
+                Id = UserAId,
+                UserName = "User A",
+                AvatarPath = null,
+                Email = "email@test1.com",
+            };
+            User userB = new()
+            {
+                Id = UserBId,
+                UserName = "User B",
+                AvatarPath = null,
+                Email = "email@test2.com",
+            };
 
-                context.Servers.AddRange(
-                    new Server
+            context.Users.AddRange(userA, userB);
+
+            context.Servers.AddRange(
+              new Server
+              {
+                  Id = ServerIdForDelete,
+                  Title = "Server 1",
+                  Owner = userA,
+                  ServerProfiles =
                     {
-                        Id = ServerIdForDelete,
-                        Title = "Server 1",
-                        ServerProfiles =
-                        {
                             new ServerProfile
                             {
-                                User = new User
-                                {
-                                    Id = UserAId
-                                }
+                                User = userA
                             }
-                        },
-                        Channels =
-                        {
+                    },
+                  Channels =
+                    {
                             new Channel
                             {
                                 Id = 1,
                                 Title = "Channel 1"
                             }
-                        }
-                    },
-                    new Server
+                    }
+              },
+                new Server
+                {
+                    Id = ServerIdForUpdate,
+                    Title = "Server 2",
+                    Owner = userB,
+                    ServerProfiles =
                     {
-                        Id = ServerIdForUpdate,
-                        Title = "Server 2",
-                        ServerProfiles =
-                        {
                             new ServerProfile
                             {
-                                User = new User
-                                {
-                                    Id = UserBId
-                                }
+                                User = userB
                             }
-                        },
-                        Channels =
-                        {
+                    },
+                    Channels =
+                    {
                             new Channel
                             {
                                 Id = 2,
                                 Title = "Channel 2"
                             }
-                        }
-                    });
-                context.SaveChanges();
-                return context;
-            }
+                    }
+                });
+            context.SaveChanges();
+            return context;
+        }
 
-            public static void Destroy(AppDbContext context)
-            {
-                context.Database.EnsureDeleted();
-                context.Dispose();
-            }
+        public static void Destroy(AppDbContext context)
+        {
+            context.Database.EnsureDeleted();
+            context.Dispose();
         }
     }
+
 
 }

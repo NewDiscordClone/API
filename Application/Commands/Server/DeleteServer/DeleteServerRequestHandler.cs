@@ -18,7 +18,7 @@ namespace Application.Commands.Server.DeleteServer
             if (user.Id != server.Owner.Id)
                 throw new NoPermissionsException("You are not the owner of the server");
             Context.Servers.Remove(server);
-            await Context.SaveChangesAsync();
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
         public DeleteServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

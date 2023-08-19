@@ -1,9 +1,10 @@
-using System.Linq.Expressions;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq.Expressions;
 
 namespace DataAccess
 {
@@ -11,8 +12,17 @@ namespace DataAccess
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
-        
-        
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (IMutableForeignKey? relationship in modelBuilder.Model
+                            .GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+
+            base.OnModelCreating(modelBuilder);
+        }
 
         public DbSet<Attachment> Attachments { get; set; } = null!;
         public DbSet<Channel> Channels { get; set; } = null!;
@@ -29,7 +39,7 @@ namespace DataAccess
             DbSet<TEntity> dbSet = Set<TEntity>();
             IQueryable<TEntity> queryable = dbSet.AsQueryable();
 
-            foreach (var property in includedProperties)
+            foreach (string property in includedProperties)
             {
                 queryable = queryable.Include(property);
             }
@@ -51,13 +61,13 @@ namespace DataAccess
 
         private int GetId<TEntity>(TEntity entity)
         {
-            var idProperty = typeof(TEntity).GetProperty("Id");
-    
+            System.Reflection.PropertyInfo? idProperty = typeof(TEntity).GetProperty("Id");
+
             if (idProperty == null)
             {
                 throw new InvalidOperationException($"Type {typeof(TEntity).Name} does not have an 'Id' property.");
             }
-    
+
             return (int)idProperty.GetValue(entity);
         }
     }

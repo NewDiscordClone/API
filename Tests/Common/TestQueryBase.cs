@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Mapping;
 using AutoMapper;
-using Tests.Common.Application.Tests.Common;
 
 namespace Tests.Common
 {
