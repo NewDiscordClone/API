@@ -7,5 +7,5 @@ public class Role : IdentityRole<int>
     public string Color { get; set; }
 
     public virtual Server Server { get; set; }
-    public virtual List<ServerProfile> ServerProfile { get; set; } = new();
+    public virtual List<ServerProfile> ServerProfiles { get; set; } = new();
 }

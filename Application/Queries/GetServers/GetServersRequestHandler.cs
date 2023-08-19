@@ -20,7 +20,7 @@ namespace Application.Queries.GetServer
 
         public async Task<List<GetServerLookupDto>> Handle(GetServersRequest request, CancellationToken cancellationToken)
         {
-            User user = await _appDbContext.FindByIdAsync<User>(request.UserId, cancellationToken, "ServerProfiles", "ServerProfiles.User");
+            User user = await _appDbContext.FindByIdAsync<User>(request.UserId, cancellationToken, "ServerProfiles");
 
             List<GetServerLookupDto> servers = await _appDbContext.Servers
                 .Where(server => server.ServerProfiles
