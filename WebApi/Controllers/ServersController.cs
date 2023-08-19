@@ -1,13 +1,11 @@
-﻿using Application.Commands.Server.CreateServer;
-using Application.Commands.Server.DeleteServer;
-using Application.Commands.Server.UpdateServer;
-using Application.Exceptions;
+﻿using Application.Commands.Servers.CreateServer;
+using Application.Commands.Servers.DeleteServer;
+using Application.Commands.Servers.UpdateServer;
 using Application.Queries.GetServer;
 using Application.Queries.GetServerDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using Application.Providers;
 using WebApi.Models;
 
@@ -34,7 +32,7 @@ namespace WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ServerDetailsDto>> GetServer(int serverId)
+        public async Task<ActionResult<ServerDetailsDto>> GetServerDetails(int serverId)
         {
             ServerDetailsDto server = await Mediator
                 .Send(new GetServerDetailsRequest { ServerId = serverId });
@@ -44,7 +42,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<int>> Create(CrateServerDto serverDto)
+        public async Task<ActionResult<int>> CrateServer(CrateServerDto serverDto)
         {
             CreateServerRequest request = new()
             {
@@ -59,7 +57,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Update(UpdateServerRequest request)
+        public async Task<ActionResult> UpdateServer(UpdateServerRequest request)
         {
             try
             {
@@ -76,7 +74,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Delete(DeleteServerRequest request)
+        public async Task<ActionResult> DeleteServer(DeleteServerRequest request)
         {
             try
             {

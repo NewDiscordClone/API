@@ -1,11 +1,3 @@
-using Application.Exceptions;
-using Application.Interfaces;
-using Application.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Linq.Expressions;
-
 namespace DataAccess
 {
     public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
@@ -33,6 +25,21 @@ namespace DataAccess
         public DbSet<Server> Servers { get; set; } = null!;
         public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new AttachmentConfiguration());
+            builder.ApplyConfiguration(new ChannelConfiguration());
+            builder.ApplyConfiguration(new ChatConfiguration());
+            builder.ApplyConfiguration(new MessageConfiguration());
+            builder.ApplyConfiguration(new PrivateChatConfiguration());
+            builder.ApplyConfiguration(new ReactionConfiguration());
+            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new ServerConfiguration());
+            builder.ApplyConfiguration(new ServerProfileConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
+            base.OnModelCreating(builder);
+        }
+
         public async Task<TEntity> FindByIdAsync<TEntity>(int id, CancellationToken cancellationToken = default,
             params string[] includedProperties) where TEntity : class
         {
@@ -57,18 +64,6 @@ namespace DataAccess
             }
 
             return entity;
-        }
-
-        private int GetId<TEntity>(TEntity entity)
-        {
-            System.Reflection.PropertyInfo? idProperty = typeof(TEntity).GetProperty("Id");
-
-            if (idProperty == null)
-            {
-                throw new InvalidOperationException($"Type {typeof(TEntity).Name} does not have an 'Id' property.");
-            }
-
-            return (int)idProperty.GetValue(entity);
         }
     }
 }
