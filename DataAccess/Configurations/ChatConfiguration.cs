@@ -8,13 +8,7 @@ namespace DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<Chat> builder)
         {
-            builder.HasMany(c => c.Messages)
-                .WithOne(m => m.Chat)
-                .OnDelete(DeleteBehavior.Cascade); 
-            
-            builder.HasMany(c => c.Users)
-                .WithMany(u => u.PrivateChats);
-
+            //Nothing to configure yet
         }
     }
 }

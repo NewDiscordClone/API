@@ -10,14 +10,13 @@ namespace DataAccess.Configurations
         {
             builder.HasOne(sp => sp.Server)
                 .WithMany(s => s.ServerProfiles)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(sp => sp.User)
                 .WithMany(u => u.ServerProfiles)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade); //Розрахунок на те, що юзер не видаляється
             builder.HasMany(sp => sp.Roles)
                 .WithMany(u => u.ServerProfiles);
-
         }
     }
 }
