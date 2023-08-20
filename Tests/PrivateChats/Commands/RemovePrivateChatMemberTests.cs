@@ -1,4 +1,5 @@
 ﻿using Application.Commands.PrivateChats.RemovePrivateChatMember;
+using Application.Exceptions;
 using Application.Models;
 using Tests.Common;
 
@@ -53,7 +54,7 @@ namespace Tests.PrivateChats.Commands
 
             //Act
             //Assert
-            await Assert.ThrowsAsync<Exception>(async ()
+            await Assert.ThrowsAsync<NoSuchUserException>(async ()
                 => await handler.Handle(request, CancellationToken));
 
         }
