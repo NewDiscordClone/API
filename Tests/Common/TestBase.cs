@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace Tests.Common
 {
-    public class TestQueryBase
+    public class TestBase
     {
         private readonly Mock<IAuthorizedUserProvider> _userProvider;
 
@@ -14,7 +14,7 @@ namespace Tests.Common
         protected IAuthorizedUserProvider UserProvider => _userProvider.Object;
         protected readonly CancellationToken CancellationToken = CancellationToken.None;
 
-        public TestQueryBase()
+        public TestBase()
         {
             Context = TestDbContextFactory.Create();
             MapperConfiguration mapperConfig = new(config =>

@@ -6,7 +6,7 @@ using Tests.Common;
 
 namespace Tests.Servers.Commands
 {
-    public class UpdateServerTests : TestQueryBase
+    public class UpdateServerTests : TestBase
     {
         [Fact]
         public async Task Success()

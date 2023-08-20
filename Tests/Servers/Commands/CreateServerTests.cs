@@ -5,7 +5,7 @@ using Tests.Common;
 
 namespace Tests.Servers.Commands
 {
-    public class CreateServerTests : TestQueryBase
+    public class CreateServerTests : TestBase
     {
         [Fact]
         public async Task Success()

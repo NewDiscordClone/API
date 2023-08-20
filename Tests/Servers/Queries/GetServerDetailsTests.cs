@@ -4,7 +4,7 @@ using Tests.Common;
 
 namespace Tests.Servers.Queries
 {
-    public class GetServerDetailsTests : TestQueryBase
+    public class GetServerDetailsTests : TestBase
     {
         [Fact]
         public async Task GetServerDetails_Expected()

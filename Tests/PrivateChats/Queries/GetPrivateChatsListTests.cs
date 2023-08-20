@@ -3,7 +3,7 @@ using Tests.Common;
 
 namespace Tests.PrivateChats.Queries
 {
-    public class GetPrivateChatsListTests : TestQueryBase
+    public class GetPrivateChatsListTests : TestBase
     {
         [Fact]
         public async Task Success()

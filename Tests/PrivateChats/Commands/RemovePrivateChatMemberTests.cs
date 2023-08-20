@@ -4,7 +4,7 @@ using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
 {
-    public class RemovePrivateChatMemberTests : TestQueryBase
+    public class RemovePrivateChatMemberTests : TestBase
     {
         [Fact]
         public async Task Success()

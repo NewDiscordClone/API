@@ -4,7 +4,7 @@ using Tests.Common;
 
 namespace Tests.PrivateChats.Queries
 {
-    public class GetPrivateChatDetailsTests : TestQueryBase
+    public class GetPrivateChatDetailsTests : TestBase
     {
         [Fact]
         public async Task Success()

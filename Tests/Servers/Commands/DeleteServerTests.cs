@@ -5,7 +5,7 @@ using Tests.Common;
 
 namespace Tests.Servers.Commands
 {
-    public class DeleteServerTests : TestQueryBase
+    public class DeleteServerTests : TestBase
     {
         [Fact]
         public async Task Success()
