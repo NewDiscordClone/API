@@ -10,7 +10,7 @@ namespace DataAccess.Configurations
         {
             builder.HasOne(c => c.Server)
                 .WithMany(s => s.Channels)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
 
         }
     }

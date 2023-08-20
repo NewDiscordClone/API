@@ -10,18 +10,11 @@ namespace DataAccess.Configurations
         {
             builder.HasOne(m => m.Chat)
                 .WithMany(c => c.Messages)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
             
             builder.HasOne(m => m.User)
                 .WithMany(u => u.Messages)
-                .OnDelete(DeleteBehavior.Restrict);
-            
-            builder.HasMany(m => m.Reactions)
-                .WithOne(r => r.Message)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(m => m.Attachments)
-                .WithOne(a => a.Message)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction); //Розрахунок на те, що юзер не видаляється
         }
     }
 }
