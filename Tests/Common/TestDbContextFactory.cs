@@ -103,7 +103,49 @@ namespace Tests.Common
                 {
                     Id = 3,
                     OwnerId = userA.Id,
-                    Users = { userA, userB }
+                    Users = { userA, userB },
+                    Messages =
+                    {
+                        new Message
+                        {
+                            Id = 1,
+                            Text= "Message 1",
+                            SendTime = DateTime.Now,
+                            User = userA,
+                            Reactions =
+                            {
+                                new Reaction
+                                {
+                                    Id = 1,
+                                    Emoji = "☻",
+                                    User = userB,
+                                },
+                                new Reaction
+                                {
+                                    Id = 2,
+                                    Emoji = "☺",
+                                    User = userA,
+                                }
+                            }
+                        },
+                        new Message
+                        {
+                            Id = 2,
+                            Text= "Message 2",
+                            SendTime = DateTime.Now,
+                            User = userB,
+                            IsPinned = true,
+                            Attachments =
+                            {
+                                new Attachment
+                                {
+                                    Id = 1,
+                                    Type = AttachmentType.Url,
+                                    Path = "http://localhost:3000"
+                                }
+                            }
+                        }
+                    }
                 },
                 new PrivateChat
                 {
