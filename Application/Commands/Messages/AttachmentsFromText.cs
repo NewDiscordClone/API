@@ -11,7 +11,7 @@ namespace Application.Commands.Messages
 
         private static readonly Regex _imageUrlRegEx =
             new Regex(
-                @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#\/=]*)\.(?:png|jpg)([-a-zA-Z0-9()@:%_\+.~#&?\/=]*)");
+                @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#\/=]*)\.(?:png|jpg|img)([-a-zA-Z0-9()@:%_\+.~#&?\/=]*)");
 
         private static readonly Regex _gifUrlRegEx =
             new Regex(

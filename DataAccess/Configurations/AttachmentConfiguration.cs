@@ -10,7 +10,7 @@ namespace DataAccess.Configurations
         {
             builder.HasOne(a => a.Message)
                 .WithMany(m => m.Attachments)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
 
         }
     }

@@ -10,11 +10,11 @@ namespace DataAccess.Configurations
         {
             builder.HasOne(r => r.Message)
                 .WithMany(m => m.Reactions)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
 
             builder.HasOne(r => r.User)
                 .WithMany(u => u.Reactions)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction); //Розрахунок на те, що юзер не видаляється
         }
     }
 }

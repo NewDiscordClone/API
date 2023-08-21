@@ -12,7 +12,7 @@ namespace Application.Queries.GetServerDetails
     {
         public async Task<ServerDetailsDto> Handle(GetServerDetailsRequest request, CancellationToken cancellationToken)
         {
-            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken, 
+            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken,
                 "ServerProfiles",
                 "Channels",
                 "Roles");
@@ -23,7 +23,6 @@ namespace Application.Queries.GetServerDetails
 
         public GetServerDetailsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
             IMapper mapper) : base(context, userProvider, mapper)
-        {
-        }
+        { }
     }
 }

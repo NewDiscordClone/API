@@ -1,10 +1,10 @@
-using System.Linq.Expressions;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DataAccess
 {
@@ -12,8 +12,6 @@ namespace DataAccess
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
-        
-        
 
         public DbSet<Attachment> Attachments { get; set; } = null!;
         public DbSet<Channel> Channels { get; set; } = null!;
@@ -45,7 +43,7 @@ namespace DataAccess
             DbSet<TEntity> dbSet = Set<TEntity>();
             IQueryable<TEntity> queryable = dbSet.AsQueryable();
 
-            foreach (var property in includedProperties)
+            foreach (string property in includedProperties)
             {
                 queryable = queryable.Include(property);
             }

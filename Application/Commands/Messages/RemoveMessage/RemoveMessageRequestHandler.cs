@@ -16,16 +16,15 @@ namespace Application.Commands.Messages.RemoveMessage
                 "User",
                 "Chat",
                 "Chat.Users");
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
 
-            if (message.User.Id != user.Id)
+            if (message.User.Id != UserId)
             {
                 Channel? channel = await Context.Channels
                     .Include(c => c.Server)
                     .Include(c => c.Server.Owner)
                     .FirstOrDefaultAsync(c => c.Id == message.Chat.Id,
                         cancellationToken: cancellationToken);
-                if (channel != null && channel.Server.Owner.Id != user.Id) 
+                if (channel == null || channel.Server.Owner.Id != UserId) 
                     throw new NoPermissionsException("You don't have permission to remove the message");
             }
 
