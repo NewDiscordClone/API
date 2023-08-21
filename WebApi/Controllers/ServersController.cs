@@ -72,6 +72,7 @@ namespace WebApi.Controllers
             }
         }
 
+        [InRole("Owner")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

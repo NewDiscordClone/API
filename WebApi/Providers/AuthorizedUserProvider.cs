@@ -35,8 +35,9 @@ namespace WebApi.Providers
             if (!server.Roles.Any(serverRole => serverRole.Name == role.Name))
                 return false;
 
+            int userId = GetUserId();
             ServerProfile? profile = server.ServerProfiles
-                .FirstOrDefault(user => user.Id == GetUserId());
+                .FirstOrDefault(prof => prof.User.Id == userId);
 
             if (profile is null)
                 return false;
@@ -55,7 +56,7 @@ namespace WebApi.Providers
                 => role.Server.Id == serverId && role.Name == roleName);
 
             Server? server = await _context
-                .FindByIdAsync<Server>(serverId, default, "ServerProfiles", "ServerProfiles.Roles");
+                .FindByIdAsync<Server>(serverId, default, "ServerProfiles", "ServerProfiles.Roles", "ServerProfiles.User");
 
             if (role is null || server is null)
                 throw new EntityNotFoundException("Role or Server not found");
