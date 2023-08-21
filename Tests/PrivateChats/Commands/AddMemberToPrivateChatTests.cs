@@ -1,4 +1,5 @@
 ﻿using Application.Commands.PrivateChats.AddMemberToPrivateChat;
+using Application.Exceptions;
 using Application.Models;
 using Tests.Common;
 
@@ -54,7 +55,7 @@ namespace Tests.PrivateChats.Commands
 
             //Act
             //Assert
-            await Assert.ThrowsAsync<Exception>(async ()
+            await Assert.ThrowsAsync<NoPermissionsException>(async ()
                 => await handler.Handle(request, CancellationToken));
         }
     }

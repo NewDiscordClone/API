@@ -14,6 +14,8 @@ namespace Application.Commands.PrivateChats.AddMemberToPrivateChat
                 await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken, "Users");
             if (chat.Users.Find(u => u.Id == UserId) == null)
                 throw new NoPermissionsException("User is not a member of the chat");
+            if (chat.Users.Find(u => u.Id == request.NewMemberId) != null)
+                throw new NoPermissionsException("User is already a member of the chat");
 
             User NewMember = await Context.FindByIdAsync<User>(request.NewMemberId, cancellationToken);
             chat.Users.Add(NewMember);
