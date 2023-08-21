@@ -23,6 +23,12 @@ namespace Tests.Common
             AppDbContext context = new(options);
             context.Database.EnsureCreated();
 
+            Role ownerRole = new()
+            {
+                Name = "Owner",
+                Color = "#FFFF00"
+            };
+
             User userA = new()
             {
                 Id = UserAId,
@@ -60,11 +66,13 @@ namespace Tests.Common
                   Id = ServerIdForDelete,
                   Title = "Server 1",
                   Owner = userA,
+                  Roles = new() { ownerRole },
                   ServerProfiles =
                     {
                             new ServerProfile
                             {
-                                User = userA
+                                User = userA,
+                                Roles = new() { ownerRole }
                             }
                     },
                   Channels =
@@ -81,11 +89,13 @@ namespace Tests.Common
                     Id = ServerIdForUpdate,
                     Title = "Server 2",
                     Owner = userB,
+                    Roles = new() { ownerRole },
                     ServerProfiles =
                     {
                             new ServerProfile
                             {
-                                User = userB
+                                 User = userB,
+                                 Roles = new() { ownerRole }
                             }
                     },
                     Channels =
@@ -97,6 +107,7 @@ namespace Tests.Common
                             }
                     }
                 });
+            ;
 
             context.PrivateChats.AddRange(
                 new PrivateChat

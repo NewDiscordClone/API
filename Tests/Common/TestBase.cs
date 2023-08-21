@@ -5,7 +5,7 @@ using AutoMapper;
 
 namespace Tests.Common
 {
-    public class TestBase
+    public abstract class TestBase
     {
         private readonly Mock<IAuthorizedUserProvider> _userProvider;
 
