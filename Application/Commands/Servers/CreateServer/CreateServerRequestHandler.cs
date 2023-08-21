@@ -11,13 +11,21 @@ namespace Application.Commands.Servers.CreateServer
         {
             User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
 
+            Role ownerRole = new()
+            {
+                Name = "Owner",
+                Color = "#FFF000"
+            };
+
             Server server = new()
             {
                 Title = request.Title,
                 Image = request.Image,
-                Owner = user
+                Owner = user,
+                Roles = new() { ownerRole }
+
             };
-            server.ServerProfiles.Add(new() { User = user, Server = server });
+            server.ServerProfiles.Add(new() { User = user, Server = server, Roles = new() { ownerRole } });
 
             await Context.Servers.AddAsync(server, cancellationToken);
             await Context.SaveChangesAsync(cancellationToken);
