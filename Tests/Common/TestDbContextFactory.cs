@@ -65,7 +65,6 @@ namespace Tests.Common
               {
                   Id = ServerIdForDelete,
                   Title = "Server 1",
-                  Owner = userA,
                   Roles = new() { ownerRole },
                   ServerProfiles =
                     {
@@ -88,7 +87,6 @@ namespace Tests.Common
                 {
                     Id = ServerIdForUpdate,
                     Title = "Server 2",
-                    Owner = userB,
                     Roles = new() { ownerRole },
                     ServerProfiles =
                     {

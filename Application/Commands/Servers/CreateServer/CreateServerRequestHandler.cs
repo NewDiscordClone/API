@@ -21,7 +21,6 @@ namespace Application.Commands.Servers.CreateServer
             {
                 Title = request.Title,
                 Image = request.Image,
-                Owner = user,
                 Roles = new() { ownerRole }
 
             };

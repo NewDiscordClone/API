@@ -16,7 +16,6 @@ public class User : IdentityUser<int>
     public UserStatus Status { get; set; }
     public string? TextStatus { get; set; }
 
-    public virtual List<Server> OwnedServers { get; set; } = new();
     public virtual List<ServerProfile> ServerProfiles { get; set; } = new();
     public virtual List<Message> Messages { get; set; } = new();
     public virtual List<Chat> PrivateChats { get; set; } = new();

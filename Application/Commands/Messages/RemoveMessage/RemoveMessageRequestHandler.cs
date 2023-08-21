@@ -3,7 +3,6 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.Messages.RemoveMessage
 {
@@ -12,21 +11,19 @@ namespace Application.Commands.Messages.RemoveMessage
     {
         public async Task<Chat> Handle(RemoveMessageRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken, 
+            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken,
                 "User",
                 "Chat",
                 "Chat.Users");
 
-            if (message.User.Id != UserId)
-            {
-                Channel? channel = await Context.Channels
-                    .Include(c => c.Server)
-                    .Include(c => c.Server.Owner)
-                    .FirstOrDefaultAsync(c => c.Id == message.Chat.Id,
-                        cancellationToken: cancellationToken);
-                if (channel == null || channel.Server.Owner.Id != UserId) 
-                    throw new NoPermissionsException("You don't have permission to remove the message");
-            }
+            bool isOwner = false;
+
+            if (message.Chat is Channel channel)
+                isOwner = UserProvider.IsInRole("Owner", channel.Server.Id);
+
+            if (message.User.Id != UserId || isOwner)
+                throw new NoPermissionsException("You don't have permission to remove the message");
+
 
             Chat chat = message.Chat;
 

@@ -1,5 +1,4 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using MediatR;
@@ -12,10 +11,7 @@ namespace Application.Commands.Servers.UpdateServer
             User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
             Server server = await Context.FindByIdAsync<Server>
                 (request.ServerId, cancellationToken);
-            
-            if (user.Id != server.Owner.Id)
-                throw new NoPermissionsException("You are not the owner of the server");
-            
+
             server.Title = request.Title ?? server.Title;
             server.Image = request.Image ?? server.Image;
 
