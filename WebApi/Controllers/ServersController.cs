@@ -1,12 +1,13 @@
 ﻿using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
 using Application.Commands.Servers.UpdateServer;
+using Application.Providers;
 using Application.Queries.GetServer;
 using Application.Queries.GetServerDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Providers;
+using WebApi.Attributes;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -17,7 +18,7 @@ namespace WebApi.Controllers
     public class ServersController : ApiControllerBase
     {
         public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
-        {}
+        { }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -53,6 +54,7 @@ namespace WebApi.Controllers
             return Created(string.Empty, id);
         }
 
+        [InRole("Owner")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

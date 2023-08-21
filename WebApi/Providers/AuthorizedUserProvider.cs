@@ -32,7 +32,7 @@ namespace WebApi.Providers
 
         public bool IsInRole(Role role, Server server)
         {
-            if (server.Roles.Contains(role))
+            if (!server.Roles.Any(serverRole => serverRole.Name == role.Name))
                 return false;
 
             ServerProfile? profile = server.ServerProfiles
@@ -54,7 +54,8 @@ namespace WebApi.Providers
             Role? role = await _context.Roles.FirstOrDefaultAsync(role
                 => role.Server.Id == serverId && role.Name == roleName);
 
-            Server? server = await _context.Servers.FindAsync(serverId);
+            Server? server = await _context
+                .FindByIdAsync<Server>(serverId, default, "ServerProfiles", "ServerProfiles.Roles");
 
             if (role is null || server is null)
                 throw new EntityNotFoundException("Role or Server not found");

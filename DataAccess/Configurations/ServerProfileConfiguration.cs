@@ -16,7 +16,13 @@ namespace DataAccess.Configurations
                 .WithMany(u => u.ServerProfiles)
                 .OnDelete(DeleteBehavior.Cascade); //Розрахунок на те, що юзер не видаляється
             builder.HasMany(sp => sp.Roles)
-                .WithMany(u => u.ServerProfiles);
+                .WithMany(u => u.ServerProfiles)
+                .UsingEntity<Dictionary<string, object>>(
+                "ServerProfileRoles",
+                j => j.HasOne<Role>().WithMany().HasForeignKey("RoleId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasOne<ServerProfile>().WithMany().HasForeignKey("ServerProfileId").OnDelete(DeleteBehavior.Cascade),
+                j => j.HasKey("ServerProfileId", "RoleId"));
+
         }
     }
 }
