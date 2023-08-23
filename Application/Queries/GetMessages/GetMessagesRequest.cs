@@ -1,10 +1,12 @@
-﻿using MediatR;
+﻿using Application.Models;
+using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Queries.GetMessages
 {
-    public record GetMessagesRequest : IRequest<List<GetMessageLookUpDto>>
+    public record GetMessagesRequest : IRequest<List<Message>>
     {
-        public int ChatId { get; init; }
+        public ObjectId ChatId { get; init; }
         public int MessagesCount { get; init; }
     }
 }

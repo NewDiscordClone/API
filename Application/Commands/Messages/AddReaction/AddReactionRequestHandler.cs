@@ -2,36 +2,39 @@
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
+using AutoMapper;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.Messages.AddReaction
 {
-
     public class AddReactionRequestHandler : RequestHandlerBase, IRequestHandler<AddReactionRequest, Reaction>
     {
         public async Task<Reaction> Handle(AddReactionRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken, 
-                "Chat",
-                "Chat.Users"
-                );
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
+            Chat chat = await Context.FindByIdAsync<Chat>(message.ChatId, cancellationToken);
+            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
-            if (!message.Chat.Users.Contains(user))
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
-            
-            Reaction reaction = new()
+
+            Reaction reaction = new Reaction
             {
-                User = user,
-                Message = message,
+                User = Mapper.Map<UserLookUp>(user),
                 Emoji = request.Emoji,
             };
-            await Context.Reactions.AddAsync(reaction, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
+
+            await Context.Messages.UpdateOneAsync(
+                Context.GetIdFilter<Message>(request.MessageId),
+                Builders<Message>.Update.Push(m => m.Reactions, reaction),
+                null, cancellationToken);
+            
             return reaction;
         }
 
-        public AddReactionRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public AddReactionRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
+            base(context, userProvider, mapper)
         {
         }
     }

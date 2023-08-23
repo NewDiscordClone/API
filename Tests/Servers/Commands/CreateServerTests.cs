@@ -11,19 +11,18 @@ namespace Tests.Servers.Commands
         public async Task Success()
         {
             //Arrange
-            const int userId = 1;
+            int userId = TestDbContextFactory.UserAId;
             int oldCount = Context.Servers.Count();
             const string serverName = "New server";
 
-            Mock<IAuthorizedUserProvider> userProvider = new();
-            userProvider.Setup(provider => provider.GetUserId()).Returns(userId);
+            SetAuthorizedUserId(userId);
 
             CreateServerRequest request = new() { Title = serverName, Image = null };
-            CreateServerRequestHandler handler = new(Context, userProvider.Object);
+            CreateServerRequestHandler handler = new(Context, UserProvider);
 
             //Act
             int result = await handler.Handle(request, CancellationToken);
-            ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, userProvider.Object, Mapper)
+            ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)
                 .Handle(new GetServerDetailsRequest() { ServerId = result }, CancellationToken);
 
             //Assert

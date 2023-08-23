@@ -1,5 +1,6 @@
 ﻿using Application.Commands.PrivateChats.RenamePrivateChat;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -10,7 +11,7 @@ namespace Tests.PrivateChats.Commands
         public async Task Success()
         {
             //Arrange
-            int chatId = 4;
+            var chatId = TestDbContextFactory.PrivateChat4;
             string newTitle = "New title test";
 
             SetAuthorizedUserId(TestDbContextFactory.UserAId);
@@ -25,7 +26,7 @@ namespace Tests.PrivateChats.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
 
             //Assert
             Assert.NotNull(chat);

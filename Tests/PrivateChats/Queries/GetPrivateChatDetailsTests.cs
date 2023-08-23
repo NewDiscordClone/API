@@ -1,4 +1,5 @@
-﻿using Application.Providers;
+﻿using Application.Models;
+using Application.Providers;
 using Application.Queries.GetPrivateChatDetails;
 using Tests.Common;
 
@@ -10,17 +11,16 @@ namespace Tests.PrivateChats.Queries
         public async Task Success()
         {
             //Arrange
-            const int chatId = 4;
+            var chatId = TestDbContextFactory.PrivateChat4;
             int userId = TestDbContextFactory.UserAId;
-
-            Mock<IAuthorizedUserProvider> userProvider = new();
-            userProvider.Setup(provider => provider.GetUserId()).Returns(userId);
+            
+            SetAuthorizedUserId(userId);
 
             GetPrivateChatDetailsRequest request = new() { ChatId = chatId };
-            GetPrivateChatDetailsRequestHandler handler = new(Context, userProvider.Object, Mapper);
+            GetPrivateChatDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            GetPrivateChatDetailsDto chat = await handler.Handle(request, CancellationToken);
+            PrivateChat chat = await handler.Handle(request, CancellationToken);
 
             //Assert
             Assert.NotNull(chat);

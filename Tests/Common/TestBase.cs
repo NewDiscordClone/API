@@ -2,10 +2,11 @@
 using Application.Mapping;
 using Application.Providers;
 using AutoMapper;
+using MongoDB.Driver;
 
 namespace Tests.Common
 {
-    public class TestBase
+    public class TestBase : IDisposable
     {
         private readonly Mock<IAuthorizedUserProvider> _userProvider;
 
@@ -28,6 +29,11 @@ namespace Tests.Common
         protected void SetAuthorizedUserId(int id)
         {
             _userProvider.Setup(provider => provider.GetUserId()).Returns(id);
+        }
+
+        public void Dispose()
+        {
+            TestDbContextFactory.Destroy(Context);
         }
     }
 }

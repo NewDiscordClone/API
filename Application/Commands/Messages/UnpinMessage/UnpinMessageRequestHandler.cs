@@ -4,6 +4,7 @@ using Application.Models;
 using Application.Providers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace Application.Commands.Messages.UnpinMessage
 {
@@ -12,27 +13,22 @@ namespace Application.Commands.Messages.UnpinMessage
     {
         public async Task<Message> Handle(UnpinMessageRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken, 
-                "Chat",
-                "Chat.Users",
-                "Chat.Messages");
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
+            Chat chat = await Context.FindByIdAsync<Chat>(message.ChatId, cancellationToken);
 
-            if (!message.Chat.Users.Contains(user))
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
+
+            //TODO: Перевірка на відповідну роль на сервері
             
-            Channel? channel = await Context.Channels
-                .Include(c => c.Server)
-                .Include(c => c.Server.Owner)
-                .FirstOrDefaultAsync(c => c.Id == message.Chat.Id,
-                    cancellationToken: cancellationToken);
-            if (channel != null && channel.Server.Owner.Id != user.Id) 
-                throw new NoPermissionsException("You are not the Owner of the Server");
-
-            message.IsPinned = false;
-            await Context.SaveChangesAsync(cancellationToken);
-
-            return message;
+            await Context.Messages.UpdateOneAsync(
+                Context.GetIdFilter<Message>(request.MessageId),
+                Builders<Message>.Update.Set(m => m.IsPinned, false),
+                null,
+                cancellationToken
+            );
+            
+            return await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
         }
 
         public UnpinMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

@@ -42,8 +42,7 @@ namespace Tests.Servers.Queries
 
             // Assert
             Assert.Empty(result);
+
         }
-
-
     }
 }

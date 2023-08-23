@@ -1,10 +1,11 @@
 ﻿using Application.Models;
 using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Commands.Messages.RemoveMessage
 {
     public class RemoveMessageRequest : IRequest<Chat>
     {
-        public int MessageId { get; init; }
+        public ObjectId MessageId { get; init; }
     }
 }

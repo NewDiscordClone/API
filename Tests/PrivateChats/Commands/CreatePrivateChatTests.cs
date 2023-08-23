@@ -21,7 +21,7 @@ namespace Tests.PrivateChats.Commands
                 UsersId = userIdlist,
                 Title = title,
             };
-            CreatePrivateChatRequestHandler handler = new(Context, UserProvider);
+            CreatePrivateChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             PrivateChat result = await handler.Handle(request, CancellationToken);

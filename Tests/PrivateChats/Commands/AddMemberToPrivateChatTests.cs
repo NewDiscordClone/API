@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.AddMemberToPrivateChat;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -13,7 +14,7 @@ namespace Tests.PrivateChats.Commands
             //Arrange
 
             int newMemberId = TestDbContextFactory.UserAId;
-            int chatId = 5;
+            var chatId = TestDbContextFactory.PrivateChat5;
             int oldUsersCount = 2;
 
             SetAuthorizedUserId(TestDbContextFactory.UserBId);
@@ -24,11 +25,11 @@ namespace Tests.PrivateChats.Commands
                 NewMemberId = newMemberId
             };
 
-            AddMemberToPrivateChatRequestHandler handler = new(Context, UserProvider);
+            AddMemberToPrivateChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
 
             //Assert
             Assert.NotNull(chat);
@@ -40,7 +41,7 @@ namespace Tests.PrivateChats.Commands
         {
             //Arrange
             int newMemberId = TestDbContextFactory.UserCId;
-            int chatId = 5;
+            var chatId = TestDbContextFactory.PrivateChat5;
 
             SetAuthorizedUserId(TestDbContextFactory.UserBId);
 
@@ -51,7 +52,7 @@ namespace Tests.PrivateChats.Commands
             };
 
             AddMemberToPrivateChatRequestHandler handler =
-                new(Context, UserProvider);
+                new(Context, UserProvider, Mapper);
 
             //Act
             //Assert

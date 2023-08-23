@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.MakePrivateChatOwner;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -12,7 +13,7 @@ namespace Tests.PrivateChats.Commands
         {
             //Arrange
 
-            int chatId = 3;
+            var chatId = TestDbContextFactory.PrivateChat3;
             int newOwnerId = TestDbContextFactory.UserBId;
             int oldOwner = TestDbContextFactory.UserAId;
 
@@ -29,7 +30,7 @@ namespace Tests.PrivateChats.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
 
             //Assert
             Assert.NotNull(chat);
@@ -41,7 +42,7 @@ namespace Tests.PrivateChats.Commands
         {
             //Arrange
 
-            int chatId = 6;
+            var chatId = TestDbContextFactory.PrivateChat6;
             int newOwnerId = TestDbContextFactory.UserCId;
 
             SetAuthorizedUserId(TestDbContextFactory.UserAId);
@@ -66,7 +67,7 @@ namespace Tests.PrivateChats.Commands
         {
             //Arrange
 
-            int chatId = 7;
+            var chatId = TestDbContextFactory.PrivateChat7;
             int newOwnerId = TestDbContextFactory.UserAId;
 
             SetAuthorizedUserId(TestDbContextFactory.UserBId);

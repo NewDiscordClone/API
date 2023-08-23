@@ -4,7 +4,7 @@ namespace Application.Models;
 
 public class PrivateChat : Chat
 {
-    public string? Image { get; set; }
+    //public byte[]? Image { get; set; }
     public string? Title { get; set; }
     public int OwnerId { get; set; }
 }

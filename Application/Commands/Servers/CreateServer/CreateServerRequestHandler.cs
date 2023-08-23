@@ -9,12 +9,12 @@ namespace Application.Commands.Servers.CreateServer
     {
         public async Task<int> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
             Server server = new()
             {
                 Title = request.Title,
-                Image = request.Image,
+                //Image = request.Image,
                 Owner = user
             };
             server.ServerProfiles.Add(new() { User = user, Server = server });

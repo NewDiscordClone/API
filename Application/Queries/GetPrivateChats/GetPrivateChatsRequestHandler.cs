@@ -1,34 +1,35 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace Application.Queries.GetPrivateChats
 {
-    public class GetPrivateChatsRequestHandler : IRequestHandler<GetPrivateChatsRequest, List<GetPrivateChatLookUpDto>>
+    public class GetPrivateChatsRequestHandler : RequestHandlerBase,
+        IRequestHandler<GetPrivateChatsRequest, List<PrivateChat>>
     {
-        private readonly IAppDbContext _appDbContext;
-        private readonly IMapper _mapper;
-
-        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext, IMapper mapper)
+        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
+            IMapper mapper)
+            : base(appDbContext, userProvider, mapper)
         {
-            _appDbContext = appDbContext;
-            _mapper = mapper;
         }
 
-        public async Task<List<GetPrivateChatLookUpDto>> Handle(GetPrivateChatsRequest request, CancellationToken cancellationToken)
+        public async Task<List<PrivateChat>> Handle(GetPrivateChatsRequest request,
+            CancellationToken cancellationToken)
         {
-            User user = await _appDbContext.FindByIdAsync<User>(request.UserId, cancellationToken);
+            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
-            List<GetPrivateChatLookUpDto> privateChat = await _appDbContext.PrivateChats
-                .Include(chat => chat.Users)
-                .Where(chat => chat.Users.Contains(user))
-                .ProjectTo<GetPrivateChatLookUpDto>(_mapper.ConfigurationProvider)
+            List<PrivateChat> privateChat = await (await Context.PrivateChats
+                    .FindAsync(Builders<PrivateChat>.Filter
+                            .ElemMatch(c => c.Users, u => u.Id == UserId),
+                        null,
+                        cancellationToken))
                 .ToListAsync(cancellationToken);
-
             return privateChat;
         }
     }

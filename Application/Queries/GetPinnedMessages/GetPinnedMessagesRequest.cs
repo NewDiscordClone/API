@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using Application.Models;
+using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Queries.GetPinnedMessages
 {
-    public class GetPinnedMessagesRequest : IRequest<List<GetPinnedMessageLookUpDto>>
+    public class GetPinnedMessagesRequest : IRequest<List<Message>>
     {
-        public int ChatId { get; init; }
+        public ObjectId ChatId { get; init; }
     }
 }

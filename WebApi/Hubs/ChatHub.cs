@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using Application.Providers;
+using MongoDB.Driver;
 using WebApi.Models;
 
 namespace Application.Hubs;
@@ -16,10 +17,11 @@ public class ChatHub : Hub
     private readonly ILogger<ChatHub> _logger;
     private readonly IMediator _mediator;
     private readonly IAuthorizedUserProvider _userProvider;
+    private readonly IAppDbContext _context;
 
     private event Action<Message, Chat> OnChatMessageReceived;
 
-    public ChatHub(IAuthorizedUserProvider userProvider, IMediator mediator, ILogger<ChatHub> logger)
+    public ChatHub(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider, IMediator mediator, ILogger<ChatHub> logger)
     {
         _mediator = mediator;
         _logger = logger;
@@ -73,7 +75,8 @@ public class ChatHub : Hub
             Message message = await _mediator.Send(messageRequest);
             _logger.LogInformation($"User {UserId} sent message to chat {messageRequest.ChatId}");
             
-            OnChatMessageReceived?.Invoke(message, message.Chat);
+            OnChatMessageReceived?.Invoke(message, _context.Chats.Find(_context.GetIdFilter<Chat>(message.ChatId))
+                .FirstOrDefault());
         }
         catch (Exception ex)
         {

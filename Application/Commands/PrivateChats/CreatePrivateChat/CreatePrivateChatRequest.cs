@@ -8,8 +8,8 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
         [MaxLength(255)] 
         public string? Title { get; init; }
 
-        [DataType(DataType.ImageUrl)] 
-        public string? Image { get; init; }
+        //[DataType(DataType.ImageUrl)] 
+        //public string? Image { get; init; }
 
         [MaxLength(11)]
         public List<int> UsersId { get; init; }

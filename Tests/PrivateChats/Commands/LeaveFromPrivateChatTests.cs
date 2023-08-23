@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.LeaveFromPrivateChat;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -11,7 +12,7 @@ namespace Tests.PrivateChats.Commands
         public async Task Success_Owner()
         {
             //Arrange
-            int chatId = 7;
+            var chatId = TestDbContextFactory.PrivateChat7;
             int userId = TestDbContextFactory.UserBId;
 
             SetAuthorizedUserId(userId);
@@ -25,11 +26,11 @@ namespace Tests.PrivateChats.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
 
             //Assert
             Assert.NotNull(chat);
-            Assert.DoesNotContain(chat.Users, user => user.Id == chatId);
+            Assert.DoesNotContain(chat.Users, user => user.Id == userId);
             Assert.NotEqual(userId, chat.OwnerId);
         }
 
@@ -37,7 +38,7 @@ namespace Tests.PrivateChats.Commands
         public async Task Success_LastUser()
         {
             //Arrange
-            int chatId = 4;
+            var chatId = TestDbContextFactory.PrivateChat4;
             int userId = TestDbContextFactory.UserAId;
 
             SetAuthorizedUserId(userId);
@@ -51,7 +52,7 @@ namespace Tests.PrivateChats.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
 
             //Assert
             Assert.Null(chat);
@@ -60,7 +61,7 @@ namespace Tests.PrivateChats.Commands
         public async Task Fail_NoSuchUser()
         {
             //Arrange
-            int chatId = 4;
+            var chatId = TestDbContextFactory.PrivateChat4;
             int userId = TestDbContextFactory.UserBId;
 
             SetAuthorizedUserId(userId);
@@ -76,8 +77,6 @@ namespace Tests.PrivateChats.Commands
             //Assert
             await Assert.ThrowsAsync<NoSuchUserException>(async ()
                 => await handler.Handle(request, CancellationToken));
-
-
         }
     }
 }

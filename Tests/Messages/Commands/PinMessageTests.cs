@@ -10,7 +10,7 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
-            int messageId = 1;
+            var messageId = TestDbContextFactory.Message1;
 
             PinMessageRequest request = new()
             {
@@ -22,6 +22,7 @@ namespace Tests.Messages.Commands
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert
+
             Assert.True(result.IsPinned);
         }
     }

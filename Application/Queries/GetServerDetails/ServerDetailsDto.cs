@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 
@@ -10,12 +11,13 @@ namespace Application.Queries.GetServerDetails
         public string Title { get; init; }
         public string? Image { get; init; }
         public List<ServerProfileLookupDto> ServerProfiles { get; init; }
-        public List<ChannelLookupDto> Channels { get; init; }
+        [NotMapped]
+        public List<Channel> Channels { get; set; }
         public List<RoleDto> Roles { get; init; }
 
         public void Mapping(Profile profile)
         {
-           profile.CreateMap<Server,ServerDetailsDto>();
+            profile.CreateMap<Server, ServerDetailsDto>();
         }
     }
 }

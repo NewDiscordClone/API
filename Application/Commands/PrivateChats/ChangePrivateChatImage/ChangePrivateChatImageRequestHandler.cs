@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.ChangePrivateChatImage
 {
@@ -10,13 +11,20 @@ namespace Application.Commands.PrivateChats.ChangePrivateChatImage
     {
         public async Task Handle(ChangePrivateChatImageRequest request, CancellationToken cancellationToken)
         {
-            PrivateChat chat =
-                await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken, "Users");
-            if (chat.Users.Find(u => u.Id == UserId) == null)
-                throw new NoPermissionsException("User is not a member of the chat");
-            chat.Image = request.NewImage;
-
-            await Context.SaveChangesAsync(cancellationToken);
+            throw new NotImplementedException();
+            
+            // PrivateChat chat =
+            //     await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken);
+            // if (!chat.Users.Any(u => u.Id == UserId))
+            //     throw new NoPermissionsException("User is not a member of the chat");
+            //
+            //
+            // await Context.PrivateChats.UpdateOneAsync(
+            //     Context.GetIdFilter<PrivateChat>(chat.Id),
+            //     Builders<PrivateChat>.Update.Set(c => c.Image, request.NewImage)
+            //     , null,
+            //     cancellationToken);
+            
         }
 
         public ChangePrivateChatImageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

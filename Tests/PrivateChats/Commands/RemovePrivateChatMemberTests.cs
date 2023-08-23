@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.RemovePrivateChatMember;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -11,7 +12,7 @@ namespace Tests.PrivateChats.Commands
         public async Task Success()
         {
             //Arrange
-            int chatId = 6;
+            var chatId = TestDbContextFactory.PrivateChat6;
             int removeMemberId = TestDbContextFactory.UserAId;
             int oldCount = 4;
 
@@ -27,7 +28,7 @@ namespace Tests.PrivateChats.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
 
             //Assert
             Assert.NotNull(chat);
@@ -39,7 +40,7 @@ namespace Tests.PrivateChats.Commands
         public async Task UserNotInChat_Fail()
         {
             //Arrange
-            int chatId = 7;
+            var chatId = TestDbContextFactory.PrivateChat7;
             int removeMemberId = TestDbContextFactory.UserAId;
 
             SetAuthorizedUserId(TestDbContextFactory.UserBId);
@@ -56,7 +57,6 @@ namespace Tests.PrivateChats.Commands
             //Assert
             await Assert.ThrowsAsync<NoSuchUserException>(async ()
                 => await handler.Handle(request, CancellationToken));
-
         }
     }
 }

@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using Application.Models;
+using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Queries.GetPrivateChatDetails
 {
-    public class GetPrivateChatDetailsRequest : IRequest<GetPrivateChatDetailsDto>
+    public class GetPrivateChatDetailsRequest : IRequest<PrivateChat>
     {
-        public int ChatId { get; init; }
+        public ObjectId ChatId { get; init; }
     }
 }

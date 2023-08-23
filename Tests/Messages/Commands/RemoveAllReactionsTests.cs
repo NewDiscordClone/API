@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Messages.RemoveAllReactions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -10,7 +11,7 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
-            int messageId = 1;
+            var messageId = TestDbContextFactory.Message1;
 
             SetAuthorizedUserId(TestDbContextFactory.UserBId);
 
@@ -22,9 +23,10 @@ namespace Tests.Messages.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            Message? message = Context.Messages.Find(messageId);
+            Message? message = Context.Messages.Find(Context.GetIdFilter<Message>(messageId)).FirstOrDefault();
 
             //Assert
+
             Assert.NotNull(message);
             Assert.Empty(message.Reactions);
         }

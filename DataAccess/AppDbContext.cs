@@ -5,31 +5,52 @@ using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace DataAccess
 {
     public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options) { }
+        private IMongoClient _mongoClient { get; }
+        private string _mongoDbName { get; }
 
-        public DbSet<Attachment> Attachments { get; set; } = null!;
-        public DbSet<Channel> Channels { get; set; } = null!;
-        public DbSet<Chat> Chats { get; set; } = null!;
-        public DbSet<Message> Messages { get; set; } = null!;
-        public DbSet<PrivateChat> PrivateChats { get; set; } = null!;
-        public DbSet<Reaction> Reactions { get; set; } = null!;
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration,
+            string dbName = "SparkMongoDB")
+            : base(options)
+        {
+            _mongoDbName = dbName;
+            var client = new MongoClient(configuration.GetConnectionString("MongoDB"));
+            _mongoClient = client;
+            MongoDb = client.GetDatabase(dbName);
+        }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, IMongoClient client, string dbName = "SparkMongoDB")
+            : base(options)
+        {
+            _mongoDbName = dbName;
+            _mongoClient = client;
+            MongoDb = client.GetDatabase(dbName);
+        }
+
+        public IMongoCollection<Message> Messages => MongoDb.GetCollection<Message>("messages");
+
+        public IMongoCollection<Chat> Chats => MongoDb.GetCollection<Chat>("chats");
+
+        public IMongoCollection<PrivateChat> PrivateChats =>
+            MongoDb.GetCollection<Chat>("chats").OfType<PrivateChat>();
+
+        public IMongoCollection<Channel> Channels =>
+            MongoDb.GetCollection<Chat>("chats").OfType<Channel>();
+
         public DbSet<Server> Servers { get; set; } = null!;
         public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
+        public IMongoDatabase MongoDb { get; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new AttachmentConfiguration());
-            builder.ApplyConfiguration(new ChannelConfiguration());
-            builder.ApplyConfiguration(new ChatConfiguration());
-            builder.ApplyConfiguration(new MessageConfiguration());
-            builder.ApplyConfiguration(new PrivateChatConfiguration());
-            builder.ApplyConfiguration(new ReactionConfiguration());
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new ServerConfiguration());
             builder.ApplyConfiguration(new ServerProfileConfiguration());
@@ -37,7 +58,13 @@ namespace DataAccess
             base.OnModelCreating(builder);
         }
 
-        public async Task<TEntity> FindByIdAsync<TEntity>(int id, CancellationToken cancellationToken = default,
+        public override void Dispose()
+        {
+            _mongoClient.DropDatabase(_mongoDbName);
+            base.Dispose();
+        }
+
+        public async Task<TEntity> FindSqlByIdAsync<TEntity>(int id, CancellationToken cancellationToken = default,
             params string[] includedProperties) where TEntity : class
         {
             DbSet<TEntity> dbSet = Set<TEntity>();
@@ -61,6 +88,51 @@ namespace DataAccess
             }
 
             return entity;
+        }
+
+        public FilterDefinition<TEntity> GetIdFilter<TEntity>(ObjectId id)
+        {
+            return Builders<TEntity>.Filter.Eq("_id", id);
+        }
+
+
+        private async Task<TEntity> FindByIdAsync<TEntity>(IMongoCollection<TEntity> collection, ObjectId id,
+            CancellationToken cancellationToken = default) where TEntity : class
+        {
+            var filter = GetIdFilter<TEntity>(id);
+            var result =
+                await (await collection.FindAsync(filter, cancellationToken: cancellationToken)).FirstOrDefaultAsync(
+                    cancellationToken);
+            if (result == null) throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
+            return result;
+        }
+
+
+        public async Task<TEntity> FindByIdAsync<TEntity>(ObjectId id, CancellationToken cancellationToken = default)
+            where TEntity : class
+        {
+            var type = typeof(TEntity);
+            if (type == typeof(Chat))
+            {
+                return (await FindByIdAsync(Chats, id, cancellationToken) as TEntity) ??
+                       throw new EntityNotFoundException($"{type.Name} {id} not found");
+            }
+            if (type == typeof(PrivateChat))
+            {
+                return (await FindByIdAsync(PrivateChats, id, cancellationToken) as TEntity) ??
+                       throw new EntityNotFoundException($"{type.Name} {id} not found");
+            }
+            if (type == typeof(Channel))
+            {
+                return (await FindByIdAsync(Channels, id, cancellationToken) as TEntity) ??
+                       throw new EntityNotFoundException($"{type.Name} {id} not found");
+            }
+            if (type == typeof(Message))
+            {
+                return (await FindByIdAsync(Messages, id, cancellationToken) as TEntity) ??
+                       throw new EntityNotFoundException($"{type.Name} {id} not found");
+            }
+            throw new InvalidOperationException($"Unhandled entity type: {type.Name}");
         }
     }
 }

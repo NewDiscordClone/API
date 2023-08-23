@@ -8,17 +8,16 @@ using MediatR;
 namespace Application.Queries.GetPinnedMessages
 {
     public class GetPinnedMessagesRequestHandler : RequestHandlerBase,
-        IRequestHandler<GetPinnedMessagesRequest, List<GetPinnedMessageLookUpDto>>
+        IRequestHandler<GetPinnedMessagesRequest, List<Message>>
     {
-        public async Task<List<GetPinnedMessageLookUpDto>> Handle(GetPinnedMessagesRequest request,
+        public async Task<List<Message>> Handle(GetPinnedMessagesRequest request,
             CancellationToken cancellationToken)
         {
-            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users", "Messages");
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken);
             
-            if (!chat.Users.Contains(user)) throw new NoPermissionsException("You are not a member of the Chat");
-            
-            return Mapper.Map<List<GetPinnedMessageLookUpDto>>(chat.PinnedMessages);
+            if (chat.Users.Find(u => u.Id == UserId) == null) throw new NoPermissionsException("You are not a member of the Chat");
+
+            return await chat.GetPinnedMessagesAsync(Context.Messages, cancellationToken);
         }
 
         public GetPinnedMessagesRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,

@@ -3,24 +3,29 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.RenamePrivateChat
 {
-    public class RenamePrivateChatRequestHandler :RequestHandlerBase, IRequestHandler<RenamePrivateChatRequest>
+    public class RenamePrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<RenamePrivateChatRequest>
     {
-
         public async Task Handle(RenamePrivateChatRequest request, CancellationToken cancellationToken)
         {
-            Models.PrivateChat chat =
-                await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken);
-            if (chat.Users.Find(u => u.Id == UserId) == null)
+            PrivateChat chat =
+                await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken);
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
-            chat.Title = request.NewTitle;
 
-            await Context.SaveChangesAsync(cancellationToken);
+            Context.PrivateChats.UpdateOneAsync(
+                Context.GetIdFilter<PrivateChat>(chat.Id),
+                Builders<PrivateChat>.Update.Set(c => c.Title, request.NewTitle),
+                null,
+                cancellationToken
+            );
         }
 
-        public RenamePrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public RenamePrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
+            context, userProvider)
         {
         }
     }

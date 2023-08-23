@@ -26,6 +26,7 @@ namespace Tests.Servers.Queries
             Assert.NotNull(result);
             Assert.Equal(serverId, result.Id);
             Assert.NotEmpty(result.Channels);
+
         }
     }
 }

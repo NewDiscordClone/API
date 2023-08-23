@@ -11,8 +11,9 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
-            int messageId = 1;
-            string newText = "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
+            var messageId = TestDbContextFactory.Message1;
+            string newText =
+                "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 
             SetAuthorizedUserId(TestDbContextFactory.UserAId);
 
@@ -27,6 +28,7 @@ namespace Tests.Messages.Commands
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert
+
             Assert.Equal(newText, result.Text);
             Assert.Equal(AttachmentType.UrlImage, result.Attachments[0].Type);
         }
@@ -35,8 +37,9 @@ namespace Tests.Messages.Commands
         public async Task Fail_NoPermissions()
         {
             //Arrange
-            int messageId = 1;
-            string newText = "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
+            var messageId = TestDbContextFactory.Message1;
+            string newText =
+                "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 
             SetAuthorizedUserId(TestDbContextFactory.UserBId);
 
@@ -49,6 +52,7 @@ namespace Tests.Messages.Commands
 
             //Act
             //Assert
+
             await Assert.ThrowsAsync<NoPermissionsException>(async ()
                 => await handler.Handle(request, CancellationToken));
         }

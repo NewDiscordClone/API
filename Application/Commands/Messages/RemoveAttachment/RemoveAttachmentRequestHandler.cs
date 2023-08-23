@@ -4,6 +4,7 @@ using Application.Models;
 using Application.Providers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace Application.Commands.Messages.RemoveAttachment
 {
@@ -11,20 +12,20 @@ namespace Application.Commands.Messages.RemoveAttachment
     {
         public async Task<Chat> Handle(RemoveAttachmentRequest request, CancellationToken cancellationToken)
         {
-            Attachment attachment = await Context.FindByIdAsync<Attachment>(request.AttachmentId, cancellationToken,
-                "Message",
-                "Message.User",
-                "Message.Chat",
-                "Message.Chat.Users"
-                );
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
+            Chat chat = await Context.FindByIdAsync<Chat>(message.ChatId, cancellationToken);
+            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
-            if (attachment.Message == null || attachment.Message.User.Id != user.Id)
+            if (message.User.Id != user.Id)
                 throw new NoPermissionsException("You don't have permission to edit the message");
-            Chat chat = attachment.Message.Chat;
 
-            Context.Attachments.Remove(attachment);
-            await Context.SaveChangesAsync(cancellationToken);
+            await Context.Messages.UpdateOneAsync(
+                Context.GetIdFilter<Message>(message.Id),
+                Builders<Message>.Update.Pull(m => m.Attachments,
+                    message.Attachments[request.AttachmentIndex]),
+                null,
+                cancellationToken
+            );
             return chat;
         }
 

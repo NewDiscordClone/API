@@ -10,7 +10,7 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
-            int messageId = 2;
+            var messageId = TestDbContextFactory.Message2;
 
             SetAuthorizedUserId(TestDbContextFactory.UserAId);
 

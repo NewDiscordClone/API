@@ -1,6 +1,7 @@
 ﻿using Application.Commands.Servers.DeleteServer;
 using Application.Exceptions;
 using Application.Providers;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -15,14 +16,13 @@ namespace Tests.Servers.Commands
             int serverId = TestDbContextFactory.ServerIdForDelete;
             int oldCount = Context.Servers.Count();
 
-            Mock<IAuthorizedUserProvider> userProvider = new();
-            userProvider.Setup(p => p.GetUserId()).Returns(userId);
+            SetAuthorizedUserId(userId);
 
             DeleteServerRequest request = new()
             {
                 ServerId = serverId,
             };
-            DeleteServerRequestHandler handler = new(Context, userProvider.Object);
+            DeleteServerRequestHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);
@@ -30,7 +30,7 @@ namespace Tests.Servers.Commands
             //Assert
             Assert.Null(Context.Servers.Find(serverId));
             Assert.False(Context.ServerProfiles.Any(profile => profile.Server.Id == serverId));
-            Assert.False(Context.Channels.Any(channel => channel.Server.Id == serverId));
+            Assert.False(Context.Channels.Find(channel => channel.ServerId == serverId).Any());
             Assert.Equal(oldCount - 1, Context.Servers.Count());
             Assert.NotNull(Context.Users.Find(userId));
         }

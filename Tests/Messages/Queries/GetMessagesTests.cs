@@ -1,4 +1,5 @@
-﻿using Application.Queries.GetMessages;
+﻿using Application.Models;
+using Application.Queries.GetMessages;
 using Tests.Common;
 
 namespace Tests.Messages.Queries
@@ -9,7 +10,7 @@ namespace Tests.Messages.Queries
         public async Task Success()
         {
             //Arrange
-            int chatId = 3;
+            var chatId = TestDbContextFactory.PrivateChat3;
             int messagesCount = 2;
 
             GetMessagesRequest request = new()
@@ -21,7 +22,7 @@ namespace Tests.Messages.Queries
             GetMessagesRequestHandler handler = new(Context, Mapper);
 
             //Act
-            List<GetMessageLookUpDto> result = await handler.Handle(request, CancellationToken);
+            List<Message> result = await handler.Handle(request, CancellationToken);
 
             //Assert
             Assert.Empty(result);
@@ -31,7 +32,7 @@ namespace Tests.Messages.Queries
         public async Task SingleMessage()
         {
             //Arrange
-            int chatId = 3;
+            var chatId = TestDbContextFactory.PrivateChat3;
             int messagesCount = 1;
 
             GetMessagesRequest request = new()
@@ -43,7 +44,7 @@ namespace Tests.Messages.Queries
             GetMessagesRequestHandler handler = new(Context, Mapper);
 
             //Act
-            List<GetMessageLookUpDto> result = await handler.Handle(request, CancellationToken);
+            List<Message> result = await handler.Handle(request, CancellationToken);
 
             //Assert
             Assert.Single(result);

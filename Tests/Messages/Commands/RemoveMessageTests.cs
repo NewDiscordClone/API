@@ -1,5 +1,7 @@
 ﻿using Application.Commands.Messages.RemoveMessage;
 using Application.Exceptions;
+using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -11,7 +13,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
 
-            int messageId = 1;
+            var messageId = TestDbContextFactory.Message1;
 
             SetAuthorizedUserId(TestDbContextFactory.UserAId);
 
@@ -25,7 +27,7 @@ namespace Tests.Messages.Commands
             await handler.Handle(request, CancellationToken);
 
             //Assert
-            Assert.Null(Context.Messages.Find(messageId));
+            Assert.Null(Context.Messages.Find(Context.GetIdFilter<Message>(messageId)).FirstOrDefault());
         }
 
         [Fact]
@@ -33,7 +35,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
 
-            int messageId = 1;
+            var messageId = TestDbContextFactory.Message1;
 
             SetAuthorizedUserId(TestDbContextFactory.UserBId);
 
@@ -47,7 +49,6 @@ namespace Tests.Messages.Commands
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(async ()
                 => await handler.Handle(request, CancellationToken));
-
         }
     }
 }

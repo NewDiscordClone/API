@@ -31,18 +31,18 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<GetMessageLookUpDto>>> GetMessages([FromBody] GetMessagesRequest get)
+        public async Task<ActionResult<List<Message>>> GetMessages([FromBody] GetMessagesRequest get)
         {
-            List<GetMessageLookUpDto> messages = await Mediator.Send(get);
+            List<Message> messages = await Mediator.Send(get);
             return Ok(messages);
         }
         
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<GetPinnedMessageLookUpDto>>> GetPinnedMessages([FromBody] GetPinnedMessagesRequest get)
+        public async Task<ActionResult<List<Message>>> GetPinnedMessages([FromBody] GetPinnedMessagesRequest get)
         {
-            List<GetPinnedMessageLookUpDto> messages = await Mediator.Send(get);
+            List<Message> messages = await Mediator.Send(get);
             return Ok(messages);
         }
 
@@ -140,7 +140,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
+        public async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
         {
             try
             {

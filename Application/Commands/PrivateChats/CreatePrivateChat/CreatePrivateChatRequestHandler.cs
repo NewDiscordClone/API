@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
+using AutoMapper;
 using MediatR;
 
 namespace Application.Commands.PrivateChats.CreatePrivateChat
@@ -10,26 +11,23 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
     {
         public async Task<PrivateChat> Handle(CreatePrivateChatRequest request, CancellationToken cancellationToken)
         {
-            List<User> users = new();
-            request.UsersId.ForEach(userId => users.Add(Context.Users.Find(userId)
-                                                        ?? throw new EntityNotFoundException(
-                                                            $"User {userId} not found")));
-            User owner = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            List<UserLookUp> users = new();
+            request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindSqlByIdAsync<User>(userId, cancellationToken).Result)));
+            
+            User owner = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
             PrivateChat privateChat = new()
             {
                 Title = request.Title,
-                Image = request.Image,
+                //Image = request.Image,
                 Users = users,
-                Messages = new List<Message>(),
                 OwnerId = owner.Id
             };
 
-            await Context.PrivateChats.AddAsync(privateChat, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
+            await Context.PrivateChats.InsertOneAsync(privateChat, null, cancellationToken);
             return privateChat;
         }
 
-        public CreatePrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public CreatePrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
     }

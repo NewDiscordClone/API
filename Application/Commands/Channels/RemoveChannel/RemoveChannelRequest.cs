@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Commands.Channels.RemoveChannel
 {
     public class RemoveChannelRequest : IRequest
     {
-        public int ChatId { get; init; }
+        public ObjectId ChatId { get; init; }
     }
 }
