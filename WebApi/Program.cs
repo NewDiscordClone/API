@@ -87,7 +87,6 @@ namespace WebApi
                 app.UseSwaggerUI(option =>
                 {
                     option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
-                    option.RoutePrefix = string.Empty;
                     option.DisplayRequestDuration();
                 });
             }
