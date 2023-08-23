@@ -11,11 +11,12 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
 
-            var chatId = TestDbContextFactory.PrivateChat3;
-            int newOwnerId = TestDbContextFactory.UserBId;
-            int oldOwner = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat3;
+            int newOwnerId = Ids.UserBId;
+            int oldOwner = Ids.UserAId;
 
             SetAuthorizedUserId(oldOwner);
 
@@ -40,12 +41,13 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Fail_NoPermissions()
         {
+            CreateDatabase();
             //Arrange
 
-            var chatId = TestDbContextFactory.PrivateChat6;
-            int newOwnerId = TestDbContextFactory.UserCId;
+            var chatId = Ids.PrivateChat6;
+            int newOwnerId = Ids.UserCId;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             MakePrivateChatOwnerRequest request = new()
             {
@@ -65,12 +67,13 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Fail_NoSuchUser()
         {
+            CreateDatabase();
             //Arrange
 
-            var chatId = TestDbContextFactory.PrivateChat7;
-            int newOwnerId = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat7;
+            int newOwnerId = Ids.UserAId;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             MakePrivateChatOwnerRequest request = new()
             {

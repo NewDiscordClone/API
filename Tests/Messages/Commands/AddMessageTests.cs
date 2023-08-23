@@ -10,10 +10,11 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
             string messageText = "Test message";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             AddMessageRequest request = new()
             {
@@ -26,7 +27,7 @@ namespace Tests.Messages.Commands
                             "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg"
                     }
                 },
-                ChatId = TestDbContextFactory.PrivateChat3,
+                ChatId = Ids.PrivateChat3,
                 Text = messageText
             };
 
@@ -45,15 +46,16 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success_AttachmentInText()
         {
+            CreateDatabase();
             //Arrange
             string messageText =
                 "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             AddMessageRequest request = new()
             {
-                ChatId = TestDbContextFactory.PrivateChat3,
+                ChatId = Ids.PrivateChat3,
                 Text = messageText
             };
 

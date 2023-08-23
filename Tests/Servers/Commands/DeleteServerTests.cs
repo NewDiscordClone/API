@@ -11,9 +11,10 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            int userId = TestDbContextFactory.UserAId;
-            int serverId = TestDbContextFactory.ServerIdForDelete;
+            int userId = Ids.UserAId;
+            int serverId = Ids.ServerIdForDelete;
             int oldCount = Context.Servers.Count();
 
             SetAuthorizedUserId(userId);
@@ -38,9 +39,10 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Unauthorized_Fail()
         {
+            CreateDatabase();
             //Arrange
-            int userId = TestDbContextFactory.UserBId;
-            int serverId = TestDbContextFactory.ServerIdForDelete;
+            int userId = Ids.UserBId;
+            int serverId = Ids.ServerIdForDelete;
 
             Mock<IAuthorizedUserProvider> userProvider = new();
             userProvider.Setup(p => p.GetUserId()).Returns(userId);

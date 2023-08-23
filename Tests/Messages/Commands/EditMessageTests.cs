@@ -10,12 +10,13 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var messageId = TestDbContextFactory.Message1;
+            var messageId = Ids.Message1;
             string newText =
                 "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             EditMessageRequest request = new()
             {
@@ -36,12 +37,13 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Fail_NoPermissions()
         {
+            CreateDatabase();
             //Arrange
-            var messageId = TestDbContextFactory.Message1;
+            var messageId = Ids.Message1;
             string newText =
                 "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             EditMessageRequest request = new()
             {

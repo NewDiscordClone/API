@@ -8,8 +8,9 @@ namespace Tests.Servers.Queries
         [Fact]
         public async Task Handle_ReturnsExpectedServers()
         {
+            CreateDatabase();
             // Arrange
-            int userId = 1;
+            int userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
 
             GetServersRequestHandler handler = new(Context, Mapper);
@@ -28,6 +29,7 @@ namespace Tests.Servers.Queries
         [Fact]
         public async Task Handle_ReturnsUnexpectedServers()
         {
+            CreateDatabase();
             // Arrange
             int userId = int.MaxValue;
             CancellationToken cancellationToken = CancellationToken.None;
@@ -42,7 +44,6 @@ namespace Tests.Servers.Queries
 
             // Assert
             Assert.Empty(result);
-
         }
     }
 }

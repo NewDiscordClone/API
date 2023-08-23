@@ -11,13 +11,14 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
 
-            int newMemberId = TestDbContextFactory.UserAId;
-            var chatId = TestDbContextFactory.PrivateChat5;
+            int newMemberId = Ids.UserAId;
+            var chatId = Ids.PrivateChat5;
             int oldUsersCount = 2;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             AddMemberToPrivateChatRequest request = new()
             {
@@ -39,11 +40,12 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task UserAlreadyExists_Fail()
         {
+            CreateDatabase();
             //Arrange
-            int newMemberId = TestDbContextFactory.UserCId;
-            var chatId = TestDbContextFactory.PrivateChat5;
+            int newMemberId = Ids.UserCId;
+            var chatId = Ids.PrivateChat5;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             AddMemberToPrivateChatRequest request = new()
             {

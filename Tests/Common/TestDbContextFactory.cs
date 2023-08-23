@@ -11,63 +11,43 @@ namespace Tests.Common
 {
     public static class TestDbContextFactory
     {
-        public static int UserAId { get; set; } = 1;
-        public static int UserBId { get; set; } = 2;
-        public static int UserCId { get; set; } = 3;
-        public static int UserDId { get; set; } = 4;
-
-        public static int ServerIdForDelete { get; set; } = 1;
-        public static int ServerIdForUpdate { get; set; } = 2;
-
-        public static ObjectId Channel1 { get; set; }
-        public static ObjectId Channel2 { get; set; }
-
-        public static ObjectId PrivateChat3 { get; set; }
-        public static ObjectId PrivateChat4 { get; set; }
-        public static ObjectId PrivateChat5 { get; set; }
-        public static ObjectId PrivateChat6 { get; set; }
-        public static ObjectId PrivateChat7 { get; set; } 
-        
-        public static ObjectId Message1 { get; set; } 
-        public static ObjectId Message2 { get; set; } 
-
         private static IMongoClient _mongoClient;
-        private const string _mongoDbName = "TestDatabase";
 
-        public static IAppDbContext Create()
+        public static IAppDbContext Create(out Ids ids)
         {
+            ids = new Ids();
             DbContextOptions<AppDbContext> options =
                 new DbContextOptionsBuilder<AppDbContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
 
             _mongoClient = new MongoClient("mongodb://localhost:27017");
-            AppDbContext context = new(options, _mongoClient, _mongoDbName);
+            AppDbContext context = new(options, _mongoClient, Guid.NewGuid().ToString());
             context.Database.EnsureCreated();
 
             User userA = new()
             {
-                Id = UserAId,
+                Id = ids.UserAId,
                 UserName = "User A",
                 //AvatarPath = null,
                 Email = "email@test1.com",
             };
             User userB = new()
             {
-                Id = UserBId,
+                Id = ids.UserBId,
                 UserName = "User B",
                 // AvatarPath = null,
                 Email = "email@test2.com",
             };
             User userC = new()
             {
-                Id = UserCId,
+                Id = ids.UserCId,
                 UserName = "User C",
                 // AvatarPath = null,
                 Email = "email@test3.com",
             };
             User userD = new()
             {
-                Id = UserDId,
+                Id = ids.UserDId,
                 UserName = "User D",
                 // AvatarPath = null,
                 Email = "email@test4.com",
@@ -78,7 +58,7 @@ namespace Tests.Common
             context.Servers.AddRange(
                 new Server
                 {
-                    Id = ServerIdForDelete,
+                    Id = ids.ServerIdForDelete,
                     Title = "Server 1",
                     Owner = userA,
                     ServerProfiles =
@@ -92,7 +72,7 @@ namespace Tests.Common
                 },
                 new Server
                 {
-                    Id = ServerIdForUpdate,
+                    Id = ids.ServerIdForUpdate,
                     Title = "Server 2",
                     Owner = userB,
                     ServerProfiles =
@@ -108,15 +88,15 @@ namespace Tests.Common
             {
                 new Channel
                 {
-                    Id = Channel1 = ObjectId.GenerateNewId(),
+                    Id = ids.Channel1 = ObjectId.GenerateNewId(),
                     Title = "Channel 1",
-                    ServerId = ServerIdForDelete
+                    ServerId = ids.ServerIdForDelete
                 },
                 new Channel
                 {
-                    Id = Channel2 = ObjectId.GenerateNewId(),
+                    Id = ids.Channel2 = ObjectId.GenerateNewId(),
                     Title = "Channel 2",
-                    ServerId = ServerIdForUpdate
+                    ServerId = ids.ServerIdForUpdate
                 }
             });
 
@@ -128,25 +108,29 @@ namespace Tests.Common
                 {
                     new()
                     {
-                        Id = PrivateChat3 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat3 = ObjectId.GenerateNewId(),
+                        Title = "PrivateChat 3",
                         OwnerId = userA.Id,
                         Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userB) },
                     },
                     new()
                     {
-                        Id = PrivateChat4 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat4 = ObjectId.GenerateNewId(), 
+                        Title = "PrivateChat 4",
                         OwnerId = userA.Id,
                         Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userC) }
                     },
                     new()
                     {
-                        Id = PrivateChat5 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat5 = ObjectId.GenerateNewId(),
+                        Title = "PrivateChat 5",
                         OwnerId = userB.Id,
                         Users = { mapper.Map<UserLookUp>(userB), mapper.Map<UserLookUp>(userC) }
                     },
                     new()
                     {
-                        Id = PrivateChat6 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat6 = ObjectId.GenerateNewId(),
+                        Title = "PrivateChat 6",
                         OwnerId = userB.Id,
                         Users =
                         {
@@ -158,7 +142,8 @@ namespace Tests.Common
                     },
                     new()
                     {
-                        Id = PrivateChat7 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat7 = ObjectId.GenerateNewId(),
+                        Title = "PrivateChat 7",
                         OwnerId = userB.Id,
                         Users =
                         {
@@ -171,11 +156,11 @@ namespace Tests.Common
             {
                 new Message
                 {
-                    Id = Message1 = ObjectId.GenerateNewId(),
+                    Id = ids.Message1 = ObjectId.GenerateNewId(),
                     Text = "Message 1",
                     SendTime = DateTime.Now,
                     User = mapper.Map<UserLookUp>(userA),
-                    ChatId = PrivateChat3,
+                    ChatId = ids.PrivateChat3,
                     Reactions =
                     {
                         new Reaction
@@ -192,12 +177,12 @@ namespace Tests.Common
                 },
                 new Message
                 {
-                    Id = Message2 = ObjectId.GenerateNewId(),
+                    Id = ids.Message2 = ObjectId.GenerateNewId(),
                     Text= "Message 2",
                     SendTime = DateTime.Now,
                     User = mapper.Map<UserLookUp>(userB),
                     IsPinned = true,
-                    ChatId = PrivateChat3,
+                    ChatId = ids.PrivateChat3,
                     Attachments =
                     {
                         new Attachment

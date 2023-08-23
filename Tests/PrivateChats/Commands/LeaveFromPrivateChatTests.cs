@@ -11,9 +11,10 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success_Owner()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat7;
-            int userId = TestDbContextFactory.UserBId;
+            var chatId = Ids.PrivateChat7;
+            int userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 
@@ -37,9 +38,10 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success_LastUser()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat4;
-            int userId = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat4;
+            int userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 
@@ -60,9 +62,10 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Fail_NoSuchUser()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat4;
-            int userId = TestDbContextFactory.UserBId;
+            var chatId = Ids.PrivateChat4;
+            int userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 

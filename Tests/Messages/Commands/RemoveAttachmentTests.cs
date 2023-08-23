@@ -10,11 +10,12 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var messageId = TestDbContextFactory.Message2;
+            var messageId = Ids.Message2;
             int attachmentIndex = 0;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemoveAttachmentRequest request = new()
             {

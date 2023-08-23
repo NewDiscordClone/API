@@ -10,8 +10,9 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            int userId = TestDbContextFactory.UserAId;
+            int userId = Ids.UserAId;
             int oldCount = Context.Servers.Count();
             const string serverName = "New server";
 

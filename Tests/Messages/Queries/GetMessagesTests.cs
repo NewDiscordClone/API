@@ -9,8 +9,9 @@ namespace Tests.Messages.Queries
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat3;
+            var chatId = Ids.PrivateChat3;
             int messagesCount = 2;
 
             GetMessagesRequest request = new()
@@ -31,8 +32,9 @@ namespace Tests.Messages.Queries
         [Fact]
         public async Task SingleMessage()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat3;
+            var chatId = Ids.PrivateChat3;
             int messagesCount = 1;
 
             GetMessagesRequest request = new()

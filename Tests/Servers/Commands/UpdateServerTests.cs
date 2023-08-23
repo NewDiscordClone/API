@@ -11,9 +11,10 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            int userId = TestDbContextFactory.UserBId;
-            int serverId = TestDbContextFactory.ServerIdForUpdate;
+            int userId = Ids.UserBId;
+            int serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
 
             Mock<IAuthorizedUserProvider> userProvider = new();
@@ -39,9 +40,10 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Unauthorized_Fail()
         {
+            CreateDatabase();
             //Arrange
-            int userId = TestDbContextFactory.UserAId;
-            int serverId = TestDbContextFactory.ServerIdForUpdate;
+            int userId = Ids.UserAId;
+            int serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
 
             Mock<IAuthorizedUserProvider> userProvider = new();

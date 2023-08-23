@@ -9,8 +9,9 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var messageId = TestDbContextFactory.Message1;
+            var messageId = Ids.Message1;
 
             PinMessageRequest request = new()
             {

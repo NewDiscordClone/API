@@ -9,10 +9,11 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var messageId = TestDbContextFactory.Message2;
+            var messageId = Ids.Message2;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             UnpinMessageRequest request = new()
             {

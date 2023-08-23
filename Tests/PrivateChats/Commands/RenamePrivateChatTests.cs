@@ -10,11 +10,12 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat4;
+            var chatId = Ids.PrivateChat4;
             string newTitle = "New title test";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             RenamePrivateChatRequest request = new()
             {

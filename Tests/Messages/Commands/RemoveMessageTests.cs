@@ -11,11 +11,12 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
 
-            var messageId = TestDbContextFactory.Message1;
+            var messageId = Ids.Message1;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             RemoveMessageRequest request = new()
             {
@@ -33,11 +34,12 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Fail_NoPermissions()
         {
+            CreateDatabase();
             //Arrange
 
-            var messageId = TestDbContextFactory.Message1;
+            var messageId = Ids.Message1;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemoveMessageRequest request = new()
             {

@@ -10,6 +10,7 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //TODO: Коли додам зрображення, реалізую
             // //Arrange
             // var chatId = TestDbContextFactory.PrivateChat4;

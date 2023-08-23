@@ -11,12 +11,13 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat6;
-            int removeMemberId = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat6;
+            int removeMemberId = Ids.UserAId;
             int oldCount = 4;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemovePrivateChatMemberRequest request = new()
             {
@@ -39,11 +40,12 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task UserNotInChat_Fail()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat7;
-            int removeMemberId = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat7;
+            int removeMemberId = Ids.UserAId;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemovePrivateChatMemberRequest request = new()
             {

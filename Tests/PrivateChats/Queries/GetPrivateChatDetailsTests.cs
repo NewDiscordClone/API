@@ -10,9 +10,10 @@ namespace Tests.PrivateChats.Queries
         [Fact]
         public async Task Success()
         {
+            CreateDatabase();
             //Arrange
-            var chatId = TestDbContextFactory.PrivateChat4;
-            int userId = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat4;
+            int userId = Ids.UserAId;
             
             SetAuthorizedUserId(userId);
 
