@@ -54,7 +54,7 @@ namespace WebApi.Controllers
             return Created(string.Empty, id);
         }
 
-        [InRole("Owner")]
+        [ServerAuthorize(Role = "Owner")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -72,7 +72,7 @@ namespace WebApi.Controllers
             }
         }
 
-        [InRole("Owner")]
+        [ServerAuthorize(Role = "Owner")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

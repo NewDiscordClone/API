@@ -5,24 +5,19 @@ using System.Reflection;
 
 namespace WebApi.Attributes
 {
-    public class InRoleAttribute : ActionFilterAttribute
+    public class ServerAuthorizeAttribute : ActionFilterAttribute
     {
         private IAuthorizedUserProvider _userProvider;
-        private string RoleName { get; set; }
-
-        public InRoleAttribute(string roleName)
-        {
-            RoleName = roleName;
-        }
-
+        public string Role { get; set; }
+        public string Policy { get; set; }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             _userProvider = context.HttpContext.RequestServices.GetService<IAuthorizedUserProvider>()
-                ?? throw new InvalidOperationException("The IAuthorizedUserProvider service was not registered.");
+               ?? throw new InvalidOperationException("The IAuthorizedUserProvider service was not registered.");
 
             int serverId = GetServerId(context);
 
-            bool authorized = await _userProvider.IsInRoleAsync(RoleName, serverId);
+            bool authorized = await _userProvider.IsInRoleAsync(Role, serverId);
             if (authorized)
             {
                 await next();
