@@ -5,13 +5,13 @@ using MediatR;
 
 namespace Application.Commands.Channels.CreateChannel
 {
-    public class CreateChannelRequestHandler : RequestHandlerBase,  IRequestHandler<CreateChannelRequest, Channel>
+    public class CreateChannelRequestHandler : RequestHandlerBase, IRequestHandler<CreateChannelRequest, Channel>
     {
 
         public async Task<Channel> Handle(CreateChannelRequest request, CancellationToken cancellationToken)
         {
             //TODO: Перевірити що у юзера є відповідні права
-            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken, "ServerProfile");
+            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken, "ServerProfiles", "ServerProfiles.User");
             List<User> users = new();
             server.ServerProfiles.ForEach(profile => users.Add(profile.User));
             Channel channel = new()

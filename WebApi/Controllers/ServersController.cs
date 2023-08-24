@@ -20,7 +20,6 @@ namespace WebApi.Controllers
         { }
 
         [HttpGet]
-        [Authorize(Policy = "test")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<GetServerLookupDto>>> GetServers()

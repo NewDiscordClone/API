@@ -19,10 +19,10 @@ namespace Application.Commands.Messages.RemoveMessage
             bool isOwner = false;
 
             if (message.Chat is Channel channel)
-                isOwner = UserProvider.IsInRole("Owner", channel.Server.Id);
+                //    isOwner = UserProvider.IsInRole("Owner", channel.Server.Id);
 
-            if (message.User.Id != UserId || isOwner)
-                throw new NoPermissionsException("You don't have permission to remove the message");
+                if (message.User.Id != UserId || isOwner)
+                    throw new NoPermissionsException("You don't have permission to remove the message");
 
 
             Chat chat = message.Chat;

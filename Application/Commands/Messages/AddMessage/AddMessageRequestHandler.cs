@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
@@ -9,7 +8,7 @@ namespace Application.Commands.Messages.AddMessage
 {
     public class AddMessageRequestHandler : RequestHandlerBase, IRequestHandler<AddMessageRequest, Message>
     {
-        
+
         public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
         {
             Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users");
@@ -17,9 +16,9 @@ namespace Application.Commands.Messages.AddMessage
 
             if (!chat.Users.Contains(user))
                 throw new NoPermissionsException("You are not a member of the Chat");
-            List<Attachment> attachments = new List<Attachment>();
-            
-            AttachmentsFromText.GetAttachments(request.Text, a=> attachments.Add(a));
+            List<Attachment> attachments = new();
+
+            AttachmentsFromText.GetAttachments(request.Text, a => attachments.Add(a));
 
             request.Attachments?.ForEach(a =>
             {

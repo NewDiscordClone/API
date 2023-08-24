@@ -2,12 +2,10 @@ using Application;
 using Application.Common.Mapping;
 using Application.Hubs;
 using Application.Interfaces;
-using Application.Models;
 using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
@@ -56,27 +54,12 @@ namespace WebApi
 
             services.AddAuthorization();
 
+            services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
             services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
-            services.AddSingleton<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
             services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
 
-            services.AddIdentity<User, Role>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = false;
-                options.Lockout.MaxFailedAccessAttempts = 5;
-
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
-
-                options.User.RequireUniqueEmail = true;
-            })
-               .AddEntityFrameworkStores<AppDbContext>()
-               .AddDefaultTokenProviders();
-
             services.AddHttpContextAccessor();
-            services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
 
             builder.Services.AddCors(options =>
             {
@@ -107,16 +90,16 @@ namespace WebApi
             app.MapControllers();
 
             app.MapHub<ChatHub>("chat");
-
+            app.MapSwagger();
+            app.UseSwaggerUI(option =>
+            {
+                option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
+                option.RoutePrefix = string.Empty;
+                option.DisplayRequestDuration();
+            });
             if (app.Environment.IsDevelopment())
             {
-                app.MapSwagger();
-                app.UseSwaggerUI(option =>
-                {
-                    option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
-                    option.RoutePrefix = string.Empty;
-                    option.DisplayRequestDuration();
-                });
+
             }
 
             app.Run();

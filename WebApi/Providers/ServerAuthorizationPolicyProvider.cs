@@ -27,7 +27,7 @@ namespace WebApi.Providers
                 return await FallbackPolicyProvider.GetPolicyAsync(policyName);
 
             if (!TryParseServerId(policyName, out int serverId))
-                throw new InvalidOperationException("No server id provider");
+                throw new InvalidOperationException("No server id provided");
 
             AuthorizationPolicyBuilder policy = new();
 

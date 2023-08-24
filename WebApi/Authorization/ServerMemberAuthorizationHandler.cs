@@ -10,9 +10,10 @@ namespace WebApi.Authorization
         private readonly IMediator _mediator;
         private readonly IAuthorizedUserProvider _userProvider;
 
-        public ServerMemberAuthorizationHandler(IMediator mediator)
+        public ServerMemberAuthorizationHandler(IMediator mediator, IAuthorizedUserProvider userProvider)
         {
             _mediator = mediator;
+            _userProvider = userProvider;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, ServerMemberRequirement requirement)
