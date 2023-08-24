@@ -7,24 +7,27 @@ namespace Application.Commands.Servers.CreateServer
 {
     public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, int>
     {
+        //    private readonly IRoleFactory _roleFactory;
+
         public async Task<int> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
             User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
 
-            Role ownerRole = new()
-            {
-                Name = "Owner",
-                Color = "#FFF000"
-            };
+            List<Role> roles = new();
 
             Server server = new()
             {
                 Title = request.Title,
                 Image = request.Image,
-                Roles = new() { ownerRole }
+                Roles = roles
 
             };
-            server.ServerProfiles.Add(new() { User = user, Server = server, Roles = new() { ownerRole } });
+            server.ServerProfiles.Add(new()
+            {
+                User = user,
+                Server = server,
+                Roles = new() { roles.First(role => role.Name == "Owner") }
+            });
 
             await Context.Servers.AddAsync(server, cancellationToken);
             await Context.SaveChangesAsync(cancellationToken);
@@ -33,6 +36,7 @@ namespace Application.Commands.Servers.CreateServer
 
         public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
         {
+            // _roleFactory = roleFactory;
         }
     }
 }

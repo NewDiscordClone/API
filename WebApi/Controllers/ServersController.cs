@@ -7,7 +7,6 @@ using Application.Queries.GetServerDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -21,6 +20,7 @@ namespace WebApi.Controllers
         { }
 
         [HttpGet]
+        [Authorize(Policy = "test")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<GetServerLookupDto>>> GetServers()
@@ -54,7 +54,6 @@ namespace WebApi.Controllers
             return Created(string.Empty, id);
         }
 
-        [ServerAuthorize(Role = "Owner")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -72,7 +71,7 @@ namespace WebApi.Controllers
             }
         }
 
-        [ServerAuthorize(Role = "Owner")]
+        // [ServerAuthorize(Role = "Owner")]
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

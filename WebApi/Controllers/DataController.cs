@@ -1,4 +1,4 @@
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Queries.GetMessages;
 using Application.Queries.GetPrivateChats;
 using Application.Queries.GetUser;

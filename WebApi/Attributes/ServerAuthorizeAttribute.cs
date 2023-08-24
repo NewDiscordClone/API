@@ -1,33 +1,42 @@
-﻿using Application.Providers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using WebApi.Providers;
 
 namespace WebApi.Attributes
 {
-    public class ServerAuthorizeAttribute : ActionFilterAttribute
+    public partial class ServerAuthorizeAttribute : AuthorizeAttribute, IActionFilter
     {
-        private IAuthorizedUserProvider _userProvider;
-        public string Role { get; set; }
-        public string Policy { get; set; }
-        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public int ServerId
         {
-            _userProvider = context.HttpContext.RequestServices.GetService<IAuthorizedUserProvider>()
-               ?? throw new InvalidOperationException("The IAuthorizedUserProvider service was not registered.");
-
-            int serverId = GetServerId(context);
-
-            bool authorized = await _userProvider.IsInRoleAsync(Role, serverId);
-            if (authorized)
+            get
             {
-                await next();
+                if (Policy is null)
+                    return default;
+                string stringId = GetServerIdFromPolicyName()
+                    .Match(Policy).Value;
+                if (int.TryParse(stringId, out int serverId))
+                {
+                    return serverId;
+                }
+                return default;
             }
-            else
+            set
             {
-                context.Result = new ForbidResult();
+                if (Policy is null)
+                {
+                    Policy = $"{ServerPolicies.ServerMember}{value}";
+                    return;
+                }
+                Match match = GetServerIdFromPolicyName().Match(Policy);
+                if (match.Success)
+                {
+                    Policy = Policy.Remove(match.Index, match.Length);
+                }
+                Policy = $"{Policy}{value}";
             }
         }
-
         private static int GetServerId(ActionExecutingContext context)
         {
             InvalidOperationException exception = new("Server id not found in request");
@@ -46,6 +55,18 @@ namespace WebApi.Attributes
                 }
             }
             throw exception;
+        }
+
+        [GeneratedRegex("[0-9]+$")]
+        private static partial Regex GetServerIdFromPolicyName();
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+        }
+
+        public void OnActionExecuting(ActionExecutingContext context)
+        {
+            ServerId = GetServerId(context);
         }
     }
 }

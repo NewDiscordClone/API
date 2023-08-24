@@ -1,5 +1,4 @@
-﻿using Application.Exceptions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Commands.PrivateChats.AddMemberToPrivateChat;
@@ -13,6 +12,7 @@ using Application.Models;
 using Application.Providers;
 using Application.Queries.GetPrivateChatDetails;
 using Application.Queries.GetPrivateChats;
+using Application.Common.Exceptions;
 
 namespace WebApi.Controllers
 {

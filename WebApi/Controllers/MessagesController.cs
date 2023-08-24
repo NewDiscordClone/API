@@ -7,7 +7,7 @@ using Application.Commands.Messages.RemoveAttachment;
 using Application.Commands.Messages.RemoveMessage;
 using Application.Commands.Messages.RemoveReaction;
 using Application.Commands.Messages.UnpinMessage;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
 using Application.Providers;
 using Application.Queries.GetMessages;
@@ -15,6 +15,7 @@ using Application.Queries.GetPinnedMessages;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
@@ -36,7 +37,7 @@ namespace WebApi.Controllers
             List<GetMessageLookUpDto> messages = await Mediator.Send(get);
             return Ok(messages);
         }
-        
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -50,6 +51,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Policy = "SendMessage")]
         public async Task<ActionResult> AddMessage([FromBody] AddMessageRequest request)
         {
             try
@@ -140,7 +142,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
+        private async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
         {
             try
             {

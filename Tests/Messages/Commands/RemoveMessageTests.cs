@@ -1,5 +1,5 @@
 ﻿using Application.Commands.Messages.RemoveMessage;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Tests.Common;
 
 namespace Tests.Messages.Commands

@@ -1,4 +1,4 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
@@ -21,9 +21,9 @@ namespace Application.Queries.GetMessageReactions
                 "Reactions",
                 "Reactions.User");
 
-            if (!message.Chat.Users.Contains(user)) 
+            if (!message.Chat.Users.Contains(user))
                 throw new NoPermissionsException("You are not a member of the Chat");
-            
+
 
             List<UserReactionDto> userReactions = new();
             message.Reactions.ForEach(r =>

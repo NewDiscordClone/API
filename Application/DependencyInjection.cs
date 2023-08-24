@@ -12,6 +12,7 @@ namespace Application
             config.RegisterServicesFromAssembly(
                 Assembly.GetExecutingAssembly()));
 
+            // services.AddSingleton<IRoleFactory, RoleFactory>();
             return services;
         }
     }

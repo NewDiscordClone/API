@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;

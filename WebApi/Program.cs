@@ -1,14 +1,20 @@
 using Application;
+using Application.Common.Mapping;
 using Application.Hubs;
 using Application.Interfaces;
-using Application.Mapping;
+using Application.Models;
 using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using WebApi.Attributes;
+using WebApi.Authorization;
 using WebApi.Providers;
 
 namespace WebApi
@@ -47,6 +53,27 @@ namespace WebApi
                     options.Audience = "MessageApi";
                     options.RequireHttpsMetadata = false;
                 });
+
+            services.AddAuthorization();
+
+            services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
+            services.AddSingleton<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
+            services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
+
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Lockout.MaxFailedAccessAttempts = 5;
+
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+
+                options.User.RequireUniqueEmail = true;
+            })
+               .AddEntityFrameworkStores<AppDbContext>()
+               .AddDefaultTokenProviders();
 
             services.AddHttpContextAccessor();
             services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();

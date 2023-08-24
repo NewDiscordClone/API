@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
@@ -32,9 +31,9 @@ namespace Application.Commands.Messages.EditMessage
             await Context.SaveChangesAsync(cancellationToken);
             List<Attachment> attachments = await Context.Attachments
                 .Include(a => a.Message)
-                .Where(a => a.Message!=null && a.Message.Id == message.Id).ToListAsync(cancellationToken);
-            
-            AttachmentsFromText.GetAttachments(request.NewText, a=> attachments.Add(a));
+                .Where(a => a.Message != null && a.Message.Id == message.Id).ToListAsync(cancellationToken);
+
+            AttachmentsFromText.GetAttachments(request.NewText, a => attachments.Add(a));
             message.Attachments = attachments;
             await Context.SaveChangesAsync(cancellationToken);
             return message;

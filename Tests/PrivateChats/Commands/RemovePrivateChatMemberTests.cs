@@ -1,5 +1,5 @@
 ﻿using Application.Commands.PrivateChats.RemovePrivateChatMember;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
 using Tests.Common;
 

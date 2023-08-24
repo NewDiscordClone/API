@@ -1,5 +1,5 @@
 ﻿using Application.Commands.Messages.EditMessage;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
 using Tests.Common;
 
