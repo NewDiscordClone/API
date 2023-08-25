@@ -23,7 +23,7 @@ namespace Application.Commands.PrivateChats.ChangePrivateChatImage
                 , null,
                 cancellationToken);
             if(oldImage != null)
-                await Context.CheckRemoveMedia(oldImage[oldImage.LastIndexOf('/')..], cancellationToken);
+                await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/')-1)..], cancellationToken);
         }
 
         public ChangePrivateChatImageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

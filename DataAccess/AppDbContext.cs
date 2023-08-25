@@ -12,7 +12,7 @@ using MongoDB.Driver;
 
 namespace DataAccess
 {
-    public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         private IMongoClient _mongoClient { get; }
         private string _mongoDbName { get; }
@@ -47,8 +47,11 @@ namespace DataAccess
 
         public IMongoCollection<Media> Media => MongoDb.GetCollection<Media>("media");
 
-        public DbSet<Server> Servers { get; set; } = null!;
-        public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
+        public IMongoCollection<Server> Servers => MongoDb.GetCollection<Server>("servers");
+        public IMongoCollection<Role> Roles => MongoDb.GetCollection<Role>("roles");
+
+        public DbSet<User> Users { get; set; }
+        //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
         public IMongoDatabase MongoDb { get; }
 
@@ -67,8 +70,11 @@ namespace DataAccess
                     Builders<Attachment>.Filter.Regex(c => c.Path, regex)),
                 null,
                 cancellationToken);
+            count += await Servers.CountDocumentsAsync(
+                Builders<Server>.Filter.Regex(s => s.Image, regex),
+                null,
+                cancellationToken);
             count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(cancellationToken);
-            count += await Servers.Where(s => s.Image != null && s.Image.Contains(id)).CountAsync(cancellationToken);
             
             if (count > 0) return;
 
@@ -81,9 +87,6 @@ namespace DataAccess
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new RoleConfiguration());
-            builder.ApplyConfiguration(new ServerConfiguration());
-            builder.ApplyConfiguration(new ServerProfileConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             base.OnModelCreating(builder);
         }
@@ -165,10 +168,14 @@ namespace DataAccess
                 return (await FindByIdAsync(Messages, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
-
             if (type == typeof(Media))
             {
                 return (await FindByIdAsync(Media, id, cancellationToken) as TEntity) ??
+                       throw new EntityNotFoundException($"{type.Name} {id} not found");
+            }
+            if (type == typeof(Server))
+            {
+                return (await FindByIdAsync(Servers, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
 

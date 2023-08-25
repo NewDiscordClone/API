@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Providers;
+using MongoDB.Bson;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -24,7 +25,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<GetServerLookupDto>>> GetServers()
         {
-            GetServersRequest get = new() { UserId = UserId };
+            GetServersRequest get = new();
             List<GetServerLookupDto> servers = await Mediator.Send(get);
             return Ok(servers);
         }
@@ -32,7 +33,7 @@ namespace WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ServerDetailsDto>> GetServerDetails(int serverId)
+        public async Task<ActionResult<ServerDetailsDto>> GetServerDetails(ObjectId serverId)
         {
             ServerDetailsDto server = await Mediator
                 .Send(new GetServerDetailsRequest { ServerId = serverId });
@@ -49,7 +50,7 @@ namespace WebApi.Controllers
                 Title = serverDto.Title,
                 Image = serverDto.Image,
             };
-            int id = await Mediator.Send(request);
+            ObjectId id = await Mediator.Send(request);
             return Created(string.Empty, id);
         }
 

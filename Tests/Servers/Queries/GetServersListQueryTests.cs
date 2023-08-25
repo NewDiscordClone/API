@@ -13,10 +13,10 @@ namespace Tests.Servers.Queries
             int userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
 
-            GetServersRequestHandler handler = new(Context, Mapper);
+            SetAuthorizedUserId(userId);
+            GetServersRequestHandler handler = new(Context, UserProvider, Mapper);
 
-            GetServersRequest request = new()
-            { UserId = userId };
+            GetServersRequest request = new();
 
             // Act
             List<GetServerLookupDto> result = await handler.Handle(request, cancellationToken);
@@ -34,10 +34,11 @@ namespace Tests.Servers.Queries
             int userId = int.MaxValue;
             CancellationToken cancellationToken = CancellationToken.None;
 
-            GetServersRequestHandler handler = new(Context, Mapper);
+            SetAuthorizedUserId(userId);
+            
+            GetServersRequestHandler handler = new(Context,UserProvider, Mapper);
 
-            GetServersRequest request = new()
-            { UserId = userId };
+            GetServersRequest request = new();
 
             // Act
             List<GetServerLookupDto> result = await handler.Handle(request, cancellationToken);

@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
 
 namespace Application.Queries.GetServerDetails
 {
     public record GetServerDetailsRequest : IRequest<ServerDetailsDto>
     {
         [Required]
-        public int ServerId { get; init; }
+        public ObjectId ServerId { get; init; }
     }
 }

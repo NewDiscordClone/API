@@ -26,6 +26,7 @@ public class ChatHub : Hub
         _mediator = mediator;
         _logger = logger;
         _userProvider = userProvider;
+        _context = appDbContext;
 
         OnChatMessageReceived += async (msg, chat) => await SendMessageToChat(msg, chat);
     }

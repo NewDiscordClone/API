@@ -1,6 +1,8 @@
 ﻿using Application.Commands.Servers.DeleteServer;
 using Application.Exceptions;
+using Application.Models;
 using Application.Providers;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Tests.Common;
 
@@ -14,8 +16,9 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             //Arrange
             int userId = Ids.UserAId;
-            int serverId = Ids.ServerIdForDelete;
-            int oldCount = Context.Servers.Count();
+            ObjectId serverId = Ids.ServerIdForDelete;
+            long oldCount = await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty);
+            
 
             SetAuthorizedUserId(userId);
 
@@ -29,11 +32,11 @@ namespace Tests.Servers.Commands
             await handler.Handle(request, CancellationToken);
 
             //Assert
-            Assert.Null(Context.Servers.Find(serverId));
-            Assert.False(Context.ServerProfiles.Any(profile => profile.Server.Id == serverId));
+            await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+                await Context.FindByIdAsync<Server>(serverId, CancellationToken));
             Assert.False(Context.Channels.Find(channel => channel.ServerId == serverId).Any());
-            Assert.Equal(oldCount - 1, Context.Servers.Count());
-            Assert.NotNull(Context.Users.Find(userId));
+            Assert.Equal(oldCount - 1, await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty));
+            Assert.NotNull(await Context.FindSqlByIdAsync<User>(userId, CancellationToken));
         }
 
         [Fact]
@@ -42,7 +45,7 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             //Arrange
             int userId = Ids.UserBId;
-            int serverId = Ids.ServerIdForDelete;
+            ObjectId serverId = Ids.ServerIdForDelete;
 
             Mock<IAuthorizedUserProvider> userProvider = new();
             userProvider.Setup(p => p.GetUserId()).Returns(userId);
@@ -55,7 +58,8 @@ namespace Tests.Servers.Commands
 
             //Act
             //Assert
-            await Assert.ThrowsAsync<NoPermissionsException>(async () => await handler.Handle(request, CancellationToken));
+            await Assert.ThrowsAsync<NoPermissionsException>(async () =>
+                await handler.Handle(request, CancellationToken));
         }
     }
 }

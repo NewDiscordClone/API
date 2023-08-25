@@ -2,12 +2,13 @@
 using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
+using MongoDB.Bson;
 
 namespace Application.Queries.GetServerDetails
 {
     public record ServerDetailsDto : IMapWith<Server>
     {
-        public int Id { get; init; }
+        public ObjectId Id { get; init; }
         public string Title { get; init; }
         public string? Image { get; init; }
         public List<ServerProfileLookupDto> ServerProfiles { get; init; }

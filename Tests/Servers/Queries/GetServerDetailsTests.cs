@@ -1,5 +1,6 @@
 ﻿using Application.Providers;
 using Application.Queries.GetServerDetails;
+using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.Servers.Queries
@@ -11,7 +12,7 @@ namespace Tests.Servers.Queries
         {
             CreateDatabase();
             //Arrange
-            int serverId = Ids.ServerIdForDelete;
+            ObjectId serverId = Ids.ServerIdForDelete;
             int userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
             

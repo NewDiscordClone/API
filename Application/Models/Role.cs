@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson;
 
 namespace Application.Models;
 
-public class Role : IdentityRole<int>
+public class Role : IdentityRole<ObjectId>
 {
     public string Color { get; set; }
-
-    public virtual Server Server { get; set; }
-    public virtual List<ServerProfile> ServerProfiles { get; set; } = new();
+    public ObjectId ServerId { get; set; }
 }

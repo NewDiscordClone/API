@@ -18,7 +18,7 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
             PrivateChat privateChat = new()
             {
                 Title = request.Title,
-                //Image = request.Image,
+                Image = request.Image,
                 Users = users,
                 OwnerId = owner.Id
             };

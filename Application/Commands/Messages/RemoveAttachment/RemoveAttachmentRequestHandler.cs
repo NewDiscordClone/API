@@ -28,7 +28,7 @@ namespace Application.Commands.Messages.RemoveAttachment
                 null,
                 cancellationToken
             );
-            await Context.CheckRemoveMedia(path[path.LastIndexOf('/')..], cancellationToken);
+            await Context.CheckRemoveMedia(path[(path.LastIndexOf('/')-1)..], cancellationToken);
             return chat;
         }
 

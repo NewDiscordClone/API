@@ -2,6 +2,7 @@
 using Application.Exceptions;
 using Application.Models;
 using Application.Providers;
+using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -14,7 +15,7 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             //Arrange
             int userId = Ids.UserBId;
-            int serverId = Ids.ServerIdForUpdate;
+            ObjectId serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
 
             Mock<IAuthorizedUserProvider> userProvider = new();
@@ -30,7 +31,7 @@ namespace Tests.Servers.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            Server? updatedServer = Context.Servers.Find(serverId);
+            Server updatedServer = await Context.FindByIdAsync<Server>(serverId, CancellationToken);
 
             //Assert
             Assert.NotNull(updatedServer);
@@ -43,7 +44,7 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             //Arrange
             int userId = Ids.UserAId;
-            int serverId = Ids.ServerIdForUpdate;
+            ObjectId serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
 
             Mock<IAuthorizedUserProvider> userProvider = new();

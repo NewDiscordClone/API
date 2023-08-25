@@ -68,7 +68,7 @@ namespace Tests.Messages.Commands
 
             Assert.Contains(Context.Messages.Find(Builders<Message>.Filter.Empty).ToList(), e => e.Id == result.Id);
             Assert.NotEmpty(result.Attachments);
-            Assert.Equal(true, result.Attachments[0].IsInText);
+            Assert.True(result.Attachments[0].IsInText);
             Assert.Equal(messageText, result.Text);
         }
     }

@@ -9,8 +9,8 @@ namespace Tests.Common
         public int UserCId { get; set; } = 3;
         public int UserDId { get; set; } = 4;
 
-        public int ServerIdForDelete { get; set; } = 1;
-        public int ServerIdForUpdate { get; set; } = 2;
+        public ObjectId ServerIdForDelete { get; set; }
+        public ObjectId ServerIdForUpdate { get; set; }
 
         public ObjectId Channel1 { get; set; }
         public ObjectId Channel2 { get; set; }

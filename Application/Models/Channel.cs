@@ -6,7 +6,7 @@ public class Channel : Chat
 {
     public string Title { get; set; }
 
-    public int ServerId { get; set; } //TODO: Поміняти на ObjectId якщо сервер також буде в mongodb
+    public ObjectId ServerId { get; set; }
     
     
 }

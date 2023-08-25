@@ -23,67 +23,74 @@ namespace Tests.Common
             _mongoClient = new MongoClient("mongodb://localhost:27017");
             AppDbContext context = new(options, _mongoClient, Guid.NewGuid().ToString());
             context.Database.EnsureCreated();
+            IMapper mapper = new MapperConfiguration(config =>
+                config.AddProfile(new AssemblyMappingProfile(
+                    typeof(IAppDbContext).Assembly))).CreateMapper();
 
             User userA = new()
             {
                 Id = ids.UserAId,
                 UserName = "User A",
-                //AvatarPath = null,
+                Avatar = null,
                 Email = "email@test1.com",
             };
             User userB = new()
             {
                 Id = ids.UserBId,
                 UserName = "User B",
-                // AvatarPath = null,
+                Avatar = null,
                 Email = "email@test2.com",
             };
             User userC = new()
             {
                 Id = ids.UserCId,
                 UserName = "User C",
-                // AvatarPath = null,
+                Avatar = null,
                 Email = "email@test3.com",
             };
             User userD = new()
             {
                 Id = ids.UserDId,
                 UserName = "User D",
-                // AvatarPath = null,
+                Avatar = null,
                 Email = "email@test4.com",
             };
-            
+
             context.Users.AddRange(userA, userB, userC, userD);
-            
-            context.Servers.AddRange(
+
+            context.Servers.InsertMany(new List<Server> //Here I am getting NullRefferenceException
+            {
                 new Server
                 {
-                    Id = ids.ServerIdForDelete,
+                    Id = ids.ServerIdForDelete = ObjectId.GenerateNewId(),
                     Title = "Server 1",
-                    Owner = userA,
-                    ServerProfiles =
+                    Owner = mapper.Map<UserLookUp>(userA),
+                    ServerProfiles = 
                     {
                         new ServerProfile
                         {
-                            User = userA
+                            User = mapper.Map<UserLookUp>(userA)
                         }
                     },
-                    Roles = new List<Role>()
+
+                    // Roles = new List<Role>()
                 },
                 new Server
                 {
-                    Id = ids.ServerIdForUpdate,
+                    Id = ids.ServerIdForUpdate = ObjectId.GenerateNewId(),
                     Title = "Server 2",
-                    Owner = userB,
-                    ServerProfiles =
+                    Owner = mapper.Map<UserLookUp>(userB),
+                    ServerProfiles = 
                     {
                         new ServerProfile
                         {
-                            User = userB
+                            User = mapper.Map<UserLookUp>(userB)
                         }
                     },
-                    Roles = new List<Role>()
-                });
+                    // Roles = new List<Role>()
+                }
+                
+            });
             context.Channels.InsertMany(new List<Channel>()
             {
                 new Channel
@@ -100,9 +107,6 @@ namespace Tests.Common
                 }
             });
 
-            IMapper mapper = new MapperConfiguration(config =>
-                config.AddProfile(new AssemblyMappingProfile(
-                    typeof(IAppDbContext).Assembly))).CreateMapper();
 
             context.PrivateChats.InsertMany(new List<PrivateChat>()
                 {
@@ -115,7 +119,7 @@ namespace Tests.Common
                     },
                     new()
                     {
-                        Id = ids.PrivateChat4 = ObjectId.GenerateNewId(), 
+                        Id = ids.PrivateChat4 = ObjectId.GenerateNewId(),
                         Title = "PrivateChat 4",
                         OwnerId = userA.Id,
                         Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userC) }
@@ -178,7 +182,7 @@ namespace Tests.Common
                 new Message
                 {
                     Id = ids.Message2 = ObjectId.GenerateNewId(),
-                    Text= "Message 2",
+                    Text = "Message 2",
                     SendTime = DateTime.Now,
                     User = mapper.Map<UserLookUp>(userB),
                     IsPinned = true,
@@ -200,7 +204,7 @@ namespace Tests.Common
 
         public static void Destroy(IAppDbContext iContext)
         {
-            if(iContext is not AppDbContext context) return;
+            if (iContext is not AppDbContext context) return;
             context.Database.EnsureDeleted();
             context.Dispose();
         }
