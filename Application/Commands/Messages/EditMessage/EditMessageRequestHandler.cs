@@ -23,10 +23,7 @@ namespace Application.Commands.Messages.EditMessage
             await Context.Messages.UpdateOneAsync(
                 filter,
                 Builders<Message>.Update
-                    .PullFilter(m => m.Attachments, a =>
-                        a.Type == AttachmentType.Url ||
-                        a.Type == AttachmentType.UrlGif ||
-                        a.Type == AttachmentType.UrlImage)
+                    .PullFilter(m => m.Attachments, a =>a.IsInText)
                     .Set(m => m.Text, request.NewText),
                 null,
                 cancellationToken

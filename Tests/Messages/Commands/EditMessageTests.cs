@@ -31,7 +31,7 @@ namespace Tests.Messages.Commands
             //Assert
 
             Assert.Equal(newText, result.Text);
-            Assert.Equal(AttachmentType.UrlImage, result.Attachments[0].Type);
+            Assert.Equal(true, result.Attachments[0].IsInText);
         }
 
         [Fact]

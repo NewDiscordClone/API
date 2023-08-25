@@ -11,20 +11,19 @@ namespace Application.Commands.PrivateChats.ChangePrivateChatImage
     {
         public async Task Handle(ChangePrivateChatImageRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            PrivateChat chat =
+                await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken);
+            if (!chat.Users.Any(u => u.Id == UserId))
+                throw new NoPermissionsException("User is not a member of the chat");
+            var oldImage = chat.Image;
             
-            // PrivateChat chat =
-            //     await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken);
-            // if (!chat.Users.Any(u => u.Id == UserId))
-            //     throw new NoPermissionsException("User is not a member of the chat");
-            //
-            //
-            // await Context.PrivateChats.UpdateOneAsync(
-            //     Context.GetIdFilter<PrivateChat>(chat.Id),
-            //     Builders<PrivateChat>.Update.Set(c => c.Image, request.NewImage)
-            //     , null,
-            //     cancellationToken);
-            
+            await Context.PrivateChats.UpdateOneAsync(
+                Context.GetIdFilter<PrivateChat>(chat.Id),
+                Builders<PrivateChat>.Update.Set(c => c.Image, request.NewImage)
+                , null,
+                cancellationToken);
+            if(oldImage != null)
+                await Context.CheckRemoveMedia(oldImage[oldImage.LastIndexOf('/')..], cancellationToken);
         }
 
         public ChangePrivateChatImageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

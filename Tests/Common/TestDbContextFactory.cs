@@ -187,7 +187,7 @@ namespace Tests.Common
                     {
                         new Attachment
                         {
-                            Type = AttachmentType.Url,
+                            IsInText = false,
                             Path = "http://localhost:3000"
                         }
                     }

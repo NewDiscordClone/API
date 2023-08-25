@@ -22,7 +22,7 @@ namespace Tests.Messages.Commands
                 {
                     new Attachment
                     {
-                        Type = AttachmentType.UrlImage,
+                        IsInText = false,
                         Path =
                             "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg"
                     }
@@ -68,7 +68,7 @@ namespace Tests.Messages.Commands
 
             Assert.Contains(Context.Messages.Find(Builders<Message>.Filter.Empty).ToList(), e => e.Id == result.Id);
             Assert.NotEmpty(result.Attachments);
-            Assert.Equal(AttachmentType.UrlImage, result.Attachments[0].Type);
+            Assert.Equal(true, result.Attachments[0].IsInText);
             Assert.Equal(messageText, result.Text);
         }
     }

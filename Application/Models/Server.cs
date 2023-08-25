@@ -6,7 +6,7 @@ public class Server
 {
     public int Id { get; set; }
     public string Title { get; set; }
-    //public string? Image { get; set; }
+    public string? Image { get; set; }
 
     public virtual User Owner { get; set; }
     public virtual List<ServerProfile> ServerProfiles { get; set; } = new();

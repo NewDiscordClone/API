@@ -8,7 +8,7 @@ namespace Application.Models
         public int Id { get; set; }
 
         public string DisplayName { get; set; }
-        //public byte[] Avatar { get; set; }
+        public string Avatar { get; set; }
 
         public void Mapping(Profile profile)
         {

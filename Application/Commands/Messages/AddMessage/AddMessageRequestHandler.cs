@@ -25,8 +25,8 @@ namespace Application.Commands.Messages.AddMessage
             {
                 attachments.Add(new Attachment
                 {
+                    IsInText = false,
                     Path = a.Path,
-                    Type = a.Type,
                     IsSpoiler = a.IsSpoiler
                 });
             });

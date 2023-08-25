@@ -19,6 +19,8 @@ namespace Application.Commands.Messages.RemoveAttachment
             if (message.User.Id != user.Id)
                 throw new NoPermissionsException("You don't have permission to edit the message");
 
+            string path = message.Attachments[request.AttachmentIndex].Path;
+            
             await Context.Messages.UpdateOneAsync(
                 Context.GetIdFilter<Message>(message.Id),
                 Builders<Message>.Update.Pull(m => m.Attachments,
@@ -26,6 +28,7 @@ namespace Application.Commands.Messages.RemoveAttachment
                 null,
                 cancellationToken
             );
+            await Context.CheckRemoveMedia(path[path.LastIndexOf('/')..], cancellationToken);
             return chat;
         }
 

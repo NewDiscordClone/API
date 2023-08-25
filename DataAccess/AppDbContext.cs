@@ -5,6 +5,7 @@ using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -44,10 +45,39 @@ namespace DataAccess
         public IMongoCollection<Channel> Channels =>
             MongoDb.GetCollection<Chat>("chats").OfType<Channel>();
 
+        public IMongoCollection<Media> Media => MongoDb.GetCollection<Media>("media");
+
         public DbSet<Server> Servers { get; set; } = null!;
         public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
         public IMongoDatabase MongoDb { get; }
+
+        public async Task CheckRemoveMedia(string id, CancellationToken cancellationToken = default)
+        {
+            if(!ObjectId.TryParse(id, out var mediaId)) return;
+
+            var regex = new BsonRegularExpression(id, "i");
+            long count = 0;
+            count += await PrivateChats.CountDocumentsAsync(
+                Builders<PrivateChat>.Filter.Regex(c => c.Image, regex),
+                null,
+                cancellationToken);
+            count += await Messages.CountDocumentsAsync(
+                Builders<Message>.Filter.ElemMatch(c => c.Attachments, 
+                    Builders<Attachment>.Filter.Regex(c => c.Path, regex)),
+                null,
+                cancellationToken);
+            count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(cancellationToken);
+            count += await Servers.Where(s => s.Image != null && s.Image.Contains(id)).CountAsync(cancellationToken);
+            
+            if (count > 0) return;
+
+            await Media.DeleteOneAsync(
+                GetIdFilter<Media>(mediaId),
+                null,
+                cancellationToken);
+
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -117,21 +147,31 @@ namespace DataAccess
                 return (await FindByIdAsync(Chats, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
+
             if (type == typeof(PrivateChat))
             {
                 return (await FindByIdAsync(PrivateChats, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
+
             if (type == typeof(Channel))
             {
                 return (await FindByIdAsync(Channels, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
+
             if (type == typeof(Message))
             {
                 return (await FindByIdAsync(Messages, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
+
+            if (type == typeof(Media))
+            {
+                return (await FindByIdAsync(Media, id, cancellationToken) as TEntity) ??
+                       throw new EntityNotFoundException($"{type.Name} {id} not found");
+            }
+
             throw new InvalidOperationException($"Unhandled entity type: {type.Name}");
         }
     }

@@ -17,7 +17,12 @@ namespace Application.Commands.Servers.UpdateServer
                 throw new NoPermissionsException("You are not the owner of the server");
             
             server.Title = request.Title ?? server.Title;
-            //server.Image = request.Image ?? server.Image;
+            if(request.Image != null)
+            {
+                if(server.Image != null)
+                    await Context.CheckRemoveMedia(server.Image[server.Image.LastIndexOf('/')..], cancellationToken);
+                server.Image = request.Image;
+            }
 
             Context.Servers.Update(server);
             await Context.SaveChangesAsync(cancellationToken);
