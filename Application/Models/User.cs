@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Identity;
+using AspNetCore.Identity.Mongo.Model;
+using MongoDB.Bson;
 
 namespace Application.Models;
 
@@ -9,7 +10,7 @@ public enum UserStatus
     DoNotDisturb,
     Offline
 }
-public class User : IdentityUser<int>
+public class User : MongoUser<ObjectId>
 {
     public string? DisplayName { get; set; }
     public string? Avatar { get; set; }

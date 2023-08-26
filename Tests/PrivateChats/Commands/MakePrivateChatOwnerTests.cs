@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.MakePrivateChatOwner;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Tests.Common;
 
@@ -15,8 +16,8 @@ namespace Tests.PrivateChats.Commands
             //Arrange
 
             var chatId = Ids.PrivateChat3;
-            int newOwnerId = Ids.UserBId;
-            int oldOwner = Ids.UserAId;
+            ObjectId newOwnerId = Ids.UserBId;
+            ObjectId oldOwner = Ids.UserAId;
 
             SetAuthorizedUserId(oldOwner);
 
@@ -45,7 +46,7 @@ namespace Tests.PrivateChats.Commands
             //Arrange
 
             var chatId = Ids.PrivateChat6;
-            int newOwnerId = Ids.UserCId;
+            ObjectId newOwnerId = Ids.UserCId;
 
             SetAuthorizedUserId(Ids.UserAId);
 
@@ -71,7 +72,7 @@ namespace Tests.PrivateChats.Commands
             //Arrange
 
             var chatId = Ids.PrivateChat7;
-            int newOwnerId = Ids.UserAId;
+            ObjectId newOwnerId = Ids.UserAId;
 
             SetAuthorizedUserId(Ids.UserBId);
 

@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.LeaveFromPrivateChat;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Tests.Common;
 
@@ -14,7 +15,7 @@ namespace Tests.PrivateChats.Commands
             CreateDatabase();
             //Arrange
             var chatId = Ids.PrivateChat7;
-            int userId = Ids.UserBId;
+            ObjectId userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 
@@ -41,7 +42,7 @@ namespace Tests.PrivateChats.Commands
             CreateDatabase();
             //Arrange
             var chatId = Ids.PrivateChat4;
-            int userId = Ids.UserAId;
+            ObjectId userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 
@@ -65,7 +66,7 @@ namespace Tests.PrivateChats.Commands
             CreateDatabase();
             //Arrange
             var chatId = Ids.PrivateChat4;
-            int userId = Ids.UserBId;
+            ObjectId userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 

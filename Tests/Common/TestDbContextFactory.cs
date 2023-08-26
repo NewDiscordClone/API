@@ -16,56 +16,58 @@ namespace Tests.Common
         public static IAppDbContext Create(out Ids ids)
         {
             ids = new Ids();
-            DbContextOptions<AppDbContext> options =
-                new DbContextOptionsBuilder<AppDbContext>()
-                    .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-
             _mongoClient = new MongoClient("mongodb://localhost:27017");
-            AppDbContext context = new(options, _mongoClient, Guid.NewGuid().ToString());
-            context.Database.EnsureCreated();
+            AppDbContext context = new(_mongoClient, Guid.NewGuid().ToString());
             IMapper mapper = new MapperConfiguration(config =>
                 config.AddProfile(new AssemblyMappingProfile(
                     typeof(IAppDbContext).Assembly))).CreateMapper();
 
             User userA = new()
             {
-                Id = ids.UserAId,
+                Id = ids.UserAId = ObjectId.GenerateNewId(),
                 UserName = "User A",
                 Avatar = null,
                 Email = "email@test1.com",
             };
             User userB = new()
             {
-                Id = ids.UserBId,
+                Id = ids.UserBId = ObjectId.GenerateNewId(),
                 UserName = "User B",
                 Avatar = null,
                 Email = "email@test2.com",
             };
             User userC = new()
             {
-                Id = ids.UserCId,
+                Id = ids.UserCId = ObjectId.GenerateNewId(),
                 UserName = "User C",
                 Avatar = null,
                 Email = "email@test3.com",
             };
             User userD = new()
             {
-                Id = ids.UserDId,
+                Id = ids.UserDId = ObjectId.GenerateNewId(),
+                UserName = "User D",
+                Avatar = null,
+                Email = "email@test4.com",
+            };
+            User userFail = new()
+            {
+                Id = ids.UserFailId = ObjectId.GenerateNewId(),
                 UserName = "User D",
                 Avatar = null,
                 Email = "email@test4.com",
             };
 
-            context.Users.AddRange(userA, userB, userC, userD);
+            context.Users.InsertMany(new List<User> { userA, userB, userC, userD, userFail });
 
-            context.Servers.InsertMany(new List<Server> //Here I am getting NullRefferenceException
+            context.Servers.InsertMany(new List<Server>
             {
                 new Server
                 {
                     Id = ids.ServerIdForDelete = ObjectId.GenerateNewId(),
                     Title = "Server 1",
                     Owner = mapper.Map<UserLookUp>(userA),
-                    ServerProfiles = 
+                    ServerProfiles =
                     {
                         new ServerProfile
                         {
@@ -80,7 +82,7 @@ namespace Tests.Common
                     Id = ids.ServerIdForUpdate = ObjectId.GenerateNewId(),
                     Title = "Server 2",
                     Owner = mapper.Map<UserLookUp>(userB),
-                    ServerProfiles = 
+                    ServerProfiles =
                     {
                         new ServerProfile
                         {
@@ -89,7 +91,6 @@ namespace Tests.Common
                     },
                     // Roles = new List<Role>()
                 }
-                
             });
             context.Channels.InsertMany(new List<Channel>()
             {
@@ -197,15 +198,12 @@ namespace Tests.Common
                     }
                 }
             });
-
-            context.SaveChanges();
             return context;
         }
 
         public static void Destroy(IAppDbContext iContext)
         {
             if (iContext is not AppDbContext context) return;
-            context.Database.EnsureDeleted();
             context.Dispose();
         }
     }

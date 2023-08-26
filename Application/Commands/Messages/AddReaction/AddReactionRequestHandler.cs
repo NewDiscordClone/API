@@ -14,7 +14,7 @@ namespace Application.Commands.Messages.AddReaction
         {
             Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
             Chat chat = await Context.FindByIdAsync<Chat>(message.ChatId, cancellationToken);
-            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
+            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
 
             if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");

@@ -1,11 +1,12 @@
 ﻿using Application.Interfaces;
 using AutoMapper;
+using MongoDB.Bson;
 
 namespace Application.Models
 {
     public class UserLookUp : IMapWith<User>
     {
-        public int Id { get; set; }
+        public ObjectId Id { get; set; }
 
         public string DisplayName { get; set; }
         public string Avatar { get; set; }

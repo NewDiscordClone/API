@@ -13,18 +13,12 @@ namespace WebApi.Controllers
     [Route("api/[action]")]
     [ApiController]
     [Authorize]
-    public class DataController : Controller
+    public class DataController : ApiControllerBase
     {
-        private readonly IMediator _mediator;
-        private readonly IAuthorizedUserProvider _userProvider;
-
-        public DataController(IMediator mediator, IAuthorizedUserProvider userProvider)
+        public DataController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
         {
-            _mediator = mediator;
-            _userProvider = userProvider;
         }
 
-        protected int UserId => _userProvider.GetUserId();
             // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
             //                            throw new NoSuchUserException());
 
@@ -33,13 +27,13 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<GetUserDetailsDto>> GetUser([FromBody] GetUserDetailsRequest getUserDetailsRequest)
         {
-            GetUserDetailsDto user = await _mediator.Send(getUserDetailsRequest);
+            GetUserDetailsDto user = await Mediator.Send(getUserDetailsRequest);
             return Ok(user);
         }
         [HttpGet]
         public async Task<ActionResult<GetUserDetailsDto>> GetCurrentUser()
         {
-            GetUserDetailsDto user = await _mediator
+            GetUserDetailsDto user = await Mediator
                 .Send(new GetUserDetailsRequest { UserId = UserId });
             return Ok(user);
         }

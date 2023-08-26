@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Commands.PrivateChats.CreatePrivateChat
 {
@@ -12,6 +13,6 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
         public string? Image { get; init; }
 
         [MaxLength(11)]
-        public List<int> UsersId { get; init; }
+        public List<ObjectId> UsersId { get; init; }
     }
 }

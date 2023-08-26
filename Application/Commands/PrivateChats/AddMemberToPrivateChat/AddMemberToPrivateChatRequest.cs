@@ -7,6 +7,6 @@ namespace Application.Commands.PrivateChats.AddMemberToPrivateChat
     public class AddMemberToPrivateChatRequest : IRequest
     {
         public ObjectId ChatId { get; init; }
-        public int NewMemberId { get; init; }
+        public ObjectId NewMemberId { get; init; }
     }
 }

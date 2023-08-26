@@ -2,6 +2,7 @@
 using Application.Mapping;
 using Application.Providers;
 using AutoMapper;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Tests.Common
@@ -23,10 +24,9 @@ namespace Tests.Common
                     typeof(IAppDbContext).Assembly)));
             Mapper = mapperConfig.CreateMapper();
             _userProvider = new();
-            SetAuthorizedUserId(1);
         }
 
-        protected void SetAuthorizedUserId(int id)
+        protected void SetAuthorizedUserId(ObjectId id)
         {
             _userProvider.Setup(provider => provider.GetUserId()).Returns(id);
         }
@@ -34,6 +34,7 @@ namespace Tests.Common
         public void CreateDatabase()
         {
             Context = TestDbContextFactory.Create(out Ids);
+            SetAuthorizedUserId(Ids.UserAId);
         }
 
         public void Dispose()

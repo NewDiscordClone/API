@@ -1,4 +1,5 @@
 ﻿using Application.Queries.GetServer;
+using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.Servers.Queries
@@ -10,7 +11,7 @@ namespace Tests.Servers.Queries
         {
             CreateDatabase();
             // Arrange
-            int userId = Ids.UserAId;
+            ObjectId userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
 
             SetAuthorizedUserId(userId);
@@ -31,7 +32,7 @@ namespace Tests.Servers.Queries
         {
             CreateDatabase();
             // Arrange
-            int userId = int.MaxValue;
+            ObjectId userId = Ids.UserFailId;
             CancellationToken cancellationToken = CancellationToken.None;
 
             SetAuthorizedUserId(userId);

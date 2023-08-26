@@ -14,7 +14,7 @@ namespace Tests.Servers.Commands
         {
             CreateDatabase();
             //Arrange
-            int userId = Ids.UserBId;
+            ObjectId userId = Ids.UserBId;
             ObjectId serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
 
@@ -43,7 +43,7 @@ namespace Tests.Servers.Commands
         {
             CreateDatabase();
             //Arrange
-            int userId = Ids.UserAId;
+            ObjectId userId = Ids.UserAId;
             ObjectId serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
 

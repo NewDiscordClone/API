@@ -11,7 +11,7 @@ namespace Application.Commands.Servers.CreateServer
     {
         public async Task<ObjectId> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
-            var ownerLookUp = Mapper.Map<UserLookUp>(await Context.FindSqlByIdAsync<User>(UserId, cancellationToken));
+            var ownerLookUp = Mapper.Map<UserLookUp>(await Context.FindByIdAsync<User>(UserId, cancellationToken));
             
             Server server = new()
             {

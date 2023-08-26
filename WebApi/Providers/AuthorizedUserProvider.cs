@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Application.Exceptions;
 using Application.Providers;
+using MongoDB.Bson;
 
 namespace WebApi.Providers
 {
@@ -13,7 +14,7 @@ namespace WebApi.Providers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int GetUserId()
+        public ObjectId GetUserId()
         {
             var userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -22,7 +23,12 @@ namespace WebApi.Providers
                 throw new NoSuchUserException();
             }
 
-            return int.Parse(userIdClaim);
+            if (!ObjectId.TryParse(userIdClaim, out var resultId))
+            {
+                throw new Exception("Can't parse userIdClaim");
+            }
+
+            return resultId;
         }
     }
 }

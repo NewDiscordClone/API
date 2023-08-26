@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using Application.Providers;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using WebApi.Models;
 
@@ -31,9 +32,9 @@ public class ChatHub : Hub
         OnChatMessageReceived += async (msg, chat) => await SendMessageToChat(msg, chat);
     }
 
-    private static readonly Dictionary<int, HashSet<string>> _userConnections = new();
+    private static readonly Dictionary<ObjectId, HashSet<string>> _userConnections = new();
 
-    private int UserId => _userProvider.GetUserId();
+    private ObjectId UserId => _userProvider.GetUserId();
 
     // int.Parse(Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
     // ?? throw new Exception("User not authenticated"));

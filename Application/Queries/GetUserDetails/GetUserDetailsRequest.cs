@@ -5,7 +5,7 @@ namespace Application.Queries.GetUser
 {
     public class GetUserDetailsRequest : IRequest<GetUserDetailsDto>
     {
-        public int UserId { get; init; }
+        public ObjectId UserId { get; init; }
         public ObjectId? ServerId { get; init; }
     }
 }
