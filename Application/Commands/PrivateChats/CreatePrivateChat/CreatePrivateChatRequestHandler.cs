@@ -12,9 +12,9 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
         public async Task<PrivateChat> Handle(CreatePrivateChatRequest request, CancellationToken cancellationToken)
         {
             List<UserLookUp> users = new();
-            request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindByIdAsync<User>(userId, cancellationToken).Result)));
+            request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindSqlByIdAsync<User>(userId, cancellationToken).Result)));
             
-            User owner = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            User owner = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
             PrivateChat privateChat = new()
             {
                 Title = request.Title,

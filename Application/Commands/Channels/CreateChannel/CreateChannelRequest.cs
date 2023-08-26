@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Application.Models;
 using MediatR;
-using MongoDB.Bson;
 
 namespace Application.Commands.Channels.CreateChannel
 {
@@ -10,6 +9,6 @@ namespace Application.Commands.Channels.CreateChannel
         [MaxLength(255)] 
         public string Title { get; init; }
 
-        public ObjectId ServerId { get; init; }
+        public int ServerId { get; init; }
     }
 }

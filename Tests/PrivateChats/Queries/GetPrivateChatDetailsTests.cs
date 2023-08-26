@@ -1,7 +1,6 @@
 ﻿using Application.Models;
 using Application.Providers;
 using Application.Queries.GetPrivateChatDetails;
-using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Queries
@@ -14,7 +13,7 @@ namespace Tests.PrivateChats.Queries
             CreateDatabase();
             //Arrange
             var chatId = Ids.PrivateChat4;
-            ObjectId userId = Ids.UserAId;
+            int userId = Ids.UserAId;
             
             SetAuthorizedUserId(userId);
 

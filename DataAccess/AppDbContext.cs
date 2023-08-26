@@ -1,26 +1,34 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using DataAccess.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DataAccess
 {
-    public class AppDbContext : IAppDbContext
+    public class AppDbContext : DbContext, IAppDbContext
     {
         private IMongoClient _mongoClient { get; }
         private string _mongoDbName { get; }
 
-        public AppDbContext(IConfiguration configuration)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration,
+            string dbName = "SparkMongoDB")
+            : base(options)
         {
-            _mongoDbName = configuration["MongoDBName"]?? "SparkMongoDB";
+            _mongoDbName = dbName;
             var client = new MongoClient(configuration.GetConnectionString("MongoDB"));
             _mongoClient = client;
-            MongoDb = client.GetDatabase(_mongoDbName);
+            MongoDb = client.GetDatabase(dbName);
         }
 
-        public AppDbContext(IMongoClient client, string dbName)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IMongoClient client, string dbName = "SparkMongoDB")
+            : base(options)
         {
             _mongoDbName = dbName;
             _mongoClient = client;
@@ -41,7 +49,8 @@ namespace DataAccess
 
         public IMongoCollection<Server> Servers => MongoDb.GetCollection<Server>("servers");
         public IMongoCollection<Role> Roles => MongoDb.GetCollection<Role>("roles");
-        public IMongoCollection<User> Users => MongoDb.GetCollection<User>("users");
+
+        public DbSet<User> Users { get; set; }
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
         public IMongoDatabase MongoDb { get; }
@@ -65,7 +74,7 @@ namespace DataAccess
                 Builders<Server>.Filter.Regex(s => s.Image, regex),
                 null,
                 cancellationToken);
-            count += await Users.Find(u => u.Avatar != null && u.Avatar.Contains(id)).CountDocumentsAsync(cancellationToken);
+            count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(cancellationToken);
             
             if (count > 0) return;
 
@@ -76,9 +85,42 @@ namespace DataAccess
 
         }
 
-        public void Dispose()
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new UserConfiguration());
+            base.OnModelCreating(builder);
+        }
+
+        public override void Dispose()
         {
             _mongoClient.DropDatabase(_mongoDbName);
+            base.Dispose();
+        }
+
+        public async Task<TEntity> FindSqlByIdAsync<TEntity>(int id, CancellationToken cancellationToken = default,
+            params string[] includedProperties) where TEntity : class
+        {
+            DbSet<TEntity> dbSet = Set<TEntity>();
+            IQueryable<TEntity> queryable = dbSet.AsQueryable();
+
+            foreach (string property in includedProperties)
+            {
+                queryable = queryable.Include(property);
+            }
+
+            // Define an expression that represents the ID property
+            Expression<Func<TEntity, bool>> predicate = entity =>
+                EF.Property<int>(entity, "Id") == id;
+
+            TEntity? entity = await queryable
+                .FirstOrDefaultAsync(predicate, cancellationToken);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
+            }
+
+            return entity;
         }
 
         public FilterDefinition<TEntity> GetIdFilter<TEntity>(ObjectId id)
@@ -108,11 +150,13 @@ namespace DataAccess
                 return (await FindByIdAsync(Chats, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
+
             if (type == typeof(PrivateChat))
             {
                 return (await FindByIdAsync(PrivateChats, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
+
             if (type == typeof(Channel))
             {
                 return (await FindByIdAsync(Channels, id, cancellationToken) as TEntity) ??
@@ -132,11 +176,6 @@ namespace DataAccess
             if (type == typeof(Server))
             {
                 return (await FindByIdAsync(Servers, id, cancellationToken) as TEntity) ??
-                       throw new EntityNotFoundException($"{type.Name} {id} not found");
-            }
-            if (type == typeof(User))
-            {
-                return (await FindByIdAsync(Users, id, cancellationToken) as TEntity) ??
                        throw new EntityNotFoundException($"{type.Name} {id} not found");
             }
 

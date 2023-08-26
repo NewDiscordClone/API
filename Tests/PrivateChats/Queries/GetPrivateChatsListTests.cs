@@ -1,6 +1,5 @@
 ﻿using Application.Models;
 using Application.Queries.GetPrivateChats;
-using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Queries
@@ -12,7 +11,7 @@ namespace Tests.PrivateChats.Queries
         {
             CreateDatabase();
             //Arrange
-            ObjectId userId = Ids.UserAId;
+            int userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 

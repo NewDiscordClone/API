@@ -11,7 +11,7 @@ namespace Application.Commands.Channels.CreateChannel
         public async Task<Channel> Handle(CreateChannelRequest request, CancellationToken cancellationToken)
         {
             //TODO: Перевірити що у юзера є відповідні права
-            Server server = await Context.FindByIdAsync<Server>(request.ServerId, cancellationToken);
+            Server server = await Context.FindSqlByIdAsync<Server>(request.ServerId, cancellationToken, "ServerProfile");
             List<UserLookUp> users = new();
             server.ServerProfiles.ForEach(profile => users.Add(Mapper.Map<UserLookUp>(profile.User)));
             Channel channel = new()

@@ -17,10 +17,11 @@ public interface IAppDbContext
     //DbSet<Role> Roles { get; set; }
     IMongoCollection<Server> Servers { get; }
     //DbSet<ServerProfile> ServerProfiles { get; }
-    IMongoCollection<User> Users { get;}
+    DbSet<User> Users { get; set; }
     IMongoDatabase MongoDb { get; }
 
     Task CheckRemoveMedia(string id, CancellationToken cancellationToken = default);
+    Task<TResult> FindSqlByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
     FilterDefinition<TEntity> GetIdFilter<TEntity>(ObjectId id);
     Task<TResult> FindByIdAsync<TResult>(ObjectId id, CancellationToken cancellationToken = default) where TResult : class;
 

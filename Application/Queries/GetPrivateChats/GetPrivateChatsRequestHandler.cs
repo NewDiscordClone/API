@@ -22,6 +22,8 @@ namespace Application.Queries.GetPrivateChats
         public async Task<List<PrivateChat>> Handle(GetPrivateChatsRequest request,
             CancellationToken cancellationToken)
         {
+            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
+
             List<PrivateChat> privateChat = await (await Context.PrivateChats
                     .FindAsync(Builders<PrivateChat>.Filter
                             .ElemMatch(c => c.Users, u => u.Id == UserId),

@@ -13,7 +13,9 @@ namespace Application.Queries.GetUser
 
         public async Task<GetUserDetailsDto> Handle(GetUserDetailsRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            User user = await Context.Users
+                  .FindAsync(new object[] { request.UserId }, cancellationToken)
+                  ?? throw new NoSuchUserException();
             GetUserDetailsDto userDto = Mapper.Map<GetUserDetailsDto>(user);
 
             if (request.ServerId is not null)

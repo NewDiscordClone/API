@@ -1,6 +1,5 @@
 ﻿using Application.Commands.PrivateChats.CreatePrivateChat;
 using Application.Models;
-using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -12,8 +11,8 @@ namespace Tests.PrivateChats.Commands
         {
             CreateDatabase();
             //Arrange
-            ObjectId userId = Ids.UserAId;
-            List<ObjectId> userIdlist = new() { userId, Ids.UserDId };
+            int userId = Ids.UserAId;
+            List<int> userIdlist = new() { userId, Ids.UserDId };
             const string title = "TestCreate";
 
             SetAuthorizedUserId(userId);

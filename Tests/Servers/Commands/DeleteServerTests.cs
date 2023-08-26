@@ -15,7 +15,7 @@ namespace Tests.Servers.Commands
         {
             CreateDatabase();
             //Arrange
-            ObjectId userId = Ids.UserAId;
+            int userId = Ids.UserAId;
             ObjectId serverId = Ids.ServerIdForDelete;
             long oldCount = await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty);
             
@@ -36,7 +36,7 @@ namespace Tests.Servers.Commands
                 await Context.FindByIdAsync<Server>(serverId, CancellationToken));
             Assert.False(Context.Channels.Find(channel => channel.ServerId == serverId).Any());
             Assert.Equal(oldCount - 1, await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty));
-            Assert.NotNull(await Context.FindByIdAsync<User>(userId, CancellationToken));
+            Assert.NotNull(await Context.FindSqlByIdAsync<User>(userId, CancellationToken));
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Tests.Servers.Commands
         {
             CreateDatabase();
             //Arrange
-            ObjectId userId = Ids.UserBId;
+            int userId = Ids.UserBId;
             ObjectId serverId = Ids.ServerIdForDelete;
 
             Mock<IAuthorizedUserProvider> userProvider = new();

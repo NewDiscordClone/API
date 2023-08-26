@@ -3,8 +3,6 @@ using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
 using System.Reflection;
-using AspNetCore.Identity.Mongo;
-using MongoDB.Bson;
 
 namespace Identity
 {
@@ -17,7 +15,10 @@ namespace Identity
 
             services.AddDatabase(builder.Configuration);
             services.AddControllers();
-            services.AddMvc(options => { options.EnableEndpointRouting = false; });
+            services.AddMvc(options =>
+            {
+                options.EnableEndpointRouting = false;
+            });
 
             services.AddMediatR(options =>
             {
@@ -25,29 +26,19 @@ namespace Identity
                     .GetExecutingAssembly());
             });
 
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
+            services.AddIdentity<User, Role>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.Lockout.MaxFailedAccessAttempts = 5;
 
-            services.AddIdentityMongoDbProvider<User, Role, ObjectId>(options =>
-                {
-                    options.SignIn.RequireConfirmedAccount = false;
-                    options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
 
-                    options.Password.RequireNonAlphanumeric = true;
-                    options.Password.RequireUppercase = true;
-                    options.Password.RequireDigit = true;
-                    options.Password.RequiredLength = 8;
-
-                    options.User.RequireUniqueEmail = true;
-                }, mongo =>
-                {
-                    mongo.ConnectionString = configuration.GetConnectionString("IdentityMongoDb");
-                    mongo.UsersCollection = "users";
-                    mongo.RolesCollection = "roles";
-                })
-                //.AddEntityFrameworkStores<AppDbContext>()
+                options.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer4WithConfiguration()

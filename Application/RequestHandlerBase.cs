@@ -1,7 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Providers;
 using AutoMapper;
-using MongoDB.Bson;
 
 namespace Application
 {
@@ -11,7 +10,7 @@ namespace Application
         private readonly IAuthorizedUserProvider _userProvider;
         private readonly IMapper? _mapper;
         protected IMapper Mapper => _mapper ?? throw new Exception("There is no constructor with IMapper");
-        protected ObjectId UserId => _userProvider.GetUserId();
+        protected int UserId => _userProvider.GetUserId();
 
         public RequestHandlerBase(IAppDbContext context, IAuthorizedUserProvider userProvider)
         {

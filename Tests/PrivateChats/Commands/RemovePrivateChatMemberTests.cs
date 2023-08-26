@@ -1,7 +1,6 @@
 ﻿using Application.Commands.PrivateChats.RemovePrivateChatMember;
 using Application.Exceptions;
 using Application.Models;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Tests.Common;
 
@@ -15,7 +14,7 @@ namespace Tests.PrivateChats.Commands
             CreateDatabase();
             //Arrange
             var chatId = Ids.PrivateChat6;
-            ObjectId removeMemberId = Ids.UserAId;
+            int removeMemberId = Ids.UserAId;
             int oldCount = 4;
 
             SetAuthorizedUserId(Ids.UserBId);
@@ -44,7 +43,7 @@ namespace Tests.PrivateChats.Commands
             CreateDatabase();
             //Arrange
             var chatId = Ids.PrivateChat7;
-            ObjectId removeMemberId = Ids.UserAId;
+            int removeMemberId = Ids.UserAId;
 
             SetAuthorizedUserId(Ids.UserBId);
 
