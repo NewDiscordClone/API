@@ -3,8 +3,6 @@ name: Link GitHub Issue and Pull Request with Trello Card
 on:
   issues:
     types: [opened, reopened]
-  pull_request:
-    types: [opened]
 
 jobs:
   link_with_trello:
@@ -13,7 +11,7 @@ jobs:
     steps:
     - name: Call trello-github-actions 
       id: call-trello-github-actions
-      uses: jessicazu/trello-github-actions@v1.0 
+      uses: Grabtot/trello-github-actions@v1.0 
       with:
         trello-action: create_card_when_issue_opened
       env:
