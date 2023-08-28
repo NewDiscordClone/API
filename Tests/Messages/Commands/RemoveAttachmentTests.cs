@@ -10,8 +10,8 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var messageId = Ids.Message2;
             int attachmentIndex = 0;
 

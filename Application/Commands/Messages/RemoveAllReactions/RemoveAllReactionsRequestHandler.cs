@@ -24,7 +24,7 @@ namespace Application.Commands.Messages.RemoveAllReactions
             // if (channel != null && channel.Server.Owner.Id != UserId) 
             //     throw new NoPermissionsException("You don't have permission to remove the message reactions");
 
-            Context.Messages.UpdateOneAsync(
+            await Context.Messages.UpdateOneAsync(
                 Context.GetIdFilter<Message>(message.Id),
                 Builders<Message>.Update.Set(m => m.Reactions, new List<Reaction>()),
                 null,

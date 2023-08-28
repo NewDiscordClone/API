@@ -9,8 +9,8 @@ namespace Tests.Messages.Queries
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var chatId = Ids.PrivateChat3;
             int messagesCount = 2;
 
@@ -32,8 +32,8 @@ namespace Tests.Messages.Queries
         [Fact]
         public async Task SingleMessage()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var chatId = Ids.PrivateChat3;
             int messagesCount = 1;
 

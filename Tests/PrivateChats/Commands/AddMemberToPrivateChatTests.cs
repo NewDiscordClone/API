@@ -11,8 +11,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
 
             int newMemberId = Ids.UserAId;
             var chatId = Ids.PrivateChat5;
@@ -40,8 +40,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task UserAlreadyExists_Fail()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int newMemberId = Ids.UserCId;
             var chatId = Ids.PrivateChat5;
 

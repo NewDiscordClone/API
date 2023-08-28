@@ -8,8 +8,8 @@ namespace Tests.Servers.Queries
         [Fact]
         public async Task Handle_ReturnsExpectedServers()
         {
-            CreateDatabase();
             // Arrange
+            CreateDatabase();
             int userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -29,8 +29,8 @@ namespace Tests.Servers.Queries
         [Fact]
         public async Task Handle_ReturnsUnexpectedServers()
         {
-            CreateDatabase();
             // Arrange
+            CreateDatabase();
             int userId = int.MaxValue;
             CancellationToken cancellationToken = CancellationToken.None;
 

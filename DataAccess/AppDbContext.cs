@@ -5,14 +5,13 @@ using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace DataAccess
 {
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User,Role,int>, IAppDbContext
     {
         private IMongoClient _mongoClient { get; }
         private string _mongoDbName { get; }
@@ -48,9 +47,6 @@ namespace DataAccess
         public IMongoCollection<Media> Media => MongoDb.GetCollection<Media>("media");
 
         public IMongoCollection<Server> Servers => MongoDb.GetCollection<Server>("servers");
-        public IMongoCollection<Role> Roles => MongoDb.GetCollection<Role>("roles");
-
-        public DbSet<User> Users { get; set; }
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
         public IMongoDatabase MongoDb { get; }
@@ -144,42 +140,20 @@ namespace DataAccess
         public async Task<TEntity> FindByIdAsync<TEntity>(ObjectId id, CancellationToken cancellationToken = default)
             where TEntity : class
         {
-            var type = typeof(TEntity);
-            if (type == typeof(Chat))
-            {
-                return (await FindByIdAsync(Chats, id, cancellationToken) as TEntity) ??
-                       throw new EntityNotFoundException($"{type.Name} {id} not found");
-            }
+            Type type = typeof(TEntity);
+            TEntity? entity = null;
 
-            if (type == typeof(PrivateChat))
+            entity = type.Name switch
             {
-                return (await FindByIdAsync(PrivateChats, id, cancellationToken) as TEntity) ??
-                       throw new EntityNotFoundException($"{type.Name} {id} not found");
-            }
-
-            if (type == typeof(Channel))
-            {
-                return (await FindByIdAsync(Channels, id, cancellationToken) as TEntity) ??
-                       throw new EntityNotFoundException($"{type.Name} {id} not found");
-            }
-
-            if (type == typeof(Message))
-            {
-                return (await FindByIdAsync(Messages, id, cancellationToken) as TEntity) ??
-                       throw new EntityNotFoundException($"{type.Name} {id} not found");
-            }
-            if (type == typeof(Media))
-            {
-                return (await FindByIdAsync(Media, id, cancellationToken) as TEntity) ??
-                       throw new EntityNotFoundException($"{type.Name} {id} not found");
-            }
-            if (type == typeof(Server))
-            {
-                return (await FindByIdAsync(Servers, id, cancellationToken) as TEntity) ??
-                       throw new EntityNotFoundException($"{type.Name} {id} not found");
-            }
-
-            throw new InvalidOperationException($"Unhandled entity type: {type.Name}");
+                nameof(Chat) => await FindByIdAsync(Chats, id, cancellationToken) as TEntity,
+                nameof(PrivateChat) => await FindByIdAsync(PrivateChats, id, cancellationToken) as TEntity,
+                nameof(Channel) => await FindByIdAsync(Channels, id, cancellationToken) as TEntity,
+                nameof(Message) => await FindByIdAsync(Messages, id, cancellationToken) as TEntity,
+                nameof(Application.Models.Media) => await FindByIdAsync(Media, id, cancellationToken) as TEntity,
+                nameof(Server) => await FindByIdAsync(Servers, id, cancellationToken) as TEntity,
+                _ => throw new InvalidOperationException($"Unhandled entity type: {type.Name}"),
+            };
+            return entity ?? throw new EntityNotFoundException($"{type.Name} {id} not found");
         }
     }
 }

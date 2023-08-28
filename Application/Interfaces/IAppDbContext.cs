@@ -14,9 +14,9 @@ public interface IAppDbContext
     IMongoCollection<PrivateChat> PrivateChats { get; }
     IMongoCollection<Channel> Channels { get; }
     IMongoCollection<Media> Media { get; }
-    //DbSet<Role> Roles { get; set; }
     IMongoCollection<Server> Servers { get; }
     //DbSet<ServerProfile> ServerProfiles { get; }
+    DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
     IMongoDatabase MongoDb { get; }
 

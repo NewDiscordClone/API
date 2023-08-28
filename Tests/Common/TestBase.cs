@@ -2,6 +2,7 @@
 using Application.Mapping;
 using Application.Providers;
 using AutoMapper;
+using Mongo2Go;
 using MongoDB.Driver;
 
 namespace Tests.Common
@@ -11,6 +12,7 @@ namespace Tests.Common
         private readonly Mock<IAuthorizedUserProvider> _userProvider;
 
         protected Ids Ids;
+        private MongoDbRunner _runner;
         protected IAppDbContext Context;
         protected readonly IMapper Mapper;
         protected IAuthorizedUserProvider UserProvider => _userProvider.Object;
@@ -33,12 +35,12 @@ namespace Tests.Common
 
         public void CreateDatabase()
         {
-            Context = TestDbContextFactory.Create(out Ids);
+            Context = TestDbContextFactory.Create(out Ids, out _runner);
         }
 
         public void Dispose()
         {
-            TestDbContextFactory.Destroy(Context);
+            TestDbContextFactory.Destroy(Context, _runner);
         }
     }
 }

@@ -10,8 +10,8 @@ namespace Tests.Servers.Queries
         [Fact]
         public async Task GetServerDetails_Expected()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             ObjectId serverId = Ids.ServerIdForDelete;
             int userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;

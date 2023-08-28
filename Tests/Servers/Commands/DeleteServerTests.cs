@@ -13,8 +13,8 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int userId = Ids.UserAId;
             ObjectId serverId = Ids.ServerIdForDelete;
             long oldCount = await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty);
@@ -42,8 +42,8 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Unauthorized_Fail()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int userId = Ids.UserBId;
             ObjectId serverId = Ids.ServerIdForDelete;
 

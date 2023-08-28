@@ -19,29 +19,22 @@ namespace Application.Commands.Messages.EditMessage
             
 
             var filter = Context.GetIdFilter<Message>(request.MessageId);
+
+            message.Attachments.RemoveAll(a => a.IsInText);
+            
+            List<Attachment> attachments = new List<Attachment>();
+            AttachmentsFromText.GetAttachments(request.NewText, a => attachments.Add(a));
+            attachments.AddRange(message.Attachments);
             
             await Context.Messages.UpdateOneAsync(
                 filter,
                 Builders<Message>.Update
-                    .PullFilter(m => m.Attachments, a =>a.IsInText)
+                    .Set(m => m.Attachments, attachments)
                     .Set(m => m.Text, request.NewText),
                 null,
                 cancellationToken
             );
-            
-            message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
-            List<Attachment> attachments = message.Attachments;
-
-            AttachmentsFromText.GetAttachments(request.NewText, a => attachments.Add(a));
-            
-            await Context.Messages.UpdateOneAsync(
-                filter,
-                Builders<Message>.Update
-                    .Set(m => m.Attachments, attachments),
-                null,
-                cancellationToken
-            );
-            return message;
+            return await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
         }
 
         public EditMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

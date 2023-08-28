@@ -13,8 +13,8 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int userId = Ids.UserAId;
             long oldCount = await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty);
             const string serverName = "New server";

@@ -11,8 +11,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var chatId = Ids.PrivateChat6;
             int removeMemberId = Ids.UserAId;
             int oldCount = 4;
@@ -40,8 +40,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task UserNotInChat_Fail()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var chatId = Ids.PrivateChat7;
             int removeMemberId = Ids.UserAId;
 

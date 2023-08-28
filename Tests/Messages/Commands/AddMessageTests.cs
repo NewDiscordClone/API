@@ -10,8 +10,8 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             string messageText = "Test message";
 
             SetAuthorizedUserId(Ids.UserAId);
@@ -46,8 +46,8 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success_AttachmentInText()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             string messageText =
                 "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 

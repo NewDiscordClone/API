@@ -10,8 +10,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var chatId = Ids.PrivateChat4;
             string newTitle = "New title test";
 

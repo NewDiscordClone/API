@@ -10,8 +10,8 @@ namespace Tests.Messages.Queries
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var chatId = Ids.PrivateChat3;
 
             GetPinnedMessagesRequest request = new()

@@ -10,8 +10,8 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var messageId = Ids.Message1;
             string newText =
                 "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
@@ -37,8 +37,8 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Fail_NoPermissions()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             var messageId = Ids.Message1;
             string newText =
                 "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";

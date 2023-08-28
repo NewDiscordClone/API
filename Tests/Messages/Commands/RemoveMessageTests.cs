@@ -11,8 +11,8 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
 
             var messageId = Ids.Message1;
 
@@ -34,8 +34,8 @@ namespace Tests.Messages.Commands
         [Fact]
         public async Task Fail_NoPermissions()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
 
             var messageId = Ids.Message1;
 

@@ -9,8 +9,8 @@ namespace Tests.PrivateChats.Queries
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);

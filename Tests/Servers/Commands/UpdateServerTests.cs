@@ -12,8 +12,8 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int userId = Ids.UserBId;
             ObjectId serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
@@ -41,8 +41,8 @@ namespace Tests.Servers.Commands
         [Fact]
         public async Task Unauthorized_Fail()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int userId = Ids.UserAId;
             ObjectId serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";

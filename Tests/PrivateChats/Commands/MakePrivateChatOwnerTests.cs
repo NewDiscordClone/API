@@ -11,8 +11,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
 
             var chatId = Ids.PrivateChat3;
             int newOwnerId = Ids.UserBId;
@@ -41,8 +41,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Fail_NoPermissions()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
 
             var chatId = Ids.PrivateChat6;
             int newOwnerId = Ids.UserCId;
@@ -67,8 +67,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Fail_NoSuchUser()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
 
             var chatId = Ids.PrivateChat7;
             int newOwnerId = Ids.UserAId;

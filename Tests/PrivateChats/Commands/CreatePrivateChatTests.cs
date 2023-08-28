@@ -9,8 +9,8 @@ namespace Tests.PrivateChats.Commands
         [Fact]
         public async Task Success()
         {
-            CreateDatabase();
             //Arrange
+            CreateDatabase();
             int userId = Ids.UserAId;
             List<int> userIdlist = new() { userId, Ids.UserDId };
             const string title = "TestCreate";
