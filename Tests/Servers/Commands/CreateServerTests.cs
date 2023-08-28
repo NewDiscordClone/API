@@ -1,6 +1,9 @@
 ﻿using Application.Commands.Servers.CreateServer;
+using Application.Common.Factories;
+using Application.Models;
 using Application.Providers;
 using Application.Queries.GetServerDetails;
+using Microsoft.AspNetCore.Identity;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -19,7 +22,7 @@ namespace Tests.Servers.Commands
             userProvider.Setup(provider => provider.GetUserId()).Returns(userId);
 
             CreateServerRequest request = new() { Title = serverName, Image = null };
-            CreateServerRequestHandler handler = new(Context, userProvider.Object);
+            CreateServerRequestHandler handler = new(Context, userProvider.Object, new RoleFactory(new Mock<RoleManager<Role>>().Object));
 
             //Act
             int result = await handler.Handle(request, CancellationToken);

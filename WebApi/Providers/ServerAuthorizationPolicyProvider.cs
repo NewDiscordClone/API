@@ -37,6 +37,9 @@ namespace WebApi.Providers
                 case ServerPolicies.ServerMember:
                     policy.AddRequirements(new ServerMemberRequirement(serverId));
                     return policy.Build();
+                case ServerPolicies.ManageMessages:
+                    policy.RequireServerClaim(serverId, ServerClaims.ManageMessages);
+                    return policy.Build();
                 default:
                     return await FallbackPolicyProvider.GetPolicyAsync(policyName);
             }
@@ -85,6 +88,7 @@ namespace WebApi.Providers
     public enum ServerPolicies
     {
         SendMessages,
+        ManageMessages,
         ServerMember
     }
 }

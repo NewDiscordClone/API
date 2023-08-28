@@ -30,7 +30,7 @@ namespace Application.Common.Factories
                 Color = "#FFF000"
             };
 
-            _roleManager.AddClaimAsync(ownerRole, new Claim("SendMessages", "true"));
+            _roleManager.AddClaimAsync(memberRole, new Claim("SendMessages", "true"));
 
             return new() { ownerRole, memberRole };
         }

@@ -7,13 +7,13 @@ namespace Application.Commands.Servers.CreateServer
 {
     public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, int>
     {
-        //    private readonly IRoleFactory _roleFactory;
+        private readonly IRoleFactory _roleFactory;
 
         public async Task<int> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
             User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
 
-            List<Role> roles = new();
+            List<Role> roles = _roleFactory.GetDefaultServerRoles();
 
             Server server = new()
             {
@@ -34,8 +34,9 @@ namespace Application.Commands.Servers.CreateServer
             return server.Id;
         }
 
-        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IRoleFactory roleFactory) : base(context, userProvider)
         {
+            _roleFactory = roleFactory;
             // _roleFactory = roleFactory;
         }
     }
