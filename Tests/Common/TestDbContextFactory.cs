@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using AutoMapper;
-using Mongo2Go;
 
 namespace Tests.Common
 {
@@ -14,15 +13,14 @@ namespace Tests.Common
     {
         private static IMongoClient _mongoClient;
 
-        public static IAppDbContext Create(out Ids ids, out MongoDbRunner runner)
+        public static IAppDbContext Create(out Ids ids)
         {
             ids = new Ids();
             DbContextOptions<AppDbContext> options =
                 new DbContextOptionsBuilder<AppDbContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
 
-            runner = MongoDbRunner.Start();
-            _mongoClient = new MongoClient(runner.ConnectionString);
+            _mongoClient = new MongoClient("mongodb://localhost:27017");
             AppDbContext context = new(options, _mongoClient, Guid.NewGuid().ToString());
             context.Database.EnsureCreated();
             IMapper mapper = new MapperConfiguration(config =>
@@ -204,12 +202,11 @@ namespace Tests.Common
             return context;
         }
 
-        public static void Destroy(IAppDbContext iContext, MongoDbRunner runner)
+        public static void Destroy(IAppDbContext iContext)
         {
             if (iContext is not AppDbContext context) return;
             context.Database.EnsureDeleted();
             context.Dispose();
-            runner.Dispose();
         }
     }
 }
