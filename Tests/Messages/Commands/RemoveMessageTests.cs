@@ -25,10 +25,11 @@ namespace Tests.Messages.Commands
             RemoveMessageRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
 
             //Assert
-            Assert.Null(Context.Messages.Find(Context.GetIdFilter<Message>(messageId)).FirstOrDefault());
+            await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Context.Messages.FindAsync(messageId));
         }
 
         [Fact]

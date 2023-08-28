@@ -9,20 +9,19 @@ namespace Application.Interfaces;
 
 public interface IAppDbContext
 {
-    IMongoCollection<Message> Messages { get; }
-    IMongoCollection<Chat> Chats { get; }
-    IMongoCollection<PrivateChat> PrivateChats { get; }
-    IMongoCollection<Channel> Channels { get; }
-    IMongoCollection<Media> Media { get; }
-    IMongoCollection<Server> Servers { get; }
+    ISimpleDbSet<Message> Messages { get; }
+    ISimpleDbSet<Chat> Chats { get; }
+    ISimpleDbSet<PrivateChat> PrivateChats { get; }
+    ISimpleDbSet<Channel> Channels { get; }
+    ISimpleDbSet<Media> Media { get; }
+    ISimpleDbSet<Server> Servers { get; }
     //DbSet<ServerProfile> ServerProfiles { get; }
     DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
     IMongoDatabase MongoDb { get; }
 
-    Task CheckRemoveMedia(string id, CancellationToken cancellationToken = default);
+    void SetToken(CancellationToken cancellationToken);
+    Task CheckRemoveMedia(string id);
     Task<TResult> FindSqlByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
-    FilterDefinition<TEntity> GetIdFilter<TEntity>(ObjectId id);
-    Task<TResult> FindByIdAsync<TResult>(ObjectId id, CancellationToken cancellationToken = default) where TResult : class;
 
 }

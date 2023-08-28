@@ -1,7 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using MediatR;
 
@@ -11,6 +10,8 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
     {
         public async Task<PrivateChat> Handle(CreatePrivateChatRequest request, CancellationToken cancellationToken)
         {
+            Context.SetToken(cancellationToken);
+            
             List<UserLookUp> users = new();
             request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindSqlByIdAsync<User>(userId, cancellationToken).Result)));
             
@@ -23,8 +24,7 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
                 OwnerId = owner.Id
             };
 
-            await Context.PrivateChats.InsertOneAsync(privateChat, null, cancellationToken);
-            return privateChat;
+            return await Context.PrivateChats.AddAsync(privateChat);
         }
 
         public CreatePrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)

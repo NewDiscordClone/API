@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using MediatR;
 
@@ -10,6 +9,8 @@ namespace Application.Commands.Channels.CreateChannel
     {
         public async Task<Channel> Handle(CreateChannelRequest request, CancellationToken cancellationToken)
         {
+            Context.SetToken(cancellationToken);
+            
             //TODO: Перевірити що у юзера є відповідні права
             Server server = await Context.FindSqlByIdAsync<Server>(request.ServerId, cancellationToken, "ServerProfile");
             List<UserLookUp> users = new();
@@ -20,8 +21,8 @@ namespace Application.Commands.Channels.CreateChannel
                 Users = users,
                 ServerId = server.Id
             };
-            await Context.Chats.InsertOneAsync(channel, null, cancellationToken);
-            return channel;
+            
+            return await Context.Channels.AddAsync(channel);
         }
 
         public CreateChannelRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)

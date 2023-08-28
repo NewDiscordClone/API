@@ -1,7 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using MediatR;
 
@@ -13,11 +12,13 @@ namespace Application.Queries.GetPinnedMessages
         public async Task<List<Message>> Handle(GetPinnedMessagesRequest request,
             CancellationToken cancellationToken)
         {
-            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken);
+            Context.SetToken(cancellationToken);
             
-            if (chat.Users.Find(u => u.Id == UserId) == null) throw new NoPermissionsException("You are not a member of the Chat");
+            Chat chat = await Context.Chats.FindAsync(request.ChatId);
+            
+            if (!chat.Users.Any(u => u.Id == UserId)) throw new NoPermissionsException("You are not a member of the Chat");
 
-            return await chat.GetPinnedMessagesAsync(Context.Messages, cancellationToken);
+            return await chat.GetPinnedMessagesAsync(Context.Messages.Collection, cancellationToken);
         }
 
         public GetPinnedMessagesRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,

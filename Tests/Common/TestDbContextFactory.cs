@@ -58,7 +58,7 @@ namespace Tests.Common
 
             context.Users.AddRange(userA, userB, userC, userD);
 
-            context.Servers.InsertMany(new List<Server>
+            context.Servers.AddMany(new List<Server>
             {
                 new Server
                 {
@@ -91,7 +91,7 @@ namespace Tests.Common
                 }
                 
             });
-            context.Channels.InsertMany(new List<Channel>()
+            context.Channels.AddMany(new List<Channel>()
             {
                 new Channel
                 {
@@ -108,7 +108,7 @@ namespace Tests.Common
             });
 
 
-            context.PrivateChats.InsertMany(new List<PrivateChat>()
+            context.PrivateChats.AddMany(new List<PrivateChat>()
                 {
                     new()
                     {
@@ -156,7 +156,7 @@ namespace Tests.Common
                     }
                 }
             );
-            context.Messages.InsertMany(new List<Message>
+            context.Messages.AddMany(new List<Message>
             {
                 new Message
                 {

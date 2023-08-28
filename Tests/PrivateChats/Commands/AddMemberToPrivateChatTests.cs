@@ -29,11 +29,11 @@ namespace Tests.PrivateChats.Commands
             AddMemberToPrivateChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
+            PrivateChat chat =await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
             Assert.Equal(oldUsersCount + 1, chat.Users.Count);
             Assert.Contains(chat.Users, user => user.Id == newMemberId);
         }

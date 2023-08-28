@@ -1,7 +1,7 @@
 ﻿using Application.Commands.Servers.DeleteServer;
 using Application.Exceptions;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Tests.Common;
@@ -17,7 +17,7 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             int userId = Ids.UserAId;
             ObjectId serverId = Ids.ServerIdForDelete;
-            long oldCount = await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty);
+            long oldCount = await Context.Servers.CountAsync(s => true);
             
 
             SetAuthorizedUserId(userId);
@@ -29,13 +29,14 @@ namespace Tests.Servers.Commands
             DeleteServerRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
 
             //Assert
             await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
-                await Context.FindByIdAsync<Server>(serverId, CancellationToken));
-            Assert.False(Context.Channels.Find(channel => channel.ServerId == serverId).Any());
-            Assert.Equal(oldCount - 1, await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty));
+                await Context.Servers.FindAsync(serverId));
+            Assert.Empty(await Context.Channels.FilterAsync(channel => channel.ServerId == serverId));
+            Assert.Equal(oldCount - 1, await Context.Servers.CountAsync(s => true));
             Assert.NotNull(await Context.FindSqlByIdAsync<User>(userId, CancellationToken));
         }
 

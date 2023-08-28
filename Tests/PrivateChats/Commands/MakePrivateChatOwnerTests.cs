@@ -30,11 +30,11 @@ namespace Tests.PrivateChats.Commands
                 new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
+            PrivateChat chat = await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
             Assert.Equal(newOwnerId, chat.OwnerId);
         }
 

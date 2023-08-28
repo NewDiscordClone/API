@@ -1,7 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -12,8 +11,10 @@ namespace Application.Commands.Messages.RemoveAttachment
     {
         public async Task<Chat> Handle(RemoveAttachmentRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
-            Chat chat = await Context.FindByIdAsync<Chat>(message.ChatId, cancellationToken);
+            Context.SetToken(cancellationToken);
+            
+            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Chat chat = await Context.Chats.FindAsync(message.ChatId);
             User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
             if (message.User.Id != user.Id)
@@ -21,14 +22,10 @@ namespace Application.Commands.Messages.RemoveAttachment
 
             string path = message.Attachments[request.AttachmentIndex].Path;
             
-            await Context.Messages.UpdateOneAsync(
-                Context.GetIdFilter<Message>(message.Id),
-                Builders<Message>.Update.Pull(m => m.Attachments,
-                    message.Attachments[request.AttachmentIndex]),
-                null,
-                cancellationToken
-            );
-            await Context.CheckRemoveMedia(path[(path.LastIndexOf('/')-1)..], cancellationToken);
+            message.Attachments.RemoveAt(request.AttachmentIndex);
+            
+            await Context.Messages.UpdateAsync(message);
+            await Context.CheckRemoveMedia(path[(path.LastIndexOf('/')-1)..]);
             return chat;
         }
 

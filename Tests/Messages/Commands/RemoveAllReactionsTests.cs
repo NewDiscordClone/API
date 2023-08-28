@@ -23,12 +23,11 @@ namespace Tests.Messages.Commands
             RemoveAllReactionsRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            Message? message = Context.Messages.Find(Context.GetIdFilter<Message>(messageId)).FirstOrDefault();
+            Message message = await Context.Messages.FindAsync(messageId);
 
             //Assert
-
-            Assert.NotNull(message);
             Assert.Empty(message.Reactions);
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Application.Providers
+namespace Application.Interfaces
 {
     public interface IAuthorizedUserProvider
     {

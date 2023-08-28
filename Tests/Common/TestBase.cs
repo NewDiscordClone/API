@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Mapping;
-using Application.Providers;
 using AutoMapper;
 using MongoDB.Driver;
 

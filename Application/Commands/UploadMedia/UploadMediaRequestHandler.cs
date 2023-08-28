@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
 using MongoDB.Bson;
 
@@ -15,6 +14,8 @@ namespace Application.Commands.UploadMedia
 
         public async Task<Media> Handle(UploadMediaRequest request, CancellationToken cancellationToken)
         {
+            Context.SetToken(cancellationToken);
+            
             using var memoryStream = new MemoryStream();
 
             await request.File.CopyToAsync(memoryStream, cancellationToken);
@@ -29,8 +30,7 @@ namespace Application.Commands.UploadMedia
                 Data = fileBytes,
                 Extension = Path.GetExtension(request.File.FileName)[1..]
             };
-            await Context.Media.InsertOneAsync(media, null, cancellationToken);
-            return await Context.FindByIdAsync<Media>(id, cancellationToken);
+            return await Context.Media.AddAsync(media);
         }
     }
 }

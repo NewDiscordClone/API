@@ -1,6 +1,6 @@
 ﻿using Application.Commands.Servers.CreateServer;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using Application.Queries.GetServerDetails;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -16,7 +16,7 @@ namespace Tests.Servers.Commands
             //Arrange
             CreateDatabase();
             int userId = Ids.UserAId;
-            long oldCount = await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty);
+            long oldCount = await Context.Servers.CountAsync(s => true);
             const string serverName = "New server";
 
             SetAuthorizedUserId(userId);
@@ -25,6 +25,7 @@ namespace Tests.Servers.Commands
             CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
+            Context.SetToken(CancellationToken);
             ObjectId result = await handler.Handle(request, CancellationToken);
             ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)
                 .Handle(new GetServerDetailsRequest() { ServerId = result }, CancellationToken);
@@ -32,7 +33,7 @@ namespace Tests.Servers.Commands
             //Assert
             Assert.Equal(serverName, resultServer.Title);
             Assert.NotNull(resultServer.ServerProfiles.FirstOrDefault(profile => profile.UserId == userId));
-            Assert.Equal(oldCount + 1, await Context.Servers.CountDocumentsAsync(Builders<Server>.Filter.Empty));
+            Assert.Equal(oldCount + 1, await Context.Servers.CountAsync(s => true));
         }
     }
 }

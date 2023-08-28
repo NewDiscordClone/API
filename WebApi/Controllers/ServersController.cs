@@ -6,7 +6,7 @@ using Application.Queries.GetServerDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Providers;
+using Application.Interfaces;
 using MongoDB.Bson;
 using WebApi.Models;
 

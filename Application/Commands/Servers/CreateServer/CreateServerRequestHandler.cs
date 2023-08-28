@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using MediatR;
 using MongoDB.Bson;
@@ -11,6 +10,8 @@ namespace Application.Commands.Servers.CreateServer
     {
         public async Task<ObjectId> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
+            Context.SetToken(cancellationToken);
+            
             var ownerLookUp = Mapper.Map<UserLookUp>(await Context.FindSqlByIdAsync<User>(UserId, cancellationToken));
             
             Server server = new()
@@ -21,7 +22,7 @@ namespace Application.Commands.Servers.CreateServer
             };
             server.ServerProfiles.Add(new() { User = ownerLookUp});
 
-            await Context.Servers.InsertOneAsync(server, null, cancellationToken);
+            await Context.Servers.AddAsync(server);
             return server.Id;
         }
 

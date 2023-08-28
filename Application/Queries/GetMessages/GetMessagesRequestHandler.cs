@@ -8,28 +8,26 @@ using MongoDB.Driver;
 
 namespace Application.Queries.GetMessages
 {
-    public class GetMessagesRequestHandler : IRequestHandler<GetMessagesRequest, List<Message>>
+    public class GetMessagesRequestHandler : RequestHandlerBase, IRequestHandler<GetMessagesRequest, List<Message>>
     {
         private const int _pageSize = 25;
-        private readonly IAppDbContext _appDbContext;
-        private readonly IMapper _mapper;
-
-        public GetMessagesRequestHandler(IAppDbContext appDbContext, IMapper mapper)
-        {
-            _appDbContext = appDbContext;
-            _mapper = mapper;
-        }
 
         public async Task<List<Message>> Handle(GetMessagesRequest request, CancellationToken cancellationToken)
         {
+            Context.SetToken(cancellationToken);
+            
             var messages = await
             (
-                await _appDbContext.FindByIdAsync<Chat>(request.ChatId, cancellationToken)
+                await Context.Chats.FindAsync(request.ChatId)
             ).GetMessagesAsync
             (
-                _appDbContext.Messages, request.MessagesCount, _pageSize, cancellationToken
+                Context.Messages.Collection, request.MessagesCount, _pageSize, cancellationToken
             );
             return messages;
+        }
+
+        public GetMessagesRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        {
         }
     }
 }

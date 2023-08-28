@@ -1,7 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
@@ -9,12 +8,13 @@ using MongoDB.Driver;
 namespace Application.Commands.PrivateChats.RemovePrivateChatMember
 {
     public class RemovePrivateChatMemberRequestHandler : RequestHandlerBase,
-        IRequestHandler<RemovePrivateChatMemberRequest>
+        IRequestHandler<RemovePrivateChatMemberRequest, PrivateChat>
     {
-        public async Task Handle(RemovePrivateChatMemberRequest request, CancellationToken cancellationToken)
+        public async Task<PrivateChat> Handle(RemovePrivateChatMemberRequest request, CancellationToken cancellationToken)
         {
-            PrivateChat chat =
-                await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken);
+            Context.SetToken(cancellationToken);
+
+            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
 
             if (!chat.Users.Any(u => u.Id == request.MemberId))
                 throw new NoSuchUserException();
@@ -24,13 +24,9 @@ namespace Application.Commands.PrivateChats.RemovePrivateChatMember
                 throw new Exception("You can't remove yourself");
 
             //User member = await Context.FindSqlByIdAsync<User>(request.MemberId, cancellationToken);
-            await Context.Chats.UpdateOneAsync(
-                Context.GetIdFilter<Chat>(chat.Id),
-                Builders<Chat>.Update.PullFilter(c => c.Users,
-                    Builders<UserLookUp>.Filter.Eq(u => u.Id, request.MemberId)),
-                null,
-                cancellationToken
-            );
+            chat.Users.Remove(chat.Users.Find(u => u.Id == request.MemberId) ?? throw new NoSuchUserException());
+
+            return await Context.PrivateChats.UpdateAsync(chat);
         }
 
         public RemovePrivateChatMemberRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :

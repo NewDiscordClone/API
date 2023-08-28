@@ -1,19 +1,19 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using MediatR;
 using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.AddMemberToPrivateChat
 {
-    public class AddMemberToPrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<AddMemberToPrivateChatRequest>
+    public class AddMemberToPrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<AddMemberToPrivateChatRequest, PrivateChat>
     {
-        public async Task Handle(AddMemberToPrivateChatRequest request, CancellationToken cancellationToken)
+        public async Task<PrivateChat> Handle(AddMemberToPrivateChatRequest request, CancellationToken cancellationToken)
         {
-            PrivateChat chat =
-                await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken);
+            Context.SetToken(cancellationToken);
+            
+            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
             
             if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
@@ -22,12 +22,9 @@ namespace Application.Commands.PrivateChats.AddMemberToPrivateChat
 
             User NewMember = await Context.FindSqlByIdAsync<User>(request.NewMemberId, cancellationToken);
             
-            await Context.Chats.UpdateOneAsync(
-                Context.GetIdFilter<Chat>(chat.Id),
-                Builders<Chat>.Update.Push(c => c.Users, Mapper.Map<UserLookUp>(NewMember)),
-                null,
-                cancellationToken
-            );
+            chat.Users.Add(Mapper.Map<UserLookUp>(NewMember));
+            
+            return await Context.PrivateChats.UpdateAsync(chat);
         }
 
         public AddMemberToPrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)

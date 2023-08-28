@@ -1,7 +1,6 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -22,15 +21,9 @@ namespace Application.Queries.GetPrivateChats
         public async Task<List<PrivateChat>> Handle(GetPrivateChatsRequest request,
             CancellationToken cancellationToken)
         {
-            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
+            Context.SetToken(cancellationToken);
 
-            List<PrivateChat> privateChat = await (await Context.PrivateChats
-                    .FindAsync(Builders<PrivateChat>.Filter
-                            .ElemMatch(c => c.Users, u => u.Id == UserId),
-                        null,
-                        cancellationToken))
-                .ToListAsync(cancellationToken);
-            return privateChat;
+            return await Context.PrivateChats.FilterAsync(c => c.Users.Any(u => u.Id == UserId));
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using Application.Queries.GetPrivateChatDetails;
 using Tests.Common;
 

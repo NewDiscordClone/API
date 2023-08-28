@@ -2,9 +2,9 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.Messages.AddMessage
 {
@@ -12,7 +12,9 @@ namespace Application.Commands.Messages.AddMessage
     {
         public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
         {
-            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken);
+            Context.SetToken(cancellationToken);
+            
+            Chat chat = await Context.Chats.FindAsync(request.ChatId);
             User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
             if (!chat.Users.Any(u => u.Id == UserId))
@@ -39,8 +41,8 @@ namespace Application.Commands.Messages.AddMessage
                 User = Mapper.Map<UserLookUp>(user),
                 Attachments = attachments
             };
-            await Context.Messages.InsertOneAsync(message, null, cancellationToken);
-            return message;
+            
+            return await Context.Messages.AddAsync(message);
         }
 
         public AddMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :

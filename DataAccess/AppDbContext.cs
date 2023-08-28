@@ -34,51 +34,47 @@ namespace DataAccess
             MongoDb = client.GetDatabase(dbName);
         }
 
-        public IMongoCollection<Message> Messages => MongoDb.GetCollection<Message>("messages");
+        private CancellationToken _token = default;
 
-        public IMongoCollection<Chat> Chats => MongoDb.GetCollection<Chat>("chats");
+        public ISimpleDbSet<Message> Messages =>
+            new SimpleMongoDbSet<Message>(MongoDb.GetCollection<Message>("messages"), _token); 
 
-        public IMongoCollection<PrivateChat> PrivateChats =>
-            MongoDb.GetCollection<Chat>("chats").OfType<PrivateChat>();
+        public ISimpleDbSet<Chat> Chats => 
+            new SimpleMongoDbSet<Chat>(MongoDb.GetCollection<Chat>("chats"), _token);
 
-        public IMongoCollection<Channel> Channels =>
-            MongoDb.GetCollection<Chat>("chats").OfType<Channel>();
+        public ISimpleDbSet<PrivateChat> PrivateChats =>
+            new SimpleMongoDbSet<PrivateChat>(MongoDb.GetCollection<Chat>("chats").OfType<PrivateChat>(), _token);
 
-        public IMongoCollection<Media> Media => MongoDb.GetCollection<Media>("media");
+        public ISimpleDbSet<Channel> Channels =>
+            new SimpleMongoDbSet<Channel>(MongoDb.GetCollection<Chat>("chats").OfType<Channel>(), _token);
 
-        public IMongoCollection<Server> Servers => MongoDb.GetCollection<Server>("servers");
+        public ISimpleDbSet<Media> Media => 
+            new SimpleMongoDbSet<Media>(MongoDb.GetCollection<Media>("media"), _token);
+
+        public ISimpleDbSet<Server> Servers => 
+            new SimpleMongoDbSet<Server>(MongoDb.GetCollection<Server>("servers"), _token);
+        
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
-
         public IMongoDatabase MongoDb { get; }
 
-        public async Task CheckRemoveMedia(string id, CancellationToken cancellationToken = default)
+        public void SetToken(CancellationToken cancellationToken)
         {
-            if(!ObjectId.TryParse(id, out var mediaId)) return;
+            _token = cancellationToken;
+        }
 
-            var regex = new BsonRegularExpression(id, "i");
+        public async Task CheckRemoveMedia(string id)
+        {
+            if(!ObjectId.TryParse(id, out var objectId)) return;
+            
             long count = 0;
-            count += await PrivateChats.CountDocumentsAsync(
-                Builders<PrivateChat>.Filter.Regex(c => c.Image, regex),
-                null,
-                cancellationToken);
-            count += await Messages.CountDocumentsAsync(
-                Builders<Message>.Filter.ElemMatch(c => c.Attachments, 
-                    Builders<Attachment>.Filter.Regex(c => c.Path, regex)),
-                null,
-                cancellationToken);
-            count += await Servers.CountDocumentsAsync(
-                Builders<Server>.Filter.Regex(s => s.Image, regex),
-                null,
-                cancellationToken);
-            count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(cancellationToken);
+            count += await PrivateChats.CountAsync(c => c.Image != null && c.Image.Contains(id) );
+            count += await Messages.CountAsync(m => m.Attachments.Any(a => a.Path.Contains(id)));
+            count += await Servers.CountAsync(s => s.Image != null && s.Image.Contains(id));
+            count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(_token);
             
             if (count > 0) return;
 
-            await Media.DeleteOneAsync(
-                GetIdFilter<Media>(mediaId),
-                null,
-                cancellationToken);
-
+            await Media.DeleteAsync(objectId);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -117,43 +113,6 @@ namespace DataAccess
             }
 
             return entity;
-        }
-
-        public FilterDefinition<TEntity> GetIdFilter<TEntity>(ObjectId id)
-        {
-            return Builders<TEntity>.Filter.Eq("_id", id);
-        }
-
-
-        private async Task<TEntity> FindByIdAsync<TEntity>(IMongoCollection<TEntity> collection, ObjectId id,
-            CancellationToken cancellationToken = default) where TEntity : class
-        {
-            var filter = GetIdFilter<TEntity>(id);
-            var result =
-                await (await collection.FindAsync(filter, cancellationToken: cancellationToken)).FirstOrDefaultAsync(
-                    cancellationToken);
-            if (result == null) throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
-            return result;
-        }
-
-
-        public async Task<TEntity> FindByIdAsync<TEntity>(ObjectId id, CancellationToken cancellationToken = default)
-            where TEntity : class
-        {
-            Type type = typeof(TEntity);
-            TEntity? entity = null;
-
-            entity = type.Name switch
-            {
-                nameof(Chat) => await FindByIdAsync(Chats, id, cancellationToken) as TEntity,
-                nameof(PrivateChat) => await FindByIdAsync(PrivateChats, id, cancellationToken) as TEntity,
-                nameof(Channel) => await FindByIdAsync(Channels, id, cancellationToken) as TEntity,
-                nameof(Message) => await FindByIdAsync(Messages, id, cancellationToken) as TEntity,
-                nameof(Application.Models.Media) => await FindByIdAsync(Media, id, cancellationToken) as TEntity,
-                nameof(Server) => await FindByIdAsync(Servers, id, cancellationToken) as TEntity,
-                _ => throw new InvalidOperationException($"Unhandled entity type: {type.Name}"),
-            };
-            return entity ?? throw new EntityNotFoundException($"{type.Name} {id} not found");
         }
     }
 }

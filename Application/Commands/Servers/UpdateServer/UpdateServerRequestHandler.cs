@@ -1,7 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
 using MongoDB.Driver;
 
@@ -11,28 +10,20 @@ namespace Application.Commands.Servers.UpdateServer
     {
         public async Task Handle(UpdateServerRequest request, CancellationToken cancellationToken)
         {
-            Server server = await Context.FindByIdAsync<Server>
-                (request.ServerId, cancellationToken);
+            Context.SetToken(cancellationToken);
+            
+            Server server = await Context.Servers.FindAsync(request.ServerId);
 
             if (UserId != server.Owner.Id)
                 throw new NoPermissionsException("You are not the owner of the server");
 
-            UpdateDefinition<Server> toUpdate;
-            UpdateDefinition<Server> updateTitle = Builders<Server>.Update.Set(s => s.Title, request.Title);
-            UpdateDefinition<Server> updateImage = Builders<Server>.Update.Set(s => s.Image, request.Image);
-
             if (request.Image != null && server.Image != null)
-                await Context.CheckRemoveMedia(server.Image[(server.Image.LastIndexOf('/') - 1)..], cancellationToken);
+                await Context.CheckRemoveMedia(server.Image[(server.Image.LastIndexOf('/') - 1)..]);
 
-            if (request is { Title: { }, Image: { } })
-                toUpdate = Builders<Server>.Update.Combine(updateTitle, updateImage);
-            else if (request.Image != null)
-                toUpdate = updateImage;
-            else if (request.Title != null)
-                toUpdate = updateTitle;
-            else throw new Exception("Your request isn't changing anything");
+            server.Title = request.Title ?? server.Title;
+            server.Image = request.Image ?? server.Image;
 
-            await Context.Servers.UpdateOneAsync(Context.GetIdFilter<Server>(request.ServerId), toUpdate, null, cancellationToken);
+            await Context.Servers.UpdateAsync(server);
         }
 
         public UpdateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

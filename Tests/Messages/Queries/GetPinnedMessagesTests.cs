@@ -21,11 +21,11 @@ namespace Tests.Messages.Queries
             GetPinnedMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
+            Context.SetToken(CancellationToken);
             List<Message> result = await handler.Handle(request, CancellationToken);
 
             //Assert
-            Assert.True(result.All(message =>
-                Context.Messages.Find(Context.GetIdFilter<Message>(message.Id)).FirstOrDefault().IsPinned));
+            Assert.True(result.All(message => Context.Messages.FindAsync(message.Id).Result.IsPinned));
         }
     }
 }

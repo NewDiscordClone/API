@@ -20,7 +20,7 @@ namespace Tests.Messages.Queries
                 MessagesCount = messagesCount
             };
 
-            GetMessagesRequestHandler handler = new(Context, Mapper);
+            GetMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<Message> result = await handler.Handle(request, CancellationToken);
@@ -43,7 +43,7 @@ namespace Tests.Messages.Queries
                 MessagesCount = messagesCount
             };
 
-            GetMessagesRequestHandler handler = new(Context, Mapper);
+            GetMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<Message> result = await handler.Handle(request, CancellationToken);

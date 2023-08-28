@@ -2,7 +2,6 @@ using Application;
 using Application.Hubs;
 using Application.Interfaces;
 using Application.Mapping;
-using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;

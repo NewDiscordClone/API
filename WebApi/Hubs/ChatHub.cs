@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
-using Application.Providers;
 using MongoDB.Driver;
 using WebApi.Models;
 
@@ -75,9 +74,8 @@ public class ChatHub : Hub
         {
             Message message = await _mediator.Send(messageRequest);
             _logger.LogInformation($"User {UserId} sent message to chat {messageRequest.ChatId}");
-            
-            OnChatMessageReceived?.Invoke(message, _context.Chats.Find(_context.GetIdFilter<Chat>(message.ChatId))
-                .FirstOrDefault());
+
+            OnChatMessageReceived?.Invoke(message, await _context.Chats.FindAsync(message.ChatId));
         }
         catch (Exception ex)
         {

@@ -3,7 +3,7 @@ using Application.Commands.Channels.RemoveChannel;
 using Application.Commands.Channels.RenameChannel;
 using Application.Exceptions;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -38,7 +38,7 @@ namespace Tests.Messages.Commands
 
             //Assert
 
-            Assert.Contains(Context.Messages.Find(Builders<Message>.Filter.Empty).ToList(), e => e.Id == result.Id);
+            Assert.Contains(await Context.Messages.FilterAsync(_ => true), e => e.Id == result.Id);
             Assert.NotEmpty(result.Attachments);
             Assert.Equal(messageText, result.Text);
         }
@@ -62,11 +62,12 @@ namespace Tests.Messages.Commands
             AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
+            Context.SetToken(CancellationToken);
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert
 
-            Assert.Contains(Context.Messages.Find(Builders<Message>.Filter.Empty).ToList(), e => e.Id == result.Id);
+            Assert.Contains(await Context.Messages.FilterAsync(_ => true), e => e.Id == result.Id);
             Assert.NotEmpty(result.Attachments);
             Assert.True(result.Attachments[0].IsInText);
             Assert.Equal(messageText, result.Text);

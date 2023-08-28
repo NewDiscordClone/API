@@ -1,4 +1,4 @@
-﻿using Application.Providers;
+﻿using Application.Interfaces;
 using Application.Queries.GetServerDetails;
 using MongoDB.Bson;
 using Tests.Common;

@@ -10,7 +10,7 @@ using Application.Commands.PrivateChats.MakePrivateChatOwner;
 using Application.Commands.PrivateChats.RemovePrivateChatMember;
 using Application.Commands.PrivateChats.RenamePrivateChat;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using Application.Queries.GetPrivateChatDetails;
 using Application.Queries.GetPrivateChats;
 using MongoDB.Bson;

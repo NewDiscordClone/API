@@ -1,7 +1,6 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +10,10 @@ namespace Application.Commands.Messages.RemoveMessage
     {
         public async Task<Chat> Handle(RemoveMessageRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken);
-            Chat chat = await Context.FindByIdAsync<Chat>(message.ChatId, cancellationToken);
+            Context.SetToken(cancellationToken);
+            
+            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
             if (message.User.Id != UserId)
             {
@@ -27,10 +28,7 @@ namespace Application.Commands.Messages.RemoveMessage
             }
 
 
-            await Context.Messages.DeleteOneAsync(
-                Context.GetIdFilter<Message>(message.Id),
-                cancellationToken
-            );
+            await Context.Messages.DeleteAsync(message);
             return chat;
         }
 

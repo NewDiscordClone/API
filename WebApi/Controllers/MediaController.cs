@@ -2,7 +2,6 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using Application.Queries.GetMedia;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

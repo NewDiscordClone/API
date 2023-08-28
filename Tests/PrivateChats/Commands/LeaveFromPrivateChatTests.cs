@@ -26,11 +26,11 @@ namespace Tests.PrivateChats.Commands
             LeaveFromPrivateChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
+            PrivateChat chat = await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
             Assert.DoesNotContain(chat.Users, user => user.Id == userId);
             Assert.NotEqual(userId, chat.OwnerId);
         }
@@ -53,11 +53,12 @@ namespace Tests.PrivateChats.Commands
             LeaveFromPrivateChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(Context.GetIdFilter<PrivateChat>(chatId)).FirstOrDefault();
 
             //Assert
-            Assert.Null(chat);
+            await Assert.ThrowsAsync<EntityNotFoundException>( 
+                async () => await Context.PrivateChats.FindAsync(chatId));
         }
         [Fact]
         public async Task Fail_NoSuchUser()

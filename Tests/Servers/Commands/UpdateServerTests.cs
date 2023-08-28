@@ -1,7 +1,7 @@
 ﻿using Application.Commands.Servers.UpdateServer;
 using Application.Exceptions;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using MongoDB.Bson;
 using Tests.Common;
 
@@ -30,8 +30,9 @@ namespace Tests.Servers.Commands
             UpdateServerRequestHandler handler = new(Context, userProvider.Object);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            Server updatedServer = await Context.FindByIdAsync<Server>(serverId, CancellationToken);
+            Server updatedServer = await Context.Servers.FindAsync(serverId);
 
             //Assert
             Assert.NotNull(updatedServer);
