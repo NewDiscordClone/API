@@ -16,7 +16,7 @@ namespace Application.Commands.PrivateChats.RenamePrivateChat
             if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
 
-            Context.PrivateChats.UpdateOneAsync(
+           await Context.PrivateChats.UpdateOneAsync(
                 Context.GetIdFilter<PrivateChat>(chat.Id),
                 Builders<PrivateChat>.Update.Set(c => c.Title, request.NewTitle),
                 null,
