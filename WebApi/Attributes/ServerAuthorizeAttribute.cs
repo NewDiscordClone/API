@@ -1,43 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using WebApi.Providers;
 
 namespace WebApi.Attributes
 {
-    public partial class ServerAuthorizeAttribute : AuthorizeAttribute, IActionFilter
+    public partial class ServerAuthorizeAttribute : ActionFilterAttribute
     {
-        public int ServerId
-        {
-            get
-            {
-                if (Policy is null)
-                    return default;
-                string stringId = GetServerIdFromPolicyName()
-                    .Match(Policy).Value;
-                if (int.TryParse(stringId, out int serverId))
-                {
-                    return serverId;
-                }
-                return default;
-            }
-            set
-            {
-                if (Policy is null)
-                {
-                    Policy = $"{ServerPolicies.ServerMember}{value}";
-                    return;
-                }
-                Match match = GetServerIdFromPolicyName().Match(Policy);
-                if (match.Success)
-                {
-                    Policy = Policy.Remove(match.Index, match.Length);
-                }
-                Policy = $"{Policy}{value}";
-            }
-        }
-        private static int GetServerId(ActionExecutingContext context)
+        public string? Policy { get; set; }
+
+        private int GetServerId(ActionExecutingContext context)
         {
             InvalidOperationException exception = new("Server id not found in request");
             foreach (object? item in context.ActionArguments.Values)
@@ -60,13 +33,30 @@ namespace WebApi.Attributes
         [GeneratedRegex("[0-9]+$")]
         private static partial Regex GetServerIdFromPolicyName();
 
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-        }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+
+        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            ServerId = GetServerId(context);
+
+            int id = GetServerId(context);
+            IAuthorizationService authorizationService = context.HttpContext.RequestServices.GetService<IAuthorizationService>()
+                ?? throw new InvalidOperationException();
+
+            if (Policy is null)
+            {
+                throw new Exception();
+            }
+            AuthorizationResult result = await authorizationService
+                .AuthorizeAsync(context.HttpContext.User, id, Policy);
+
+            if (result.Succeeded)
+            {
+                await next();
+            }
+            else
+            {
+                context.Result = new ForbidResult();
+            }
         }
     }
 }

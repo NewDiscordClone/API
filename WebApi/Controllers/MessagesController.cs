@@ -51,7 +51,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ServerAuthorize]
+        [ServerAuthorize(Policy = "SendMessages")]
         public async Task<ActionResult> AddMessage([FromBody] AddMessageRequest request)
         {
             try

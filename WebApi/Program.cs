@@ -58,6 +58,7 @@ namespace WebApi
             services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
             services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
             services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
+            services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
 
             services.AddHttpContextAccessor();
 
@@ -90,16 +91,16 @@ namespace WebApi
             app.MapControllers();
 
             app.MapHub<ChatHub>("chat");
-            app.MapSwagger();
-            app.UseSwaggerUI(option =>
-            {
-                option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
-                option.RoutePrefix = string.Empty;
-                option.DisplayRequestDuration();
-            });
+
             if (app.Environment.IsDevelopment())
             {
-
+                app.MapSwagger();
+                app.UseSwaggerUI(option =>
+                {
+                    option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
+                    option.RoutePrefix = string.Empty;
+                    option.DisplayRequestDuration();
+                });
             }
 
             app.Run();
