@@ -13,18 +13,4 @@ public class Server
 
     public UserLookUp Owner { get; set; }
     public List<ServerProfile> ServerProfiles { get; set; } = new();
-    
-    public async Task<List<Channel>> GetChannelsAsync(
-        IMongoCollection<Channel> collection,
-        CancellationToken cancellationToken = default
-    ) => await collection
-        .Find(Builders<Channel>.Filter.Eq(c => c.ServerId, Id))
-        .ToListAsync(cancellationToken);
-    
-    public async Task<List<Role>> GetRolesAsync(
-        IMongoCollection<Role> collection,
-        CancellationToken cancellationToken = default
-        ) => await collection
-        .Find(Builders<Role>.Filter.Eq(r => r.ServerId, Id))
-        .ToListAsync(cancellationToken);
 }

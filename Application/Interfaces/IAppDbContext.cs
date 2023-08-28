@@ -18,10 +18,11 @@ public interface IAppDbContext
     //DbSet<ServerProfile> ServerProfiles { get; }
     DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
-    IMongoDatabase MongoDb { get; }
 
     void SetToken(CancellationToken cancellationToken);
     Task CheckRemoveMedia(string id);
     Task<TResult> FindSqlByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
+    Task<List<Message>> GetMessagesAsync(ObjectId chatId, int skip, int take);
+    Task<List<Message>> GetPinnedMessagesAsync(ObjectId chatId);
 
 }

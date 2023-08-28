@@ -32,7 +32,7 @@ namespace Tests.Common
 
         public void CreateDatabase()
         {
-            Context = TestDbContextFactory.Create(out Ids);
+            Context = TestDbContextFactory.CreateFake(out Ids);
         }
 
         public void Dispose()

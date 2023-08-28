@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using Application.Exceptions;
 using Application.Interfaces;
+using Application.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
@@ -14,11 +15,11 @@ namespace DataAccess
     {
         public CancellationToken CancellationToken { get; set; } = default;
 
-        public IMongoCollection<TEntity> Collection { get; private set; }
+        private IMongoCollection<TEntity> _collection;
 
         public SimpleMongoDbSet(IMongoCollection<TEntity> collection, CancellationToken cancellationToken = default)
         {
-            Collection = collection;
+            _collection = collection;
         }
 
         public Task<TEntity> FindAsync(object id)
@@ -29,29 +30,30 @@ namespace DataAccess
 
         public Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression)
         {
-            return Collection.Find(expression).ToListAsync(CancellationToken);
+            return _collection.Find(expression).ToListAsync(CancellationToken);
         }
+
 
         public void AddMany(IEnumerable<TEntity> entities)
         {
-            Collection.InsertMany(entities, null, CancellationToken);
+            _collection.InsertMany(entities, null, CancellationToken);
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             PropertyInfo idProp = GetIdProperty();
-            idProp.SetValue(entity, ObjectId.GenerateNewId());
+            
+            ObjectId objectId = ObjectId.GenerateNewId();
+            idProp.SetValue(entity, objectId);
 
-            ObjectId objectId = ConvertToId(idProp.GetValue(entity));
-
-            await Collection.InsertOneAsync(entity, null, CancellationToken);
+            await _collection.InsertOneAsync(entity, null, CancellationToken);
             return await FindByIdAsync(objectId);
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
             ObjectId id = GetId(entity);
-            await Collection.ReplaceOneAsync(
+            await _collection.ReplaceOneAsync(
                 GetIdFilter(id),
                 entity,
                 cancellationToken: CancellationToken);
@@ -61,23 +63,23 @@ namespace DataAccess
         public async Task DeleteAsync(object id)
         {
             ObjectId objId = ConvertToId(id);
-            await Collection.DeleteOneAsync(GetIdFilter(objId), null, CancellationToken);
+            await _collection.DeleteOneAsync(GetIdFilter(objId), null, CancellationToken);
         }
 
         public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression)
         {
-            await Collection.DeleteManyAsync(expression, null, CancellationToken);
+            await _collection.DeleteManyAsync(expression, null, CancellationToken);
         }
 
         public Task<long> CountAsync(Expression<Func<TEntity, bool>> expression)
         {
-            return Collection.CountDocumentsAsync(expression, null, CancellationToken);
+            return _collection.CountDocumentsAsync(expression, null, CancellationToken);
         }
 
         public async Task DeleteAsync(TEntity entity)
         {
             ObjectId id = GetId(entity);
-            await Collection.DeleteOneAsync(GetIdFilter(id), null, CancellationToken);
+            await _collection.DeleteOneAsync(GetIdFilter(id), null, CancellationToken);
         }
 
         private static ObjectId GetId(TEntity entity)
@@ -118,7 +120,7 @@ namespace DataAccess
         {
             var filter = GetIdFilter(id);
             var result =
-                await (await Collection.FindAsync(filter, null, CancellationToken)).FirstOrDefaultAsync(
+                await (await _collection.FindAsync(filter, null, CancellationToken)).FirstOrDefaultAsync(
                     CancellationToken);
             if (result == null) throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
             return result;

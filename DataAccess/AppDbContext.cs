@@ -16,7 +16,8 @@ namespace DataAccess
         private IMongoClient _mongoClient { get; }
         private string _mongoDbName { get; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration,
+        public AppDbContext(DbContextOptions<AppDbContext> options, 
+            IConfiguration configuration,
             string dbName = "SparkMongoDB")
             : base(options)
         {
@@ -25,8 +26,9 @@ namespace DataAccess
             _mongoClient = client;
             MongoDb = client.GetDatabase(dbName);
         }
-
-        public AppDbContext(DbContextOptions<AppDbContext> options, IMongoClient client, string dbName = "SparkMongoDB")
+        public AppDbContext(DbContextOptions<AppDbContext> options, 
+            IMongoClient client, 
+            string dbName = "SparkMongoDB")
             : base(options)
         {
             _mongoDbName = dbName;
@@ -114,5 +116,26 @@ namespace DataAccess
 
             return entity;
         }
+
+        public async Task<List<Message>> GetMessagesAsync(
+            ObjectId chatId,
+            int skip,
+            int take)
+            => await MongoDb.GetCollection<Message>("messages")
+                .Find(Builders<Message>.Filter.Eq("ChatId", chatId))
+                .SortByDescending(m => m.SendTime)
+                .Skip(skip)
+                .Limit(take)
+                .ToListAsync(_token);
+
+        public async Task<List<Message>> GetPinnedMessagesAsync(
+            ObjectId chatId
+        ) => await MongoDb.GetCollection<Message>("messages")
+            .Find(
+                Builders<Message>.Filter.Eq("ChatId", chatId) &
+                Builders<Message>.Filter.Eq("IsPinned", true)
+            )
+            .SortByDescending(m => m.PinnedTime)
+            .ToListAsync(_token);
     }
 }

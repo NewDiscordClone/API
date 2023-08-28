@@ -15,18 +15,11 @@ namespace Application.Queries.GetMessages
         public async Task<List<Message>> Handle(GetMessagesRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
-            var messages = await
-            (
-                await Context.Chats.FindAsync(request.ChatId)
-            ).GetMessagesAsync
-            (
-                Context.Messages.Collection, request.MessagesCount, _pageSize, cancellationToken
-            );
-            return messages;
+            return await Context.GetMessagesAsync(request.ChatId, request.MessagesCount, _pageSize);
         }
 
-        public GetMessagesRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        public GetMessagesRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
+            base(context, userProvider, mapper)
         {
         }
     }

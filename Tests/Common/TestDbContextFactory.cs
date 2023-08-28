@@ -202,6 +202,20 @@ namespace Tests.Common
             return context;
         }
 
+        public static IAppDbContext CreateFake(out Ids ids)
+        {
+            ids = new Ids();
+            DbContextOptions<FakeDbContext> options =
+                new DbContextOptionsBuilder<FakeDbContext>()
+                    .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+            IMapper mapper = new MapperConfiguration(config =>
+                config.AddProfile(new AssemblyMappingProfile(
+                    typeof(IAppDbContext).Assembly))).CreateMapper();
+            var context = new FakeDbContext(options, mapper);
+            context.Create(ids);
+            return context;
+        }
+
         public static void Destroy(IAppDbContext iContext)
         {
             if (iContext is not AppDbContext context) return;

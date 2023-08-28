@@ -7,7 +7,6 @@ namespace Application.Interfaces
 {
     public interface ISimpleDbSet<TEntity> where TEntity : class
     {
-        IMongoCollection<TEntity> Collection { get; }
         CancellationToken CancellationToken { set; }
          
         Task<TEntity> FindAsync(object id);

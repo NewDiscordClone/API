@@ -23,6 +23,7 @@ namespace Application.Commands.Messages.PinMessage
             //TODO: Перевірка на відповідну роль на сервері
             
             message.IsPinned = true;
+            message.PinnedTime = DateTime.Now;
             return await Context.Messages.UpdateAsync(message);
         }
 

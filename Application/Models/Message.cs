@@ -9,6 +9,7 @@ public class Message
     public ObjectId Id { get; set; }
     public string Text { get; set; }
     public DateTime SendTime { get; set; }
+    public DateTime? PinnedTime { get; set; } = null;
     public bool IsPinned { get; set; } = false;
 
     public List<Reaction> Reactions { get; set; } = new();
