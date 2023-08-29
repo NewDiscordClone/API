@@ -1,4 +1,5 @@
-﻿using Application.Commands.Channels.CreateChannel;
+﻿using System.ComponentModel;
+using Application.Commands.Channels.CreateChannel;
 using Application.Commands.Channels.RemoveChannel;
 using Application.Commands.Channels.RenameChannel;
 using Application.Exceptions;
@@ -23,12 +24,6 @@ namespace WebApi.Controllers
         /// 
         /// </summary>
         /// <param name="request">
-        /// <code>
-        /// {
-        ///     "title": "Channel 1",
-        ///     "serverId": "5f95a3c3d0ddad0017ea9291"
-        /// }
-        /// </code>
         /// </param>
         /// <returns></returns>
         [HttpPost]

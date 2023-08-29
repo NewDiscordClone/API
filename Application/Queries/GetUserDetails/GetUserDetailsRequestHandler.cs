@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries.GetUser
 {
-    public class GetUserDeatilsRequestHandler : RequestHandlerBase, IRequestHandler<GetUserDetailsRequest, GetUserDetailsDto>
+    public class GetUserDetailsRequestHandler : RequestHandlerBase, IRequestHandler<GetUserDetailsRequest, GetUserDetailsDto>
     {
 
         public async Task<GetUserDetailsDto> Handle(GetUserDetailsRequest request, CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ namespace Application.Queries.GetUser
             return userDto;
         }
 
-        public GetUserDeatilsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        public GetUserDetailsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
     }

@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -13,5 +15,7 @@ public class Role : IdentityRole<int>
     /// </summary>
     /// <example>5f95a3c3d0ddad0017ea9291</example>
     [BsonRepresentation(BsonType.ObjectId)]
+    [StringLength(24, MinimumLength = 24)]
+    [DefaultValue("5f95a3c3d0ddad0017ea9291")]
     public string ServerId { get; set; }
 }
