@@ -1,5 +1,9 @@
 ﻿using Application.Common.Exceptions;
+using Application.Interfaces;
+using Application.Models;
 using Application.Providers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace WebApi.Providers
@@ -7,11 +11,14 @@ namespace WebApi.Providers
     public class AuthorizedUserProvider : IAuthorizedUserProvider
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        //   private readonly IAppDbContext _context;
+        private readonly IAppDbContext _context;
+        private readonly RoleManager<Role> _roleManager;
 
-        public AuthorizedUserProvider(IHttpContextAccessor httpContextAccessor)
+        public AuthorizedUserProvider(IHttpContextAccessor httpContextAccessor, IAppDbContext context, RoleManager<Role> roleManager)
         {
             _httpContextAccessor = httpContextAccessor;
+            _context = context;
+            _roleManager = roleManager;
         }
 
         public int GetUserId()
@@ -26,38 +33,50 @@ namespace WebApi.Providers
             return int.Parse(userIdClaim);
         }
 
-        //public bool IsInRole(Role role, Server server)
-        //{
-        //    if (!server.Roles.Any(serverRole => serverRole.Name == role.Name))
-        //        return false;
+        public async Task<bool> HasClaimsAsync(int serverId, IEnumerable<string> claimTypes)
+        {
+            ServerProfile? profile = await _context.ServerProfiles.FirstAsync(profile
+            => profile.Server.Id == serverId
+            && profile.User.Id == GetUserId());
 
-        //    int userId = GetUserId();
-        //    ServerProfile? profile = server.ServerProfiles
-        //        .FirstOrDefault(prof => prof.User.Id == userId);
+            if (profile is null || profile.Roles is null)
+                return false;
 
-        //    if (profile is null)
-        //        return false;
+            List<string> matchingUserClaims = new();
+            foreach (Role role in profile.Roles)
+            {
+                foreach (Claim claim in await _roleManager.GetClaimsAsync(role))
+                {
+                    if (claimTypes.Any(claimType
+                        => string.Equals(claim.Type, claimType)))
+                    {
+                        matchingUserClaims.Add(claim.Type);
+                    }
 
-        //    return profile.Roles.Contains(role);
-        //}
+                    if (claimTypes.All(matchingUserClaims.Contains))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return true;
+        }
 
-        //public bool IsInRole(string roleName, int serverId)
-        //{
-        //    return IsInRoleAsync(roleName, serverId).Result;
-        //}
+        public async Task<bool> HasClaimsAsync(int serverId, params string[] claimTypes)
+        {
+            return await HasClaimsAsync(serverId, (IEnumerable<string>)claimTypes);
+        }
 
-        //public async Task<bool> IsInRoleAsync(string roleName, int serverId)
-        //{
-        //    Role? role = await _context.Roles.FirstOrDefaultAsync(role
-        //        => role.Server.Id == serverId && role.Name == roleName);
+        public bool HasClaims(int serverId, params string[] claimTypes)
+        {
+            return HasClaims(serverId, (IEnumerable<string>)claimTypes);
 
-        //    Server? server = await _context
-        //        .FindByIdAsync<Server>(serverId, default, "ServerProfiles", "ServerProfiles.Roles", "ServerProfiles.User");
+        }
 
-        //    if (role is null || server is null)
-        //        throw new EntityNotFoundException("Role or Server not found");
+        public bool HasClaims(int serverId, IEnumerable<string> claimTypes)
+        {
+            return HasClaimsAsync(serverId, claimTypes).Result;
+        }
 
-        //    return IsInRole(role, server);
-        //}
     }
 }

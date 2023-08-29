@@ -7,7 +7,7 @@ namespace WebApi.Authorization
         public static AuthorizationPolicyBuilder RequireServerClaim
             (this AuthorizationPolicyBuilder builder, int serverId, params string[] claimTypes)
         {
-            return RequireServerClaim(builder, serverId, claimTypes);
+            return RequireServerClaim(builder, serverId, (IEnumerable<string>)claimTypes);
         }
         public static AuthorizationPolicyBuilder RequireServerClaim
             (this AuthorizationPolicyBuilder builder, int serverId, IEnumerable<string> claimTypes)
