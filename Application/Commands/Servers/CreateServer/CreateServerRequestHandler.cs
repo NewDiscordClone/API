@@ -6,9 +6,9 @@ using MongoDB.Bson;
 
 namespace Application.Commands.Servers.CreateServer
 {
-    public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, ObjectId>
+    public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, string>
     {
-        public async Task<ObjectId> Handle(CreateServerRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             

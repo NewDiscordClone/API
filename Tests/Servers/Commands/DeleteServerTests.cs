@@ -16,7 +16,7 @@ namespace Tests.Servers.Commands
             //Arrange
             CreateDatabase();
             int userId = Ids.UserAId;
-            ObjectId serverId = Ids.ServerIdForDelete;
+            string serverId = Ids.ServerIdForDelete;
             long oldCount = await Context.Servers.CountAsync(s => true);
             
 
@@ -46,7 +46,7 @@ namespace Tests.Servers.Commands
             //Arrange
             CreateDatabase();
             int userId = Ids.UserBId;
-            ObjectId serverId = Ids.ServerIdForDelete;
+            string serverId = Ids.ServerIdForDelete;
 
             Mock<IAuthorizedUserProvider> userProvider = new();
             userProvider.Setup(p => p.GetUserId()).Returns(userId);

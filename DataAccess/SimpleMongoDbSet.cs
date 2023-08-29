@@ -44,7 +44,7 @@ namespace DataAccess
             PropertyInfo idProp = GetIdProperty();
             
             ObjectId objectId = ObjectId.GenerateNewId();
-            idProp.SetValue(entity, objectId);
+            idProp.SetValue(entity, objectId.ToString());
 
             await _collection.InsertOneAsync(entity, null, CancellationToken);
             return await FindByIdAsync(objectId);

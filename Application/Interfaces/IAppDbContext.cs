@@ -22,7 +22,7 @@ public interface IAppDbContext
     void SetToken(CancellationToken cancellationToken);
     Task CheckRemoveMedia(string id);
     Task<TResult> FindSqlByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
-    Task<List<Message>> GetMessagesAsync(ObjectId chatId, int skip, int take);
-    Task<List<Message>> GetPinnedMessagesAsync(ObjectId chatId);
+    Task<List<Message>> GetMessagesAsync(string chatId, int skip, int take);
+    Task<List<Message>> GetPinnedMessagesAsync(string chatId);
 
 }

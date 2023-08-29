@@ -6,7 +6,7 @@ namespace Application.Queries.GetMessages
 {
     public record GetMessagesRequest : IRequest<List<Message>>
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
         public int MessagesCount { get; init; }
     }
 }

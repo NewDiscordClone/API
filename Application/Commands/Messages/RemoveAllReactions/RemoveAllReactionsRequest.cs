@@ -6,6 +6,6 @@ namespace Application.Commands.Messages.RemoveAllReactions
 {
     public class RemoveAllReactionsRequest : IRequest<Chat>
     {
-        public ObjectId MessageId { get; init; }
+        public string MessageId { get; init; }
     }
 }

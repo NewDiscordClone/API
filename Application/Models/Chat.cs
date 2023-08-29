@@ -7,6 +7,7 @@ namespace Application.Models;
 public abstract class Chat
 {
     [BsonId]
-    public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
     public List<UserLookUp> Users { get; set; } = new();
 }

@@ -118,7 +118,7 @@ namespace DataAccess
         }
 
         public async Task<List<Message>> GetMessagesAsync(
-            ObjectId chatId,
+            string chatId,
             int skip,
             int take)
             => await MongoDb.GetCollection<Message>("messages")
@@ -129,7 +129,7 @@ namespace DataAccess
                 .ToListAsync(_token);
 
         public async Task<List<Message>> GetPinnedMessagesAsync(
-            ObjectId chatId
+            string chatId
         ) => await MongoDb.GetCollection<Message>("messages")
             .Find(
                 Builders<Message>.Filter.Eq("ChatId", chatId) &

@@ -38,9 +38,9 @@ namespace Tests.Common
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             PropertyInfo idProp = GetIdProperty();
-            idProp.SetValue(entity, ObjectId.GenerateNewId());
-
-            ObjectId objectId = ConvertToId(idProp.GetValue(entity));
+            
+            ObjectId objectId = ObjectId.GenerateNewId();
+            idProp.SetValue(entity, objectId.ToString());
             
             Entitites.Add(entity);
             return Entitites[FindIndex(objectId)];

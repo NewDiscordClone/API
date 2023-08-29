@@ -8,7 +8,7 @@ namespace Application.Queries.GetServerDetails
 {
     public record ServerDetailsDto : IMapWith<Server>
     {
-        public ObjectId Id { get; init; }
+        public string Id { get; init; }
         public string Title { get; init; }
         public string? Image { get; init; }
         public List<ServerProfileLookupDto> ServerProfiles { get; init; }

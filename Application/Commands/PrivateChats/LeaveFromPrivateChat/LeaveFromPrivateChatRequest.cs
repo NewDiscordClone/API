@@ -6,6 +6,6 @@ namespace Application.Commands.PrivateChats.LeaveFromPrivateChat
 {
     public class LeaveFromPrivateChatRequest : IRequest
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
     }
 }

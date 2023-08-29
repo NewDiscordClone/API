@@ -26,7 +26,7 @@ namespace Tests.Servers.Commands
 
             //Act
             Context.SetToken(CancellationToken);
-            ObjectId result = await handler.Handle(request, CancellationToken);
+            string result = await handler.Handle(request, CancellationToken);
             ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)
                 .Handle(new GetServerDetailsRequest() { ServerId = result }, CancellationToken);
 

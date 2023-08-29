@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         [Route("{id}")]//.{ext}
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Index([FromRoute] ObjectId id, [FromQuery] bool details = false)//, [FromRoute] string ext
+        public async Task<ActionResult> Index([FromRoute] string id, [FromQuery] bool details = false)
         {
             try
             {

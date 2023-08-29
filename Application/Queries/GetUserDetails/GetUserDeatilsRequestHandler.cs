@@ -19,7 +19,7 @@ namespace Application.Queries.GetUser
 
             if (request.ServerId is not null)
             {
-                var server = await Context.Servers.FindAsync(request.ServerId.Value);
+                var server = await Context.Servers.FindAsync(request.ServerId);
                 var serverProfile = server.ServerProfiles.FirstOrDefault(profile => profile.User.Id == request.UserId);
                 userDto.ServerProfile = Mapper.Map<GetUserDetailsServerProfileDto>(serverProfile);
             }

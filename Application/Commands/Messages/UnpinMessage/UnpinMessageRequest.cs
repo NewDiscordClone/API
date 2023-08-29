@@ -6,6 +6,6 @@ namespace Application.Commands.Messages.UnpinMessage
 {
     public class UnpinMessageRequest : IRequest<Message>
     {
-        public ObjectId MessageId { get; init; }
+        public string MessageId { get; init; }
     }
 }

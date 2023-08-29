@@ -8,7 +8,7 @@ namespace Application.Queries.GetPrivateChats
 {
     public record GetPrivateChatLookUpDto : IMapWith<PrivateChat>
     {
-        public ObjectId Id { get; init; }
+        public string Id { get; init; }
         public string? Image { get; init; }
         public string? Title { get; init; }
         public List<UserLookUp> Users { get; init; } = new();

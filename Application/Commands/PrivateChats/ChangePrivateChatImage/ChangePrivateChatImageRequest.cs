@@ -7,7 +7,7 @@ namespace Application.Commands.PrivateChats.ChangePrivateChatImage
 {
     public class ChangePrivateChatImageRequest : IRequest<PrivateChat>
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
         public string NewImage { get; init; }
     }
 }

@@ -7,7 +7,7 @@ namespace Application.Commands.PrivateChats.RenamePrivateChat
 {
     public class RenamePrivateChatRequest : IRequest<PrivateChat>
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
         public string NewTitle { get; init; }
     }
 }

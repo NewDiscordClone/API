@@ -7,6 +7,6 @@ namespace Application.Commands.Servers.DeleteServer
     public record DeleteServerRequest : IRequest
     {
         [Required]
-        public ObjectId ServerId { get; init; }
+        public string ServerId { get; init; }
     }
 }

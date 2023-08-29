@@ -7,6 +7,6 @@ namespace Application.Queries.GetServerDetails
     public record GetServerDetailsRequest : IRequest<ServerDetailsDto>
     {
         [Required]
-        public ObjectId ServerId { get; init; }
+        public string ServerId { get; init; }
     }
 }

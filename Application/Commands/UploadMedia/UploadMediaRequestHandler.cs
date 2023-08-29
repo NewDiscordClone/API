@@ -21,7 +21,7 @@ namespace Application.Commands.UploadMedia
             await request.File.CopyToAsync(memoryStream, cancellationToken);
 
             var fileBytes = memoryStream.ToArray();
-            var id = ObjectId.GenerateNewId();
+            var id = ObjectId.GenerateNewId().ToString();
             var media = new Media
             {
                 Id = id,

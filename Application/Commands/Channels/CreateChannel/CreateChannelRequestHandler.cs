@@ -12,7 +12,7 @@ namespace Application.Commands.Channels.CreateChannel
             Context.SetToken(cancellationToken);
             
             //TODO: Перевірити що у юзера є відповідні права
-            Server server = await Context.FindSqlByIdAsync<Server>(request.ServerId, cancellationToken, "ServerProfile");
+            Server server = await Context.Servers.FindAsync(request.ServerId);
             List<UserLookUp> users = new();
             server.ServerProfiles.ForEach(profile => users.Add(Mapper.Map<UserLookUp>(profile.User)));
             Channel channel = new()

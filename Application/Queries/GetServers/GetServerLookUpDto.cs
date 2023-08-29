@@ -7,7 +7,7 @@ namespace Application.Queries.GetServer
 {
     public record GetServerLookupDto : IMapWith<Server>
     {
-        public ObjectId Id { get; init; }
+        public string Id { get; init; }
         public string Title { get; init; }
         public string? Image { get; init; }
         public void Mapping(Profile profile)

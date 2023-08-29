@@ -6,7 +6,8 @@ namespace Application.Models;
 public class Message
 {
     [BsonId]
-    public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
     public string Text { get; set; }
     public DateTime SendTime { get; set; }
     public DateTime? PinnedTime { get; set; } = null;
@@ -15,5 +16,6 @@ public class Message
     public List<Reaction> Reactions { get; set; } = new();
     public List<Attachment> Attachments { get; set; } = new();
     public UserLookUp User { get; set; }
-    public ObjectId ChatId { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string ChatId { get; set; }
 }

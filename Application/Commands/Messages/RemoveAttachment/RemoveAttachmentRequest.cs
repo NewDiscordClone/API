@@ -6,7 +6,7 @@ namespace Application.Commands.Messages.RemoveAttachment
 {
     public class RemoveAttachmentRequest : IRequest<Chat>
     {
-        public ObjectId MessageId { get; init; }
+        public string MessageId { get; init; }
         public int AttachmentIndex { get; init; }
     }
 }

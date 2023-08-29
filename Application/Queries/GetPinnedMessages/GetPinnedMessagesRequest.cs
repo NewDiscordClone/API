@@ -6,6 +6,6 @@ namespace Application.Queries.GetPinnedMessages
 {
     public class GetPinnedMessagesRequest : IRequest<List<Message>>
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
     }
 }

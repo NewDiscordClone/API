@@ -33,7 +33,7 @@ namespace WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ServerDetailsDto>> GetServerDetails(ObjectId serverId)
+        public async Task<ActionResult<ServerDetailsDto>> GetServerDetails(string serverId)
         {
             ServerDetailsDto server = await Mediator
                 .Send(new GetServerDetailsRequest { ServerId = serverId });
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
                 Title = serverDto.Title,
                 Image = serverDto.Image,
             };
-            ObjectId id = await Mediator.Send(request);
+            string id = await Mediator.Send(request);
             return Created(string.Empty, id);
         }
 

@@ -4,7 +4,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.Servers.CreateServer
 {
-    public record CreateServerRequest : IRequest<ObjectId>
+    public record CreateServerRequest : IRequest<string>
     {
         [Required, MaxLength(255)]
         public string Title { get; init; }

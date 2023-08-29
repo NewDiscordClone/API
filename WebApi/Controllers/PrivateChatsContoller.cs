@@ -41,7 +41,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<PrivateChat>> GetPrivateChatDetails(ObjectId chatId)
+        public async Task<ActionResult<PrivateChat>> GetPrivateChatDetails(string chatId)
         {
             try
             {

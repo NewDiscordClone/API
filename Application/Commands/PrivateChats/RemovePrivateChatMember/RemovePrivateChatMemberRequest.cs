@@ -7,7 +7,7 @@ namespace Application.Commands.PrivateChats.RemovePrivateChatMember
 {
     public class RemovePrivateChatMemberRequest : IRequest<PrivateChat>
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
         public int MemberId { get; init; }
     }
 }

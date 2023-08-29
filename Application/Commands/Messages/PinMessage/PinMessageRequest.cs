@@ -6,6 +6,6 @@ namespace Application.Commands.Messages.PinMessage
 {
     public class PinMessageRequest : IRequest<Message>
     {
-        public ObjectId MessageId { get; init; }
+        public string MessageId { get; init; }
     }
 }

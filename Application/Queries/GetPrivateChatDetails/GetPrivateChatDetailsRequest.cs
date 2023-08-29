@@ -6,6 +6,6 @@ namespace Application.Queries.GetPrivateChatDetails
 {
     public class GetPrivateChatDetailsRequest : IRequest<PrivateChat>
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
     }
 }

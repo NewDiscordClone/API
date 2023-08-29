@@ -6,6 +6,6 @@ namespace Application.Commands.Channels.RemoveChannel
 {
     public class RemoveChannelRequest : IRequest
     {
-        public ObjectId ChatId { get; init; }
+        public string ChatId { get; init; }
     }
 }

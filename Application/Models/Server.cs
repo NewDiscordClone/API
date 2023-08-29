@@ -7,7 +7,8 @@ namespace Application.Models;
 public class Server
 {
     [BsonId]
-    public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; }
     public string Title { get; set; }
     public string? Image { get; set; }
 

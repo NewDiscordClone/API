@@ -62,7 +62,7 @@ namespace Tests.Common
             {
                 new Server
                 {
-                    Id = ids.ServerIdForDelete = ObjectId.GenerateNewId(),
+                    Id = ids.ServerIdForDelete = ObjectId.GenerateNewId().ToString(),
                     Title = "Server 1",
                     Owner = mapper.Map<UserLookUp>(userA),
                     ServerProfiles = 
@@ -77,7 +77,7 @@ namespace Tests.Common
                 },
                 new Server
                 {
-                    Id = ids.ServerIdForUpdate = ObjectId.GenerateNewId(),
+                    Id = ids.ServerIdForUpdate = ObjectId.GenerateNewId().ToString(),
                     Title = "Server 2",
                     Owner = mapper.Map<UserLookUp>(userB),
                     ServerProfiles = 
@@ -95,13 +95,13 @@ namespace Tests.Common
             {
                 new Channel
                 {
-                    Id = ids.Channel1 = ObjectId.GenerateNewId(),
+                    Id = ids.Channel1 = ObjectId.GenerateNewId().ToString(),
                     Title = "Channel 1",
                     ServerId = ids.ServerIdForDelete
                 },
                 new Channel
                 {
-                    Id = ids.Channel2 = ObjectId.GenerateNewId(),
+                    Id = ids.Channel2 = ObjectId.GenerateNewId().ToString(),
                     Title = "Channel 2",
                     ServerId = ids.ServerIdForUpdate
                 }
@@ -112,28 +112,28 @@ namespace Tests.Common
                 {
                     new()
                     {
-                        Id = ids.PrivateChat3 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat3 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 3",
                         OwnerId = userA.Id,
                         Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userB) },
                     },
                     new()
                     {
-                        Id = ids.PrivateChat4 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat4 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 4",
                         OwnerId = userA.Id,
                         Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userC) }
                     },
                     new()
                     {
-                        Id = ids.PrivateChat5 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat5 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 5",
                         OwnerId = userB.Id,
                         Users = { mapper.Map<UserLookUp>(userB), mapper.Map<UserLookUp>(userC) }
                     },
                     new()
                     {
-                        Id = ids.PrivateChat6 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat6 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 6",
                         OwnerId = userB.Id,
                         Users =
@@ -146,7 +146,7 @@ namespace Tests.Common
                     },
                     new()
                     {
-                        Id = ids.PrivateChat7 = ObjectId.GenerateNewId(),
+                        Id = ids.PrivateChat7 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 7",
                         OwnerId = userB.Id,
                         Users =
@@ -160,7 +160,7 @@ namespace Tests.Common
             {
                 new Message
                 {
-                    Id = ids.Message1 = ObjectId.GenerateNewId(),
+                    Id = ids.Message1 = ObjectId.GenerateNewId().ToString(),
                     Text = "Message 1",
                     SendTime = DateTime.Now,
                     User = mapper.Map<UserLookUp>(userA),
@@ -181,7 +181,7 @@ namespace Tests.Common
                 },
                 new Message
                 {
-                    Id = ids.Message2 = ObjectId.GenerateNewId(),
+                    Id = ids.Message2 = ObjectId.GenerateNewId().ToString(),
                     Text = "Message 2",
                     SendTime = DateTime.Now,
                     User = mapper.Map<UserLookUp>(userB),
