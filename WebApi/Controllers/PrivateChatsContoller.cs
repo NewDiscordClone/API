@@ -58,7 +58,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<int>> CreatePrivateChat(CreatePrivateChatRequest chatRequest)
+        public async Task<ActionResult<string>> CreatePrivateChat(CreatePrivateChatRequest chatRequest)
         {
             PrivateChat chat = await Mediator.Send(chatRequest);
             //TODO: Реалізація відправки Notify

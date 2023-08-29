@@ -22,7 +22,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<int>> CreateChannel([FromBody] CreateChannelRequest request)
+        public async Task<ActionResult<string>> CreateChannel([FromBody] CreateChannelRequest request)
         {
             Channel chat = await Mediator.Send(request);
             //TODO: Реалізація відправки Notify
