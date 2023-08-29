@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using WebApi.Attributes;
 using WebApi.Authorization;
+using WebApi.Authorization.Handlers;
 using WebApi.Providers;
 
 namespace WebApi

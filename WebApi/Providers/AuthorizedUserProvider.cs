@@ -32,7 +32,6 @@ namespace WebApi.Providers
 
             return int.Parse(userIdClaim);
         }
-
         public async Task<bool> HasClaimsAsync(int serverId, IEnumerable<string> claimTypes)
         {
             ServerProfile? profile = await _context.ServerProfiles.FirstAsync(profile
@@ -64,13 +63,22 @@ namespace WebApi.Providers
 
         public async Task<bool> HasClaimsAsync(int serverId, params string[] claimTypes)
         {
+            if (claimTypes is null)
+            {
+                throw new ArgumentNullException(nameof(claimTypes));
+            }
+
             return await HasClaimsAsync(serverId, (IEnumerable<string>)claimTypes);
         }
 
         public bool HasClaims(int serverId, params string[] claimTypes)
         {
-            return HasClaims(serverId, (IEnumerable<string>)claimTypes);
+            if (claimTypes is null)
+            {
+                throw new ArgumentNullException(nameof(claimTypes));
+            }
 
+            return HasClaims(serverId, (IEnumerable<string>)claimTypes);
         }
 
         public bool HasClaims(int serverId, IEnumerable<string> claimTypes)
@@ -78,5 +86,22 @@ namespace WebApi.Providers
             return HasClaimsAsync(serverId, claimTypes).Result;
         }
 
+        public bool IsAdmin(int serverId)
+        {
+            return IsAdminAsync(serverId).Result;
+        }
+
+        public async Task<bool> IsAdminAsync(int serverId)
+        {
+            ServerProfile? profile = await _context.ServerProfiles.FirstAsync(profile
+                => profile.Server.Id == serverId
+                && profile.User.Id == GetUserId());
+
+            if (profile is null || profile.Roles is null)
+                return false;
+
+            bool isAdmin = profile.Roles.Any(role => role.IsAdmin);
+            return isAdmin;
+        }
     }
 }

@@ -2,8 +2,9 @@
 using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using WebApi.Authorization.Requirements;
 
-namespace WebApi.Authorization
+namespace WebApi.Authorization.Handlers
 {
     public class ServerMemberAuthorizationHandler : AuthorizationHandler<ServerMemberRequirement>
     {

@@ -19,10 +19,10 @@ namespace Application.Common.Factories
             Role ownerRole = new()
             {
                 Name = "Owner",
-                Color = "#FFF000"
+                Color = "#FFF000",
+                IsAdmin = true,
             };
 
-            _roleManager.AddClaimAsync(ownerRole, new Claim("Admin", "true"));
 
             Role memberRole = new()
             {
@@ -30,7 +30,7 @@ namespace Application.Common.Factories
                 Color = "#FFF000"
             };
 
-            _roleManager.AddClaimAsync(memberRole, new Claim("SendMessages", "true"));
+            _roleManager.AddClaimAsync(memberRole, new Claim(ServerClaims.ChangeServerName, "true"));
 
             return new() { ownerRole, memberRole };
         }

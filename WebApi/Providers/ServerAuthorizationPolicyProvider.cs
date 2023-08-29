@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Application.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Text.RegularExpressions;
 using WebApi.Authorization;
+using WebApi.Authorization.Requirements;
 
 namespace WebApi.Providers
 {
@@ -39,6 +41,23 @@ namespace WebApi.Providers
                     return policy.Build();
                 case ServerPolicies.ManageMessages:
                     policy.RequireServerClaim(serverId, ServerClaims.ManageMessages);
+                    return policy.Build();
+                case ServerPolicies.MangeRoles:
+                    policy.RequireServerClaim(serverId,
+                        ServerClaims.ManageRoles);
+                    return policy.Build();
+                case ServerPolicies.ManageServer:
+                    policy.RequireServerClaim(serverId,
+                        ServerClaims.ManageRoles);
+                    return policy.Build();
+                case ServerPolicies.ChangeName:
+                    policy.RequireServerClaim(serverId, ServerClaims.ChangeServerName);
+                    return policy.Build();
+                case ServerPolicies.ChangeSomeoneName:
+                    policy.RequireServerClaim(serverId, ServerClaims.ChangeSomeoneServerName);
+                    return policy.Build();
+                case ServerPolicies.RemoveMembers:
+                    policy.RequireServerClaim(serverId, ServerClaims.RemoveMembers);
                     return policy.Build();
                 default:
                     return await FallbackPolicyProvider.GetPolicyAsync(policyName);
@@ -88,7 +107,12 @@ namespace WebApi.Providers
     public enum ServerPolicies
     {
         SendMessages,
+        ServerMember,
         ManageMessages,
-        ServerMember
+        MangeRoles,
+        ManageServer,
+        ChangeName,
+        ChangeSomeoneName,
+        RemoveMembers,
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WebApi.Authorization
+﻿namespace Application.Common
 {
     public static class ServerClaims
     {

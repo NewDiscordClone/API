@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace WebApi.Authorization
+namespace WebApi.Authorization.Requirements
 {
     public record ServerMemberRequirement : IAuthorizationRequirement
     {

@@ -1,7 +1,8 @@
 ﻿using Application.Providers;
 using Microsoft.AspNetCore.Authorization;
+using WebApi.Authorization.Requirements;
 
-namespace WebApi.Authorization
+namespace WebApi.Authorization.Handlers
 {
     public class ServerClaimsAuthorizationRequirementHandler :
         AuthorizationHandler<ServerClaimsAuthorizationRequirement>
@@ -16,7 +17,8 @@ namespace WebApi.Authorization
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
             ServerClaimsAuthorizationRequirement requirement)
         {
-            if (await _userProvider.HasClaimsAsync(requirement.ServerId, requirement.ClaimTypes))
+            if (await _userProvider.IsAdminAsync(requirement.ServerId)
+                || await _userProvider.HasClaimsAsync(requirement.ServerId, requirement.ClaimTypes))
             {
                 context.Succeed(requirement);
             }
