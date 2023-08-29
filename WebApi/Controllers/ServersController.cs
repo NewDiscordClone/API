@@ -43,7 +43,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<int>> CrateServer(CrateServerDto serverDto)
+        public async Task<ActionResult<string>> CrateServer(CrateServerDto serverDto)
         {
             CreateServerRequest request = new()
             {
