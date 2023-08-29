@@ -6,7 +6,7 @@ namespace Application.Models;
 
 public class Channel : Chat
 {
-    [DefaultValue("5f95a3c3d0ddad0017ea9291")]
+    [DefaultValue("Test Channel")]
     public string Title { get; set; }
 
     [BsonRepresentation(BsonType.ObjectId)]

@@ -15,13 +15,12 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
             List<UserLookUp> users = new();
             request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindSqlByIdAsync<User>(userId, cancellationToken).Result)));
             
-            User owner = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
             PrivateChat privateChat = new()
             {
                 Title = request.Title,
                 Image = request.Image,
                 Users = users,
-                OwnerId = owner.Id
+                OwnerId = UserId
             };
 
             return await Context.PrivateChats.AddAsync(privateChat);
