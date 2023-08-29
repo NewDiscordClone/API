@@ -2,12 +2,14 @@ using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using DataAccess.Configurations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace DataAccess
 {
@@ -139,5 +141,34 @@ namespace DataAccess
             )
             .SortByDescending(m => m.PinnedTime)
             .ToListAsync(_token);
+
+        async Task IAppDbContext.SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            await SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<List<Claim>> GetRoleClaimAsync(Role role)
+        {
+            return await RoleClaims.Where(t => t.RoleId == role.Id)
+                .Select(t => t.ToClaim()).ToListAsync();
+        }
+
+        public async Task AddClaimToRoleAsync(Role role, Claim claim)
+        {
+            await AddClaimsToRoleAsync(role, new List<Claim> { claim });
+        }
+
+        public async Task AddClaimsToRoleAsync(Role role, IEnumerable<Claim> claims)
+        {
+            foreach (Claim claim in claims)
+            {
+                await RoleClaims.AddAsync(new IdentityRoleClaim<int>
+                {
+                    ClaimType = claim.Type,
+                    ClaimValue = claim.Value,
+                    RoleId = role.Id
+                });
+            }
+        }
     }
 }

@@ -25,6 +25,11 @@ namespace Application.Commands.Servers.CreateServer
             server.ServerProfiles.Add(new() { User = ownerLookUp });
 
             await Context.Servers.AddAsync(server);
+
+            List<Role> roles = _roleFactory.GetDefaultServerRoles(server.Id);
+
+            await Context.Roles.AddRangeAsync(roles, cancellationToken);
+            await Context.SaveChangesAsync(cancellationToken);
             return server.Id;
         }
 

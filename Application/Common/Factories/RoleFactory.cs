@@ -1,36 +1,37 @@
 ﻿using Application.Interfaces;
 using Application.Models;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
 namespace Application.Common.Factories
 {
     public class RoleFactory : IRoleFactory
     {
-        private readonly RoleManager<Role> _roleManager;
+        private readonly IAppDbContext _context;
 
-        public RoleFactory(RoleManager<Role> roleManager)
+        public RoleFactory(IAppDbContext context)
         {
-            _roleManager = roleManager;
+            _context = context;
         }
 
-        public List<Role> GetDefaultServerRoles()
+        public List<Role> GetDefaultServerRoles(string serverId)
         {
             Role ownerRole = new()
             {
                 Name = "Owner",
                 Color = "#FFF000",
                 IsAdmin = true,
+                ServerId = serverId
             };
 
 
             Role memberRole = new()
             {
                 Name = "Member",
-                Color = "#FFF000"
+                Color = "#FFF000",
+                ServerId = serverId
             };
 
-            _roleManager.AddClaimAsync(memberRole, new Claim(ServerClaims.ChangeServerName, "true"));
+            _context.AddClaimToRoleAsync(memberRole, new Claim(ServerClaims.ChangeServerName, "true"));
 
             return new() { ownerRole, memberRole };
         }

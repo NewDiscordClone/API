@@ -4,6 +4,6 @@ namespace Application.Interfaces
 {
     public interface IRoleFactory
     {
-        List<Role> GetDefaultServerRoles();
+        List<Role> GetDefaultServerRoles(string serverId);
     }
 }

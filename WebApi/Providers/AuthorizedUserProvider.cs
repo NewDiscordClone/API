@@ -2,7 +2,6 @@
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
 namespace WebApi.Providers
@@ -11,13 +10,11 @@ namespace WebApi.Providers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAppDbContext _context;
-        private readonly RoleManager<Role> _roleManager;
 
-        public AuthorizedUserProvider(IHttpContextAccessor httpContextAccessor, IAppDbContext context, RoleManager<Role> roleManager)
+        public AuthorizedUserProvider(IHttpContextAccessor httpContextAccessor, IAppDbContext context)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;
-            _roleManager = roleManager;
         }
 
         public int GetUserId()
@@ -48,7 +45,7 @@ namespace WebApi.Providers
             List<string> matchingUserClaims = new();
             foreach (Role role in profile.Roles)
             {
-                foreach (Claim claim in await _roleManager.GetClaimsAsync(role))
+                foreach (Claim claim in await _context.GetRoleClaimAsync(role))
                 {
                     if (claimTypes.Any(claimType
                         => string.Equals(claim.Type, claimType)))
