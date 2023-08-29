@@ -1,23 +1,3 @@
-using Application;
-using Application.Common.Mapping;
-using Application.Hubs;
-using Application.Interfaces;
-using Application.Models;
-using Application.Providers;
-using DataAccess;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
-using WebApi.Attributes;
-using WebApi.Authorization;
-using WebApi.Authorization.Handlers;
-using WebApi.Providers;
-
 namespace WebApi
 {
     internal static class Program
@@ -114,7 +94,6 @@ namespace WebApi
                 app.UseSwaggerUI(option =>
                 {
                     option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
-                    option.RoutePrefix = string.Empty;
                     option.DisplayRequestDuration();
                 });
             }

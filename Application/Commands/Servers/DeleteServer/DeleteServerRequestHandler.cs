@@ -1,20 +1,19 @@
-﻿using Application.Interfaces;
-using Application.Models;
-using Application.Providers;
-using MediatR;
-
-namespace Application.Commands.Servers.DeleteServer
+﻿namespace Application.Commands.Servers.DeleteServer
 {
     public class DeleteServerRequestHandler : RequestHandlerBase, IRequestHandler<DeleteServerRequest>
     {
 
         public async Task Handle(DeleteServerRequest request, CancellationToken cancellationToken)
         {
-            Server server = await Context.FindByIdAsync<Server>
-                (request.ServerId, cancellationToken);
+            Context.SetToken(cancellationToken);
 
-            Context.Servers.Remove(server);
-            await Context.SaveChangesAsync(cancellationToken);
+            Server server = await Context.Servers.FindAsync(request.ServerId);
+
+            if (UserId != server.Owner.Id)
+                throw new NoPermissionsException("You are not the owner of the server");
+
+            await Context.Servers.DeleteAsync(server);
+            await Context.Channels.DeleteManyAsync(c => c.ServerId == request.ServerId);
         }
 
         public DeleteServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

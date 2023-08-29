@@ -1,5 +1,6 @@
 ﻿using Application.Commands.PrivateChats.RenamePrivateChat;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -10,10 +11,11 @@ namespace Tests.PrivateChats.Commands
         public async Task Success()
         {
             //Arrange
-            int chatId = 4;
+            CreateDatabase();
+            var chatId = Ids.PrivateChat4;
             string newTitle = "New title test";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             RenamePrivateChatRequest request = new()
             {
@@ -24,11 +26,11 @@ namespace Tests.PrivateChats.Commands
             RenamePrivateChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat chat = await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
             Assert.Equal(newTitle, chat.Title);
         }
     }

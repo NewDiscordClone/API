@@ -12,7 +12,7 @@ namespace Application.Queries.GetUser
         public string AvatarPath { get; init; }
         public UserStatus Status { get; init; } = UserStatus.Online;
         public string? TextStatus { get; init; }
-        public GetUserDetailsServerProfileDto? Profile { get; set; }
+        public GetUserDetailsServerProfileDto? ServerProfile { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<User, GetUserDetailsDto>();

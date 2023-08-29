@@ -1,23 +1,28 @@
 using System.Linq.Expressions;
 using Application.Models;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace Application.Interfaces;
 
 public interface IAppDbContext
 {
-    DbSet<Attachment> Attachments { get; set; }
-    DbSet<Channel> Channels { get; set; }
-    DbSet<Chat> Chats { get; set; }
-    DbSet<Message> Messages { get; set; }
-    DbSet<PrivateChat> PrivateChats { get; set; }
-    DbSet<Reaction> Reactions { get; set; }
+    ISimpleDbSet<Message> Messages { get; }
+    ISimpleDbSet<Chat> Chats { get; }
+    ISimpleDbSet<PrivateChat> PrivateChats { get; }
+    ISimpleDbSet<Channel> Channels { get; }
+    ISimpleDbSet<Media> Media { get; }
+    ISimpleDbSet<Server> Servers { get; }
+    //DbSet<ServerProfile> ServerProfiles { get; }
     DbSet<Role> Roles { get; set; }
-    DbSet<Server> Servers { get; set; }
-    DbSet<ServerProfile> ServerProfiles { get; set; }
     DbSet<User> Users { get; set; }
 
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    Task<TResult> FindByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
+    void SetToken(CancellationToken cancellationToken);
+    Task CheckRemoveMedia(string id);
+    Task<TResult> FindSqlByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
+    Task<List<Message>> GetMessagesAsync(string chatId, int skip, int take);
+    Task<List<Message>> GetPinnedMessagesAsync(string chatId);
 
 }

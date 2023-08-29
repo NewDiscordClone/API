@@ -1,4 +1,6 @@
-﻿using Application.Queries.GetPinnedMessages;
+﻿using Application.Models;
+using Application.Queries.GetPinnedMessages;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Queries
@@ -9,7 +11,8 @@ namespace Tests.Messages.Queries
         public async Task Success()
         {
             //Arrange
-            int chatId = 3;
+            CreateDatabase();
+            var chatId = Ids.PrivateChat3;
 
             GetPinnedMessagesRequest request = new()
             {
@@ -18,12 +21,11 @@ namespace Tests.Messages.Queries
             GetPinnedMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            List<GetPinnedMessageLookUpDto> result = await handler.Handle(request, CancellationToken);
+            Context.SetToken(CancellationToken);
+            List<Message> result = await handler.Handle(request, CancellationToken);
 
             //Assert
-            Assert.True(result.All(message =>
-          Context.Messages.Any(msg => msg.Id == message.Id && msg.IsPinned)));
-
+            Assert.True(result.All(message => Context.Messages.FindAsync(message.Id).Result.IsPinned));
         }
     }
 }

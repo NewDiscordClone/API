@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Application.Models;
 using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Commands.PrivateChats.ChangePrivateChatImage
 {
-    public class ChangePrivateChatImageRequest : IRequest
+    public class ChangePrivateChatImageRequest : IRequest<PrivateChat>
     {
-        public int ChatId { get; init; }
+        public string ChatId { get; init; }
         public string NewImage { get; init; }
     }
 }

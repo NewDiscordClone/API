@@ -9,13 +9,14 @@ namespace Tests.Servers.Queries
         public async Task Handle_ReturnsExpectedServers()
         {
             // Arrange
-            int userId = 1;
+            CreateDatabase();
+            int userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
 
-            GetServersRequestHandler handler = new(Context, Mapper);
+            SetAuthorizedUserId(userId);
+            GetServersRequestHandler handler = new(Context, UserProvider);
 
-            GetServersRequest request = new()
-            { UserId = userId };
+            GetServersRequest request = new();
 
             // Act
             List<GetServerLookupDto> result = await handler.Handle(request, cancellationToken);
@@ -29,13 +30,15 @@ namespace Tests.Servers.Queries
         public async Task Handle_ReturnsUnexpectedServers()
         {
             // Arrange
+            CreateDatabase();
             int userId = int.MaxValue;
             CancellationToken cancellationToken = CancellationToken.None;
 
-            GetServersRequestHandler handler = new(Context, Mapper);
+            SetAuthorizedUserId(userId);
+            
+            GetServersRequestHandler handler = new(Context,UserProvider);
 
-            GetServersRequest request = new()
-            { UserId = userId };
+            GetServersRequest request = new();
 
             // Act
             List<GetServerLookupDto> result = await handler.Handle(request, cancellationToken);
@@ -43,7 +46,5 @@ namespace Tests.Servers.Queries
             // Assert
             Assert.Empty(result);
         }
-
-
     }
 }

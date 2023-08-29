@@ -1,40 +1,27 @@
-﻿using Application.Interfaces;
-using Application.Models;
-using Application.Providers;
-using MediatR;
-
-namespace Application.Commands.Servers.CreateServer
+﻿namespace Application.Commands.Servers.CreateServer
 {
-    public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, int>
+    public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, string>
     {
-        private readonly IRoleFactory _roleFactory;
-
-        public async Task<int> Handle(CreateServerRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Context.SetToken(cancellationToken);
 
-            List<Role> roles = _roleFactory.GetDefaultServerRoles();
+            var ownerLookUp = Mapper.Map<UserLookUp>(await Context.FindSqlByIdAsync<User>(UserId, cancellationToken));
 
             Server server = new()
             {
                 Title = request.Title,
                 Image = request.Image,
-                Roles = roles
-
+                Owner = ownerLookUp
             };
-            server.ServerProfiles.Add(new()
-            {
-                User = user,
-                Server = server,
-                Roles = new() { roles.First(role => role.Name == "Owner") }
-            });
+            server.ServerProfiles.Add(new() { User = ownerLookUp });
 
-            await Context.Servers.AddAsync(server, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
+            await Context.Servers.AddAsync(server);
             return server.Id;
         }
 
-        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IRoleFactory roleFactory) : base(context, userProvider)
+        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
+            : base(context, userProvider, mapper)
         {
             _roleFactory = roleFactory;
             // _roleFactory = roleFactory;

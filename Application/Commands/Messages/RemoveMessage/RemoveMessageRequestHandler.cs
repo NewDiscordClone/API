@@ -1,39 +1,33 @@
-﻿using Application.Common.Exceptions;
-using Application.Interfaces;
-using Application.Models;
-using Application.Providers;
-using MediatR;
-
-namespace Application.Commands.Messages.RemoveMessage
+﻿namespace Application.Commands.Messages.RemoveMessage
 {
-
     public class RemoveMessageRequestHandler : RequestHandlerBase, IRequestHandler<RemoveMessageRequest, Chat>
     {
         public async Task<Chat> Handle(RemoveMessageRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken,
-                "User",
-                "Chat",
-                "Chat.Users");
+            Context.SetToken(cancellationToken);
 
-            bool isOwner = false;
+            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
-            if (message.Chat is Channel channel)
-                //    isOwner = UserProvider.IsInRole("Owner", channel.Server.Id);
+            if (message.User.Id != UserId)
+            {
+                //TODO: Перевірити юзера на відповідну роль на сервері
+                // Channel? channel = await Context.Channels
+                //     .Include(c => c.Server)
+                //     .Include(c => c.Server.Owner)
+                //     .FirstOrDefaultAsync(c => c.Id == message.Chat.Id,
+                //         cancellationToken: cancellationToken);
+                // if (channel == null || channel.Server.Owner.Id != UserId) 
+                throw new NoPermissionsException("You don't have permission to remove the message");
+            }
 
-                if (message.User.Id != UserId || isOwner)
-                    throw new NoPermissionsException("You don't have permission to remove the message");
 
-
-            Chat chat = message.Chat;
-
-            Context.Messages.Remove(message);
-            await Context.SaveChangesAsync(cancellationToken);
-
+            await Context.Messages.DeleteAsync(message);
             return chat;
         }
 
-        public RemoveMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public RemoveMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
+            userProvider)
         {
         }
     }

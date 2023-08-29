@@ -1,5 +1,9 @@
 ﻿using Application.Commands.Servers.DeleteServer;
-using Application.Providers;
+using Application.Exceptions;
+using Application.Models;
+using Application.Interfaces;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -10,9 +14,39 @@ namespace Tests.Servers.Commands
         public async Task Success()
         {
             //Arrange
-            int userId = TestDbContextFactory.UserAId;
-            int serverId = TestDbContextFactory.ServerIdForDelete;
-            int oldCount = Context.Servers.Count();
+            CreateDatabase();
+            int userId = Ids.UserAId;
+            string serverId = Ids.ServerIdForDelete;
+            long oldCount = await Context.Servers.CountAsync(s => true);
+            
+
+            SetAuthorizedUserId(userId);
+
+            DeleteServerRequest request = new()
+            {
+                ServerId = serverId,
+            };
+            DeleteServerRequestHandler handler = new(Context, UserProvider);
+
+            //Act
+            Context.SetToken(CancellationToken);
+            await handler.Handle(request, CancellationToken);
+
+            //Assert
+            await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+                await Context.Servers.FindAsync(serverId));
+            Assert.Empty(await Context.Channels.FilterAsync(channel => channel.ServerId == serverId));
+            Assert.Equal(oldCount - 1, await Context.Servers.CountAsync(s => true));
+            Assert.NotNull(await Context.FindSqlByIdAsync<User>(userId, CancellationToken));
+        }
+
+        [Fact]
+        public async Task Unauthorized_Fail()
+        {
+            //Arrange
+            CreateDatabase();
+            int userId = Ids.UserBId;
+            string serverId = Ids.ServerIdForDelete;
 
             Mock<IAuthorizedUserProvider> userProvider = new();
             userProvider.Setup(p => p.GetUserId()).Returns(userId);
@@ -24,14 +58,9 @@ namespace Tests.Servers.Commands
             DeleteServerRequestHandler handler = new(Context, userProvider.Object);
 
             //Act
-            await handler.Handle(request, CancellationToken);
-
             //Assert
-            Assert.Null(Context.Servers.Find(serverId));
-            Assert.False(Context.ServerProfiles.Any(profile => profile.Server.Id == serverId));
-            Assert.False(Context.Channels.Any(channel => channel.Server.Id == serverId));
-            Assert.Equal(oldCount - 1, Context.Servers.Count());
-            Assert.NotNull(Context.Users.Find(userId));
+            await Assert.ThrowsAsync<NoPermissionsException>(async () =>
+                await handler.Handle(request, CancellationToken));
         }
     }
 }

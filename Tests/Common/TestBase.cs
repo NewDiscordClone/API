@@ -5,18 +5,18 @@ using AutoMapper;
 
 namespace Tests.Common
 {
-    public abstract class TestBase
+    public class TestBase : IDisposable
     {
         private readonly Mock<IAuthorizedUserProvider> _userProvider;
 
-        protected readonly IAppDbContext Context;
+        protected Ids Ids;
+        protected IAppDbContext Context;
         protected readonly IMapper Mapper;
         protected IAuthorizedUserProvider UserProvider => _userProvider.Object;
         protected readonly CancellationToken CancellationToken = CancellationToken.None;
 
         public TestBase()
         {
-            Context = TestDbContextFactory.Create();
             MapperConfiguration mapperConfig = new(config =>
                 config.AddProfile(new AssemblyMappingProfile(
                     typeof(IAppDbContext).Assembly)));
@@ -28,6 +28,16 @@ namespace Tests.Common
         protected void SetAuthorizedUserId(int id)
         {
             _userProvider.Setup(provider => provider.GetUserId()).Returns(id);
+        }
+
+        public void CreateDatabase()
+        {
+            Context = TestDbContextFactory.CreateFake(out Ids); //Can be turned to TestDbContextFactory.Create(out Ids); for real database instances
+        }
+
+        public void Dispose()
+        {
+            TestDbContextFactory.Destroy(Context);
         }
     }
 }

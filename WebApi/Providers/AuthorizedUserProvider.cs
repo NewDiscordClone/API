@@ -3,7 +3,6 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace WebApi.Providers
@@ -32,11 +31,16 @@ namespace WebApi.Providers
 
             return int.Parse(userIdClaim);
         }
-        public async Task<bool> HasClaimsAsync(int serverId, IEnumerable<string> claimTypes)
+        public async Task<bool> HasClaimsAsync(string serverId, IEnumerable<string> claimTypes)
         {
-            ServerProfile? profile = await _context.ServerProfiles.FirstAsync(profile
-            => profile.Server.Id == serverId
-            && profile.User.Id == GetUserId());
+            Server? server = await _context.Servers.FindAsync(serverId);
+
+            if (server is null)
+                return false;
+
+            ServerProfile? profile = server.ServerProfiles.
+                FirstOrDefault(profile => profile.User.Id == GetUserId());
+
 
             if (profile is null || profile.Roles is null)
                 return false;
@@ -61,7 +65,7 @@ namespace WebApi.Providers
             return true;
         }
 
-        public async Task<bool> HasClaimsAsync(int serverId, params string[] claimTypes)
+        public async Task<bool> HasClaimsAsync(string serverId, params string[] claimTypes)
         {
             if (claimTypes is null)
             {
@@ -71,7 +75,7 @@ namespace WebApi.Providers
             return await HasClaimsAsync(serverId, (IEnumerable<string>)claimTypes);
         }
 
-        public bool HasClaims(int serverId, params string[] claimTypes)
+        public bool HasClaims(string serverId, params string[] claimTypes)
         {
             if (claimTypes is null)
             {
@@ -81,21 +85,26 @@ namespace WebApi.Providers
             return HasClaims(serverId, (IEnumerable<string>)claimTypes);
         }
 
-        public bool HasClaims(int serverId, IEnumerable<string> claimTypes)
+        public bool HasClaims(string serverId, IEnumerable<string> claimTypes)
         {
             return HasClaimsAsync(serverId, claimTypes).Result;
         }
 
-        public bool IsAdmin(int serverId)
+        public bool IsAdmin(string serverId)
         {
             return IsAdminAsync(serverId).Result;
         }
 
-        public async Task<bool> IsAdminAsync(int serverId)
+        public async Task<bool> IsAdminAsync(string serverId)
         {
-            ServerProfile? profile = await _context.ServerProfiles.FirstAsync(profile
-                => profile.Server.Id == serverId
-                && profile.User.Id == GetUserId());
+            Server? server = await _context.Servers.FindAsync(serverId);
+
+            if (server is null)
+                return false;
+
+            ServerProfile? profile = server.ServerProfiles.
+                FirstOrDefault(profile => profile.User.Id == GetUserId());
+
 
             if (profile is null || profile.Roles is null)
                 return false;

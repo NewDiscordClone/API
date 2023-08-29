@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.AddMemberToPrivateChat;
 using Application.Common.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -11,12 +12,13 @@ namespace Tests.PrivateChats.Commands
         public async Task Success()
         {
             //Arrange
+            CreateDatabase();
 
-            int newMemberId = TestDbContextFactory.UserAId;
-            int chatId = 5;
+            int newMemberId = Ids.UserAId;
+            var chatId = Ids.PrivateChat5;
             int oldUsersCount = 2;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             AddMemberToPrivateChatRequest request = new()
             {
@@ -24,14 +26,14 @@ namespace Tests.PrivateChats.Commands
                 NewMemberId = newMemberId
             };
 
-            AddMemberToPrivateChatRequestHandler handler = new(Context, UserProvider);
+            AddMemberToPrivateChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat chat =await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
             Assert.Equal(oldUsersCount + 1, chat.Users.Count);
             Assert.Contains(chat.Users, user => user.Id == newMemberId);
         }
@@ -39,10 +41,11 @@ namespace Tests.PrivateChats.Commands
         public async Task UserAlreadyExists_Fail()
         {
             //Arrange
-            int newMemberId = TestDbContextFactory.UserCId;
-            int chatId = 5;
+            CreateDatabase();
+            int newMemberId = Ids.UserCId;
+            var chatId = Ids.PrivateChat5;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             AddMemberToPrivateChatRequest request = new()
             {
@@ -51,7 +54,7 @@ namespace Tests.PrivateChats.Commands
             };
 
             AddMemberToPrivateChatRequestHandler handler =
-                new(Context, UserProvider);
+                new(Context, UserProvider, Mapper);
 
             //Act
             //Assert

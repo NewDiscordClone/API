@@ -3,7 +3,7 @@ using Application.Commands.Channels.RemoveChannel;
 using Application.Commands.Channels.RenameChannel;
 using Application.Common.Exceptions;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +19,22 @@ namespace WebApi.Controllers
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request">
+        /// <code>
+        /// {
+        ///     "title": "Channel 1",
+        ///     "serverId": "5f95a3c3d0ddad0017ea9291"
+        /// }
+        /// </code>
+        /// </param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<int>> CreateChannel([FromBody] CreateChannelRequest request)
+        public async Task<ActionResult<string>> CreateChannel([FromBody] CreateChannelRequest request)
         {
             Channel chat = await Mediator.Send(request);
             //TODO: Реалізація відправки Notify

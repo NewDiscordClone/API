@@ -10,10 +10,11 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
-            int messageId = 1;
+            CreateDatabase();
+            var messageId = Ids.Message1;
             const string emoji = "☻";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             AddReactionRequest request = new()
             {
@@ -21,12 +22,13 @@ namespace Tests.Messages.Commands
                 MessageId = messageId
             };
 
-            AddReactionRequestHandler handler = new(Context, UserProvider);
+            AddReactionRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             Reaction result = await handler.Handle(request, CancellationToken);
 
             //Assert
+
             Assert.NotNull(result);
             Assert.Equal(emoji, result.Emoji);
         }

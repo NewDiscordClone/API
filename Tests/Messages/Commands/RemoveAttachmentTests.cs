@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Messages.RemoveAttachment;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -10,23 +11,27 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
-            int attachmentId = 1;
+            CreateDatabase();
+            var messageId = Ids.Message2;
+            int attachmentIndex = 0;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemoveAttachmentRequest request = new()
             {
-                AttachmentId = attachmentId
+                MessageId = messageId,
+                AttachmentIndex = attachmentIndex
             };
 
             RemoveAttachmentRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            Attachment? attachment = Context.Attachments.Find(attachmentId);
+            Message? message = await Context.Messages.FindAsync(messageId);
 
             //Assert
-            Assert.Null(attachment);
+            Assert.Empty(message.Attachments);
         }
     }
 }

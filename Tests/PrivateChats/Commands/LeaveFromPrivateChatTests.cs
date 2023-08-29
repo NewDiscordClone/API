@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.LeaveFromPrivateChat;
 using Application.Common.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -11,8 +12,9 @@ namespace Tests.PrivateChats.Commands
         public async Task Success_Owner()
         {
             //Arrange
-            int chatId = 7;
-            int userId = TestDbContextFactory.UserBId;
+            CreateDatabase();
+            var chatId = Ids.PrivateChat7;
+            int userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 
@@ -24,12 +26,12 @@ namespace Tests.PrivateChats.Commands
             LeaveFromPrivateChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat chat = await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
-            Assert.DoesNotContain(chat.Users, user => user.Id == chatId);
+            Assert.DoesNotContain(chat.Users, user => user.Id == userId);
             Assert.NotEqual(userId, chat.OwnerId);
         }
 
@@ -37,8 +39,9 @@ namespace Tests.PrivateChats.Commands
         public async Task Success_LastUser()
         {
             //Arrange
-            int chatId = 4;
-            int userId = TestDbContextFactory.UserAId;
+            CreateDatabase();
+            var chatId = Ids.PrivateChat4;
+            int userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 
@@ -50,18 +53,20 @@ namespace Tests.PrivateChats.Commands
             LeaveFromPrivateChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
 
             //Assert
-            Assert.Null(chat);
+            await Assert.ThrowsAsync<EntityNotFoundException>( 
+                async () => await Context.PrivateChats.FindAsync(chatId));
         }
         [Fact]
         public async Task Fail_NoSuchUser()
         {
             //Arrange
-            int chatId = 4;
-            int userId = TestDbContextFactory.UserBId;
+            CreateDatabase();
+            var chatId = Ids.PrivateChat4;
+            int userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 
@@ -76,8 +81,6 @@ namespace Tests.PrivateChats.Commands
             //Assert
             await Assert.ThrowsAsync<NoSuchUserException>(async ()
                 => await handler.Handle(request, CancellationToken));
-
-
         }
     }
 }

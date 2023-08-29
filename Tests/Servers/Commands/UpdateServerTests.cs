@@ -1,6 +1,8 @@
 ﻿using Application.Commands.Servers.UpdateServer;
+using Application.Exceptions;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
+using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -11,8 +13,9 @@ namespace Tests.Servers.Commands
         public async Task Success()
         {
             //Arrange
-            int userId = TestDbContextFactory.UserBId;
-            int serverId = TestDbContextFactory.ServerIdForUpdate;
+            CreateDatabase();
+            int userId = Ids.UserBId;
+            string serverId = Ids.ServerIdForUpdate;
             const string newTitle = "Updated title";
 
             Mock<IAuthorizedUserProvider> userProvider = new();
@@ -27,12 +30,38 @@ namespace Tests.Servers.Commands
             UpdateServerRequestHandler handler = new(Context, userProvider.Object);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            Server? updatedServer = Context.Servers.Find(serverId);
+            Server updatedServer = await Context.Servers.FindAsync(serverId);
 
             //Assert
             Assert.NotNull(updatedServer);
             Assert.Equal(newTitle, updatedServer.Title);
+        }
+
+        [Fact]
+        public async Task Unauthorized_Fail()
+        {
+            //Arrange
+            CreateDatabase();
+            int userId = Ids.UserAId;
+            string serverId = Ids.ServerIdForUpdate;
+            const string newTitle = "Updated title";
+
+            Mock<IAuthorizedUserProvider> userProvider = new();
+            userProvider.Setup(p => p.GetUserId()).Returns(userId);
+
+            UpdateServerRequest request = new()
+            {
+                ServerId = serverId,
+                Image = null,
+                Title = newTitle
+            };
+            UpdateServerRequestHandler handler = new(Context, userProvider.Object);
+
+            //Act
+            //Assert
+            await Assert.ThrowsAsync<NoPermissionsException>(async () => await handler.Handle(request, CancellationToken));
         }
     }
 }

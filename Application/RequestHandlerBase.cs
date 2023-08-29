@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-using Application.Providers;
 using AutoMapper;
 
 namespace Application

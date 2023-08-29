@@ -9,6 +9,6 @@ namespace Application.Commands.Channels.CreateChannel
         [MaxLength(255)] 
         public string Title { get; init; }
 
-        public int ServerId { get; init; }
+        public string ServerId { get; init; }
     }
 }

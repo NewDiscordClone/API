@@ -10,8 +10,9 @@ namespace Tests.PrivateChats.Commands
         public async Task Success()
         {
             //Arrange
-            int userId = TestDbContextFactory.UserAId;
-            List<int> userIdlist = new() { userId, TestDbContextFactory.UserDId };
+            CreateDatabase();
+            int userId = Ids.UserAId;
+            List<int> userIdlist = new() { userId, Ids.UserDId };
             const string title = "TestCreate";
 
             SetAuthorizedUserId(userId);
@@ -21,7 +22,7 @@ namespace Tests.PrivateChats.Commands
                 UsersId = userIdlist,
                 Title = title,
             };
-            CreatePrivateChatRequestHandler handler = new(Context, UserProvider);
+            CreatePrivateChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             PrivateChat result = await handler.Handle(request, CancellationToken);

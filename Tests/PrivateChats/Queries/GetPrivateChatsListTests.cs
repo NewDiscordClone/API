@@ -1,4 +1,5 @@
-﻿using Application.Queries.GetPrivateChats;
+﻿using Application.Models;
+using Application.Queries.GetPrivateChats;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Queries
@@ -9,16 +10,16 @@ namespace Tests.PrivateChats.Queries
         public async Task Success()
         {
             //Arrange
-            int userId = TestDbContextFactory.UserAId;
+            CreateDatabase();
+            int userId = Ids.UserAId;
 
-            GetPrivateChatsRequest request = new()
-            {
-                UserId = userId
-            };
-            GetPrivateChatsRequestHandler handler = new(Context, Mapper);
+            SetAuthorizedUserId(userId);
+
+            GetPrivateChatsRequest request = new();
+            GetPrivateChatsRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            List<GetPrivateChatLookUpDto> chats = await handler.Handle(request, CancellationToken);
+            List<PrivateChat> chats = await handler.Handle(request, CancellationToken);
 
             //Assert
             Assert.NotEmpty(chats);

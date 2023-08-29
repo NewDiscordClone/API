@@ -1,5 +1,6 @@
-﻿using Application.Providers;
+﻿using Application.Interfaces;
 using Application.Queries.GetServerDetails;
+using MongoDB.Bson;
 using Tests.Common;
 
 namespace Tests.Servers.Queries
@@ -10,12 +11,14 @@ namespace Tests.Servers.Queries
         public async Task GetServerDetails_Expected()
         {
             //Arrange
-            int serverId = 1;
-            int userId = 1;
+            CreateDatabase();
+            string serverId = Ids.ServerIdForDelete;
+            int userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
-            Mock<IAuthorizedUserProvider> mock = new();
-            mock.Setup(mock => mock.GetUserId()).Returns(userId);
-            GetServerDetailsRequestHandler handler = new(Context, mock.Object, Mapper);
+            
+            SetAuthorizedUserId(userId);
+            
+            GetServerDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
 
             GetServerDetailsRequest request = new() { ServerId = serverId };
 
@@ -26,6 +29,7 @@ namespace Tests.Servers.Queries
             Assert.NotNull(result);
             Assert.Equal(serverId, result.Id);
             Assert.NotEmpty(result.Channels);
+
         }
     }
 }

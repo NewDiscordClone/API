@@ -1,31 +1,36 @@
 ﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.RemovePrivateChatMember
 {
-    public class RemovePrivateChatMemberRequestHandler : RequestHandlerBase, IRequestHandler<RemovePrivateChatMemberRequest>
+    public class RemovePrivateChatMemberRequestHandler : RequestHandlerBase,
+        IRequestHandler<RemovePrivateChatMemberRequest, PrivateChat>
     {
-        
-        public async Task Handle(RemovePrivateChatMemberRequest request, CancellationToken cancellationToken)
+        public async Task<PrivateChat> Handle(RemovePrivateChatMemberRequest request, CancellationToken cancellationToken)
         {
-            Models.PrivateChat chat =
-                await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken, "Users");
+            Context.SetToken(cancellationToken);
+
+            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
+
+            if (!chat.Users.Any(u => u.Id == request.MemberId))
+                throw new NoSuchUserException();
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("You are not an owner of the chat");
             if (UserId == request.MemberId)
                 throw new Exception("You can't remove yourself");
 
-            User member = await Context.FindByIdAsync<User>(request.MemberId, cancellationToken);
-            if (!chat.Users.Remove(member))
-                throw new NoSuchUserException();
-            await Context.SaveChangesAsync(cancellationToken);
+            //User member = await Context.FindSqlByIdAsync<User>(request.MemberId, cancellationToken);
+            chat.Users.Remove(chat.Users.Find(u => u.Id == request.MemberId) ?? throw new NoSuchUserException());
+
+            return await Context.PrivateChats.UpdateAsync(chat);
         }
 
-        public RemovePrivateChatMemberRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public RemovePrivateChatMemberRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :
+            base(context, userProvider)
         {
         }
     }

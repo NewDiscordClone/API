@@ -1,9 +1,9 @@
 ﻿using Application.Commands.Servers.CreateServer;
-using Application.Common.Factories;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using Application.Queries.GetServerDetails;
-using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -14,25 +14,26 @@ namespace Tests.Servers.Commands
         public async Task Success()
         {
             //Arrange
-            const int userId = 1;
-            int oldCount = Context.Servers.Count();
+            CreateDatabase();
+            int userId = Ids.UserAId;
+            long oldCount = await Context.Servers.CountAsync(s => true);
             const string serverName = "New server";
 
-            Mock<IAuthorizedUserProvider> userProvider = new();
-            userProvider.Setup(provider => provider.GetUserId()).Returns(userId);
+            SetAuthorizedUserId(userId);
 
             CreateServerRequest request = new() { Title = serverName, Image = null };
-            CreateServerRequestHandler handler = new(Context, userProvider.Object, new RoleFactory(new Mock<RoleManager<Role>>().Object));
+            CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            int result = await handler.Handle(request, CancellationToken);
-            ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, userProvider.Object, Mapper)
+            Context.SetToken(CancellationToken);
+            string result = await handler.Handle(request, CancellationToken);
+            ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)
                 .Handle(new GetServerDetailsRequest() { ServerId = result }, CancellationToken);
 
             //Assert
             Assert.Equal(serverName, resultServer.Title);
             Assert.NotNull(resultServer.ServerProfiles.FirstOrDefault(profile => profile.UserId == userId));
-            Assert.Equal(oldCount + 1, Context.Servers.Count());
+            Assert.Equal(oldCount + 1, await Context.Servers.CountAsync(s => true));
         }
     }
 }

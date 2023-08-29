@@ -5,39 +5,93 @@ using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace DataAccess
 {
-    public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User,Role,int>, IAppDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options) { }
+        private IMongoClient _mongoClient { get; }
+        private string _mongoDbName { get; }
 
-        public DbSet<Attachment> Attachments { get; set; } = null!;
-        public DbSet<Channel> Channels { get; set; } = null!;
-        public DbSet<Chat> Chats { get; set; } = null!;
-        public DbSet<Message> Messages { get; set; } = null!;
-        public DbSet<PrivateChat> PrivateChats { get; set; } = null!;
-        public DbSet<Reaction> Reactions { get; set; } = null!;
-        public DbSet<Server> Servers { get; set; } = null!;
-        public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
+        public AppDbContext(DbContextOptions<AppDbContext> options, 
+            IConfiguration configuration,
+            string dbName = "SparkMongoDB")
+            : base(options)
+        {
+            _mongoDbName = dbName;
+            var client = new MongoClient(configuration.GetConnectionString("MongoDB"));
+            _mongoClient = client;
+            MongoDb = client.GetDatabase(dbName);
+        }
+        public AppDbContext(DbContextOptions<AppDbContext> options, 
+            IMongoClient client, 
+            string dbName = "SparkMongoDB")
+            : base(options)
+        {
+            _mongoDbName = dbName;
+            _mongoClient = client;
+            MongoDb = client.GetDatabase(dbName);
+        }
+
+        private CancellationToken _token = default;
+
+        public ISimpleDbSet<Message> Messages =>
+            new SimpleMongoDbSet<Message>(MongoDb.GetCollection<Message>("messages"), _token); 
+
+        public ISimpleDbSet<Chat> Chats => 
+            new SimpleMongoDbSet<Chat>(MongoDb.GetCollection<Chat>("chats"), _token);
+
+        public ISimpleDbSet<PrivateChat> PrivateChats =>
+            new SimpleMongoDbSet<PrivateChat>(MongoDb.GetCollection<Chat>("chats").OfType<PrivateChat>(), _token);
+
+        public ISimpleDbSet<Channel> Channels =>
+            new SimpleMongoDbSet<Channel>(MongoDb.GetCollection<Chat>("chats").OfType<Channel>(), _token);
+
+        public ISimpleDbSet<Media> Media => 
+            new SimpleMongoDbSet<Media>(MongoDb.GetCollection<Media>("media"), _token);
+
+        public ISimpleDbSet<Server> Servers => 
+            new SimpleMongoDbSet<Server>(MongoDb.GetCollection<Server>("servers"), _token);
+        
+        //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
+        public IMongoDatabase MongoDb { get; }
+
+        public void SetToken(CancellationToken cancellationToken)
+        {
+            _token = cancellationToken;
+        }
+
+        public async Task CheckRemoveMedia(string id)
+        {
+            if(!ObjectId.TryParse(id, out var objectId)) return;
+            
+            long count = 0;
+            count += await PrivateChats.CountAsync(c => c.Image != null && c.Image.Contains(id) );
+            count += await Messages.CountAsync(m => m.Attachments.Any(a => a.Path.Contains(id)));
+            count += await Servers.CountAsync(s => s.Image != null && s.Image.Contains(id));
+            count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(_token);
+            
+            if (count > 0) return;
+
+            await Media.DeleteAsync(objectId);
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new AttachmentConfiguration());
-            builder.ApplyConfiguration(new ChannelConfiguration());
-            builder.ApplyConfiguration(new ChatConfiguration());
-            builder.ApplyConfiguration(new MessageConfiguration());
-            builder.ApplyConfiguration(new PrivateChatConfiguration());
-            builder.ApplyConfiguration(new ReactionConfiguration());
-            builder.ApplyConfiguration(new RoleConfiguration());
-            builder.ApplyConfiguration(new ServerConfiguration());
-            builder.ApplyConfiguration(new ServerProfileConfiguration());
             builder.ApplyConfiguration(new UserConfiguration());
             base.OnModelCreating(builder);
         }
 
-        public async Task<TEntity> FindByIdAsync<TEntity>(int id, CancellationToken cancellationToken = default,
+        public override void Dispose()
+        {
+            _mongoClient.DropDatabase(_mongoDbName);
+            base.Dispose();
+        }
+
+        public async Task<TEntity> FindSqlByIdAsync<TEntity>(int id, CancellationToken cancellationToken = default,
             params string[] includedProperties) where TEntity : class
         {
             DbSet<TEntity> dbSet = Set<TEntity>();
@@ -62,5 +116,26 @@ namespace DataAccess
 
             return entity;
         }
+
+        public async Task<List<Message>> GetMessagesAsync(
+            string chatId,
+            int skip,
+            int take)
+            => await MongoDb.GetCollection<Message>("messages")
+                .Find(Builders<Message>.Filter.Eq("ChatId", chatId))
+                .SortByDescending(m => m.SendTime)
+                .Skip(skip)
+                .Limit(take)
+                .ToListAsync(_token);
+
+        public async Task<List<Message>> GetPinnedMessagesAsync(
+            string chatId
+        ) => await MongoDb.GetCollection<Message>("messages")
+            .Find(
+                Builders<Message>.Filter.Eq("ChatId", chatId) &
+                Builders<Message>.Filter.Eq("IsPinned", true)
+            )
+            .SortByDescending(m => m.PinnedTime)
+            .ToListAsync(_token);
     }
 }
