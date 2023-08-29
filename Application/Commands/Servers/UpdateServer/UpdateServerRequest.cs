@@ -1,9 +1,9 @@
-﻿using MediatR;
+﻿using Application.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.Commands.Servers.UpdateServer
 {
-    public record UpdateServerRequest : IRequest
+    public record UpdateServerRequest : IServerRequest
     {
         [Required]
         public int ServerId { get; init; }

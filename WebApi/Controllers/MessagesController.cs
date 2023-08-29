@@ -142,7 +142,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        private async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
+        public async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
         {
             try
             {
