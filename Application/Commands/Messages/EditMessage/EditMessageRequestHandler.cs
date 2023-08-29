@@ -1,4 +1,10 @@
-﻿namespace Application.Commands.Messages.EditMessage
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using MediatR;
+
+namespace Application.Commands.Messages.EditMessage
 {
     public class EditMessageRequestHandler : RequestHandlerBase, IRequestHandler<EditMessageRequest, Message>
     {
@@ -14,7 +20,7 @@
             message.Text = request.NewText;
             message.Attachments.RemoveAll(a => a.IsInText);
 
-            List<Attachment> attachments = new List<Attachment>();
+            List<Attachment> attachments = new();
             AttachmentsFromText.GetAttachments(request.NewText, a => attachments.Add(a));
             attachments.AddRange(message.Attachments);
             message.Attachments = attachments;

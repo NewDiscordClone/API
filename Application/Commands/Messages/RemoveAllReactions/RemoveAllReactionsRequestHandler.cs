@@ -1,4 +1,9 @@
-﻿namespace Application.Commands.Messages.RemoveAllReactions
+﻿using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using MediatR;
+
+namespace Application.Commands.Messages.RemoveAllReactions
 {
     public class RemoveAllReactionsRequestHandler : RequestHandlerBase, IRequestHandler<RemoveAllReactionsRequest, Chat>
     {
@@ -8,15 +13,6 @@
 
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
-
-            //TODO: Перевірка на наявність відповідної ролі
-            // Channel? channel = await Context.Channels
-            //     .Include(c => c.Server)
-            //     .Include(c => c.Server.Owner)
-            //     .FirstOrDefaultAsync(c => c.Id == message.Chat.Id,
-            //         cancellationToken: cancellationToken);
-            // if (channel != null && channel.Server.Owner.Id != UserId) 
-            //     throw new NoPermissionsException("You don't have permission to remove the message reactions");
 
             message.Reactions = new List<Reaction>();
 

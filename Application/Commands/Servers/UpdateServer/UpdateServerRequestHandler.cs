@@ -1,4 +1,10 @@
-﻿namespace Application.Commands.Servers.UpdateServer
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using MediatR;
+
+namespace Application.Commands.Servers.UpdateServer
 {
     public class UpdateServerRequestHandler : RequestHandlerBase, IRequestHandler<UpdateServerRequest>
     {

@@ -12,7 +12,7 @@ namespace Tests.Controllers.ServerController
         public async Task Success()
         {
             //Arrange
-            int serverId = 2;
+            string serverId = Ids.ServerIdForUpdate;
 
             Mock<IMediator> mediator = new();
             mediator.Setup(mediator => mediator.Send(It.IsAny<UpdateServerRequest>(), CancellationToken))

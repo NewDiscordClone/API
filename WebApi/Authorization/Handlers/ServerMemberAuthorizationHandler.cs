@@ -25,7 +25,7 @@ namespace WebApi.Authorization.Handlers
                 UserId = userId,
                 ServerId = requirement.ServerId
             });
-            if (user.Profile is not null)
+            if (user.ServerProfile is not null)
             {
                 context.Succeed(requirement);
             }

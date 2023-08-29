@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Text.RegularExpressions;
 
 namespace WebApi.Attributes
 {
@@ -10,7 +9,7 @@ namespace WebApi.Attributes
     {
         public string? Policy { get; set; }
 
-        private int GetServerId(ActionExecutingContext context)
+        private string GetServerId(ActionExecutingContext context)
         {
             InvalidOperationException exception = new("Server id not found in request");
             foreach (object? item in context.ActionArguments.Values)
@@ -21,14 +20,9 @@ namespace WebApi.Attributes
             throw exception;
         }
 
-        [GeneratedRegex("[0-9]+$")]
-        private static partial Regex GetServerIdFromPolicyName();
-
-
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-
-            int id = GetServerId(context);
+            string id = GetServerId(context);
             IAuthorizationService authorizationService = context.HttpContext.RequestServices.GetService<IAuthorizationService>()
                 ?? throw new InvalidOperationException();
 

@@ -1,8 +1,8 @@
 ﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.RemovePrivateChatMember

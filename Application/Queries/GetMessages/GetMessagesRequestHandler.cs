@@ -1,10 +1,8 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
 
 namespace Application.Queries.GetMessages
 {

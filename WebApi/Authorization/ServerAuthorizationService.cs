@@ -12,9 +12,9 @@ namespace WebApi.Authorization
 
         public override Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, string policyName)
         {
-            if (resource is int serverId)
+            if (resource is string serverId)
             {
-                policyName += serverId.ToString();
+                policyName += "serverId:" + serverId;
             }
             return base.AuthorizeAsync(user, resource, policyName);
         }

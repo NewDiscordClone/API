@@ -9,7 +9,7 @@ using Application.Commands.Messages.RemoveReaction;
 using Application.Commands.Messages.UnpinMessage;
 using Application.Common.Exceptions;
 using Application.Models;
-using Application.Interfaces;
+using Application.Providers;
 using Application.Queries.GetMessages;
 using Application.Queries.GetPinnedMessages;
 using MediatR;

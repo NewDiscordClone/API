@@ -4,30 +4,30 @@ using Application.Models;
 using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 
 namespace DataAccess
 {
-    public class AppDbContext : IdentityDbContext<User,Role,int>, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
     {
         private IMongoClient _mongoClient { get; }
         private string _mongoDbName { get; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, 
+        public AppDbContext(DbContextOptions<AppDbContext> options,
             IConfiguration configuration,
             string dbName = "SparkMongoDB")
             : base(options)
         {
             _mongoDbName = dbName;
-            var client = new MongoClient(configuration.GetConnectionString("MongoDB"));
+            MongoClient client = new(configuration.GetConnectionString("MongoDB"));
             _mongoClient = client;
             MongoDb = client.GetDatabase(dbName);
         }
-        public AppDbContext(DbContextOptions<AppDbContext> options, 
-            IMongoClient client, 
+        public AppDbContext(DbContextOptions<AppDbContext> options,
+            IMongoClient client,
             string dbName = "SparkMongoDB")
             : base(options)
         {
@@ -39,9 +39,9 @@ namespace DataAccess
         private CancellationToken _token = default;
 
         public ISimpleDbSet<Message> Messages =>
-            new SimpleMongoDbSet<Message>(MongoDb.GetCollection<Message>("messages"), _token); 
+            new SimpleMongoDbSet<Message>(MongoDb.GetCollection<Message>("messages"), _token);
 
-        public ISimpleDbSet<Chat> Chats => 
+        public ISimpleDbSet<Chat> Chats =>
             new SimpleMongoDbSet<Chat>(MongoDb.GetCollection<Chat>("chats"), _token);
 
         public ISimpleDbSet<PrivateChat> PrivateChats =>
@@ -50,12 +50,12 @@ namespace DataAccess
         public ISimpleDbSet<Channel> Channels =>
             new SimpleMongoDbSet<Channel>(MongoDb.GetCollection<Chat>("chats").OfType<Channel>(), _token);
 
-        public ISimpleDbSet<Media> Media => 
+        public ISimpleDbSet<Media> Media =>
             new SimpleMongoDbSet<Media>(MongoDb.GetCollection<Media>("media"), _token);
 
-        public ISimpleDbSet<Server> Servers => 
+        public ISimpleDbSet<Server> Servers =>
             new SimpleMongoDbSet<Server>(MongoDb.GetCollection<Server>("servers"), _token);
-        
+
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
         public IMongoDatabase MongoDb { get; }
 
@@ -66,15 +66,17 @@ namespace DataAccess
 
         public async Task CheckRemoveMedia(string id)
         {
-            if(!ObjectId.TryParse(id, out var objectId)) return;
-            
+            if (!ObjectId.TryParse(id, out ObjectId objectId))
+                return;
+
             long count = 0;
-            count += await PrivateChats.CountAsync(c => c.Image != null && c.Image.Contains(id) );
+            count += await PrivateChats.CountAsync(c => c.Image != null && c.Image.Contains(id));
             count += await Messages.CountAsync(m => m.Attachments.Any(a => a.Path.Contains(id)));
             count += await Servers.CountAsync(s => s.Image != null && s.Image.Contains(id));
             count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(_token);
-            
-            if (count > 0) return;
+
+            if (count > 0)
+                return;
 
             await Media.DeleteAsync(objectId);
         }

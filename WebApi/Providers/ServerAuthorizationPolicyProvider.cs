@@ -28,7 +28,7 @@ namespace WebApi.Providers
             if (!TryParsePolicyType(policyName, out ServerPolicies policyType))
                 return await FallbackPolicyProvider.GetPolicyAsync(policyName);
 
-            if (!TryParseServerId(policyName, out int serverId))
+            if (!TryParseServerId(policyName, out string serverId))
                 throw new InvalidOperationException("No server id provided");
 
             AuthorizationPolicyBuilder policy = new();
@@ -64,18 +64,20 @@ namespace WebApi.Providers
             }
         }
 
-        private bool TryParseServerId(string policyName, out int serverId)
+        private bool TryParseServerId(string policyName, out string serverId)
         {
+            serverId = string.Empty;
+
             if (string.IsNullOrEmpty(policyName))
             {
-                serverId = default;
                 return false;
             }
 
             Regex serverIdRegex = GetServerIdRegex();
-            string idString = serverIdRegex.Match(policyName).Value;
-            if (int.TryParse(idString, out serverId))
+            Match match = serverIdRegex.Match(policyName);
+            if (match.Success)
             {
+                serverId = match.Value;
                 return true;
             }
             return false;

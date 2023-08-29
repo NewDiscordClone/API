@@ -1,4 +1,10 @@
-﻿namespace Application.Commands.Channels.RenameChannel
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using MediatR;
+
+namespace Application.Commands.Channels.RenameChannel
 {
     public class RenameChannelRequestHandler : RequestHandlerBase, IRequestHandler<RenameChannelRequest>
     {

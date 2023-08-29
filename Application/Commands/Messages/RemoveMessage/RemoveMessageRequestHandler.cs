@@ -1,4 +1,10 @@
-﻿namespace Application.Commands.Messages.RemoveMessage
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using MediatR;
+
+namespace Application.Commands.Messages.RemoveMessage
 {
     public class RemoveMessageRequestHandler : RequestHandlerBase, IRequestHandler<RemoveMessageRequest, Chat>
     {

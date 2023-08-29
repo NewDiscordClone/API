@@ -1,4 +1,15 @@
-﻿namespace WebApi.Controllers
+﻿using Application.Commands.Servers.CreateServer;
+using Application.Commands.Servers.DeleteServer;
+using Application.Commands.Servers.UpdateServer;
+using Application.Providers;
+using Application.Queries.GetServer;
+using Application.Queries.GetServerDetails;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Models;
+
+namespace WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

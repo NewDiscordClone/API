@@ -4,10 +4,10 @@ namespace Application.Interfaces
 {
     public interface IServerRequest : IRequest
     {
-        int ServerId { get; }
+        string ServerId { get; }
     }
     public interface IServerRequest<TResponse> : IRequest<TResponse>
     {
-        int ServerId { get; }
+        string ServerId { get; }
     }
 }

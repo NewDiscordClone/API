@@ -1,4 +1,10 @@
-﻿namespace Application.Commands.Channels.CreateChannel
+﻿using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using AutoMapper;
+using MediatR;
+
+namespace Application.Commands.Channels.CreateChannel
 {
     public class CreateChannelRequestHandler : RequestHandlerBase, IRequestHandler<CreateChannelRequest, Channel>
     {

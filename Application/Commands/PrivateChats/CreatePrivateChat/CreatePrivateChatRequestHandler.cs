@@ -1,20 +1,20 @@
-﻿using Application.Common.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using MediatR;
 
 namespace Application.Commands.PrivateChats.CreatePrivateChat
 {
-    public class CreatePrivateChatRequestHandler : RequestHandlerBase,  IRequestHandler<CreatePrivateChatRequest, Models.PrivateChat>
+    public class CreatePrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<CreatePrivateChatRequest, Models.PrivateChat>
     {
         public async Task<PrivateChat> Handle(CreatePrivateChatRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             List<UserLookUp> users = new();
             request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindSqlByIdAsync<User>(userId, cancellationToken).Result)));
-            
+
             PrivateChat privateChat = new()
             {
                 Title = request.Title,

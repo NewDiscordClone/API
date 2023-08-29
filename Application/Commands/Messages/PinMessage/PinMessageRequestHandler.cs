@@ -1,4 +1,10 @@
-﻿namespace Application.Commands.Messages.PinMessage
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
+using Application.Models;
+using Application.Providers;
+using MediatR;
+
+namespace Application.Commands.Messages.PinMessage
 {
     public class PinMessageRequestHandler : RequestHandlerBase, IRequestHandler<PinMessageRequest, Message>
     {

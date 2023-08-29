@@ -1,4 +1,20 @@
-﻿namespace WebApi.Controllers
+﻿using Application.Commands.PrivateChats.AddMemberToPrivateChat;
+using Application.Commands.PrivateChats.ChangePrivateChatImage;
+using Application.Commands.PrivateChats.CreatePrivateChat;
+using Application.Commands.PrivateChats.LeaveFromPrivateChat;
+using Application.Commands.PrivateChats.MakePrivateChatOwner;
+using Application.Commands.PrivateChats.RemovePrivateChatMember;
+using Application.Commands.PrivateChats.RenamePrivateChat;
+using Application.Common.Exceptions;
+using Application.Models;
+using Application.Providers;
+using Application.Queries.GetPrivateChatDetails;
+using Application.Queries.GetPrivateChats;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
