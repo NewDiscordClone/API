@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Common.Factories;
+using Application.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-// using Application.Providers;
 
 namespace Application
 {
@@ -12,7 +13,7 @@ namespace Application
             config.RegisterServicesFromAssembly(
                 Assembly.GetExecutingAssembly()));
 
-            // services.AddSingleton<IRoleFactory, RoleFactory>();
+            services.AddScoped<IRoleFactory, RoleFactory>();
             return services;
         }
     }
