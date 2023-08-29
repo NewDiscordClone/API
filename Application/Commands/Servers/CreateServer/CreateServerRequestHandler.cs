@@ -1,30 +1,33 @@
 ﻿using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
+using AutoMapper;
 using MediatR;
+using MongoDB.Bson;
 
 namespace Application.Commands.Servers.CreateServer
 {
-    public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, int>
+    public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, string>
     {
-        public async Task<int> Handle(CreateServerRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-
+            Context.SetToken(cancellationToken);
+            
+            var ownerLookUp = Mapper.Map<UserLookUp>(await Context.FindSqlByIdAsync<User>(UserId, cancellationToken));
+            
             Server server = new()
             {
                 Title = request.Title,
                 Image = request.Image,
-                Owner = user
+                Owner = ownerLookUp
             };
-            server.ServerProfiles.Add(new() { User = user, Server = server });
+            server.ServerProfiles.Add(new() { User = ownerLookUp});
 
-            await Context.Servers.AddAsync(server, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
+            await Context.Servers.AddAsync(server);
             return server.Id;
         }
 
-        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) 
+            : base(context, userProvider, mapper)
         {
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.MakePrivateChatOwner;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -11,10 +12,11 @@ namespace Tests.PrivateChats.Commands
         public async Task Success()
         {
             //Arrange
+            CreateDatabase();
 
-            int chatId = 3;
-            int newOwnerId = TestDbContextFactory.UserBId;
-            int oldOwner = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat3;
+            int newOwnerId = Ids.UserBId;
+            int oldOwner = Ids.UserAId;
 
             SetAuthorizedUserId(oldOwner);
 
@@ -28,11 +30,11 @@ namespace Tests.PrivateChats.Commands
                 new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat chat = await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
             Assert.Equal(newOwnerId, chat.OwnerId);
         }
 
@@ -40,11 +42,12 @@ namespace Tests.PrivateChats.Commands
         public async Task Fail_NoPermissions()
         {
             //Arrange
+            CreateDatabase();
 
-            int chatId = 6;
-            int newOwnerId = TestDbContextFactory.UserCId;
+            var chatId = Ids.PrivateChat6;
+            int newOwnerId = Ids.UserCId;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             MakePrivateChatOwnerRequest request = new()
             {
@@ -65,11 +68,12 @@ namespace Tests.PrivateChats.Commands
         public async Task Fail_NoSuchUser()
         {
             //Arrange
+            CreateDatabase();
 
-            int chatId = 7;
-            int newOwnerId = TestDbContextFactory.UserAId;
+            var chatId = Ids.PrivateChat7;
+            int newOwnerId = Ids.UserAId;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             MakePrivateChatOwnerRequest request = new()
             {

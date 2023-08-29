@@ -1,8 +1,8 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.Channels.RenameChannel
 {
@@ -10,15 +10,17 @@ namespace Application.Commands.Channels.RenameChannel
     {
         public async Task Handle(RenameChannelRequest request, CancellationToken cancellationToken)
         {
-            Channel chat =
-                await Context.FindByIdAsync<Channel>(request.ChatId, cancellationToken);
+            Context.SetToken(cancellationToken);
+            
+            Channel chat = await Context.Channels.FindAsync(request.ChatId);
             
             //TODO: Перевірити що у юзера є відповідні права
-            if (chat.Users.Find(u => u.Id == UserId) == null)
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
-            chat.Title = request.NewTitle;
 
-            await Context.SaveChangesAsync(cancellationToken);
+            chat.Title = request.NewTitle;
+            
+            await Context.Channels.UpdateAsync(chat);
         }
 
         public RenameChannelRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

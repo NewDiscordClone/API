@@ -1,5 +1,7 @@
 ﻿using Application.Commands.Messages.RemoveReaction;
 using Application.Exceptions;
+using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -10,34 +12,42 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
-            int reactionId = 1;
+            CreateDatabase();
+            var messageId = Ids.Message1;
+            int reactionIndex = 0;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemoveReactionRequest request = new()
             {
-                ReactionId = reactionId
+                MessageId = messageId,
+                ReactionIndex = reactionIndex
             };
             RemoveReactionRequestHandler handler = new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-
+            Message message = await Context.Messages.FindAsync(messageId);
+            
             //Assert
-            Assert.Null(Context.Reactions.Find(reactionId));
+            Assert.Single(message.Reactions);
         }
 
         [Fact]
         public async Task Fail_NoPermissions()
         {
             //Arrange
-            int reactionId = 1;
+            CreateDatabase();
+            var messageId = Ids.Message1;
+            int reactionIndex = 0;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             RemoveReactionRequest request = new()
             {
-                ReactionId = reactionId
+                MessageId = messageId,
+                ReactionIndex = reactionIndex
             };
             RemoveReactionRequestHandler handler = new(Context, UserProvider);
 

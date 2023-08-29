@@ -1,29 +1,33 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
+using MongoDB.Driver;
+
 namespace Application.Commands.Servers.UpdateServer
 {
     public class UpdateServerRequestHandler : RequestHandlerBase, IRequestHandler<UpdateServerRequest>
     {
         public async Task Handle(UpdateServerRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-            Server server = await Context.FindByIdAsync<Server>
-                (request.ServerId, cancellationToken);
+            Context.SetToken(cancellationToken);
             
-            if (user.Id != server.Owner.Id)
+            Server server = await Context.Servers.FindAsync(request.ServerId);
+
+            if (UserId != server.Owner.Id)
                 throw new NoPermissionsException("You are not the owner of the server");
-            
+
+            if (request.Image != null && server.Image != null)
+                await Context.CheckRemoveMedia(server.Image[(server.Image.LastIndexOf('/') - 1)..]);
+
             server.Title = request.Title ?? server.Title;
             server.Image = request.Image ?? server.Image;
 
-            Context.Servers.Update(server);
-            await Context.SaveChangesAsync(cancellationToken);
+            await Context.Servers.UpdateAsync(server);
         }
 
-        public UpdateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public UpdateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
+            userProvider)
         {
         }
     }

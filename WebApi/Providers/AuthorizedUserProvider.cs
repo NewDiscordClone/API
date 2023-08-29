@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 using Application.Exceptions;
-using Application.Providers;
+using Application.Interfaces;
 
 namespace WebApi.Providers
 {

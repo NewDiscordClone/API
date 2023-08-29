@@ -1,6 +1,7 @@
 ﻿using Application.Commands.PrivateChats.RemovePrivateChatMember;
 using Application.Exceptions;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.PrivateChats.Commands
@@ -11,11 +12,12 @@ namespace Tests.PrivateChats.Commands
         public async Task Success()
         {
             //Arrange
-            int chatId = 6;
-            int removeMemberId = TestDbContextFactory.UserAId;
+            CreateDatabase();
+            var chatId = Ids.PrivateChat6;
+            int removeMemberId = Ids.UserAId;
             int oldCount = 4;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemovePrivateChatMemberRequest request = new()
             {
@@ -26,11 +28,11 @@ namespace Tests.PrivateChats.Commands
                 new(Context, UserProvider);
 
             //Act
+            Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            PrivateChat? chat = Context.PrivateChats.Find(chatId);
+            PrivateChat chat = await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.NotNull(chat);
             Assert.Equal(oldCount - 1, chat.Users.Count);
             Assert.DoesNotContain(chat.Users, user => user.Id == removeMemberId);
         }
@@ -39,10 +41,11 @@ namespace Tests.PrivateChats.Commands
         public async Task UserNotInChat_Fail()
         {
             //Arrange
-            int chatId = 7;
-            int removeMemberId = TestDbContextFactory.UserAId;
+            CreateDatabase();
+            var chatId = Ids.PrivateChat7;
+            int removeMemberId = Ids.UserAId;
 
-            SetAuthorizedUserId(TestDbContextFactory.UserBId);
+            SetAuthorizedUserId(Ids.UserBId);
 
             RemovePrivateChatMemberRequest request = new()
             {
@@ -56,7 +59,6 @@ namespace Tests.PrivateChats.Commands
             //Assert
             await Assert.ThrowsAsync<NoSuchUserException>(async ()
                 => await handler.Handle(request, CancellationToken));
-
         }
     }
 }

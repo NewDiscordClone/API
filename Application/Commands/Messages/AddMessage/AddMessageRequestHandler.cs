@@ -2,31 +2,33 @@
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
+using AutoMapper;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.Messages.AddMessage
 {
     public class AddMessageRequestHandler : RequestHandlerBase, IRequestHandler<AddMessageRequest, Message>
     {
-        
         public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
         {
-            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users");
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Context.SetToken(cancellationToken);
+            
+            Chat chat = await Context.Chats.FindAsync(request.ChatId);
+            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
-            if (!chat.Users.Contains(user))
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
             List<Attachment> attachments = new List<Attachment>();
-            
-            AttachmentsFromText.GetAttachments(request.Text, a=> attachments.Add(a));
+
+            AttachmentsFromText.GetAttachments(request.Text, a => attachments.Add(a));
 
             request.Attachments?.ForEach(a =>
             {
                 attachments.Add(new Attachment
                 {
+                    IsInText = false,
                     Path = a.Path,
-                    Type = a.Type,
                     IsSpoiler = a.IsSpoiler
                 });
             });
@@ -34,18 +36,17 @@ namespace Application.Commands.Messages.AddMessage
             Message message = new()
             {
                 Text = request.Text,
-                Chat = chat,
+                ChatId = request.ChatId,
                 SendTime = DateTime.UtcNow,
-                User = user,
+                User = Mapper.Map<UserLookUp>(user),
                 Attachments = attachments
             };
-            await Context.Messages.AddAsync(message, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
-            return message;
+            
+            return await Context.Messages.AddAsync(message);
         }
 
-        public AddMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
-            userProvider)
+        public AddMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
+            base(context, userProvider, mapper)
         {
         }
     }

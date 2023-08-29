@@ -1,8 +1,8 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.LeaveFromPrivateChat
 {
@@ -10,20 +10,24 @@ namespace Application.Commands.PrivateChats.LeaveFromPrivateChat
     {
         public async Task Handle(LeaveFromPrivateChatRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-
-            Models.PrivateChat chat =
-                await Context.FindByIdAsync<Models.PrivateChat>(request.ChatId, cancellationToken, "Users");
-            if (chat.Users.Find(u => u.Id == user.Id) == null)
+            Context.SetToken(cancellationToken);
+            
+            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
+            
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoSuchUserException("User is not a member of the chat");
-            chat.Users.Remove(user);
-            if (chat.Users.Count <= 1)
+
+            if (chat.Users.Count <= 2)
             {
-                Context.Chats.Remove(chat);
+                await Context.Chats.DeleteAsync(chat);
             }
-            else if (chat.OwnerId == UserId)
-                chat.OwnerId = chat.Users.First().Id;
-            await Context.SaveChangesAsync(cancellationToken);
+            else
+            {
+                chat.Users.Remove(chat.Users.Find(u => u.Id == UserId)?? throw new NoSuchUserException());
+                if (chat.OwnerId == UserId) chat.OwnerId = chat.Users.First(u => u.Id != UserId).Id;
+                
+                await Context.PrivateChats.UpdateAsync(chat);
+            }
         }
 
         public LeaveFromPrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(

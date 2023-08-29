@@ -39,8 +39,10 @@ public class DesignTimeDbContextFactory : /*IDesignTimeDbContextFactory<AppDbCon
             .Build();
 
         DbContextOptionsBuilder<AppDbContext> optionsBuilder = new();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("SqlServer"));
+        var connectionString = configuration.GetConnectionString("SqlServer");
+        if (connectionString == null) throw new Exception("Connection string is null");
+        optionsBuilder.UseSqlServer();
 
-        return new AppDbContext(optionsBuilder.Options);
+        return new AppDbContext(optionsBuilder.Options, configuration);
     }
 }

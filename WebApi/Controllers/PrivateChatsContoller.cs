@@ -10,9 +10,10 @@ using Application.Commands.PrivateChats.MakePrivateChatOwner;
 using Application.Commands.PrivateChats.RemovePrivateChatMember;
 using Application.Commands.PrivateChats.RenamePrivateChat;
 using Application.Models;
-using Application.Providers;
+using Application.Interfaces;
 using Application.Queries.GetPrivateChatDetails;
 using Application.Queries.GetPrivateChats;
+using MongoDB.Bson;
 
 namespace WebApi.Controllers
 {
@@ -28,11 +29,11 @@ namespace WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<GetPrivateChatLookUpDto>>> GetAllPrivateChats()
+        public async Task<ActionResult<List<PrivateChat>>> GetAllPrivateChats()
         {
 
-            GetPrivateChatsRequest get = new() { UserId = UserId };
-            List<GetPrivateChatLookUpDto> list = await Mediator.Send(get);
+            GetPrivateChatsRequest get = new();
+            List<PrivateChat> list = await Mediator.Send(get);
             return Ok(list);
         }
 
@@ -40,11 +41,11 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<GetPrivateChatDetailsDto>> GetPrivateChatDetails(int chatId)
+        public async Task<ActionResult<PrivateChat>> GetPrivateChatDetails(string chatId)
         {
             try
             {
-                GetPrivateChatDetailsDto chat = await Mediator
+                PrivateChat chat = await Mediator
                     .Send(new GetPrivateChatDetailsRequest() { ChatId = chatId });
                 return Ok(chat);
             }
@@ -57,7 +58,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<int>> CreatePrivateChat(CreatePrivateChatRequest chatRequest)
+        public async Task<ActionResult<string>> CreatePrivateChat(CreatePrivateChatRequest chatRequest)
         {
             PrivateChat chat = await Mediator.Send(chatRequest);
             //TODO: Реалізація відправки Notify

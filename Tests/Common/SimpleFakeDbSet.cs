@@ -1,0 +1,114 @@
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using Application.Exceptions;
+using Application.Interfaces;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+
+namespace Tests.Common
+{
+    public class SimpleFakeDbSet<TEntity> : ISimpleDbSet<TEntity> where TEntity : class
+    {
+        public List<TEntity> Entitites { get; init; }
+        public CancellationToken CancellationToken { private get; set; }
+
+        public SimpleFakeDbSet(List<TEntity> init)
+        {
+            Entitites = init;
+        }
+
+        public async Task<TEntity> FindAsync(object id)
+        {
+            ObjectId objectId = ConvertToId(id);
+            return Entitites[FindIndex(objectId)];
+        }
+
+        public async Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return Entitites.FindAll(new Predicate<TEntity>(expression.Compile()) ??
+                throw new ArgumentException("Expression<Func<TEntity, bool>> is can't be cast to Predicate<TEntity>"));
+        }
+
+        public void AddMany(IEnumerable<TEntity> entities)
+        {
+            Entitites.AddRange(entities);
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity)
+        {
+            PropertyInfo idProp = GetIdProperty();
+            
+            ObjectId objectId = ObjectId.GenerateNewId();
+            idProp.SetValue(entity, objectId.ToString());
+            
+            Entitites.Add(entity);
+            return Entitites[FindIndex(objectId)];
+        }
+
+        public async Task<TEntity> UpdateAsync(TEntity entity)
+        {
+            return Entitites[FindIndex(GetId(entity))] = entity;
+        }
+
+        public async Task DeleteAsync(TEntity entity)
+        {
+            Entitites.RemoveAt(FindIndex(GetId(entity)));
+        }
+
+        public async Task DeleteAsync(object id)
+        {
+            Entitites.RemoveAt(FindIndex(ConvertToId(id)));
+        }
+
+        public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            var list = await FilterAsync(expression);
+            foreach (var entity in list)
+            {
+                await DeleteAsync(entity);
+            }
+        }
+
+        public async Task<long> CountAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            return Entitites.Count;
+        }
+
+        private static ObjectId GetId(TEntity entity)
+        {
+            return ConvertToId(GetIdProperty().GetValue(entity));
+        }
+
+        private static PropertyInfo GetIdProperty()
+        {
+            return typeof(TEntity)
+                       .GetProperties()
+                       .FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(BsonIdAttribute))) ??
+                   throw new ArgumentException(
+                       $"There is no property that has [BsonId] attribute in {typeof(TEntity).Name}");
+        }
+
+        private static ObjectId ConvertToId(object? id)
+        {
+            ObjectId? objectId = null;
+            if (id != null)
+                objectId = id switch
+                {
+                    string strId => ObjectId.Parse(strId),
+                    ObjectId objId => objId,
+                    _ => null
+                };
+            return objectId ??
+                   throw new ArgumentException("Id is not a string or ObjectId instance");
+        }
+
+
+        private int FindIndex(ObjectId id)
+        {
+            var result = Entitites.FindIndex(e => GetId(e) == id);
+            if (result < 0) throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
+            return result;
+        }
+    }
+}

@@ -1,5 +1,6 @@
 ﻿using Application.Commands.Messages.AddMessage;
 using Application.Models;
+using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -10,57 +11,65 @@ namespace Tests.Messages.Commands
         public async Task Success()
         {
             //Arrange
+            CreateDatabase();
             string messageText = "Test message";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             AddMessageRequest request = new()
             {
                 Attachments = new()
                 {
-                    new AddMessageAttachmentDto
+                    new Attachment
                     {
-                        Type = AttachmentType.UrlImage,
-                        Path = "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg"
+                        IsInText = false,
+                        Path =
+                            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg"
                     }
                 },
-                ChatId = 3,
+                ChatId = Ids.PrivateChat3,
                 Text = messageText
             };
 
-            AddMessageRequestHandler handler = new(Context, UserProvider);
+            AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert
-            Assert.Contains(result, Context.Messages);
+
+            Assert.Contains(await Context.Messages.FilterAsync(_ => true), e => e.Id == result.Id);
             Assert.NotEmpty(result.Attachments);
             Assert.Equal(messageText, result.Text);
         }
+
         [Fact]
         public async Task Success_AttachmentInText()
         {
             //Arrange
-            string messageText = "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
+            CreateDatabase();
+            string messageText =
+                "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 
-            SetAuthorizedUserId(TestDbContextFactory.UserAId);
+            SetAuthorizedUserId(Ids.UserAId);
 
             AddMessageRequest request = new()
             {
-                ChatId = 3,
+                ChatId = Ids.PrivateChat3,
                 Text = messageText
             };
 
-            AddMessageRequestHandler handler = new(Context, UserProvider);
+            AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
+            Context.SetToken(CancellationToken);
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert
-            Assert.Contains(result, Context.Messages);
+
+            Assert.Contains(await Context.Messages.FilterAsync(_ => true), e => e.Id == result.Id);
             Assert.NotEmpty(result.Attachments);
-            Assert.Equal(AttachmentType.UrlImage, result.Attachments[0].Type);
+            Assert.True(result.Attachments[0].IsInText);
             Assert.Equal(messageText, result.Text);
         }
     }

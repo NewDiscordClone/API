@@ -1,8 +1,8 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.Channels.RemoveChannel
 {
@@ -10,16 +10,15 @@ namespace Application.Commands.Channels.RemoveChannel
     {
         public async Task Handle(RemoveChannelRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-
-            Channel chat =
-                await Context.FindByIdAsync<Channel>(request.ChatId, cancellationToken, "Users");
+            Context.SetToken(cancellationToken);
+            
+            Channel chat = await Context.Channels.FindAsync(request.ChatId);
             
             //TODO: Перевірити що у юзера є відповідні права
-            if (chat.Users.Find(u => u.Id == user.Id) == null)
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoSuchUserException("User is not a member of the chat");
-            Context.Chats.Remove(chat);
-            await Context.SaveChangesAsync(cancellationToken);
+            
+            await Context.Chats.DeleteAsync(chat);
         }
 
         public RemoveChannelRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(

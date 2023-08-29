@@ -2,15 +2,16 @@
 using Application.Models;
 using Application.Queries.GetMessages;
 using AutoMapper;
+using MongoDB.Bson;
 
 namespace Application.Queries.GetPrivateChats
 {
     public record GetPrivateChatLookUpDto : IMapWith<PrivateChat>
     {
-        public int Id { get; init; }
+        public string Id { get; init; }
         public string? Image { get; init; }
         public string? Title { get; init; }
-        public List<GetPrivateChatUserLookUpDto> Users { get; init; } = new();
+        public List<UserLookUp> Users { get; init; } = new();
 
         public void Mapping(Profile profile)
         {

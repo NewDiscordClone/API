@@ -1,24 +1,24 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using MediatR;
 
 namespace Application.Queries.GetPinnedMessages
 {
     public class GetPinnedMessagesRequestHandler : RequestHandlerBase,
-        IRequestHandler<GetPinnedMessagesRequest, List<GetPinnedMessageLookUpDto>>
+        IRequestHandler<GetPinnedMessagesRequest, List<Message>>
     {
-        public async Task<List<GetPinnedMessageLookUpDto>> Handle(GetPinnedMessagesRequest request,
+        public async Task<List<Message>> Handle(GetPinnedMessagesRequest request,
             CancellationToken cancellationToken)
         {
-            Chat chat = await Context.FindByIdAsync<Chat>(request.ChatId, cancellationToken, "Users", "Messages");
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Context.SetToken(cancellationToken);
             
-            if (!chat.Users.Contains(user)) throw new NoPermissionsException("You are not a member of the Chat");
+            Chat chat = await Context.Chats.FindAsync(request.ChatId);
             
-            return Mapper.Map<List<GetPinnedMessageLookUpDto>>(chat.PinnedMessages);
+            if (!chat.Users.Any(u => u.Id == UserId)) throw new NoPermissionsException("You are not a member of the Chat");
+
+            return await Context.GetPinnedMessagesAsync(chat.Id);
         }
 
         public GetPinnedMessagesRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
