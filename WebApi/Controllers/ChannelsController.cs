@@ -19,6 +19,18 @@ namespace WebApi.Controllers
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request">
+        /// <code>
+        /// {
+        ///     "title": "Channel 1",
+        ///     "serverId": "5f95a3c3d0ddad0017ea9291"
+        /// }
+        /// </code>
+        /// </param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
