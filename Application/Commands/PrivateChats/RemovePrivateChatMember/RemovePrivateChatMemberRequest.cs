@@ -16,5 +16,8 @@ namespace Application.Commands.PrivateChats.RemovePrivateChatMember
         [Required]
         [DefaultValue(1)]
         public int MemberId { get; init; }
+        
+        [DefaultValue(false)]
+        public bool Silent { get; init; } = false;
     }
 }

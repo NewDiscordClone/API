@@ -28,6 +28,17 @@ namespace WebApi.Controllers
         {
         }
 
+        /// <summary>
+        /// Loads a page of Messages from the given chat to show them in client app. The size of a page defined as a constant (see <see cref="GetMessagesRequestHandler._pageSize"/>)
+        /// </summary>
+        /// <param name="get"> Get messages page model
+        /// 
+        /// ```
+        /// chatId: string // represents ObjectId
+        /// messagesCount: int /// The amount of messages that already loaded to skip them. Set to 0 to load last messages
+        /// ```
+        /// </param>
+        /// <returns>A list of messages to show</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -36,7 +47,16 @@ namespace WebApi.Controllers
             List<Message> messages = await Mediator.Send(get);
             return Ok(messages);
         }
-        
+
+        /// <summary>
+        /// Loads all of the Messages that are pinned in the given chat
+        /// </summary>
+        /// <param name="get"> Chat Id model
+        /// ```
+        /// chatId: string // represents ObjectId, the chat to get pinned messages from
+        /// ```
+        /// </param>
+        /// <returns>A list of pinned messages in the chat</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -46,6 +66,17 @@ namespace WebApi.Controllers
             return Ok(messages);
         }
 
+        /// <summary>
+        /// Adds message to the given chat and notify other members about it
+        /// </summary>
+        /// <param name="request"> Message model
+        /// ```
+        /// text: string //Up to 2000 characters
+        /// chatId: string //represents ObjectId of the chat to send the message to
+        /// attachments: Attachment[] //Attachments that user includes to the message
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -64,6 +95,16 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds reaction to the message
+        /// </summary>
+        /// <param name="request"> Reaction Model
+        /// ```
+        /// messageId: string //represents ObjectId of the message to add reaction to
+        /// emoji: string //represents emoji name in colon brackets (:smile:)
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -82,6 +123,19 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// A request to change the given message text
+        /// </summary>
+        /// <remarks>
+        /// This action can only be performed by the owner of the message
+        /// </remarks>
+        /// <param name="request"> Edit message model
+        /// ```
+        /// messageId: string //represents ObjectId of the message to edit
+        /// newText: string // provided text to change the previous one
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -100,6 +154,18 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Pins the selected message to the given chat
+        /// </summary>
+        /// <remarks>
+        /// This action can only be performed by a member of a private chat or a server member with an appropriate role
+        /// </remarks>
+        /// <param name="request"> message Id model
+        /// ```
+        /// messageId: string //represents ObjectId of the message to pin
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -118,6 +184,18 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove all reactions from the given message.
+        /// </summary>
+        /// <remarks>
+        /// This action can only be performed by a server member with an appropriate role
+        /// </remarks>
+        /// <param name="request">Message id model 
+        /// ```
+        /// messageId: string //represents ObjectId of the message to remove reactions from
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -136,6 +214,19 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove a selected attachment from the given message
+        /// </summary>
+        /// <remarks>
+        /// This actions can only be performed by the owner of the message
+        /// </remarks>
+        /// <param name="request"> Remove attachment model
+        /// ```
+        /// messageId: string //represents ObjectId of the message to remove the attachment from
+        /// attachmentIndex: int //the index of the attachment to remove
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -154,6 +245,18 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Removes the given message with it's attachments and reactions
+        /// </summary>
+        /// <remarks>
+        /// This action can only be performed by the owner of the message or a server member with an appropriate role
+        /// </remarks>
+        /// <param name="request"> Message Id model
+        /// ```
+        /// messageId: string //represents ObjectId of the message to remove
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -172,6 +275,19 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove the given reaction you have added
+        /// </summary>
+        /// <remarks>
+        /// this action can only be performed by the owner of the reaction
+        /// </remarks>
+        /// <param name="request">
+        /// ```
+        /// messageId: string //represents ObjectId of the message to remove
+        /// reactionIndex: string //the index of the reaction to remove
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -190,6 +306,18 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Unpin previously pinned message
+        /// </summary>
+        /// <remarks>
+        /// This action can only be performed by a member of a private chat or a server member with an appropriate role
+        /// </remarks>
+        /// <param name="request"> Message Id model
+        /// ```
+        /// messageId: string //represents ObjectId of the message to remove
+        /// ```
+        /// </param>
+        /// <returns>Ok if the operation is successful</returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

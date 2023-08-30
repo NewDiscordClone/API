@@ -11,5 +11,8 @@ namespace Application.Commands.PrivateChats.LeaveFromPrivateChat
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string ChatId { get; init; }
+        
+        [DefaultValue(false)]
+        public bool Silent { get; init; } = false;
     }
 }

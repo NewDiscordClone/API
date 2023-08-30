@@ -25,17 +25,29 @@ namespace WebApi.Controllers
         }
 
         protected int UserId => _userProvider.GetUserId();
-            // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-            //                            throw new NoSuchUserException());
 
-        
-
+        /// <summary>
+        /// Gets detailed information about the provided user, including it's ServerProfile if ServerId is provided
+        /// </summary>
+        /// <param name="getUserDetailsRequest">
+        /// ```
+        /// userId: int
+        /// serverId?: string // represents ObjectId; can be provided if ServerProfile is required
+        /// ```
+        /// </param>
+        /// <returns>UserDetails object</returns>
         [HttpPost]
-        public async Task<ActionResult<GetUserDetailsDto>> GetUser([FromBody] GetUserDetailsRequest getUserDetailsRequest)
+        public async Task<ActionResult<GetUserDetailsDto>> GetUser(
+            [FromBody] GetUserDetailsRequest getUserDetailsRequest)
         {
             GetUserDetailsDto user = await _mediator.Send(getUserDetailsRequest);
             return Ok(user);
         }
+
+        /// <summary>
+        /// Gets detailed information about the currently authorized user
+        /// </summary>
+        /// <returns>UserDetails object</returns>
         [HttpGet]
         public async Task<ActionResult<GetUserDetailsDto>> GetCurrentUser()
         {
