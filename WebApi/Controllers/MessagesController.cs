@@ -15,7 +15,6 @@ using Application.Queries.GetPinnedMessages;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
@@ -51,7 +50,6 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ServerAuthorize(Policy = "SendMessages")]
         public async Task<ActionResult> AddMessage([FromBody] AddMessageRequest request)
         {
             try
