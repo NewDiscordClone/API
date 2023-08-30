@@ -142,9 +142,9 @@ namespace DataAccess
             .SortByDescending(m => m.PinnedTime)
             .ToListAsync(_token);
 
-        async Task IAppDbContext.SaveChangesAsync(CancellationToken cancellationToken)
+        async Task IAppDbContext.SaveChangesAsync()
         {
-            await SaveChangesAsync(cancellationToken);
+            await SaveChangesAsync(_token);
         }
 
         public async Task<List<Claim>> GetRoleClaimAsync(Role role)

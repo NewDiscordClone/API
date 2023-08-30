@@ -15,7 +15,7 @@ public interface IAppDbContext
     //DbSet<ServerProfile> ServerProfiles { get; }
     DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task SaveChangesAsync();
 
     void SetToken(CancellationToken cancellationToken);
     Task CheckRemoveMedia(string id);
