@@ -15,4 +15,5 @@ public class Role : IdentityRole<int>
     [BsonRepresentation(BsonType.ObjectId)]
     public string ServerId { get; set; }
     public bool IsAdmin { get; set; }
+    public int Priority { get; set; }
 }

@@ -43,13 +43,15 @@ namespace WebApi.Providers
                 return false;
 
             List<string> matchingUserClaims = new();
-            foreach (Role role in profile.Roles)
+            foreach (Role role in profile.Roles.OrderByDescending(role => role.Priority))
             {
                 foreach (Claim claim in await _context.GetRoleClaimAsync(role))
                 {
-                    if (claimTypes.Any(claimType
-                        => string.Equals(claim.Type, claimType)))
+                    if (claimTypes.Any(claimType => string.Equals(claim.Type, claimType)))
                     {
+                        if (!bool.Parse(claim.Value) && !matchingUserClaims.Contains(claim.Type))
+                            return false;
+
                         matchingUserClaims.Add(claim.Type);
                     }
 
