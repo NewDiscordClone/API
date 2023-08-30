@@ -8,17 +8,19 @@ using Application.Commands.Messages.RemoveMessage;
 using Application.Commands.Messages.RemoveReaction;
 using Application.Commands.Messages.UnpinMessage;
 using Application.Exceptions;
-using Application.Models;
 using Application.Interfaces;
+using Application.Models;
 using Application.Queries.GetMessages;
 using Application.Queries.GetPinnedMessages;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class MessagesController : ApiControllerBase
@@ -36,7 +38,7 @@ namespace WebApi.Controllers
             List<Message> messages = await Mediator.Send(get);
             return Ok(messages);
         }
-        
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

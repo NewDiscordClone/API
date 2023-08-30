@@ -1,24 +1,25 @@
 ﻿using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
 using Application.Commands.Servers.UpdateServer;
+using Application.Interfaces;
 using Application.Queries.GetServer;
 using Application.Queries.GetServerDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Interfaces;
-using MongoDB.Bson;
+using WebApi.Attributes;
 using WebApi.Models;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class ServersController : ApiControllerBase
     {
         public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
-        {}
+        { }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
