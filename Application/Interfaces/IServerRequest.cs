@@ -1,12 +1,6 @@
-﻿using MediatR;
-
-namespace Application.Interfaces
+﻿namespace Application.Interfaces
 {
-    public interface IServerRequest : IRequest
-    {
-        string ServerId { get; }
-    }
-    public interface IServerRequest<TResponse> : IRequest<TResponse>
+    public interface IServerRequest
     {
         string ServerId { get; }
     }
