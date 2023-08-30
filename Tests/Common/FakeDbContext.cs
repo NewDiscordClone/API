@@ -279,9 +279,9 @@ namespace Tests.Common
             list.Sort((m1, m2) => m1.PinnedTime.Value.Millisecond - m2.PinnedTime.Value.Millisecond);
             return list;
         }
-        async Task IAppDbContext.SaveChangesAsync(CancellationToken cancellationToken)
+        async Task IAppDbContext.SaveChangesAsync()
         {
-            await SaveChangesAsync(cancellationToken);
+            await SaveChangesAsync(_token);
         }
 
         public async Task<List<Claim>> GetRoleClaimAsync(Role role)
