@@ -1,12 +1,8 @@
-using Application.Exceptions;
-using Application.Queries.GetMessages;
-using Application.Queries.GetPrivateChats;
+using Application.Providers;
 using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Application.Interfaces;
 
 namespace WebApi.Controllers
 {
@@ -25,10 +21,10 @@ namespace WebApi.Controllers
         }
 
         protected int UserId => _userProvider.GetUserId();
-            // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-            //                            throw new NoSuchUserException());
+        // int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+        //                            throw new NoSuchUserException());
 
-        
+
 
         [HttpPost]
         public async Task<ActionResult<GetUserDetailsDto>> GetUser([FromBody] GetUserDetailsRequest getUserDetailsRequest)

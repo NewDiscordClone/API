@@ -1,9 +1,6 @@
 ﻿using Application.Interfaces;
-using Application.Models;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Application.Providers;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 namespace Application.Queries.GetServer
@@ -15,7 +12,7 @@ namespace Application.Queries.GetServer
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             List<GetServerLookupDto> servers = new();
             (await Context.Servers.FilterAsync(s => s.ServerProfiles.Any(sp => sp.User.Id == UserId)))
                 .ForEach(s => servers.Add(

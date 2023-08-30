@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using MediatR;
 
@@ -10,7 +11,7 @@ namespace Application.Commands.Channels.CreateChannel
         public async Task<Channel> Handle(CreateChannelRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             //TODO: Перевірити що у юзера є відповідні права
             Server server = await Context.Servers.FindAsync(request.ServerId);
             List<UserLookUp> users = new();
@@ -21,7 +22,7 @@ namespace Application.Commands.Channels.CreateChannel
                 Users = users,
                 ServerId = server.Id
             };
-            
+
             return await Context.Channels.AddAsync(channel);
         }
 

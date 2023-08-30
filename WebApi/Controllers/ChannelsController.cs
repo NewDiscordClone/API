@@ -1,9 +1,9 @@
 ﻿using Application.Commands.Channels.CreateChannel;
 using Application.Commands.Channels.RemoveChannel;
 using Application.Commands.Channels.RenameChannel;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
-using Application.Interfaces;
+using Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         {
             Channel chat = await Mediator.Send(request);
             //TODO: Реалізація відправки Notify
-            return Created("https://localhost:7060/api/PrivateChat/GetDetails?chatId="+chat.Id, chat.Id);
+            return Created("https://localhost:7060/api/PrivateChat/GetDetails?chatId=" + chat.Id, chat.Id);
         }
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]

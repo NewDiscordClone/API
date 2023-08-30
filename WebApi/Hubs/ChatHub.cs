@@ -1,12 +1,10 @@
 using Application.Commands.Messages.AddMessage;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
-using MongoDB.Driver;
-using WebApi.Models;
 
 namespace Application.Hubs;
 

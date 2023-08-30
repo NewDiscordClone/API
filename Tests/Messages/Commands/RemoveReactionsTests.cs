@@ -1,7 +1,6 @@
 ﻿using Application.Commands.Messages.RemoveReaction;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
-using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -13,7 +12,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
             int reactionIndex = 0;
 
             SetAuthorizedUserId(Ids.UserBId);
@@ -29,7 +28,7 @@ namespace Tests.Messages.Commands
             Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
             Message message = await Context.Messages.FindAsync(messageId);
-            
+
             //Assert
             Assert.Single(message.Reactions);
         }
@@ -39,7 +38,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
             int reactionIndex = 0;
 
             SetAuthorizedUserId(Ids.UserAId);

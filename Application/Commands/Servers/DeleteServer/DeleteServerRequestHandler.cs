@@ -1,8 +1,8 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Application.Commands.Servers.DeleteServer
 {
@@ -12,12 +12,12 @@ namespace Application.Commands.Servers.DeleteServer
         public async Task Handle(DeleteServerRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             Server server = await Context.Servers.FindAsync(request.ServerId);
 
             if (UserId != server.Owner.Id)
                 throw new NoPermissionsException("You are not the owner of the server");
-            
+
             await Context.Servers.DeleteAsync(server);
             await Context.Channels.DeleteManyAsync(c => c.ServerId == request.ServerId);
         }

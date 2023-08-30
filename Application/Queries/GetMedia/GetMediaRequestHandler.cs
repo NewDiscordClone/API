@@ -1,10 +1,7 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using Application.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using MongoDB.Driver;
 
 namespace Application.Queries.GetMedia
 {
@@ -18,8 +15,8 @@ namespace Application.Queries.GetMedia
         public async Task<Media> Handle(GetMediaRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
-            var media = await Context.Media.FindAsync(request.Id);
+
+            Media media = await Context.Media.FindAsync(request.Id);
             return /*media.Extension == request.Extension ? */media/*: 
             throw new EntityNotFoundException($"There is no Media file {request.Id}.{request.Extension}")*/;
         }

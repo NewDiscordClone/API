@@ -1,6 +1,7 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
 using MongoDB.Driver;
 
@@ -11,9 +12,9 @@ namespace Application.Commands.PrivateChats.MakePrivateChatOwner
         public async Task Handle(MakePrivateChatOwnerRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
-            
+
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("User is not an owner of the chat");
             if (!chat.Users.Any(u => u.Id == request.MemberId))

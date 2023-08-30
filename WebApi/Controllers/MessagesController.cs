@@ -7,9 +7,9 @@ using Application.Commands.Messages.RemoveAttachment;
 using Application.Commands.Messages.RemoveMessage;
 using Application.Commands.Messages.RemoveReaction;
 using Application.Commands.Messages.UnpinMessage;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
-using Application.Interfaces;
+using Application.Providers;
 using Application.Queries.GetMessages;
 using Application.Queries.GetPinnedMessages;
 using MediatR;
@@ -36,7 +36,7 @@ namespace WebApi.Controllers
             List<Message> messages = await Mediator.Send(get);
             return Ok(messages);
         }
-        
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

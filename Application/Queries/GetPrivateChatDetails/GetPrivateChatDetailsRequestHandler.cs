@@ -1,6 +1,7 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using MediatR;
 
@@ -11,7 +12,7 @@ namespace Application.Queries.GetPrivateChatDetails
         public async Task<PrivateChat> Handle(GetPrivateChatDetailsRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
             if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");

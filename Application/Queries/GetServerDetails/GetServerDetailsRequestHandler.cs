@@ -1,9 +1,9 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Application.Queries.GetServerDetails
 {
@@ -19,7 +19,7 @@ namespace Application.Queries.GetServerDetails
             if (server.ServerProfiles.Find(sp => sp.User.Id == UserId) == null)
                 throw new NoPermissionsException("User are not a member of the Server");
 
-            var res = Mapper.Map<ServerDetailsDto>(server);
+            ServerDetailsDto res = Mapper.Map<ServerDetailsDto>(server);
 
             res.Channels = await Context.Channels.FilterAsync(c => c.ServerId == server.Id);
             return res;

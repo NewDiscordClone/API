@@ -1,19 +1,18 @@
-﻿using Application.Exceptions;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Application.Commands.PrivateChats.AddMemberToPrivateChat;
+﻿using Application.Commands.PrivateChats.AddMemberToPrivateChat;
 using Application.Commands.PrivateChats.ChangePrivateChatImage;
 using Application.Commands.PrivateChats.CreatePrivateChat;
 using Application.Commands.PrivateChats.LeaveFromPrivateChat;
 using Application.Commands.PrivateChats.MakePrivateChatOwner;
 using Application.Commands.PrivateChats.RemovePrivateChatMember;
 using Application.Commands.PrivateChats.RenamePrivateChat;
+using Application.Common.Exceptions;
 using Application.Models;
-using Application.Interfaces;
+using Application.Providers;
 using Application.Queries.GetPrivateChatDetails;
 using Application.Queries.GetPrivateChats;
-using MongoDB.Bson;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
@@ -62,7 +61,7 @@ namespace WebApi.Controllers
         {
             PrivateChat chat = await Mediator.Send(chatRequest);
             //TODO: Реалізація відправки Notify
-            return Created("https://localhost:7060/api/PrivateChat/GetDetails?chatId="+chat.Id, chat.Id);
+            return Created("https://localhost:7060/api/PrivateChat/GetDetails?chatId=" + chat.Id, chat.Id);
         }
 
         [HttpPut]
@@ -100,7 +99,7 @@ namespace WebApi.Controllers
                 return Forbid(e.Message);
             }
         }
-        
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -1,13 +1,19 @@
 using Application;
+using Application.Common.Mapping;
 using Application.Hubs;
 using Application.Interfaces;
-using Application.Mapping;
+using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using WebApi.Attributes;
+using WebApi.Authorization;
+using WebApi.Authorization.Handlers;
 using WebApi.Providers;
 
 namespace WebApi
@@ -47,8 +53,15 @@ namespace WebApi
                     options.RequireHttpsMetadata = false;
                 });
 
-            services.AddHttpContextAccessor();
+            services.AddAuthorization();
+
             services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
+            services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
+            services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
+            services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
+
+            services.AddHttpContextAccessor();
 
             builder.Services.AddCors(options =>
             {

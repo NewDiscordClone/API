@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using Application.Interfaces;
+using MediatR;
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
 
 namespace Application.Commands.Servers.DeleteServer
 {
-    public record DeleteServerRequest : IRequest
+    public record DeleteServerRequest : IRequest, IServerRequest
     {
         [Required]
         public string ServerId { get; init; }

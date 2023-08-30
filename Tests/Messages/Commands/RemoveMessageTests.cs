@@ -1,7 +1,5 @@
 ﻿using Application.Commands.Messages.RemoveMessage;
-using Application.Exceptions;
-using Application.Models;
-using MongoDB.Driver;
+using Application.Common.Exceptions;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -14,7 +12,7 @@ namespace Tests.Messages.Commands
             //Arrange
             CreateDatabase();
 
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
 
             SetAuthorizedUserId(Ids.UserAId);
 
@@ -38,7 +36,7 @@ namespace Tests.Messages.Commands
             //Arrange
             CreateDatabase();
 
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
 
             SetAuthorizedUserId(Ids.UserBId);
 

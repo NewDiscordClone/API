@@ -1,13 +1,10 @@
 ﻿using Application.Commands.UploadMedia;
-using Application.Exceptions;
-using Application.Interfaces;
+using Application.Common.Exceptions;
 using Application.Models;
+using Application.Providers;
 using Application.Queries.GetMedia;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace WebApi.Controllers
 {
@@ -30,8 +27,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Media media = await Mediator.Send(new GetMediaRequest() { Id = id});//, Extension = ext 
-                return details? Ok(media): File(media.Data, media.ContentType);
+                Media media = await Mediator.Send(new GetMediaRequest() { Id = id });//, Extension = ext 
+                return details ? Ok(media) : File(media.Data, media.ContentType);
             }
             catch (EntityNotFoundException e)
             {

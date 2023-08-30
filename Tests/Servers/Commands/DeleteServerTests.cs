@@ -1,9 +1,7 @@
 ﻿using Application.Commands.Servers.DeleteServer;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
-using Application.Interfaces;
-using MongoDB.Bson;
-using MongoDB.Driver;
+using Application.Providers;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -18,7 +16,7 @@ namespace Tests.Servers.Commands
             int userId = Ids.UserAId;
             string serverId = Ids.ServerIdForDelete;
             long oldCount = await Context.Servers.CountAsync(s => true);
-            
+
 
             SetAuthorizedUserId(userId);
 

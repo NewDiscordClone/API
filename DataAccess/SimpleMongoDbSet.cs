@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Metadata;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
-using Application.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace DataAccess
 {
@@ -42,7 +39,7 @@ namespace DataAccess
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             PropertyInfo idProp = GetIdProperty();
-            
+
             ObjectId objectId = ObjectId.GenerateNewId();
             idProp.SetValue(entity, objectId.ToString());
 
@@ -118,11 +115,12 @@ namespace DataAccess
 
         private async Task<TEntity> FindByIdAsync(ObjectId id)
         {
-            var filter = GetIdFilter(id);
-            var result =
+            FilterDefinition<TEntity> filter = GetIdFilter(id);
+            TEntity result =
                 await (await _collection.FindAsync(filter, null, CancellationToken)).FirstOrDefaultAsync(
                     CancellationToken);
-            if (result == null) throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
+            if (result == null)
+                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
             return result;
         }
     }

@@ -1,9 +1,8 @@
-﻿using Application.Exceptions;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Queries.GetUser
 {
@@ -19,8 +18,8 @@ namespace Application.Queries.GetUser
 
             if (request.ServerId is not null)
             {
-                var server = await Context.Servers.FindAsync(request.ServerId);
-                var serverProfile = server.ServerProfiles.FirstOrDefault(profile => profile.User.Id == request.UserId);
+                Server server = await Context.Servers.FindAsync(request.ServerId);
+                ServerProfile? serverProfile = server.ServerProfiles.FirstOrDefault(profile => profile.User.Id == request.UserId);
                 userDto.ServerProfile = Mapper.Map<GetUserDetailsServerProfileDto>(serverProfile);
             }
             return userDto;
