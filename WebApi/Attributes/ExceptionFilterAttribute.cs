@@ -4,26 +4,19 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WebApi.Attributes
 {
-    public class ExceptionFilterAttribute : ActionFilterAttribute
+    public class ExceptionFilterAttribute : Microsoft.AspNetCore.Mvc.Filters.ExceptionFilterAttribute
     {
-        public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+        public override async Task OnExceptionAsync(ExceptionContext context)
         {
-            try
+            context.Result = context.Exception switch
             {
-                await next();
-            }
-            catch (NoPermissionsException exception)
-            {
-                context.Result = new ForbidResult(exception.Message);
-            }
-            catch (InvalidOperationException)
-            {
-                context.Result = new BadRequestResult();
-            }
-            catch (EntityNotFoundException ex)
-            {
-                context.Result = new NotFoundObjectResult(ex.Id);
-            }
+                NoPermissionsException noPermissionsException => new ForbidResult(noPermissionsException.Message),
+                InvalidOperationException or ArgumentException => new BadRequestResult(),
+                EntityNotFoundException entityNotFoundException => new NotFoundObjectResult(entityNotFoundException.Id),
+                _ => new BadRequestResult()
+            };
+
+            await base.OnExceptionAsync(context);
         }
     }
 }
