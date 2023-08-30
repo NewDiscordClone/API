@@ -1,9 +1,9 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Tests.Common
 {
@@ -39,48 +39,58 @@ namespace Tests.Common
 
         public async void AddMany(IEnumerable<T> entities)
         {
-            foreach (var entity in entities)
+            foreach (T entity in entities)
             {
-                if (entity is T1 t1) await DbSet1.AddAsync(t1).WaitAsync(CancellationToken);
-                if (entity is T2 t2) await DbSet2.AddAsync(t2).WaitAsync(CancellationToken);
+                if (entity is T1 t1)
+                    await DbSet1.AddAsync(t1).WaitAsync(CancellationToken);
+                if (entity is T2 t2)
+                    await DbSet2.AddAsync(t2).WaitAsync(CancellationToken);
             }
         }
 
         public async Task<T> AddAsync(T entity)
         {
             ObjectId id = GetId(entity);
-            if (entity is T1 t1) await DbSet1.AddAsync(t1).WaitAsync(CancellationToken);
-            if (entity is T2 t2) await DbSet2.AddAsync(t2).WaitAsync(CancellationToken);
+            if (entity is T1 t1)
+                await DbSet1.AddAsync(t1).WaitAsync(CancellationToken);
+            if (entity is T2 t2)
+                await DbSet2.AddAsync(t2).WaitAsync(CancellationToken);
             return Combine()[FindIndex(id)];
         }
 
         public async Task<T> UpdateAsync(T entity)
         {
             ObjectId objectId = GetId(entity);
-            if (entity is T1 t1) await DbSet1.UpdateAsync(t1).WaitAsync(CancellationToken);
-            if (entity is T2 t2) await DbSet2.UpdateAsync(t2).WaitAsync(CancellationToken);
+            if (entity is T1 t1)
+                await DbSet1.UpdateAsync(t1).WaitAsync(CancellationToken);
+            if (entity is T2 t2)
+                await DbSet2.UpdateAsync(t2).WaitAsync(CancellationToken);
             return entity;
         }
 
         public async Task DeleteAsync(T entity)
         {
             ObjectId objectId = GetId(entity);
-            if (entity is T1 t1) await DbSet1.DeleteAsync(t1).WaitAsync(CancellationToken);
-            if (entity is T2 t2) await DbSet2.DeleteAsync(t2).WaitAsync(CancellationToken);
+            if (entity is T1 t1)
+                await DbSet1.DeleteAsync(t1).WaitAsync(CancellationToken);
+            if (entity is T2 t2)
+                await DbSet2.DeleteAsync(t2).WaitAsync(CancellationToken);
         }
 
         public async Task DeleteAsync(object id)
         {
             ObjectId objectId = ConvertToId(id);
-            var entity = Combine()[FindIndex(objectId)];
-            if (entity is T1 t1) await DbSet1.DeleteAsync(t1).WaitAsync(CancellationToken);
-            if (entity is T2 t2) await DbSet2.DeleteAsync(t2).WaitAsync(CancellationToken);
+            T entity = Combine()[FindIndex(objectId)];
+            if (entity is T1 t1)
+                await DbSet1.DeleteAsync(t1).WaitAsync(CancellationToken);
+            if (entity is T2 t2)
+                await DbSet2.DeleteAsync(t2).WaitAsync(CancellationToken);
         }
 
         public async Task DeleteManyAsync(Expression<Func<T, bool>> expression)
         {
-            var list = await FilterAsync(expression);
-            foreach (var entity in list)
+            List<T> list = await FilterAsync(expression);
+            foreach (T entity in list)
             {
                 await DeleteAsync(entity);
             }
@@ -133,7 +143,8 @@ namespace Tests.Common
                 2 => DbSet2.Entitites.Cast<T>().ToList(),
                 _ => throw new Exception()
             }).FindIndex(e => GetId(e) == id);
-            if (result < 0) throw new EntityNotFoundException($"{typeof(T).Name} {id} not found");
+            if (result < 0)
+                throw new EntityNotFoundException($"{typeof(T).Name} {id} not found");
             return result;
         }
     }

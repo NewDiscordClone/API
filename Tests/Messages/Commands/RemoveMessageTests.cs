@@ -1,4 +1,8 @@
-﻿namespace Tests.Messages.Commands
+﻿using Application.Commands.Messages.RemoveMessage;
+using Application.Common.Exceptions;
+using Tests.Common;
+
+namespace Tests.Messages.Commands
 {
     public class RemoveMessageTests : TestBase
     {
@@ -8,7 +12,7 @@
             //Arrange
             CreateDatabase();
 
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
 
             SetAuthorizedUserId(Ids.UserAId);
 
@@ -32,7 +36,7 @@
             //Arrange
             CreateDatabase();
 
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
 
             SetAuthorizedUserId(Ids.UserBId);
 
