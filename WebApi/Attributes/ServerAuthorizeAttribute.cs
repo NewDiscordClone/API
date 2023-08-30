@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Reflection;
 
 namespace WebApi.Attributes
 {
@@ -12,13 +13,35 @@ namespace WebApi.Attributes
         private string GetServerId(ActionExecutingContext context)
         {
             InvalidOperationException exception = new("Server id not found in request");
+
             foreach (object? item in context.ActionArguments.Values)
             {
-                if (item is not null && item is IServerRequest request)
-                    return request.ServerId;
+                if (item is not null)
+                {
+                    if (item is IServerRequest request)
+                    {
+                        return request.ServerId;
+                    }
+
+                    Type type = item.GetType();
+                    Type iServerRequest = type.FindInterfaces((i, filter) =>
+                        i.IsGenericType &&
+                        i.GetGenericTypeDefinition() == typeof(IServerRequest<>), true)
+                        .First();
+
+                    if (iServerRequest is not null)
+                    {
+                        PropertyInfo? prop = iServerRequest.GetProperty("ServerId");
+
+                        return prop?.GetValue(item)?.ToString()
+                            ?? throw exception;
+                    }
+                }
             }
+
             throw exception;
         }
+
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {

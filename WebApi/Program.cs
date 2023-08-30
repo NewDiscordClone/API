@@ -2,12 +2,10 @@ using Application;
 using Application.Common.Mapping;
 using Application.Hubs;
 using Application.Interfaces;
-using Application.Models;
 using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
@@ -56,20 +54,7 @@ namespace WebApi
                 });
 
             services.AddAuthorization();
-            services.AddIdentity<User, Role>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = false;
-                options.Lockout.MaxFailedAccessAttempts = 5;
 
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
-
-                options.User.RequireUniqueEmail = true;
-            })
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
             services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
             services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
             services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();

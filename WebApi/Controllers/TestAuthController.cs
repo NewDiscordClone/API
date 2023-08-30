@@ -19,7 +19,6 @@ namespace WebApi.Controllers
         /// This method provides information for testing authorization.
         /// To successfully execute the request, the client must be authenticated.
         /// </remarks>
-        /// <param name="request">Request parameter example</param>
         /// <returns>Information for testing authorization.</returns>
         /// <response code="200">Returns the test information for authorization.</response>
         /// <response code="401">The client must authenticate itself to get the requested response. The client is not authorized to access the resource.</response>
@@ -27,9 +26,9 @@ namespace WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TestDto))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<TestDto> Get(TestRequest request)
+        public ActionResult<TestDto> Get()
         {
-            return Ok(new TestDto { UserName = User.Identity?.Name, Number = request.RequiredNumber });
+            return Ok(new TestDto { UserName = User.Identity?.Name, Number = 5 });
         }
 
         /// <summary>

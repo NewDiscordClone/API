@@ -14,7 +14,7 @@ namespace WebApi.Authorization
         {
             if (resource is string serverId)
             {
-                policyName += "serverId:" + serverId;
+                policyName += $"[serverId:{serverId}]";
             }
             return base.AuthorizeAsync(user, resource, policyName);
         }

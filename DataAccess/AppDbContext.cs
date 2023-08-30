@@ -169,6 +169,7 @@ namespace DataAccess
                     RoleId = role.Id
                 });
             }
+            await SaveChangesAsync();
         }
     }
 }

@@ -100,10 +100,10 @@ namespace WebApi.Providers
             return false;
         }
 
-        [GeneratedRegex("^\\D+")]
+        [GeneratedRegex("^\\w+")]
         private static partial Regex GetPolicyNameRegex();
 
-        [GeneratedRegex("[0-9]+$")]
+        [GeneratedRegex("(?<=serverId:)[a-fA-F0-9]+")]
         private static partial Regex GetServerIdRegex();
     }
     public enum ServerPolicies

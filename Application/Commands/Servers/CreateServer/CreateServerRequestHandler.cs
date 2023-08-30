@@ -8,7 +8,6 @@ namespace Application.Commands.Servers.CreateServer
 {
     public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, string>
     {
-        private readonly IRoleFactory _roleFactory;
         public async Task<string> Handle(CreateServerRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
@@ -25,18 +24,12 @@ namespace Application.Commands.Servers.CreateServer
             server.ServerProfiles.Add(new() { User = ownerLookUp });
 
             await Context.Servers.AddAsync(server);
-
-            List<Role> roles = _roleFactory.GetDefaultServerRoles(server.Id);
-
-            await Context.Roles.AddRangeAsync(roles, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
             return server.Id;
         }
 
-        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IRoleFactory roleFactory)
+        public CreateServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
             : base(context, userProvider, mapper)
         {
-            _roleFactory = roleFactory;
         }
     }
 }
