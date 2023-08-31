@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -15,6 +16,9 @@ namespace Application.Queries.GetMessages
         public async Task<List<Message>> Handle(GetMessagesRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
+            Chat chat = await Context.Chats.FindAsync(request.ChatId);
+            if (!chat.Users.Any(u => u.Id == UserId)) throw new NoPermissionsException("You are not a member of the Chat");
+
             return await Context.GetMessagesAsync(request.ChatId, request.MessagesCount, _pageSize);
         }
 

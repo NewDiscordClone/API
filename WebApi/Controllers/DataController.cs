@@ -36,7 +36,13 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>UserDetails object</returns>
+        /// <response code="200">Ok. User details object in JSON</response>
+        /// <response code="400">Bad Request. The requested user is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<GetUserDetailsDto>> GetUser(
             [FromBody] GetUserDetailsRequest getUserDetailsRequest)
         {
@@ -48,7 +54,13 @@ namespace WebApi.Controllers
         /// Gets detailed information about the currently authorized user
         /// </summary>
         /// <returns>UserDetails object</returns>
+        /// <response code="200">Ok. User details object in JSON</response>
+        /// <response code="400">Bad Request. The requested user is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<GetUserDetailsDto>> GetCurrentUser()
         {
             GetUserDetailsDto user = await _mediator

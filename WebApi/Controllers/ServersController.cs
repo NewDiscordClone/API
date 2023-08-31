@@ -1,6 +1,7 @@
 ﻿using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
 using Application.Commands.Servers.UpdateServer;
+using Application.Exceptions;
 using Application.Queries.GetServer;
 using Application.Queries.GetServerDetails;
 using MediatR;
@@ -16,13 +17,17 @@ namespace WebApi.Controllers
     [Authorize]
     public class ServersController : ApiControllerBase
     {
-        public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
-        {}
+        public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator,
+            userProvider)
+        {
+        }
 
         /// <summary>
         /// Gets all Servers the currently authorized user are member of
         /// </summary>
         /// <returns>List of the server look ups</returns>
+        /// <response code="200">Ok. List of the server look ups</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -40,33 +45,47 @@ namespace WebApi.Controllers
         /// string ObjectId representation of a server to get details of
         /// </param>
         /// <returns>Server details</returns>
+        /// <response code="200">Ok. Server details object in JSON</response>
+        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ServerDetailsDto>> GetServerDetails(string serverId)
         {
-            ServerDetailsDto server = await Mediator
-                .Send(new GetServerDetailsRequest { ServerId = serverId });
-            return Ok(server);
+            try
+            {
+                ServerDetailsDto server = await Mediator
+                    .Send(new GetServerDetailsRequest { ServerId = serverId });
+                return Ok(server);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
         /// Creates new server
         /// </summary>
-        /// <param name="request"> Server creation model
+        /// <param name="request">
         /// ```
         /// title: string // up to 100 characters
         /// image?: string // URL to the image media file 
         /// ```
         /// </param>
-        /// <returns>string ObjectId representation of newly created Server</returns>
+        /// <returns>String ObjectId representation of newly created Server</returns>
+        /// <response code="201">Created. String ObjectId representation of newly created Server</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<string>> CrateServer(CreateServerRequest request)
         {
             string id = await Mediator.Send(request);
-            return Created(string.Empty, id);
+            return Created($"{this.Request.Scheme}://{this.Request.Host}/api/GetServerDetails?=" + id, id);
         }
 
         /// <summary>
@@ -75,7 +94,7 @@ namespace WebApi.Controllers
         /// <remarks>
         /// This action can only be performed by a server member with an appropriate role
         /// </remarks>
-        /// <param name="request"> Server update model
+        /// <param name="request">
         /// ```
         /// serverId: string // represents ObjectId of the server to edit
         /// title?: string // up to 100 characters
@@ -83,10 +102,15 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
+        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> UpdateServer(UpdateServerRequest request)
         {
             try
@@ -94,9 +118,13 @@ namespace WebApi.Controllers
                 await Mediator.Send(request);
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (NoPermissionsException ex)
             {
-                return BadRequest(ex);
+                return Forbid(ex.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
             }
         }
 
@@ -106,16 +134,21 @@ namespace WebApi.Controllers
         /// <remarks>
         /// This action can only be performed by a server member with an appropriate role
         /// </remarks>
-        /// <param name="request"> Server Id model
+        /// <param name="request">
         /// ```
         /// serverId: string // represents ObjectId of the server
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
+        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> DeleteServer(DeleteServerRequest request)
         {
             try
@@ -123,9 +156,13 @@ namespace WebApi.Controllers
                 await Mediator.Send(request);
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (NoPermissionsException ex)
             {
-                return BadRequest(ex);
+                return Forbid(ex.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }

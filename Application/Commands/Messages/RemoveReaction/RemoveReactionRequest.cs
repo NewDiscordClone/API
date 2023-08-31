@@ -14,6 +14,7 @@ namespace Application.Commands.Messages.RemoveReaction
         public string MessageId { get; init; }
         
         [Required]
+        [DefaultValue(0)]
         public int ReactionIndex { get; init; }
     }
 }

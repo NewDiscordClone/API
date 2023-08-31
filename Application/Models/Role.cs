@@ -8,6 +8,11 @@ namespace Application.Models;
 
 public class Role : IdentityRole<int>
 {
+    [DefaultValue(1)]
+    public override int Id { get; set; }
+    [DefaultValue("Admin")]
+    public override string Name { get; set; }
+    [DefaultValue("#FF0000")]
     public string Color { get; set; }
     
     /// <summary>

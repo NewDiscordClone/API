@@ -14,6 +14,7 @@ namespace Application.Commands.Messages.RemoveAttachment
         public string MessageId { get; init; }
         
         [Required]
+        [DefaultValue(0)]
         public int AttachmentIndex { get; init; }
     }
 }

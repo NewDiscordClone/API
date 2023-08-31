@@ -15,7 +15,7 @@ namespace Application.Commands.PrivateChats.ChangePrivateChatImage
         
         [Required]
         [DataType(DataType.ImageUrl)]
-        [DefaultValue("/")]
+        [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]
         public string NewImage { get; init; }
     }
 }

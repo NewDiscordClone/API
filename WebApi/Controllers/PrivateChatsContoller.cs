@@ -31,6 +31,8 @@ namespace WebApi.Controllers
         /// Gets all Private Chats the currently authorized user are member of
         /// </summary>
         /// <returns>List of the private chats</returns>
+        /// <response code="200">Ok. List of the private chats</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -46,10 +48,15 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="chatId">Chat Id to get detailed information from</param>
         /// <returns>Json private chat object</returns>
+        /// <response code="200">Ok. Json private chat object</response>
+        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<PrivateChat>> GetPrivateChatDetails(string chatId)
         {
             try
@@ -62,19 +69,25 @@ namespace WebApi.Controllers
             {
                 return Forbid(e.Message);
             }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
         /// Creates new private chat
         /// </summary>
-        /// <param name="request"> Create private chat model
+        /// <param name="request">
         /// ```
         /// title: string // up to 100 characters
         /// image?: string // URL to the image media file
         /// usersId: number[] // users that are members of the chat from the beginning
         /// ```
         /// </param>
-        /// <returns>string representation of an ObjectId of a newly created private chat</returns>
+        /// <returns>String representation of an ObjectId of a newly created private chat</returns>
+        /// <response code="201">Created. String representation of an ObjectId of a newly created private chat</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -82,21 +95,27 @@ namespace WebApi.Controllers
         {
             PrivateChat chat = await Mediator.Send(request);
             //TODO: Реалізація відправки Notify
-            return Created("https://localhost:7060/api/PrivateChat/GetDetails?chatId=" + chat.Id, chat.Id);
+            return Created($"{this.Request.Scheme}://{this.Request.Host}/api/PrivateChat/GetDetails?chatId=" + chat.Id, chat.Id);
         }
 
         /// <summary>
         /// Adds the given user to the private chat as a new member
         /// </summary>
-        /// <param name="request"> New member model
+        /// <param name="request">
         /// ```
         /// chatId: string // represents ObjectId of the chat to add new member to
         /// newMemberId: int // Id of the user to add
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
+        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested private chat or member is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> AddMemberToPrivateChat(AddMemberToPrivateChatRequest request)
@@ -111,20 +130,29 @@ namespace WebApi.Controllers
             {
                 return Forbid(e.Message);
             }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
         /// Changes image of the given private chat
         /// </summary>
-        /// <param name="request"> Change chat image model
+        /// <param name="request">
         /// ```
         /// chatId: string // represents ObjectId of the chat to change image
         /// newImage: string // URL to the image media file
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
+        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> ChangePrivateChatImage(ChangePrivateChatImageRequest request)
@@ -139,6 +167,10 @@ namespace WebApi.Controllers
             {
                 return Forbid(e.Message);
             }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         /// <summary>
         /// Changes the title of the given private chat
@@ -150,8 +182,14 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
+        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RenamePrivateChat(RenamePrivateChatRequest request)
@@ -166,19 +204,28 @@ namespace WebApi.Controllers
             {
                 return Forbid(e.Message);
             }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         /// <summary>
         /// Remove the currently authorized user from the private chat 
         /// </summary>
-        /// <param name="request"> Chat Id model
+        /// <param name="request">
         /// ```
         /// chatId: string // represents ObjectId of the chat to leave from
         /// silent: boolean // by default false; if true, the other chat members will not be notified 
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
+        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client must be a member of the chat</response>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> LeaveFromPrivateChat(LeaveFromPrivateChatRequest request)
@@ -190,6 +237,10 @@ namespace WebApi.Controllers
                 return Ok();
             }
             catch (NoSuchUserException e)
+            {
+                return Forbid(e.Message);
+            }
+            catch (EntityNotFoundException e)
             {
                 return BadRequest(e.Message);
             }
@@ -204,9 +255,13 @@ namespace WebApi.Controllers
         /// memberId: int // id of the user to transfer rights to
         /// ```
         /// </param>
-        /// <returns>Ok if the operation is successful</returns>
+        /// <returns>Ok if the operation is successful</returns><response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested private chat or user is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> MakePrivateChatOwner(MakePrivateChatOwnerRequest request)
@@ -220,6 +275,10 @@ namespace WebApi.Controllers
             {
                 return Forbid(e.Message);
             }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         /// <summary>
@@ -229,14 +288,18 @@ namespace WebApi.Controllers
         /// ```
         /// chatId: string // represents ObjectId of the chat to remove new member from
         /// memberId: int // Id of the user to remove
-        /// silent: boolean //by default false; if true, the other chat members will not be notified
+        /// silent: boolean // by default false; if true, the other chat members will not be notified
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
+        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested private chat or user is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemovePrivateChatMember(RemovePrivateChatMemberRequest request)
         {
@@ -253,6 +316,10 @@ namespace WebApi.Controllers
             catch (NoSuchUserException ex)
             {
                 return BadRequest(ex);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }
