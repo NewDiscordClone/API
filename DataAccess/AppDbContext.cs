@@ -115,7 +115,7 @@ namespace DataAccess
 
             if (entity == null)
             {
-                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
+                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
             }
 
             return entity;
