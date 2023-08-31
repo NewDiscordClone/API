@@ -3,10 +3,12 @@ using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
     [Route("api/[action]")]
+    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class DataController : Controller

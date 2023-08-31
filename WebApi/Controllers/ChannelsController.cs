@@ -7,10 +7,12 @@ using Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class ChannelsController : ApiControllerBase

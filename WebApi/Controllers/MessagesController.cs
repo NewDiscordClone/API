@@ -15,10 +15,12 @@ using Application.Queries.GetPinnedMessages;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class MessagesController : ApiControllerBase
