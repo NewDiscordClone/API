@@ -6,10 +6,12 @@ using Application.Queries.GetMedia;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [ExceptionFilter]
     [ApiController]
     public class MediaController : ApiControllerBase
     {

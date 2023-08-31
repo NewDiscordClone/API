@@ -113,12 +113,8 @@ namespace DataAccess
             TEntity? entity = await queryable
                 .FirstOrDefaultAsync(predicate, cancellationToken);
 
-            if (entity == null)
-            {
-                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
-            }
-
-            return entity;
+            return entity ??
+                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
         }
 
         public async Task<List<Message>> GetMessagesAsync(
