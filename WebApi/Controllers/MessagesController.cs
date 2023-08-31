@@ -31,12 +31,8 @@ namespace WebApi.Controllers
         /// <summary>
         /// Loads a page of Messages from the given chat to show them in client app. The size of a page defined as a constant (see <see cref="GetMessagesRequestHandler._pageSize"/>)
         /// </summary>
-        /// <param name="get">
-        /// 
-        /// ```
-        /// chatId: string // represents ObjectId
-        /// messagesCount: int // The amount of messages that already loaded to skip them. Set to 0 to load last messages
-        /// ```
+        /// <param name="chatId">string ObjectId representation of the chat to get pinned messages from</param>
+        /// <param name="messagesCount">The amount of messages that already loaded to skip them. Set 0 to load last messages
         /// </param>
         /// <returns>A list of messages to show</returns>
         /// <response code="200">Ok. A list of messages to show</response>
@@ -48,11 +44,12 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<List<Message>>> GetMessages([FromBody] GetMessagesRequest get)
+        public async Task<ActionResult<List<Message>>> GetMessages(string chatId, int messagesCount)
         {
             try
             {
-                List<Message> messages = await Mediator.Send(get);
+                List<Message> messages = await Mediator.Send(new GetMessagesRequest()
+                    { ChatId = chatId, MessagesCount = messagesCount });
                 return Ok(messages);
             }
             catch (EntityNotFoundException e)
@@ -64,10 +61,8 @@ namespace WebApi.Controllers
         /// <summary>
         /// Loads all of the Messages that are pinned in the given chat
         /// </summary>
-        /// <param name="get">
-        /// ```
-        /// chatId: string // represents ObjectId, the chat to get pinned messages from
-        /// ```
+        /// <param name="chatId">
+        /// string ObjectId representation of the chat to get pinned messages from
         /// </param>
         /// <returns>A list of pinned messages in the chat</returns>
         /// <response code="200">Ok. A list of pinned messages in the chat</response>
@@ -79,11 +74,11 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<List<Message>>> GetPinnedMessages([FromBody] GetPinnedMessagesRequest get)
+        public async Task<ActionResult<List<Message>>> GetPinnedMessages(string chatId)
         {
             try
             {
-                List<Message> messages = await Mediator.Send(get);
+                List<Message> messages = await Mediator.Send(new GetPinnedMessagesRequest() { ChatId = chatId });
                 return Ok(messages);
             }
             catch (EntityNotFoundException e)
@@ -420,7 +415,6 @@ namespace WebApi.Controllers
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
