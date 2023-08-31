@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.ComponentModel;
+using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 
@@ -6,8 +7,11 @@ namespace Application.Queries.GetUser
 {
     public class GetUserDetailsRolesDto : IMapWith<Role>
     {
+        [DefaultValue(1)]
         public int Id { get; set; }
+        [DefaultValue("Admin")]
         public string Name { get; set; }
+        [DefaultValue("#FF0000")]
         public string Color { get; set; }
         
         public void Mapping(Profile profile)

@@ -28,8 +28,7 @@ namespace Application.Commands.UploadMedia
                 Id = id,
                 FileName = request.File.FileName,
                 ContentType = request.File.ContentType,
-                Data = fileBytes,
-                Extension = Path.GetExtension(request.File.FileName)[1..]
+                Data = fileBytes
             };
             return await Context.Media.AddAsync(media);
         }
