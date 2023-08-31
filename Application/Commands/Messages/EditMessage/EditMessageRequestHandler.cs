@@ -1,9 +1,8 @@
-﻿using System.Text.RegularExpressions;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Application.Commands.Messages.EditMessage
 {
@@ -12,7 +11,7 @@ namespace Application.Commands.Messages.EditMessage
         public async Task<Message> Handle(EditMessageRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             Message message = await Context.Messages.FindAsync(request.MessageId);
 
             if (message.User.Id != UserId)
@@ -21,7 +20,7 @@ namespace Application.Commands.Messages.EditMessage
             message.Text = request.NewText;
             message.Attachments.RemoveAll(a => a.IsInText);
 
-            List<Attachment> attachments = new List<Attachment>();
+            List<Attachment> attachments = new();
             AttachmentsFromText.GetAttachments(request.NewText, a => attachments.Add(a));
             attachments.AddRange(message.Attachments);
             message.Attachments = attachments;

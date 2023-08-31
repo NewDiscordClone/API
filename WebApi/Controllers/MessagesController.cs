@@ -7,9 +7,9 @@ using Application.Commands.Messages.RemoveAttachment;
 using Application.Commands.Messages.RemoveMessage;
 using Application.Commands.Messages.RemoveReaction;
 using Application.Commands.Messages.UnpinMessage;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
-using Application.Interfaces;
+using Application.Providers;
 using Application.Queries.GetMessages;
 using Application.Queries.GetPinnedMessages;
 using MediatR;
@@ -103,12 +103,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -140,12 +140,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must be a member of the chat</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -180,12 +180,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must be the owner of the message</response>
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -219,12 +219,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -258,12 +258,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -298,12 +298,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message or attachment is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must to be the owner of the message</response>
         [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -337,12 +337,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -377,12 +377,12 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message or reaction is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must to be the owner of the reaction</response>
         [HttpDelete]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -416,13 +416,13 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
 
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> UnpinMessage([FromBody] UnpinMessageRequest request)

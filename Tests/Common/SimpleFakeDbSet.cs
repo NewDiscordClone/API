@@ -1,10 +1,10 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Tests.Common
 {
@@ -35,15 +35,15 @@ namespace Tests.Common
             Entitites.AddRange(entities);
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public Task<TEntity> AddAsync(TEntity entity)
         {
             PropertyInfo idProp = GetIdProperty();
-            
+
             ObjectId objectId = ObjectId.GenerateNewId();
             idProp.SetValue(entity, objectId.ToString());
-            
+
             Entitites.Add(entity);
-            return Entitites[FindIndex(objectId)];
+            return Task.FromResult(Entitites[FindIndex(objectId)]);
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
@@ -63,8 +63,8 @@ namespace Tests.Common
 
         public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression)
         {
-            var list = await FilterAsync(expression);
-            foreach (var entity in list)
+            List<TEntity> list = await FilterAsync(expression);
+            foreach (TEntity entity in list)
             {
                 await DeleteAsync(entity);
             }
@@ -106,8 +106,9 @@ namespace Tests.Common
 
         private int FindIndex(ObjectId id)
         {
-            var result = Entitites.FindIndex(e => GetId(e) == id);
-            if (result < 0) throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
+            int result = Entitites.FindIndex(e => GetId(e) == id);
+            if (result < 0)
+                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
             return result;
         }
     }

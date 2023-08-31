@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
 using MongoDB.Bson;
 
@@ -15,14 +16,14 @@ namespace Application.Commands.UploadMedia
         public async Task<Media> Handle(UploadMediaRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
-            using var memoryStream = new MemoryStream();
+
+            using MemoryStream memoryStream = new();
 
             await request.File.CopyToAsync(memoryStream, cancellationToken);
 
-            var fileBytes = memoryStream.ToArray();
-            var id = ObjectId.GenerateNewId().ToString();
-            var media = new Media
+            byte[] fileBytes = memoryStream.ToArray();
+            string id = ObjectId.GenerateNewId().ToString();
+            Media media = new()
             {
                 Id = id,
                 FileName = request.File.FileName,

@@ -1,14 +1,15 @@
-﻿using System.Linq.Expressions;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
-using DataAccess;
 using DataAccess.Configurations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace Tests.Common
 {
@@ -218,7 +219,8 @@ namespace Tests.Common
 
         public async Task CheckRemoveMedia(string id)
         {
-            if (!ObjectId.TryParse(id, out var objectId)) return;
+            if (!ObjectId.TryParse(id, out ObjectId objectId))
+                return;
 
             long count = 0;
             count += await PrivateChats.CountAsync(c => c.Image != null && c.Image.Contains(id));
@@ -226,7 +228,8 @@ namespace Tests.Common
             count += await Servers.CountAsync(s => s.Image != null && s.Image.Contains(id));
             count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(_token);
 
-            if (count > 0) return;
+            if (count > 0)
+                return;
 
             await Media.DeleteAsync(objectId);
         }
@@ -265,16 +268,45 @@ namespace Tests.Common
 
         public async Task<List<Message>> GetMessagesAsync(string chatId, int skip, int take)
         {
-            var list = await Messages.FilterAsync(m => m.ChatId == chatId);
+            List<Message> list = await Messages.FilterAsync(m => m.ChatId == chatId);
             list.Sort((m1, m2) => m1.SendTime.Millisecond - m2.SendTime.Millisecond);
             return list.Skip(skip).Take(take).ToList();
         }
 
         public async Task<List<Message>> GetPinnedMessagesAsync(string chatId)
         {
-            var list = await Messages.FilterAsync(m => m.ChatId==chatId && m.IsPinned);
+            List<Message> list = await Messages.FilterAsync(m => m.ChatId == chatId && m.IsPinned);
             list.Sort((m1, m2) => m1.PinnedTime.Value.Millisecond - m2.PinnedTime.Value.Millisecond);
             return list;
+        }
+        async Task IAppDbContext.SaveChangesAsync()
+        {
+            await SaveChangesAsync(_token);
+        }
+
+        public async Task<List<Claim>> GetRoleClaimAsync(Role role)
+        {
+            return await RoleClaims.Where(t => t.RoleId == role.Id)
+                .Select(t => t.ToClaim()).ToListAsync();
+        }
+
+        public async Task AddClaimToRoleAsync(Role role, Claim claim)
+        {
+            await AddClaimsToRoleAsync(role, new List<Claim> { claim });
+        }
+
+        public async Task AddClaimsToRoleAsync(Role role, IEnumerable<Claim> claims)
+        {
+            foreach (Claim claim in claims)
+            {
+                await RoleClaims.AddAsync(new IdentityRoleClaim<int>
+                {
+                    ClaimType = claim.Type,
+                    ClaimValue = claim.Value,
+                    RoleId = role.Id
+                });
+            }
+            await SaveChangesAsync();
         }
     }
 }

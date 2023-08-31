@@ -1,8 +1,8 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Application.Commands.Messages.RemoveReaction
 {
@@ -11,7 +11,7 @@ namespace Application.Commands.Messages.RemoveReaction
         public async Task<Message> Handle(RemoveReactionRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Reaction reaction = message.Reactions[request.ReactionIndex];
 

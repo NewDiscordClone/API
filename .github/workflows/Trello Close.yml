@@ -1,10 +1,8 @@
-name: M
+name: Move Trello Card When Issue Closed
 
 on:
   issues:
     types: [closed]
-  pull_request:
-    types: [merged]
 
 jobs:
   link_with_trello:

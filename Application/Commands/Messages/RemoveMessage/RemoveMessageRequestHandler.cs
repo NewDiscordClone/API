@@ -1,8 +1,8 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Commands.Messages.RemoveMessage
 {
@@ -11,7 +11,7 @@ namespace Application.Commands.Messages.RemoveMessage
         public async Task<Chat> Handle(RemoveMessageRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 

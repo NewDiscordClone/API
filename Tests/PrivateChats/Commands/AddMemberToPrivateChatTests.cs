@@ -1,5 +1,5 @@
 ﻿using Application.Commands.PrivateChats.AddMemberToPrivateChat;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
 using MongoDB.Driver;
 using Tests.Common;

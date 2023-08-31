@@ -1,12 +1,8 @@
-using Application.Exceptions;
-using Application.Queries.GetMessages;
-using Application.Queries.GetPrivateChats;
+using Application.Providers;
 using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Application.Interfaces;
 
 namespace WebApi.Controllers
 {
@@ -24,8 +20,8 @@ namespace WebApi.Controllers
             _userProvider = userProvider;
         }
 
-        protected int UserId => _userProvider.GetUserId();
-
+        private int UserId => _userProvider.GetUserId();
+        
         /// <summary>
         /// Gets detailed information about the provided user, including it's ServerProfile if ServerId is provided
         /// </summary>

@@ -1,11 +1,11 @@
-﻿using Application.Interfaces;
-using Application.Mapping;
+﻿using Application.Common.Mapping;
+using Application.Interfaces;
 using Application.Models;
+using AutoMapper;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using AutoMapper;
 
 namespace Tests.Common
 {
@@ -26,6 +26,12 @@ namespace Tests.Common
             IMapper mapper = new MapperConfiguration(config =>
                 config.AddProfile(new AssemblyMappingProfile(
                     typeof(IAppDbContext).Assembly))).CreateMapper();
+
+            Role ownerRole = new()
+            {
+                Name = "Owner",
+                Color = "#FFFF00"
+            };
 
             User userA = new()
             {
@@ -64,8 +70,7 @@ namespace Tests.Common
                 {
                     Id = ids.ServerIdForDelete = ObjectId.GenerateNewId().ToString(),
                     Title = "Server 1",
-                    Owner = mapper.Map<UserLookUp>(userA),
-                    ServerProfiles = 
+                    ServerProfiles =
                     {
                         new ServerProfile
                         {
@@ -79,8 +84,7 @@ namespace Tests.Common
                 {
                     Id = ids.ServerIdForUpdate = ObjectId.GenerateNewId().ToString(),
                     Title = "Server 2",
-                    Owner = mapper.Map<UserLookUp>(userB),
-                    ServerProfiles = 
+                    ServerProfiles =
                     {
                         new ServerProfile
                         {
@@ -89,7 +93,7 @@ namespace Tests.Common
                     },
                     // Roles = new List<Role>()
                 }
-                
+
             });
             context.Channels.AddMany(new List<Channel>()
             {
@@ -211,14 +215,15 @@ namespace Tests.Common
             IMapper mapper = new MapperConfiguration(config =>
                 config.AddProfile(new AssemblyMappingProfile(
                     typeof(IAppDbContext).Assembly))).CreateMapper();
-            var context = new FakeDbContext(options, mapper);
+            FakeDbContext context = new(options, mapper);
             context.Create(ids);
             return context;
         }
 
         public static void Destroy(IAppDbContext iContext)
         {
-            if (iContext is not AppDbContext context) return;
+            if (iContext is not AppDbContext context)
+                return;
             context.Database.EnsureDeleted();
             context.Dispose();
         }

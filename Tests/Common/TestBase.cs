@@ -1,7 +1,7 @@
-﻿using Application.Interfaces;
-using Application.Mapping;
+﻿using Application.Common.Mapping;
+using Application.Interfaces;
+using Application.Providers;
 using AutoMapper;
-using MongoDB.Driver;
 
 namespace Tests.Common
 {

@@ -2,7 +2,7 @@
 using AutoMapper;
 using System.Reflection;
 
-namespace Application.Mapping
+namespace Application.Common.Mapping
 {
     public class AssemblyMappingProfile : Profile
     {

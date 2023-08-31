@@ -1,14 +1,15 @@
 ﻿using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
 using Application.Commands.Servers.UpdateServer;
-using Application.Exceptions;
+using Application.Common;
+using Application.Common.Exceptions;
+using Application.Providers;
 using Application.Queries.GetServer;
 using Application.Queries.GetServerDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Interfaces;
-using MongoDB.Bson;
+using WebApi.Attributes;
 
 namespace WebApi.Controllers
 {
@@ -17,10 +18,8 @@ namespace WebApi.Controllers
     [Authorize]
     public class ServersController : ApiControllerBase
     {
-        public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator,
-            userProvider)
-        {
-        }
+        public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
+        { }
 
         /// <summary>
         /// Gets all Servers the currently authorized user are member of
@@ -102,15 +101,16 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested server is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedResult))]
+        [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ForbidResult))]
+        [ServerAuthorize(Policy = ServerClaims.ManageServer)]
         public async Task<ActionResult> UpdateServer(UpdateServerRequest request)
         {
             try
@@ -140,7 +140,7 @@ namespace WebApi.Controllers
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested server is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
@@ -149,6 +149,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Policy = ServerClaims.ManageServer)]
         public async Task<ActionResult> DeleteServer(DeleteServerRequest request)
         {
             try

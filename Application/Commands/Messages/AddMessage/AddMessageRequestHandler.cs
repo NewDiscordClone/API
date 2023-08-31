@@ -1,10 +1,9 @@
-﻿using System.Text.RegularExpressions;
-using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Application.Commands.Messages.AddMessage
 {
@@ -13,13 +12,13 @@ namespace Application.Commands.Messages.AddMessage
         public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
             User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
 
             if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
-            List<Attachment> attachments = new List<Attachment>();
+            List<Attachment> attachments = new();
 
             AttachmentsFromText.GetAttachments(request.Text, a => attachments.Add(a));
 
@@ -41,7 +40,7 @@ namespace Application.Commands.Messages.AddMessage
                 User = Mapper.Map<UserLookUp>(user),
                 Attachments = attachments
             };
-            
+
             return await Context.Messages.AddAsync(message);
         }
 

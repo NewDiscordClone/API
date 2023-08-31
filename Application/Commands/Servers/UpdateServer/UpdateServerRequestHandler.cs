@@ -1,8 +1,8 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using MediatR;
-using MongoDB.Driver;
 
 namespace Application.Commands.Servers.UpdateServer
 {
@@ -11,7 +11,7 @@ namespace Application.Commands.Servers.UpdateServer
         public async Task Handle(UpdateServerRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             Server server = await Context.Servers.FindAsync(request.ServerId);
 
             if (UserId != server.Owner.Id)

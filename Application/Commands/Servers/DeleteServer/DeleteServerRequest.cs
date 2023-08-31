@@ -1,11 +1,11 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
+using Application.Interfaces;
 
 namespace Application.Commands.Servers.DeleteServer
 {
-    public record DeleteServerRequest : IRequest
+    public record DeleteServerRequest : IRequest, IServerRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

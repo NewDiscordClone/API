@@ -1,8 +1,7 @@
 ﻿using Application.Commands.Servers.UpdateServer;
-using Application.Exceptions;
+using Application.Common.Exceptions;
 using Application.Models;
-using Application.Interfaces;
-using MongoDB.Bson;
+using Application.Providers;
 using Tests.Common;
 
 namespace Tests.Servers.Commands

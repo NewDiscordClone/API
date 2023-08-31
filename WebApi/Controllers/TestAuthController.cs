@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Controllers
 {
@@ -31,18 +33,41 @@ namespace WebApi.Controllers
 
         /// <summary>
         /// Data model for testing authorization.
+        /// 
         /// </summary>
         public record TestDto
         {
             /// <summary>
             /// User name.
             /// </summary>
+            [DefaultValue("User Name")]
             public string? UserName { get; set; } = "Default Name";
 
             /// <summary>
-            /// Number for testing.
+            /// Random number
             /// </summary>
+            [DefaultValue(1)]
             public int Number { get; set; } = 1;
+        }
+
+
+        /// <summary>
+        /// Test Authorization request
+        /// </summary>
+        public record TestRequest
+        {
+            /// <summary>
+            /// Not required info
+            /// </summary>
+            [DefaultValue("Info")]
+            public string? NotRequiredInfo { get; set; }
+
+            /// <summary>
+            /// Required info
+            /// </summary>
+            [Required]
+            [DefaultValue(10)]
+            public int RequiredNumber { get; set; }
         }
     }
 }
