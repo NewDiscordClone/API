@@ -17,4 +17,13 @@
     <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\HubClients\Connection" />
+    <Folder Include="Commands\HubClients\PrivateChats\PrivateChatCreated" />
+    <Folder Include="Commands\HubClients\PrivateChats\PrivateChatRemoved" />
+    <Folder Include="Commands\HubClients\PrivateChats\PrivateChatUpdated" />
+    <Folder Include="Commands\HubClients\Servers\ServerRemoved" />
+    <Folder Include="Commands\HubClients\Servers\ServerUpdated" />
+  </ItemGroup>
+
 </Project>

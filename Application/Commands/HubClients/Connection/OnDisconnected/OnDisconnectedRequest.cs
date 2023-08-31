@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Commands.NotifyClients.OnDisconnected
+namespace Application.Commands.HubClients.Connection.OnDisconnected
 {
     public record OnDisconnectedRequest : IRequest
     {

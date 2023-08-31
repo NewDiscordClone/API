@@ -15,10 +15,6 @@ namespace Application
 
         public IAuthorizedUserProvider UserProvider => _userProvider;
         protected IMapper Mapper => _mapper ?? throw new Exception("There is no constructor with IMapper");
-        public RequestHandlerBase(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
         public RequestHandlerBase(IAppDbContext context)
         {
             _context = context;
@@ -32,16 +28,12 @@ namespace Application
             _mapper = mapper;
             _context = context;
         }
-        public RequestHandlerBase(IAuthorizedUserProvider userProvider, IMapper mapper)
-        {
-            _mapper = mapper;
-            _userProvider = userProvider;
-        }
         public RequestHandlerBase(IAppDbContext context, IAuthorizedUserProvider userProvider)
         {
             _context = context;
             _userProvider = userProvider;
         }
+        
         public RequestHandlerBase(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
         {
             _context = context;

@@ -1,7 +1,7 @@
 ﻿using Application.Models;
 using MediatR;
 
-namespace Application.Commands.NotifyClients.NotifyChatMembers
+namespace Application.Commands.HubClients.Messages.MessageAdded
 {
     public record NotifyMessageAddedRequest : IRequest
     {

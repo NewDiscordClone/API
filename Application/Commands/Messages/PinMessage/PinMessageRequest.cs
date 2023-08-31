@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Commands.Messages.PinMessage
 {
-    public class PinMessageRequest : IRequest<Message>
+    public class PinMessageRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

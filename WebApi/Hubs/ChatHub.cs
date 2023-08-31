@@ -6,8 +6,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
-using Application.Commands.NotifyClients.OnConnected;
-using Application.Commands.NotifyClients.OnDisconnected;
+using Application.Commands.HubClients.Connection.OnConnected;
+using Application.Commands.HubClients.Connection.OnDisconnected;
 using Application.Providers;
 
 namespace Application.Hubs;

@@ -1,8 +1,9 @@
-﻿using Application.Interfaces;
+﻿using Application.Application;
+using Application.Interfaces;
 using Application.Providers;
 using MediatR;
 
-namespace Application.Commands.NotifyClients.OnDisconnected
+namespace Application.Commands.HubClients.Connection.OnDisconnected
 {
     public class OnDisconnectedRequestHandler: HubRequestHandlerBase, IRequestHandler<OnDisconnectedRequest>
     {

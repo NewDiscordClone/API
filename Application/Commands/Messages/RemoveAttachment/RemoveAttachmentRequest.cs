@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.Messages.RemoveAttachment
 {
-    public class RemoveAttachmentRequest : IRequest<Chat>
+    public class RemoveAttachmentRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

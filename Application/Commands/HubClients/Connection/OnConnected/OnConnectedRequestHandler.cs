@@ -1,8 +1,9 @@
-﻿using Application.Interfaces;
+﻿using Application.Application;
+using Application.Interfaces;
 using Application.Providers;
 using MediatR;
 
-namespace Application.Commands.NotifyClients.OnConnected
+namespace Application.Commands.HubClients.Connection.OnConnected
 {
     public class OnConnectedRequestHandler : HubRequestHandlerBase, IRequestHandler<OnConnectedRequest>
     {

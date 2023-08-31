@@ -2,6 +2,9 @@
 using Application.Commands.Channels.CreateChannel;
 using Application.Commands.Channels.RemoveChannel;
 using Application.Commands.Channels.RenameChannel;
+using Application.Commands.HubClients.Channels.ChannelCreated;
+using Application.Commands.HubClients.Channels.ChannelRemoved;
+using Application.Commands.HubClients.Channels.UpdateChannel;
 using Application.Common.Exceptions;
 using Application.Models;
 using Application.Providers;
@@ -40,9 +43,9 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<string>> CreateChannel([FromBody] CreateChannelRequest request)
         {
-            Channel chat = await Mediator.Send(request);
-            //TODO: Реалізація відправки Notify
-            return Created("", chat.Id);
+            string chatId = await Mediator.Send(request);
+            await Mediator.Send(new NotifyChannelCreatedRequest { ChannelId = chatId });
+            return Created("", chatId);
         }
         
         /// <summary>
@@ -69,7 +72,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyChannelUpdatedRequest() { ChannelId = request.ChatId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -99,7 +102,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyChannelRemovedRequest() { ChannelId = request.ChatId });
                 return Ok();
             }
             catch (NoPermissionsException e)

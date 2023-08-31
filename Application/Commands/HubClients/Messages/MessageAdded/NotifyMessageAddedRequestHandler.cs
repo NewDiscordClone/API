@@ -1,27 +1,22 @@
-﻿using Application.Interfaces;
+﻿using Application.Application;
+using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Application.Commands.NotifyClients.NotifyChatMembers
+namespace Application.Commands.HubClients.Messages.MessageAdded
 {
     public class NotifyMessageAddedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyMessageAddedRequest>
     {
         public async Task Handle(NotifyMessageAddedRequest request, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            SetToken(cancellationToken);
             
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
             
-            IEnumerable<string> connectedUsers = GetConnections(chat);
-
-            foreach (string connectionId in connectedUsers)
-            {
-                await Clients.Client(connectionId).SendAsync("MessageAdded", Mapper.Map<Message>(message),
-                    cancellationToken: cancellationToken);
-            }
+            await SendAsync("MessageAdded", message, GetConnections(chat));
         }
         
         public NotifyMessageAddedRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) : 

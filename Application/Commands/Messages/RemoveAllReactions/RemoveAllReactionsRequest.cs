@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.Messages.RemoveAllReactions
 {
-    public class RemoveAllReactionsRequest : IRequest<Chat>
+    public class RemoveAllReactionsRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

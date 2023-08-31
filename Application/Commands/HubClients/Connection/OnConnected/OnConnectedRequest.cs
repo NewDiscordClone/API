@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Commands.NotifyClients.OnConnected
+namespace Application.Commands.HubClients.Connection.OnConnected
 {
     public record OnConnectedRequest : IRequest
     {

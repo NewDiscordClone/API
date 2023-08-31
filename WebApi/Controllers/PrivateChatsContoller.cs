@@ -96,7 +96,7 @@ namespace WebApi.Controllers
         {
             PrivateChat chat = await Mediator.Send(request);
             //TODO: Реалізація відправки Notify
-            return Created($"{this.Request.Scheme}://{this.Request.Host}/api/PrivateChat/GetDetails?chatId=" + chat.Id, chat.Id);
+            return Created($"{Request.Scheme}://{Request.Host}/api/PrivateChat/GetDetails?chatId=" + chat.Id, chat.Id);
         }
 
         /// <summary>

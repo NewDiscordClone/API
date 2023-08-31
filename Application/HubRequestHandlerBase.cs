@@ -4,7 +4,7 @@ using Application.Providers;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 
-namespace Application.Commands.NotifyClients
+namespace Application.Application
 {
     public abstract class HubRequestHandlerBase : RequestHandlerBase
     {
@@ -12,15 +12,23 @@ namespace Application.Commands.NotifyClients
         protected IHubClients Clients => _hubContextProvider.Clients;
         protected static readonly Dictionary<int, HashSet<string>> UserConnections = new();
 
+        private CancellationToken _token;
+
         protected IEnumerable<string> GetConnections(Chat chat)
         {
             return chat.Users
                 .Where(user => UserConnections.ContainsKey(user.Id))
                 .SelectMany(user => UserConnections[user.Id]);
         }
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IMapper mapper) : base(mapper)
+
+        protected void SetToken(CancellationToken cancellationToken)
         {
-            _hubContextProvider = hubContextProvider;
+            _token = cancellationToken;
+            Context?.SetToken(cancellationToken);
+        }
+        protected async Task SendAsync<T>(string method, T arg, IEnumerable<string> connections)
+        {
+            await Clients.Clients(connections).SendAsync(method, arg, _token);
         }
 
         protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context) : base(context)
@@ -34,11 +42,6 @@ namespace Application.Commands.NotifyClients
         }
 
         protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) : base(context, mapper)
-        {
-            _hubContextProvider = hubContextProvider;
-        }
-
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider, IMapper mapper) : base(userProvider, mapper)
         {
             _hubContextProvider = hubContextProvider;
         }
