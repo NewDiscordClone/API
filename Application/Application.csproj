@@ -4,6 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <Nullable>enable</Nullable>
+	  <NoWarn>$(NoWarn);1591</NoWarn>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+		  <DocumentationFile>..\..\..\WebApi\bin\Debug\net7.0\Application.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

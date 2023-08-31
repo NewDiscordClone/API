@@ -9,17 +9,21 @@ namespace WebApi
     {
         public void Configure(SwaggerGenOptions options)
         {
-            string name = Assembly.GetExecutingAssembly().GetName().Name ?? "api";
-            string path = Path.Combine(AppContext.BaseDirectory, name + ".xml");
-            options.IncludeXmlComments(path);
+            string webAtiXmlName = Assembly.GetExecutingAssembly().GetName().Name ?? "api";
+            string webApiXmlPath = Path.Combine(AppContext.BaseDirectory, webAtiXmlName + ".xml");
+            options.IncludeXmlComments(webApiXmlPath);
 
-            options.SwaggerDoc("spark", new OpenApiInfo
+            string appXmlName = "Application";
+            string appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlName + ".xml");
+            options.IncludeXmlComments(appXmlPath);
+
+            options.SwaggerDoc("sparkle", new OpenApiInfo
             {
                 Title = "Spark API",
                 Contact = new OpenApiContact
                 {
                     Email = "dneshotkin@gmail.com",
-                    Name = "Spark",
+                    Name = "Sparkle",
                     Url = new("https://github.com/SparkChats")
                 },
                 Description = "Api for itstep graduate work",
