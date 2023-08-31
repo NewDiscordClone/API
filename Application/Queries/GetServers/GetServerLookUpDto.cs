@@ -9,7 +9,7 @@ namespace Application.Queries.GetServer
 {
     public record GetServerLookupDto : IMapWith<Server>
     {
-        [DefaultValue(1)]
+        [DefaultValue(5f95a3c3d0ddad0017ea9291)]
         public string Id { get; init; }
         [DefaultValue("Title")]
         public string Title { get; init; }
