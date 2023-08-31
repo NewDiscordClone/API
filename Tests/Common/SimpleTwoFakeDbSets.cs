@@ -144,7 +144,7 @@ namespace Tests.Common
                 _ => throw new Exception()
             }).FindIndex(e => GetId(e) == id);
             if (result < 0)
-                throw new EntityNotFoundException($"{typeof(T).Name} {id} not found");
+                throw new EntityNotFoundException($"{typeof(T).Name} {id} not found", id.ToString());
             return result;
         }
     }

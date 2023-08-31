@@ -120,7 +120,7 @@ namespace DataAccess
                 await (await _collection.FindAsync(filter, null, CancellationToken)).FirstOrDefaultAsync(
                     CancellationToken);
             if (result == null)
-                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found");
+                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
             return result;
         }
     }
