@@ -20,6 +20,12 @@ namespace Application.Application
                 .Where(user => UserConnections.ContainsKey(user.Id))
                 .SelectMany(user => UserConnections[user.Id]);
         }
+        protected IEnumerable<string> GetConnections(Server server)
+        {
+            return server.ServerProfiles
+                .Where(sp => UserConnections.ContainsKey(sp.User.Id))
+                .SelectMany(sp => UserConnections[sp.User.Id]);
+        }
 
         protected void SetToken(CancellationToken cancellationToken)
         {

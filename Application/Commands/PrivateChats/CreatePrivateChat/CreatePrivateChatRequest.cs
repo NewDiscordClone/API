@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Commands.PrivateChats.CreatePrivateChat
 {
-    public class CreatePrivateChatRequest : IRequest<Models.PrivateChat>
+    public class CreatePrivateChatRequest : IRequest<string>
     {
         [Required]
         [MaxLength(100)] 

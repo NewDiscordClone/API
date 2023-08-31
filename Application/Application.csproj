@@ -19,11 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Commands\HubClients\Connection" />
-    <Folder Include="Commands\HubClients\PrivateChats\PrivateChatCreated" />
-    <Folder Include="Commands\HubClients\PrivateChats\PrivateChatRemoved" />
-    <Folder Include="Commands\HubClients\PrivateChats\PrivateChatUpdated" />
-    <Folder Include="Commands\HubClients\Servers\ServerRemoved" />
-    <Folder Include="Commands\HubClients\Servers\ServerUpdated" />
   </ItemGroup>
 
 </Project>

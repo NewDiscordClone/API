@@ -12,13 +12,14 @@ namespace Application.Commands.PrivateChats.LeaveFromPrivateChat
         public async Task Handle(LeaveFromPrivateChatRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-
-            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
+            
+            PrivateChat pchat = await Context.PrivateChats.FindAsync(request.ChatId);
+            if(pchat is not GroupChat chat) throw new Exception("This is not group chat");
 
             if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoSuchUserException("User is not a member of the chat");
 
-            if (chat.Users.Count <= 2)
+            if (chat.Users.Count <= 1)
             {
                 await Context.Chats.DeleteAsync(chat);
             }

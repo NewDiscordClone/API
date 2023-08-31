@@ -1,4 +1,6 @@
-﻿using Application.Commands.PrivateChats.AddMemberToPrivateChat;
+﻿using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
+using Application.Commands.HubClients.PrivateChats.PrivateChatUpdated;
+using Application.Commands.PrivateChats.AddMemberToPrivateChat;
 using Application.Commands.PrivateChats.ChangePrivateChatImage;
 using Application.Commands.PrivateChats.CreatePrivateChat;
 using Application.Commands.PrivateChats.LeaveFromPrivateChat;
@@ -94,9 +96,9 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<string>> CreatePrivateChat(CreatePrivateChatRequest request)
         {
-            PrivateChat chat = await Mediator.Send(request);
-            //TODO: Реалізація відправки Notify
-            return Created($"{Request.Scheme}://{Request.Host}/api/PrivateChat/GetDetails?chatId=" + chat.Id, chat.Id);
+            string chatId = await Mediator.Send(request);
+            await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = chatId });
+            return Created($"{Request.Scheme}://{Request.Host}/api/PrivateChat/GetDetails?chatId=" + chatId, chatId);
         }
 
         /// <summary>
@@ -124,7 +126,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -161,7 +163,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoPermissionsException e)
@@ -198,7 +200,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoPermissionsException e)
@@ -234,7 +236,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoSuchUserException e)
@@ -308,7 +310,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoPermissionsException e)

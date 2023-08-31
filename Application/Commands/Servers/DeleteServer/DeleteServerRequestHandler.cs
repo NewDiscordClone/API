@@ -6,10 +6,10 @@ using MediatR;
 
 namespace Application.Commands.Servers.DeleteServer
 {
-    public class DeleteServerRequestHandler : RequestHandlerBase, IRequestHandler<DeleteServerRequest>
+    public class DeleteServerRequestHandler : RequestHandlerBase, IRequestHandler<DeleteServerRequest, Server>
     {
 
-        public async Task Handle(DeleteServerRequest request, CancellationToken cancellationToken)
+        public async Task<Server> Handle(DeleteServerRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -20,6 +20,8 @@ namespace Application.Commands.Servers.DeleteServer
 
             await Context.Servers.DeleteAsync(server);
             await Context.Channels.DeleteManyAsync(c => c.ServerId == request.ServerId);
+
+            return server;
         }
 
         public DeleteServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

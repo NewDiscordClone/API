@@ -7,9 +7,9 @@ using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.RenamePrivateChat
 {
-    public class RenamePrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<RenamePrivateChatRequest, PrivateChat>
+    public class RenamePrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<RenamePrivateChatRequest>
     {
-        public async Task<PrivateChat> Handle(RenamePrivateChatRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RenamePrivateChatRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -19,7 +19,7 @@ namespace Application.Commands.PrivateChats.RenamePrivateChat
 
             chat.Title = request.NewTitle;
 
-            return await Context.PrivateChats.UpdateAsync(chat);
+            await Context.PrivateChats.UpdateAsync(chat);
         }
 
         public RenamePrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(

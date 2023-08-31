@@ -91,28 +91,28 @@ namespace Tests.Common
             _chats = new SimpleTwoFakeDbSets<Chat, PrivateChat, Channel>(
             new List<PrivateChat>()
             {
-                new()
+                new GroupChat()
                 {
                     Id = ids.PrivateChat3 = ObjectId.GenerateNewId().ToString(),
                     Title = "PrivateChat 3",
                     OwnerId = userA.Id,
                     Users = { _mapper.Map<UserLookUp>(userA), _mapper.Map<UserLookUp>(userB) },
                 },
-                new()
+                new GroupChat()
                 {
                     Id = ids.PrivateChat4 = ObjectId.GenerateNewId().ToString(),
                     Title = "PrivateChat 4",
                     OwnerId = userA.Id,
                     Users = { _mapper.Map<UserLookUp>(userA), _mapper.Map<UserLookUp>(userC) }
                 },
-                new()
+                new GroupChat()
                 {
                     Id = ids.PrivateChat5 = ObjectId.GenerateNewId().ToString(),
                     Title = "PrivateChat 5",
                     OwnerId = userB.Id,
                     Users = { _mapper.Map<UserLookUp>(userB), _mapper.Map<UserLookUp>(userC) }
                 },
-                new()
+                new GroupChat()
                 {
                     Id = ids.PrivateChat6 = ObjectId.GenerateNewId().ToString(),
                     Title = "PrivateChat 6",
@@ -125,7 +125,7 @@ namespace Tests.Common
                         _mapper.Map<UserLookUp>(userD)
                     }
                 },
-                new()
+                new GroupChat()
                 {
                     Id = ids.PrivateChat7 = ObjectId.GenerateNewId().ToString(),
                     Title = "PrivateChat 7",

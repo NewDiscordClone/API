@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.PrivateChats.RemovePrivateChatMember
 {
-    public class RemovePrivateChatMemberRequest : IRequest<PrivateChat>
+    public class RemovePrivateChatMemberRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

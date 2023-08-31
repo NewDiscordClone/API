@@ -6,16 +6,16 @@ using MediatR;
 
 namespace Application.Commands.PrivateChats.CreatePrivateChat
 {
-    public class CreatePrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<CreatePrivateChatRequest, Models.PrivateChat>
+    public class CreatePrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<CreatePrivateChatRequest,string>
     {
-        public async Task<PrivateChat> Handle(CreatePrivateChatRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreatePrivateChatRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
             List<UserLookUp> users = new();
             request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindSqlByIdAsync<User>(userId, cancellationToken).Result)));
 
-            PrivateChat privateChat = new()
+            PrivateChat privateChat = new GroupChat()
             {
                 Title = request.Title,
                 Image = request.Image,
@@ -23,7 +23,7 @@ namespace Application.Commands.PrivateChats.CreatePrivateChat
                 OwnerId = UserId
             };
 
-            return await Context.PrivateChats.AddAsync(privateChat);
+            return (await Context.PrivateChats.AddAsync(privateChat)).Id;
         }
 
         public CreatePrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)

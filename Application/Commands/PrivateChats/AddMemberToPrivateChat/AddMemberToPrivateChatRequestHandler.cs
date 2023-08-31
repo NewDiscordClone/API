@@ -8,9 +8,9 @@ using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.AddMemberToPrivateChat
 {
-    public class AddMemberToPrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<AddMemberToPrivateChatRequest, PrivateChat>
+    public class AddMemberToPrivateChatRequestHandler : RequestHandlerBase, IRequestHandler<AddMemberToPrivateChatRequest>
     {
-        public async Task<PrivateChat> Handle(AddMemberToPrivateChatRequest request, CancellationToken cancellationToken)
+        public async Task Handle(AddMemberToPrivateChatRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -25,7 +25,7 @@ namespace Application.Commands.PrivateChats.AddMemberToPrivateChat
 
             chat.Users.Add(Mapper.Map<UserLookUp>(NewMember));
 
-            return await Context.PrivateChats.UpdateAsync(chat);
+            await Context.PrivateChats.UpdateAsync(chat);
         }
 
         public AddMemberToPrivateChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)

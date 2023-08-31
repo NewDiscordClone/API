@@ -114,28 +114,28 @@ namespace Tests.Common
 
             context.PrivateChats.AddMany(new List<PrivateChat>()
                 {
-                    new()
+                    new GroupChat()
                     {
                         Id = ids.PrivateChat3 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 3",
                         OwnerId = userA.Id,
                         Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userB) },
                     },
-                    new()
+                    new GroupChat()
                     {
                         Id = ids.PrivateChat4 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 4",
                         OwnerId = userA.Id,
                         Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userC) }
                     },
-                    new()
+                    new GroupChat()
                     {
                         Id = ids.PrivateChat5 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 5",
                         OwnerId = userB.Id,
                         Users = { mapper.Map<UserLookUp>(userB), mapper.Map<UserLookUp>(userC) }
                     },
-                    new()
+                    new GroupChat()
                     {
                         Id = ids.PrivateChat6 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 6",
@@ -148,7 +148,7 @@ namespace Tests.Common
                             mapper.Map<UserLookUp>(userD)
                         }
                     },
-                    new()
+                    new GroupChat()
                     {
                         Id = ids.PrivateChat7 = ObjectId.GenerateNewId().ToString(),
                         Title = "PrivateChat 7",
