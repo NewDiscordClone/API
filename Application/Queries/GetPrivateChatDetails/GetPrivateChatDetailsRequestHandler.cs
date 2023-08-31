@@ -1,4 +1,4 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
@@ -7,15 +7,16 @@ using MediatR;
 
 namespace Application.Queries.GetPrivateChatDetails
 {
-    public class GetPrivateChatDetailsRequestHandler : RequestHandlerBase, IRequestHandler<GetPrivateChatDetailsRequest, GetPrivateChatDetailsDto>
+    public class GetPrivateChatDetailsRequestHandler : RequestHandlerBase, IRequestHandler<GetPrivateChatDetailsRequest, PrivateChat>
     {
-        public async Task<GetPrivateChatDetailsDto> Handle(GetPrivateChatDetailsRequest request, CancellationToken cancellationToken)
+        public async Task<PrivateChat> Handle(GetPrivateChatDetailsRequest request, CancellationToken cancellationToken)
         {
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
-            PrivateChat chat = await Context.FindByIdAsync<PrivateChat>(request.ChatId, cancellationToken, "Users");
-            if (chat.Users.Find(u => u.Id == user.Id) == null)
+            Context.SetToken(cancellationToken);
+
+            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
-            return Mapper.Map<GetPrivateChatDetailsDto>(chat);
+            return Mapper.Map<PrivateChat>(chat);
         }
 
         public GetPrivateChatDetailsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)

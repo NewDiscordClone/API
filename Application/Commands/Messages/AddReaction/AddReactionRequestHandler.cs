@@ -1,37 +1,39 @@
-﻿using Application.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
+using AutoMapper;
 using MediatR;
+using MongoDB.Driver;
 
 namespace Application.Commands.Messages.AddReaction
 {
-
     public class AddReactionRequestHandler : RequestHandlerBase, IRequestHandler<AddReactionRequest, Reaction>
     {
         public async Task<Reaction> Handle(AddReactionRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken, 
-                "Chat",
-                "Chat.Users"
-                );
-            User user = await Context.FindByIdAsync<User>(UserId, cancellationToken);
+            Context.SetToken(cancellationToken);
 
-            if (!message.Chat.Users.Contains(user))
+            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Chat chat = await Context.Chats.FindAsync(message.ChatId);
+            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
+
+            if (!chat.Users.Any(u => u.Id == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
-            
+
             Reaction reaction = new()
             {
-                User = user,
-                Message = message,
+                User = Mapper.Map<UserLookUp>(user),
                 Emoji = request.Emoji,
             };
-            await Context.Reactions.AddAsync(reaction, cancellationToken);
-            await Context.SaveChangesAsync(cancellationToken);
+
+            await Context.Messages.UpdateAsync(message);
+
             return reaction;
         }
 
-        public AddReactionRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public AddReactionRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
+            base(context, userProvider, mapper)
         {
         }
     }

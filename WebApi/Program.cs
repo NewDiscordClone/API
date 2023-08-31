@@ -1,17 +1,20 @@
 using Application;
+using Application.Common.Mapping;
 using Application.Hubs;
 using Application.Interfaces;
+using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
-using Notes.Application.Common.Mapping;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
-using Application.Interfaces;
 using WebApi.Providers;
-using Application.Providers;
-using WebApi.Providers;
+using WebApi.Attributes;
+using WebApi.Authorization;
+using WebApi.Authorization.Handlers;
 
 namespace WebApi
 {
@@ -49,10 +52,19 @@ namespace WebApi
                     options.Audience = "MessageApi";
                     options.RequireHttpsMetadata = false;
                 });
-            
-            services.AddHttpContextAccessor();
+
+            services.AddAuthorization();
+
             services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
+            
             services.AddScoped<IHubContextProvider, HubContextProvider>();
+            
+            services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
+            services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
+            services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
+
+            services.AddHttpContextAccessor();
             
             builder.Services.AddCors(options =>
             {
@@ -89,8 +101,7 @@ namespace WebApi
                 app.MapSwagger();
                 app.UseSwaggerUI(option =>
                 {
-                    option.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi");
-                    option.RoutePrefix = string.Empty;
+                    option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
                     option.DisplayRequestDuration();
                 });
             }

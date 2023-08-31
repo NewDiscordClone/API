@@ -1,0 +1,23 @@
+name: Create Trello Card When Issue Created
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  link_with_trello:
+    name: Create Trello Card
+    runs-on: ubuntu-latest
+    steps:
+    - name: Call trello-github-actions 
+      id: call-trello-github-actions
+      uses: Grabtot/trello-github-actions@v1.0 
+      with:
+        trello-action: create_card_when_issue_opened
+      env:
+        TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
+        TRELLO_API_TOKEN: ${{ secrets.TRELLO_API_TOKEN }}
+        TRELLO_BOARD_ID: ${{ secrets.TRELLO_BOARD_ID }}
+        TRELLO_LIST_ID: ${{ secrets.TRELLO_LIST_ID }}
+        TRELLO_DEPARTURE_LIST_ID: ${{ secrets.TRELLO_DEPARTURE_LIST_ID }}
+        TRELLO_DESTINATION_LIST_ID: ${{ secrets.TRELLO_DESTINATION_LIST_ID }}

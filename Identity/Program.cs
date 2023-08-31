@@ -46,7 +46,7 @@ namespace Identity
 
             services.ConfigureApplicationCookie(config =>
             {
-                config.Cookie.Name = "Discord.Identity.Cookie";
+                config.Cookie.Name = "Spark.Identity.Cookie";
                 config.LoginPath = "/Authentication/Login";
                 config.LogoutPath = "/Authentication/Logout";
             });

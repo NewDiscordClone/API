@@ -13,16 +13,15 @@ namespace WebApi
             string path = Path.Combine(AppContext.BaseDirectory, name + ".xml");
             options.IncludeXmlComments(path);
 
-            options.SwaggerDoc("v1", new OpenApiInfo
+            options.SwaggerDoc("spark", new OpenApiInfo
             {
-                Title = "Discord API",
+                Title = "Spark API",
                 Contact = new OpenApiContact
                 {
                     Email = "dneshotkin@gmail.com",
-                    Name = "NewDiscordClone",
-                    Url = new("https://github.com/NewDiscordClone")
+                    Name = "Spark",
+                    Url = new("https://github.com/SparkChats")
                 },
-                Version = "v1",
                 Description = "Api for itstep graduate work",
             });
 

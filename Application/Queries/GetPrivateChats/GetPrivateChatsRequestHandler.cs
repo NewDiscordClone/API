@@ -1,35 +1,27 @@
-using Application.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Providers;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace Application.Queries.GetPrivateChats
 {
-    public class GetPrivateChatsRequestHandler : IRequestHandler<GetPrivateChatsRequest, List<GetPrivateChatLookUpDto>>
+    public class GetPrivateChatsRequestHandler : RequestHandlerBase,
+        IRequestHandler<GetPrivateChatsRequest, List<PrivateChat>>
     {
-        private readonly IAppDbContext _appDbContext;
-        private readonly IMapper _mapper;
-
-        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext, IMapper mapper)
+        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
+            IMapper mapper)
+            : base(appDbContext, userProvider, mapper)
         {
-            _appDbContext = appDbContext;
-            _mapper = mapper;
         }
 
-        public async Task<List<GetPrivateChatLookUpDto>> Handle(GetPrivateChatsRequest request, CancellationToken cancellationToken)
+        public async Task<List<PrivateChat>> Handle(GetPrivateChatsRequest request,
+            CancellationToken cancellationToken)
         {
-            User user = await _appDbContext.FindByIdAsync<User>(request.UserId, cancellationToken);
+            Context.SetToken(cancellationToken);
 
-            List<GetPrivateChatLookUpDto> privateChat = await _appDbContext.PrivateChats
-                .Include(chat => chat.Users)
-                .Where(chat => chat.Users.Contains(user))
-                .ProjectTo<GetPrivateChatLookUpDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
-
-            return privateChat;
+            return await Context.PrivateChats.FilterAsync(c => c.Users.Any(u => u.Id == UserId));
         }
     }
 }

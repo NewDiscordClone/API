@@ -10,15 +10,16 @@ namespace Application.Commands.NotifyClients.NotifyChatMembers
     {
         public async Task Handle(NotifyMessageAddedRequest request, CancellationToken cancellationToken)
         {
-            Message message = await Context.FindByIdAsync<Message>(request.MessageId, cancellationToken,
-                "Chat",
-                "Chat.Users"
-            );
-            IEnumerable<string> connectedUsers = GetConnections(message.Chat);
+            Context.SetToken(cancellationToken);
+            
+            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Chat chat = await Context.Chats.FindAsync(message.ChatId);
+            
+            IEnumerable<string> connectedUsers = GetConnections(chat);
 
             foreach (string connectionId in connectedUsers)
             {
-                await Clients.Client(connectionId).SendAsync("MessageAdded", Mapper.Map<NotifyMessageAddedDto>(message),
+                await Clients.Client(connectionId).SendAsync("MessageAdded", Mapper.Map<Message>(message),
                     cancellationToken: cancellationToken);
             }
         }

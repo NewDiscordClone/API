@@ -1,21 +1,18 @@
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 namespace Application.Models;
 
-public enum AttachmentType
-{
-    Url,
-    UrlImage,
-    UrlGif,
-    Image,
-    Gif,
-    Video,
-    Audio
-}
 
 public class Attachment
 {
-    public int Id { get; set; }
-    public AttachmentType Type { get; set; }
+    [DefaultValue(false)]
+    public bool IsInText { get; set; }
+    [Required]
+    [DefaultValue("/")]
+    [DataType(DataType.ImageUrl)]
     public string Path { get; set; }
+    [Required]
+    [DefaultValue(false)]
     public bool IsSpoiler { get; set; }
-    public virtual Message? Message { get; set; }
 }

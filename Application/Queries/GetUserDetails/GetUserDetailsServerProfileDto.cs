@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.ComponentModel;
+using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 
@@ -6,7 +7,7 @@ namespace Application.Queries.GetUser
 {
     public class GetUserDetailsServerProfileDto: IMapWith<ServerProfile>
     {
-        public int Id { get; set; }
+        [DefaultValue("𝕾𝖊𝖗𝖛𝖊𝖗 𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
         public string? DisplayName { get; set; }
         
         public virtual List<GetUserDetailsRolesDto> Roles { get; set; }
