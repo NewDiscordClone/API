@@ -26,13 +26,12 @@ namespace Tests.Messages.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            Reaction result = (await Context.Messages.FindAsync(messageId)).Reactions.Last();
+            List<Reaction> result = (await Context.Messages.FindAsync(messageId)).Reactions;
 
             //Assert
 
-            Assert.NotNull(result);
-            Assert.Equal(emoji, result.Emoji);
-            Assert.Equal(Ids.UserBId, result.User.Id);
+            Assert.NotEmpty(result);
+            Assert.Contains(result, r => r.User.Id == Ids.UserBId && r.Emoji == emoji);
         }
     }
 }

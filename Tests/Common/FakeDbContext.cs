@@ -103,7 +103,7 @@ namespace Tests.Common
                     Id = ids.PrivateChat4 = ObjectId.GenerateNewId().ToString(),
                     Title = "PrivateChat 4",
                     OwnerId = userA.Id,
-                    Users = { _mapper.Map<UserLookUp>(userA), _mapper.Map<UserLookUp>(userC) }
+                    Users = { _mapper.Map<UserLookUp>(userA) }
                 },
                 new GroupChat()
                 {
