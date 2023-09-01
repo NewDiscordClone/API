@@ -1,5 +1,9 @@
-﻿using Application.Commands.Servers.CreateServer;
+﻿using Application.Commands.Invitations.GetInvitationDetails;
+using Application.Commands.Invitations.MakeInvitation;
+using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
+using Application.Commands.Servers.JoinServer;
+using Application.Commands.Servers.LeaveServer;
 using Application.Commands.Servers.UpdateServer;
 using Application.Common;
 using Application.Common.Exceptions;
@@ -20,6 +24,58 @@ namespace WebApi.Controllers
     {
         public ServersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
         { }
+
+
+        /// <summary>
+        /// Joins to the server via invitation
+        /// </summary>
+        /// <param name="id">Id of the invitation to join to the server</param>
+        /// <returns>NoContent if the operation is successful</returns>
+        /// <response code="204">NoContent. Successful operation</response>
+        /// <response code="400">Bad Request. The invitation is expired, not available or incorrect</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        [Route("{id}")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> JoinServer(string id)
+        {
+            try
+            {
+                await Mediator.Send(new JoinServerRequest() { InvitationId = id });
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        /// <summary>
+        /// Leave the given server
+        /// </summary>
+        /// <param name="id">Id of the server to leave from</param>
+        /// <returns>NoContent if the operation is successful</returns>
+        /// <response code="204">NoContent. Successful operation</response>
+        /// <response code="400">Bad Request. The server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        [Route("{id}")]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> LeaveServer(string id)
+        {
+            try
+            {
+                await Mediator.Send(new LeaveServerRequest() { ServerId = id });
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
 
         /// <summary>
         /// Gets all Servers the currently authorized user are member of

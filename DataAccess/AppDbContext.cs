@@ -58,6 +58,9 @@ namespace DataAccess
         public ISimpleDbSet<Server> Servers =>
             new SimpleMongoDbSet<Server>(MongoDb.GetCollection<Server>("servers"), _token);
 
+        public ISimpleDbSet<Invitation> Invitations => 
+            new SimpleMongoDbSet<Invitation>(MongoDb.GetCollection<Invitation>("invitations"), _token);
+
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
         public IMongoDatabase MongoDb { get; }
 

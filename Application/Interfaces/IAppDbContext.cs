@@ -12,6 +12,7 @@ public interface IAppDbContext
     ISimpleDbSet<Channel> Channels { get; }
     ISimpleDbSet<Media> Media { get; }
     ISimpleDbSet<Server> Servers { get; }
+    ISimpleDbSet<Invitation> Invitations { get; }
     //DbSet<ServerProfile> ServerProfiles { get; }
     DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
