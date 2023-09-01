@@ -15,7 +15,7 @@ namespace Application.Commands.HubClients.Messages.MessageRemoved
         {
             SetToken(cancellationToken);
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
-            await SendAsync("MessageRemoved", request, GetConnections(chat));
+            await SendAsync(ClientMethods.MessageDeleted, request, GetConnections(chat));
         }
     }
 }

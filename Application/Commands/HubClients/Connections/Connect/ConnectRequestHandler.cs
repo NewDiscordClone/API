@@ -4,15 +4,15 @@ using Application.Models;
 using Application.Providers;
 using MediatR;
 
-namespace Application.Commands.HubClients.Connection.OnConnected
+namespace Application.Commands.HubClients.Connection.Connect
 {
-    public class OnConnectedRequestHandler : HubRequestHandlerBase, IRequestHandler<OnConnectedRequest>
+    public class ConnectRequestHandler : HubRequestHandlerBase, IRequestHandler<ConnectRequest>
     {
-        public OnConnectedRequestHandler(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
+        public ConnectRequestHandler(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
         {
         }
 
-        public async Task Handle(OnConnectedRequest request, CancellationToken cancellationToken)
+        public async Task Handle(ConnectRequest request, CancellationToken cancellationToken)
         {
             UserConnections? userConnections = await Context.UserConnections.FindOrDefaultAsync(UserId)!;
             if (userConnections == null)

@@ -16,7 +16,7 @@ namespace Application.Commands.HubClients.Servers.ServerUpdated
             SetToken(cancellationToken);
             Server server = await Context.Servers.FindAsync(request.ServerId);
             
-            await SendAsync("ServerDeleted", server, GetConnections(server));
+            await SendAsync(ClientMethods.PrivateChatUpdated, server, GetConnections(server));
         }
     }
 }

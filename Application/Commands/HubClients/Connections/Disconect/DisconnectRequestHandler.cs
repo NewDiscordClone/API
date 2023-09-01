@@ -4,16 +4,16 @@ using Application.Models;
 using Application.Providers;
 using MediatR;
 
-namespace Application.Commands.HubClients.Connection.OnDisconnected
+namespace Application.Commands.HubClients.Connection.Disconnect
 {
-    public class OnDisconnectedRequestHandler : HubRequestHandlerBase, IRequestHandler<OnDisconnectedRequest>
+    public class DisconnectRequestHandler : HubRequestHandlerBase, IRequestHandler<DisconnectRequest>
     {
-        public OnDisconnectedRequestHandler(IHubContextProvider hubContextProvider,
+        public DisconnectRequestHandler(IHubContextProvider hubContextProvider,
             IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
         {
         }
 
-        public async Task Handle(OnDisconnectedRequest request, CancellationToken cancellationToken)
+        public async Task Handle(DisconnectRequest request, CancellationToken cancellationToken)
         {
             UserConnections? userConnections = await Context.UserConnections.FindOrDefaultAsync(UserId)!;
 

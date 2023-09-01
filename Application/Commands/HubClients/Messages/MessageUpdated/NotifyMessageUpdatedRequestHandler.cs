@@ -16,7 +16,7 @@ namespace Application.Commands.HubClients.Messages.MessageUpdated
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
-            await SendAsync("MessageUpdated", message, GetConnections(chat));
+            await SendAsync(ClientMethods.MessageUpdated, message, GetConnections(chat));
         }
         
         public NotifyMessageUpdatedRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) : 

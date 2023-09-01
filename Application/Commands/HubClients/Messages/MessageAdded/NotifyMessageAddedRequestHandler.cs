@@ -16,7 +16,7 @@ namespace Application.Commands.HubClients.Messages.MessageAdded
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
             
-            await SendAsync("MessageAdded", message, GetConnections(chat));
+            await SendAsync(ClientMethods.MessageAdded, message, GetConnections(chat));
         }
         
         public NotifyMessageAddedRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) : 

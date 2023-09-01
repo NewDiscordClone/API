@@ -16,7 +16,7 @@ namespace Application.Commands.HubClients.PrivateChats.PrivateChatUpdated
             SetToken(cancellationToken);
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
 
-            await SendAsync("PrivateChatUpdated", chat, GetConnections(chat));
+            await SendAsync(ClientMethods.PrivateChatUpdated, chat, GetConnections(chat));
         }
     }
 }

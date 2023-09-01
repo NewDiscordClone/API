@@ -15,7 +15,7 @@ namespace Application.Commands.HubClients.Servers.ServerDeleted
         {
             SetToken(cancellationToken);
 
-            await SendAsync("ServerDeleted", request.Server.Id, GetConnections(request.Server));
+            await SendAsync(ClientMethods.ServerDeleted, request.Server.Id, GetConnections(request.Server));
         }
     }
 }
