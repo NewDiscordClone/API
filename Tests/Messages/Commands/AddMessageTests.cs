@@ -27,7 +27,7 @@ namespace Tests.Messages.Commands
                             "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg"
                     }
                 },
-                ChatId = Ids.PrivateChat3,
+                ChatId = Ids.GroupChat3,
                 Text = messageText
             };
 
@@ -55,7 +55,7 @@ namespace Tests.Messages.Commands
 
             AddMessageRequest request = new()
             {
-                ChatId = Ids.PrivateChat3,
+                ChatId = Ids.GroupChat3,
                 Text = messageText
             };
 

@@ -448,7 +448,7 @@ namespace DataAccess.Migrations
                     b.HasDiscriminator().HasValue("Channel");
                 });
 
-            modelBuilder.Entity("Application.Models.PrivateChat", b =>
+            modelBuilder.Entity("Application.Models.PersonalChat", b =>
                 {
                     b.HasBaseType("Application.Models.Chat");
 
@@ -462,7 +462,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PrivateChat_Title");
 
-                    b.HasDiscriminator().HasValue("PrivateChat");
+                    b.HasDiscriminator().HasValue("PersonalChat");
                 });
 
             modelBuilder.Entity("Application.Models.Attachment", b =>

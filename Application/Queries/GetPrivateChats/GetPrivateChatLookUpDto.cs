@@ -6,26 +6,29 @@ using Application.Queries.GetMessages;
 using AutoMapper;
 using MongoDB.Bson;
 
-namespace Application.Queries.GetPrivateChats
+namespace Application.Queries.GetPersonalChats
 {
-    public record GetPrivateChatLookUpDto : IMapWith<PrivateChat>
+    public record GetPrivateChatLookUpDto : IMapWith<GroupChat>
     {
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string Id { get; init; }
         [DataType(DataType.ImageUrl)]
         [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]
-        public string? Image { get; init; }
+        public string Image { get; init; }
         [DefaultValue("Title")]
-        public string? Title { get; init; }
+        public string Title { get; init; }
+        [DefaultValue("Subtitle")]
+        public string Subtitle { get; init; }
+        
         public List<UserLookUp> Users { get; init; } = new();
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<PrivateChat, GetPrivateChatLookUpDto>()
-                // .ForMember(dto => dto.Users,
-                // opt => opt.MapFrom(chat => chat.Users))
-                ;
+            profile.CreateMap<GroupChat, GetPrivateChatLookUpDto>()
+                .ForMember(dto => dto.Subtitle,
+                    opt =>
+                        opt.MapFrom(chat => chat.Users.Count + " members"));
         }
     }
 }

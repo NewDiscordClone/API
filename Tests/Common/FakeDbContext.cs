@@ -29,7 +29,7 @@ namespace Tests.Common
             
             Users.AddRange(hardCodedData.Users);
             Servers = new SimpleFakeDbSet<Server>(hardCodedData.Servers);
-            _chats = new SimpleTwoFakeDbSets<Chat, PrivateChat, Channel>(hardCodedData.PrivateChats, hardCodedData.Channels);
+            _chats = new SimpleFakeDbSet<Chat>(hardCodedData.GroupChats.Cast<Chat>().Concat(hardCodedData.Channels).ToList());
             Messages = new SimpleFakeDbSet<Message>(hardCodedData.Messages);
             SaveChanges();
         }
@@ -39,13 +39,14 @@ namespace Tests.Common
         public ISimpleDbSet<UserConnections> UserConnections => null!;
         public ISimpleDbSet<Message> Messages { get; set; }
 
-        private SimpleTwoFakeDbSets<Chat, PrivateChat, Channel> _chats;
+        private SimpleFakeDbSet<Chat> _chats;
 
         public ISimpleDbSet<Chat> Chats => _chats;
 
-        public ISimpleDbSet<PrivateChat> PrivateChats => _chats.DbSet1;
+        public ISimpleDbSet<PersonalChat> PersonalChats => new SimpleDerivedFakeDbSet<Chat, PersonalChat>(_chats);
+        public ISimpleDbSet<GroupChat> GroupChats => new SimpleDerivedFakeDbSet<Chat, GroupChat>(_chats);
 
-        public ISimpleDbSet<Channel> Channels => _chats.DbSet2;
+        public ISimpleDbSet<Channel> Channels => new SimpleDerivedFakeDbSet<Chat, Channel>(_chats);
 
         public ISimpleDbSet<Media> Media { get; set; } = new SimpleFakeDbSet<Media>(new List<Media>());
 
@@ -64,7 +65,7 @@ namespace Tests.Common
                 return;
 
             long count = 0;
-            count += await PrivateChats.CountAsync(c => c.Image != null && c.Image.Contains(id));
+            count += await GroupChats.CountAsync(c => c.Image != null && c.Image.Contains(id));
             count += await Messages.CountAsync(m => m.Attachments.Any(a => a.Path.Contains(id)));
             count += await Servers.CountAsync(s => s.Image != null && s.Image.Contains(id));
             count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(_token);

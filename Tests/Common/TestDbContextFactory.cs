@@ -38,7 +38,7 @@ namespace Tests.Common
             context.Users.AddRange(hardCodedData.Users);
             context.Servers.AddMany(hardCodedData.Servers);
             context.Channels.AddMany(hardCodedData.Channels);
-            context.PrivateChats.AddMany(hardCodedData.PrivateChats);
+            context.GroupChats.AddMany(hardCodedData.GroupChats);
             context.Messages.AddMany(hardCodedData.Messages);
 
             context.SaveChanges();

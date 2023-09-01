@@ -12,7 +12,7 @@ namespace Tests.Messages.Queries
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.PrivateChat3;
+            var chatId = Ids.GroupChat3;
 
             GetPinnedMessagesRequest request = new()
             {

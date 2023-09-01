@@ -17,7 +17,7 @@ namespace Application.Interfaces
             {
                 return await FindAsync(id);
             }
-            catch (Exception e)
+            catch
             {
                 return null;
             }
