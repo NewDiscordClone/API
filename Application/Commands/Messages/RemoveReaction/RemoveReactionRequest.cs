@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.Messages.RemoveReaction
 {
-    public class RemoveReactionRequest : IRequest<Message>
+    public class RemoveReactionRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

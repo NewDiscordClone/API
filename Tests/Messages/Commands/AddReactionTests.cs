@@ -25,12 +25,13 @@ namespace Tests.Messages.Commands
             AddReactionRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Reaction result = await handler.Handle(request, CancellationToken);
+            await handler.Handle(request, CancellationToken);
+            List<Reaction> result = (await Context.Messages.FindAsync(messageId)).Reactions;
 
             //Assert
 
-            Assert.NotNull(result);
-            Assert.Equal(emoji, result.Emoji);
+            Assert.NotEmpty(result);
+            Assert.Contains(result, r => r.User.Id == Ids.UserBId && r.Emoji == emoji);
         }
     }
 }

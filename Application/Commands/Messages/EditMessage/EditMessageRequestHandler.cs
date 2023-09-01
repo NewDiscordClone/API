@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.Messages.EditMessage
 {
-    public class EditMessageRequestHandler : RequestHandlerBase, IRequestHandler<EditMessageRequest, Message>
+    public class EditMessageRequestHandler : RequestHandlerBase, IRequestHandler<EditMessageRequest>
     {
-        public async Task<Message> Handle(EditMessageRequest request, CancellationToken cancellationToken)
+        public async Task Handle(EditMessageRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -25,7 +25,7 @@ namespace Application.Commands.Messages.EditMessage
             attachments.AddRange(message.Attachments);
             message.Attachments = attachments;
 
-            return await Context.Messages.UpdateAsync(message);
+            await Context.Messages.UpdateAsync(message);
         }
 
         public EditMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

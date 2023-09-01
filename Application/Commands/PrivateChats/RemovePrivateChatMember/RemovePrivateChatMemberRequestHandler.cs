@@ -8,13 +8,14 @@ using MongoDB.Driver;
 namespace Application.Commands.PrivateChats.RemovePrivateChatMember
 {
     public class RemovePrivateChatMemberRequestHandler : RequestHandlerBase,
-        IRequestHandler<RemovePrivateChatMemberRequest, PrivateChat>
+        IRequestHandler<RemovePrivateChatMemberRequest>
     {
-        public async Task<PrivateChat> Handle(RemovePrivateChatMemberRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RemovePrivateChatMemberRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
+            PrivateChat pchat = await Context.PrivateChats.FindAsync(request.ChatId);
+            if(pchat is not GroupChat chat) throw new Exception("This is not group chat");
 
             if (!chat.Users.Any(u => u.Id == request.MemberId))
                 throw new NoSuchUserException();
@@ -26,7 +27,7 @@ namespace Application.Commands.PrivateChats.RemovePrivateChatMember
             //User member = await Context.FindSqlByIdAsync<User>(request.MemberId, cancellationToken);
             chat.Users.Remove(chat.Users.Find(u => u.Id == request.MemberId) ?? throw new NoSuchUserException());
 
-            return await Context.PrivateChats.UpdateAsync(chat);
+            await Context.PrivateChats.UpdateAsync(chat);
         }
 
         public RemovePrivateChatMemberRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :

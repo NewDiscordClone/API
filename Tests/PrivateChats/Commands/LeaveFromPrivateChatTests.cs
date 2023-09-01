@@ -32,7 +32,9 @@ namespace Tests.PrivateChats.Commands
 
             //Assert
             Assert.DoesNotContain(chat.Users, user => user.Id == userId);
-            Assert.NotEqual(userId, chat.OwnerId);
+            var groupChat = chat as GroupChat;
+            Assert.NotNull(groupChat);
+            Assert.NotEqual(userId, groupChat.OwnerId);
         }
 
         [Fact]

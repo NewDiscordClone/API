@@ -8,9 +8,9 @@ using MongoDB.Driver;
 
 namespace Application.Commands.Messages.AddReaction
 {
-    public class AddReactionRequestHandler : RequestHandlerBase, IRequestHandler<AddReactionRequest, Reaction>
+    public class AddReactionRequestHandler : RequestHandlerBase, IRequestHandler<AddReactionRequest>
     {
-        public async Task<Reaction> Handle(AddReactionRequest request, CancellationToken cancellationToken)
+        public async Task Handle(AddReactionRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -28,8 +28,6 @@ namespace Application.Commands.Messages.AddReaction
             };
 
             await Context.Messages.UpdateAsync(message);
-
-            return reaction;
         }
 
         public AddReactionRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :

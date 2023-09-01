@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.PrivateChats.AddMemberToPrivateChat
 {
-    public class AddMemberToPrivateChatRequest : IRequest<PrivateChat>
+    public class AddMemberToPrivateChatRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

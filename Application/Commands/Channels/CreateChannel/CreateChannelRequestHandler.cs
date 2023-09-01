@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.Channels.CreateChannel
 {
-    public class CreateChannelRequestHandler : RequestHandlerBase, IRequestHandler<CreateChannelRequest, Channel>
+    public class CreateChannelRequestHandler : RequestHandlerBase, IRequestHandler<CreateChannelRequest, string>
     {
-        public async Task<Channel> Handle(CreateChannelRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateChannelRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -23,7 +23,7 @@ namespace Application.Commands.Channels.CreateChannel
                 ServerId = server.Id
             };
 
-            return await Context.Channels.AddAsync(channel);
+            return (await Context.Channels.AddAsync(channel)).Id;
         }
 
         public CreateChannelRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)

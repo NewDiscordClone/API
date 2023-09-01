@@ -11,10 +11,10 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
+using WebApi.Providers;
 using WebApi.Attributes;
 using WebApi.Authorization;
 using WebApi.Authorization.Handlers;
-using WebApi.Providers;
 
 namespace WebApi
 {
@@ -56,13 +56,16 @@ namespace WebApi
             services.AddAuthorization();
 
             services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
+            
+            services.AddScoped<IHubContextProvider, HubContextProvider>();
+            
             services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
             services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
             services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
             services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
 
             services.AddHttpContextAccessor();
-
+            
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>

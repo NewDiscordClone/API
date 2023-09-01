@@ -35,7 +35,9 @@ namespace Tests.PrivateChats.Commands
             PrivateChat chat = await Context.PrivateChats.FindAsync(chatId);
 
             //Assert
-            Assert.Equal(newOwnerId, chat.OwnerId);
+            var groupChat = chat as GroupChat;
+            Assert.NotNull(groupChat);
+            Assert.Equal(newOwnerId, groupChat.OwnerId);
         }
 
         [Fact]

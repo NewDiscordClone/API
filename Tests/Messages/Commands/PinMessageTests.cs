@@ -20,7 +20,8 @@ namespace Tests.Messages.Commands
             PinMessageRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            Message result = await handler.Handle(request, CancellationToken);
+            await handler.Handle(request, CancellationToken);
+            Message result = await Context.Messages.FindAsync(messageId);
 
             //Assert
 

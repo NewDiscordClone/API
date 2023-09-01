@@ -7,9 +7,9 @@ using MongoDB.Driver;
 
 namespace Application.Commands.PrivateChats.ChangePrivateChatImage
 {
-    public class ChangePrivateChatImageRequestHandler : RequestHandlerBase, IRequestHandler<ChangePrivateChatImageRequest, PrivateChat>
+    public class ChangePrivateChatImageRequestHandler : RequestHandlerBase, IRequestHandler<ChangePrivateChatImageRequest>
     {
-        public async Task<PrivateChat> Handle(ChangePrivateChatImageRequest request, CancellationToken cancellationToken)
+        public async Task Handle(ChangePrivateChatImageRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -25,7 +25,6 @@ namespace Application.Commands.PrivateChats.ChangePrivateChatImage
             if (oldImage != null)
                 await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/') - 1)..]);
 
-            return chat;
         }
 
         public ChangePrivateChatImageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)

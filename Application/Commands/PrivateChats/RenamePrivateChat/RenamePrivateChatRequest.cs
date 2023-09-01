@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.PrivateChats.RenamePrivateChat
 {
-    public class RenamePrivateChatRequest : IRequest<PrivateChat>
+    public class RenamePrivateChatRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

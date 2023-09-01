@@ -27,180 +27,19 @@ namespace Tests.Common
                 config.AddProfile(new AssemblyMappingProfile(
                     typeof(IAppDbContext).Assembly))).CreateMapper();
 
-            Role ownerRole = new()
-            {
-                Name = "Owner",
-                Color = "#FFFF00"
-            };
+            HardCodedData hardCodedData = new(ids, mapper);
+            
+            // Role ownerRole = new()
+            // {
+            //     Name = "Owner",
+            //     Color = "#FFFF00"
+            // };
 
-            User userA = new()
-            {
-                Id = ids.UserAId,
-                UserName = "User A",
-                Avatar = null,
-                Email = "email@test1.com",
-            };
-            User userB = new()
-            {
-                Id = ids.UserBId,
-                UserName = "User B",
-                Avatar = null,
-                Email = "email@test2.com",
-            };
-            User userC = new()
-            {
-                Id = ids.UserCId,
-                UserName = "User C",
-                Avatar = null,
-                Email = "email@test3.com",
-            };
-            User userD = new()
-            {
-                Id = ids.UserDId,
-                UserName = "User D",
-                Avatar = null,
-                Email = "email@test4.com",
-            };
-
-            context.Users.AddRange(userA, userB, userC, userD);
-
-            context.Servers.AddMany(new List<Server>
-            {
-                new Server
-                {
-                    Id = ids.ServerIdForDelete = ObjectId.GenerateNewId().ToString(),
-                    Title = "Server 1",
-                    ServerProfiles =
-                    {
-                        new ServerProfile
-                        {
-                            User = mapper.Map<UserLookUp>(userA)
-                        }
-                    },
-
-                    // Roles = new List<Role>()
-                },
-                new Server
-                {
-                    Id = ids.ServerIdForUpdate = ObjectId.GenerateNewId().ToString(),
-                    Title = "Server 2",
-                    ServerProfiles =
-                    {
-                        new ServerProfile
-                        {
-                            User = mapper.Map<UserLookUp>(userB)
-                        }
-                    },
-                    // Roles = new List<Role>()
-                }
-
-            });
-            context.Channels.AddMany(new List<Channel>()
-            {
-                new Channel
-                {
-                    Id = ids.Channel1 = ObjectId.GenerateNewId().ToString(),
-                    Title = "Channel 1",
-                    ServerId = ids.ServerIdForDelete
-                },
-                new Channel
-                {
-                    Id = ids.Channel2 = ObjectId.GenerateNewId().ToString(),
-                    Title = "Channel 2",
-                    ServerId = ids.ServerIdForUpdate
-                }
-            });
-
-
-            context.PrivateChats.AddMany(new List<PrivateChat>()
-                {
-                    new()
-                    {
-                        Id = ids.PrivateChat3 = ObjectId.GenerateNewId().ToString(),
-                        Title = "PrivateChat 3",
-                        OwnerId = userA.Id,
-                        Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userB) },
-                    },
-                    new()
-                    {
-                        Id = ids.PrivateChat4 = ObjectId.GenerateNewId().ToString(),
-                        Title = "PrivateChat 4",
-                        OwnerId = userA.Id,
-                        Users = { mapper.Map<UserLookUp>(userA), mapper.Map<UserLookUp>(userC) }
-                    },
-                    new()
-                    {
-                        Id = ids.PrivateChat5 = ObjectId.GenerateNewId().ToString(),
-                        Title = "PrivateChat 5",
-                        OwnerId = userB.Id,
-                        Users = { mapper.Map<UserLookUp>(userB), mapper.Map<UserLookUp>(userC) }
-                    },
-                    new()
-                    {
-                        Id = ids.PrivateChat6 = ObjectId.GenerateNewId().ToString(),
-                        Title = "PrivateChat 6",
-                        OwnerId = userB.Id,
-                        Users =
-                        {
-                            mapper.Map<UserLookUp>(userA),
-                            mapper.Map<UserLookUp>(userB),
-                            mapper.Map<UserLookUp>(userC),
-                            mapper.Map<UserLookUp>(userD)
-                        }
-                    },
-                    new()
-                    {
-                        Id = ids.PrivateChat7 = ObjectId.GenerateNewId().ToString(),
-                        Title = "PrivateChat 7",
-                        OwnerId = userB.Id,
-                        Users =
-                        {
-                            mapper.Map<UserLookUp>(userB), mapper.Map<UserLookUp>(userC), mapper.Map<UserLookUp>(userD)
-                        }
-                    }
-                }
-            );
-            context.Messages.AddMany(new List<Message>
-            {
-                new Message
-                {
-                    Id = ids.Message1 = ObjectId.GenerateNewId().ToString(),
-                    Text = "Message 1",
-                    SendTime = DateTime.Now,
-                    User = mapper.Map<UserLookUp>(userA),
-                    ChatId = ids.PrivateChat3,
-                    Reactions =
-                    {
-                        new Reaction
-                        {
-                            Emoji = "☻",
-                            User = mapper.Map<UserLookUp>(userB),
-                        },
-                        new Reaction
-                        {
-                            Emoji = "☺",
-                            User = mapper.Map<UserLookUp>(userA),
-                        }
-                    }
-                },
-                new Message
-                {
-                    Id = ids.Message2 = ObjectId.GenerateNewId().ToString(),
-                    Text = "Message 2",
-                    SendTime = DateTime.Now,
-                    User = mapper.Map<UserLookUp>(userB),
-                    IsPinned = true,
-                    ChatId = ids.PrivateChat3,
-                    Attachments =
-                    {
-                        new Attachment
-                        {
-                            IsInText = false,
-                            Path = "http://localhost:3000"
-                        }
-                    }
-                }
-            });
+            context.Users.AddRange(hardCodedData.Users);
+            context.Servers.AddMany(hardCodedData.Servers);
+            context.Channels.AddMany(hardCodedData.Channels);
+            context.PrivateChats.AddMany(hardCodedData.PrivateChats);
+            context.Messages.AddMany(hardCodedData.Messages);
 
             context.SaveChanges();
             return context;
@@ -216,7 +55,8 @@ namespace Tests.Common
                 config.AddProfile(new AssemblyMappingProfile(
                     typeof(IAppDbContext).Assembly))).CreateMapper();
             FakeDbContext context = new(options, mapper);
-            context.Create(ids);
+            HardCodedData hardCodedData = new(ids, mapper);
+            context.Create(hardCodedData);
             return context;
         }
 

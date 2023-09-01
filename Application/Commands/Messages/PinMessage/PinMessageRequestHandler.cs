@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.Messages.PinMessage
 {
-    public class PinMessageRequestHandler : RequestHandlerBase, IRequestHandler<PinMessageRequest, Message>
+    public class PinMessageRequestHandler : RequestHandlerBase, IRequestHandler<PinMessageRequest>
     {
-        public async Task<Message> Handle(PinMessageRequest request, CancellationToken cancellationToken)
+        public async Task Handle(PinMessageRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -23,7 +23,7 @@ namespace Application.Commands.Messages.PinMessage
 
             message.IsPinned = true;
             message.PinnedTime = DateTime.Now;
-            return await Context.Messages.UpdateAsync(message);
+            await Context.Messages.UpdateAsync(message);
         }
 
         public PinMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

@@ -25,7 +25,8 @@ namespace Tests.PrivateChats.Commands
             CreatePrivateChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            PrivateChat result = await handler.Handle(request, CancellationToken);
+            string id = await handler.Handle(request, CancellationToken);
+            PrivateChat result = await Context.PrivateChats.FindAsync(id);
 
             //Assert
             Assert.NotNull(result);
