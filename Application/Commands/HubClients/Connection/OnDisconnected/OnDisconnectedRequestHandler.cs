@@ -1,27 +1,29 @@
 ﻿using Application.Application;
 using Application.Interfaces;
+using Application.Models;
 using Application.Providers;
 using MediatR;
 
 namespace Application.Commands.HubClients.Connection.OnDisconnected
 {
-    public class OnDisconnectedRequestHandler: HubRequestHandlerBase, IRequestHandler<OnDisconnectedRequest>
+    public class OnDisconnectedRequestHandler : HubRequestHandlerBase, IRequestHandler<OnDisconnectedRequest>
     {
-        public OnDisconnectedRequestHandler(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
+        public OnDisconnectedRequestHandler(IHubContextProvider hubContextProvider,
+            IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
         {
         }
 
-        public Task Handle(OnDisconnectedRequest request, CancellationToken cancellationToken)
+        public async Task Handle(OnDisconnectedRequest request, CancellationToken cancellationToken)
         {
-            if (UserConnections.ContainsKey(UserId))
+            UserConnections? userConnections = await Context.UserConnections.FindOrDefaultAsync(UserId)!;
+
+            if (userConnections == null) return;
+
+            userConnections.Connections.Remove(request.ConnectionId);
+            if (userConnections.Connections.Count == 0)
             {
-                UserConnections[UserId].Remove(request.ConnectionId);
-                if (UserConnections[UserId].Count == 0)
-                {
-                    UserConnections.Remove(UserId);
-                }
+                await Context.UserConnections.DeleteAsync(userConnections);
             }
-            return Task.CompletedTask;
         }
     }
 }

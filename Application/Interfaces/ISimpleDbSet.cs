@@ -10,6 +10,18 @@ namespace Application.Interfaces
         CancellationToken CancellationToken { set; }
          
         Task<TEntity> FindAsync(object id);
+
+        async Task<TEntity?>? FindOrDefaultAsync(object id)
+        {
+            try
+            {
+                return await FindAsync(id);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
         
         Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression);
 

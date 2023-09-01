@@ -1,5 +1,6 @@
 ﻿using Application.Application;
 using Application.Interfaces;
+using Application.Models;
 using Application.Providers;
 using MediatR;
 
@@ -11,14 +12,20 @@ namespace Application.Commands.HubClients.Connection.OnConnected
         {
         }
 
-        public Task Handle(OnConnectedRequest request, CancellationToken cancellationToken)
+        public async Task Handle(OnConnectedRequest request, CancellationToken cancellationToken)
         {
-            if (!UserConnections.ContainsKey(UserId))
+            UserConnections? userConnections = await Context.UserConnections.FindOrDefaultAsync(UserId)!;
+            if (userConnections == null)
             {
-                UserConnections[UserId] = new HashSet<string>();
+                userConnections = new UserConnections
+                    { UserId = UserId, Connections = new HashSet<string>() { request.ConnectionId } };
+                await Context.UserConnections.AddAsync(userConnections);
             }
-            UserConnections[UserId].Add(request.ConnectionId);
-            return Task.CompletedTask;
+            else
+            {
+                userConnections.Connections.Add(request.ConnectionId);
+                await Context.UserConnections.UpdateAsync(userConnections);
+            }
         }
     }
 }

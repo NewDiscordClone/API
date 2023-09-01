@@ -10,21 +10,21 @@ namespace Application.Application
     {
         private readonly IHubContextProvider _hubContextProvider;
         protected IHubClients Clients => _hubContextProvider.Clients;
-        protected static readonly Dictionary<int, HashSet<string>> UserConnections = new();
 
         private CancellationToken _token;
 
         protected IEnumerable<string> GetConnections(Chat chat)
         {
             return chat.Users
-                .Where(user => UserConnections.ContainsKey(user.Id))
-                .SelectMany(user => UserConnections[user.Id]);
+                .Where(user => Context.UserConnections.FindOrDefaultAsync(user.Id) != null)
+                .SelectMany(user => Context.UserConnections.FindAsync(user.Id).Result.Connections);
         }
+
         protected IEnumerable<string> GetConnections(Server server)
         {
             return server.ServerProfiles
-                .Where(sp => UserConnections.ContainsKey(sp.User.Id))
-                .SelectMany(sp => UserConnections[sp.User.Id]);
+                .Where(sp => Context.UserConnections.FindOrDefaultAsync(sp.User.Id) != null)
+                .SelectMany(sp => Context.UserConnections.FindAsync(sp.User.Id).Result.Connections);
         }
 
         protected void SetToken(CancellationToken cancellationToken)
@@ -32,6 +32,7 @@ namespace Application.Application
             _token = cancellationToken;
             Context?.SetToken(cancellationToken);
         }
+
         protected async Task SendAsync<T>(string method, T arg, IEnumerable<string> connections)
         {
             await Clients.Clients(connections).SendAsync(method, arg, _token);
@@ -42,22 +43,26 @@ namespace Application.Application
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) : base(userProvider)
+        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) :
+            base(userProvider)
         {
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) : base(context, mapper)
+        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) :
+            base(context, mapper)
         {
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context,
+            IAuthorizedUserProvider userProvider) : base(context, userProvider)
         {
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context,
+            IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
             _hubContextProvider = hubContextProvider;
         }

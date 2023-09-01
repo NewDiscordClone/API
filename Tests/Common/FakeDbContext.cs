@@ -36,6 +36,7 @@ namespace Tests.Common
 
         private CancellationToken _token = default;
 
+        public ISimpleDbSet<UserConnections> UserConnections => null!;
         public ISimpleDbSet<Message> Messages { get; set; }
 
         private SimpleTwoFakeDbSets<Chat, PrivateChat, Channel> _chats;
