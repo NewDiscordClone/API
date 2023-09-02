@@ -4,6 +4,7 @@ using Application.Commands.Servers.BanUser;
 using Application.Commands.HubClients.Servers.ServerDeleted;
 using Application.Commands.HubClients.Servers.ServerUpdated;
 using Application.Commands.Servers.ChangeServerProfileDisplayName;
+using Application.Commands.Servers.ChangeServerProfileRoles;
 using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
 using Application.Commands.Servers.JoinServer;
@@ -205,7 +206,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="400">Bad Request. Your request is incorrect</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpDelete]
@@ -243,7 +244,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="400">Bad Request. Your request is incorrect</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPost]
@@ -280,7 +281,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="400">Bad Request. Your request is incorrect</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPost]
@@ -316,7 +317,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="400">Bad Request. Your request is incorrect</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPost]
@@ -347,12 +348,13 @@ namespace WebApi.Controllers
         /// <param name="request">
         /// ```
         /// serverId: string // represents ObjectId of the server to unban user from
+        /// newDisplayName: string
         /// userId: int // id of the user to change the
         /// ```
         /// </param>
         /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="400">Bad Request. TYour request is incorrect</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPost]
@@ -361,6 +363,42 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> ChangeServerProfileDisplayName(ChangeServerProfileDisplayNameRequest request)
+        {
+            try
+            {
+                await Mediator.Send(request);
+                return NoContent();
+            }
+            catch (NoPermissionsException)
+            {
+                return Forbid();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        /// <summary>
+        /// Changes the set of roles of the give user
+        /// </summary>
+        /// <param name="request">
+        /// ```
+        /// serverId: string // represents ObjectId of the server to unban user from
+        /// roles: number[] // the roles IDs
+        /// userId: int // id of the user to change the
+        /// ```
+        /// </param>
+        /// <returns>No Content if the operation is successful</returns>
+        /// <response code="204">No Content. Operation is successful</response>
+        /// <response code="400">Bad Request. Your request is incorrect</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult> ChangeServerProfileRoles(ChangeServerProfileRolesRequest request)
         {
             try
             {
