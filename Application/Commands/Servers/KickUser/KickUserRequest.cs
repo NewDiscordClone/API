@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Commands.Servers.KickUser
 {
-    public class KickUserRequest : IRequest
+    public record KickUserRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]
