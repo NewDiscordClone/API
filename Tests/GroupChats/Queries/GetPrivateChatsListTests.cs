@@ -19,7 +19,7 @@ namespace Tests.PrivateChats.Queries
             GetPrivateChatsRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            List<GetPrivateChatLookUpDto> chats = await handler.Handle(request, CancellationToken);
+            List<PrivateChatLookUp> chats = await handler.Handle(request, CancellationToken);
 
             //Assert
             Assert.NotEmpty(chats);

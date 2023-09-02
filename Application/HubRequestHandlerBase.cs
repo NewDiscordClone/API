@@ -13,17 +13,21 @@ namespace Application.Application
 
         private CancellationToken _token;
 
+        protected IEnumerable<string> GetConnections(User user)
+        {
+            return Context.UserConnections.FindAsync(user.Id).Result.Connections;
+        }
         protected IEnumerable<string> GetConnections(Chat chat)
         {
             return chat.Users
-                .Where(user => Context.UserConnections.FindOrDefaultAsync(user.Id) != null)
+                .Where(user => Context.UserConnections.FindOrDefaultAsync(user.Id).Result != null)
                 .SelectMany(user => Context.UserConnections.FindAsync(user.Id).Result.Connections);
         }
 
         protected IEnumerable<string> GetConnections(Server server)
         {
             return server.ServerProfiles
-                .Where(sp => Context.UserConnections.FindOrDefaultAsync(sp.User.Id) != null)
+                .Where(sp => Context.UserConnections.FindOrDefaultAsync(sp.User.Id).Result != null)
                 .SelectMany(sp => Context.UserConnections.FindAsync(sp.User.Id).Result.Connections);
         }
 

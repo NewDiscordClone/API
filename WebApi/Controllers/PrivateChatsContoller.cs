@@ -39,10 +39,10 @@ namespace WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<GetPrivateChatLookUpDto>>> GetAllPrivateChats()
+        public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
             GetPrivateChatsRequest get = new();
-            List<GetPrivateChatLookUpDto> list = await Mediator.Send(get);
+            List<PrivateChatLookUp> list = await Mediator.Send(get);
             return Ok(list);
         }
 

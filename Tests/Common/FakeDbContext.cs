@@ -51,6 +51,8 @@ namespace Tests.Common
         public ISimpleDbSet<Media> Media { get; set; } = new SimpleFakeDbSet<Media>(new List<Media>());
 
         public ISimpleDbSet<Server> Servers { get; set; }
+        
+        public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; } = new SimpleFakeDbSet<RelationshipList>(new List<RelationshipList>());
 
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
