@@ -21,4 +21,6 @@ public class Server
 
     public UserLookUp Owner { get; set; }
     public List<ServerProfile> ServerProfiles { get; set; } = new();
+
+    public List<int> BannedUsers { get; set; } = new();
 }

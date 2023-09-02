@@ -1,9 +1,12 @@
 ﻿using Application.Commands.Invitations.GetInvitationDetails;
 using Application.Commands.Invitations.MakeInvitation;
+using Application.Commands.Servers.BanUser;
 using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
 using Application.Commands.Servers.JoinServer;
+using Application.Commands.Servers.KickUser;
 using Application.Commands.Servers.LeaveServer;
+using Application.Commands.Servers.UnbanUser;
 using Application.Commands.Servers.UpdateServer;
 using Application.Common;
 using Application.Common.Exceptions;
@@ -156,7 +159,7 @@ namespace WebApi.Controllers
         /// image?: string // URL to the image media file
         /// ```
         /// </param>
-        /// <returns>Ok if the operation is successful</returns>
+        /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested server is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
@@ -195,7 +198,7 @@ namespace WebApi.Controllers
         /// serverId: string // represents ObjectId of the server
         /// ```
         /// </param>
-        /// <returns>Ok if the operation is successful</returns>
+        /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested server is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
@@ -220,6 +223,115 @@ namespace WebApi.Controllers
             catch (EntityNotFoundException e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Removes User from the server users list. The User can come back if would have an invitation
+        /// </summary>
+        /// <param name="request">
+        /// ```
+        /// serverId: string // represents ObjectId of the server to kick user from
+        /// userId: int // id of the user to kick from server
+        /// ```
+        /// </param>
+        /// <returns>No Content if the operation is successful</returns>
+        /// <response code="204">No Content. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult> KickUser(KickUserRequest request)
+        {
+            try
+            {
+                await Mediator.Send(request);
+                return NoContent();
+            }
+            catch (NoPermissionsException)
+            {
+                return Forbid();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        
+        /// <summary>
+        /// Removes User from the server users list and put him in a black list.
+        /// The User can't come back even if it would have an invitation
+        /// </summary>
+        /// <param name="request">
+        /// ```
+        /// serverId: string // represents ObjectId of the server to ban user from
+        /// userId: int // id of the user to ban from server
+        /// ```
+        /// </param>
+        /// <returns>No Content if the operation is successful</returns>
+        /// <response code="204">No Content. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult> BanUser(BanUserRequest request)
+        {
+            try
+            {
+                await Mediator.Send(request);
+                return NoContent();
+            }
+            catch (NoPermissionsException)
+            {
+                return Forbid();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+        
+        /// <summary>
+        /// Removes User from the server's black list. Now the user could return if it would have an invitation
+        /// </summary>
+        /// <param name="request">
+        /// ```
+        /// serverId: string // represents ObjectId of the server to unban user from
+        /// userId: int // id of the user to unban
+        /// ```
+        /// </param>
+        /// <returns>No Content if the operation is successful</returns>
+        /// <response code="204">No Content. Operation is successful</response>
+        /// <response code="400">Bad Request. The requested server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult> UnbanUser(UnbanUserRequest request)
+        {
+            try
+            {
+                await Mediator.Send(request);
+                return NoContent();
+            }
+            catch (NoPermissionsException)
+            {
+                return Forbid();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
             }
         }
     }
