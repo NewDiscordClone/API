@@ -1,6 +1,8 @@
-﻿using Application.Commands.Invitations.GetInvitationDetails;
+using Application.Commands.Invitations.GetInvitationDetails;
 using Application.Commands.Invitations.MakeInvitation;
 using Application.Commands.Servers.BanUser;
+using Application.Commands.HubClients.Servers.ServerDeleted;
+using Application.Commands.HubClients.Servers.ServerUpdated;
 using Application.Commands.Servers.CreateServer;
 using Application.Commands.Servers.DeleteServer;
 using Application.Commands.Servers.JoinServer;
@@ -10,6 +12,7 @@ using Application.Commands.Servers.UnbanUser;
 using Application.Commands.Servers.UpdateServer;
 using Application.Common;
 using Application.Common.Exceptions;
+using Application.Models;
 using Application.Providers;
 using Application.Queries.GetServer;
 using Application.Queries.GetServerDetails;
@@ -175,6 +178,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
+                await Mediator.Send(new NotifyServerUpdatedRequest { ServerId = request.ServerId });
                 return NoContent();
             }
             catch (NoPermissionsException ex)
@@ -213,7 +217,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                await Mediator.Send(request);
+                Server server = await Mediator.Send(request);
+                await Mediator.Send(new NotifyServerDeletedRequest { Server = server });
                 return NoContent();
             }
             catch (NoPermissionsException ex)

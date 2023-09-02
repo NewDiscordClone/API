@@ -6,6 +6,7 @@ namespace Application.Interfaces;
 
 public interface IAppDbContext
 {
+    ISimpleDbSet<UserConnections> UserConnections { get; }
     ISimpleDbSet<Message> Messages { get; }
     ISimpleDbSet<Chat> Chats { get; }
     ISimpleDbSet<PrivateChat> PrivateChats { get; }

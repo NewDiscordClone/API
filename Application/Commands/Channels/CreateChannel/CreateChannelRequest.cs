@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Commands.Channels.CreateChannel
 {
-    public class CreateChannelRequest : IRequest<Channel>
+    public class CreateChannelRequest : IRequest<string>
     {
         [Required]
         [MaxLength(100)] 

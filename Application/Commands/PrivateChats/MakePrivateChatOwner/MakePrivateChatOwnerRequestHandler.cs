@@ -13,7 +13,8 @@ namespace Application.Commands.PrivateChats.MakePrivateChatOwner
         {
             Context.SetToken(cancellationToken);
 
-            PrivateChat chat = await Context.PrivateChats.FindAsync(request.ChatId);
+            PrivateChat pchat = await Context.PrivateChats.FindAsync(request.ChatId);
+            if (pchat is not GroupChat chat) throw new Exception("This is not group chat");
 
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("User is not an owner of the chat");

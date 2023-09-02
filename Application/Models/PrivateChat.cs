@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Application.Models;
 
-public class PrivateChat : Chat
+public abstract class PrivateChat : Chat
 {
     
     [DataType(DataType.ImageUrl)]
@@ -12,6 +12,6 @@ public class PrivateChat : Chat
     public string? Image { get; set; }
     [DefaultValue("Title")]
     public string? Title { get; set; }
-    [DefaultValue(1)]
-    public int OwnerId { get; set; }
+    
+    
 }

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Commands.Messages.EditMessage
 {
-    public class EditMessageRequest : IRequest<Message>
+    public class EditMessageRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

@@ -14,7 +14,8 @@ namespace Application.Models
         [DataType(DataType.ImageUrl)]
         [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]
         public string Avatar { get; set; }
-
+        [DefaultValue("I am good")]
+        public string TextStatus { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<User, UserLookUp>()

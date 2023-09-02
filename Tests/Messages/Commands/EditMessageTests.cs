@@ -26,7 +26,8 @@ namespace Tests.Messages.Commands
             EditMessageRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            Message result = await handler.Handle(request, CancellationToken);
+            await handler.Handle(request, CancellationToken);
+            Message result = await Context.Messages.FindAsync(messageId);
 
             //Assert
 

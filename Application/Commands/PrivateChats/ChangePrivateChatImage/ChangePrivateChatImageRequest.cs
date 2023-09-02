@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.PrivateChats.ChangePrivateChatImage
 {
-    public class ChangePrivateChatImageRequest : IRequest<PrivateChat>
+    public class ChangePrivateChatImageRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

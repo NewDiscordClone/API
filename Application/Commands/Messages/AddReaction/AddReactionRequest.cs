@@ -6,7 +6,7 @@ using MongoDB.Bson;
 
 namespace Application.Commands.Messages.AddReaction
 {
-    public class AddReactionRequest : IRequest<Reaction>
+    public class AddReactionRequest : IRequest
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

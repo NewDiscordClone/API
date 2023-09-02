@@ -1,4 +1,7 @@
-﻿using Application.Commands.Messages.AddMessage;
+﻿using Application.Commands.HubClients.Messages.MessageAdded;
+using Application.Commands.HubClients.Messages.MessageRemoved;
+using Application.Commands.HubClients.Messages.MessageUpdated;
+using Application.Commands.Messages.AddMessage;
 using Application.Commands.Messages.AddReaction;
 using Application.Commands.Messages.EditMessage;
 using Application.Commands.Messages.PinMessage;
@@ -114,7 +117,7 @@ namespace WebApi.Controllers
             try
             {
                 Message message = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyMessageAddedRequest { MessageId = message.Id});
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -150,8 +153,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Reaction reaction = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(request);
+                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -190,8 +193,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Message chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(request);
+                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -229,8 +232,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Message chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(request);
+                //TODO: Реалізація відправки Message
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -268,8 +271,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Chat chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(request);
+                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -308,8 +311,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Chat chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(request);
+                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -348,7 +351,7 @@ namespace WebApi.Controllers
             try
             {
                 Chat chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = request.MessageId, ChatId = chat.Id});
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -387,8 +390,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                Message chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                await Mediator.Send(request);
+                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -426,7 +429,7 @@ namespace WebApi.Controllers
             try
             {
                 Message chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Notify
+                //TODO: Реалізація відправки Message
                 return Ok();
             }
             catch (NoPermissionsException e)
