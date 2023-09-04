@@ -40,7 +40,7 @@ namespace Application.Models
         public string? DisplayName { get; set; }
 
         /// <summary>
-        /// Avatar URL for the user.
+        /// Avatar URL of the user.
         /// </summary>
         [DataType(DataType.ImageUrl)]
         [RegularExpression("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\/api\\/media\\/[a-z0-9]{24}$")]

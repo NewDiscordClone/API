@@ -1,12 +1,14 @@
-﻿using System.ComponentModel;
-using MediatR;
+﻿using MediatR;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
 
 namespace Application.Queries.GetServerDetails
 {
     public record GetServerDetailsRequest : IRequest<ServerDetailsDto>
     {
+        /// <summary>
+        /// Id of the server
+        /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
