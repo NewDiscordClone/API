@@ -101,7 +101,7 @@ namespace WebApi
                 app.MapSwagger();
                 app.UseSwaggerUI(option =>
                 {
-                    option.SwaggerEndpoint("/swagger/spark/swagger.json", "WebApi");
+                    option.SwaggerEndpoint("/swagger/sparkle/swagger.json", "WebApi");
                     option.DisplayRequestDuration();
                 });
             }

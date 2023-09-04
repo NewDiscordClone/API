@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Queries.GetPersonalChats
 {
-    public record GetPrivateChatsRequest : IRequest<List<PrivateChatLookUp>>
+    public record GetPersonalChatsRequest : IRequest<List<PrivateChatLookUp>>
     {
         
     }

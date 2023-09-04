@@ -5,7 +5,7 @@ using Application.Providers;
 using AutoMapper;
 using MediatR;
 
-namespace Application.Commands.Invitations.GetInvitationDetails
+namespace Application.Queries.GetInvitationDetails
 {
     public class GetInvitationRequestHandler : RequestHandlerBase, IRequestHandler<GetInvitationDetailsRequest, InvitationDetailsDto>
     {
@@ -23,7 +23,7 @@ namespace Application.Commands.Invitations.GetInvitationDetails
                 await Context.Invitations.DeleteAsync(invitation);
                 throw new NoPermissionsException("The invitation is expired");
             }
-            
+
             User? user = invitation.UserId == null ? null : await Context.FindSqlByIdAsync<User>(invitation.UserId.Value, cancellationToken);
             Server server = await Context.Servers.FindAsync(invitation.ServerId);
 
