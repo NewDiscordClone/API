@@ -11,7 +11,7 @@ namespace Tests.Messages.Queries
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.PrivateChat3;
+            var chatId = Ids.GroupChat3;
             int messagesCount = 2;
 
             GetMessagesRequest request = new()
@@ -34,7 +34,7 @@ namespace Tests.Messages.Queries
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.PrivateChat3;
+            var chatId = Ids.GroupChat3;
             int messagesCount = 1;
 
             GetMessagesRequest request = new()

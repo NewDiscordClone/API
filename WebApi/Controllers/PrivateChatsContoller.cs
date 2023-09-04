@@ -1,17 +1,17 @@
-﻿using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
+﻿using Application.Commands.GroupChats.AddMemberToGroupChat;
+using Application.Commands.GroupChats.ChangeGroupChatImage;
+using Application.Commands.GroupChats.CreateGroupChat;
+using Application.Commands.GroupChats.LeaveFromGroupChat;
+using Application.Commands.GroupChats.MakeGroupChatOwner;
+using Application.Commands.GroupChats.RemoveGroupChatMember;
+using Application.Commands.GroupChats.RenameGroupChat;
+using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
 using Application.Commands.HubClients.PrivateChats.PrivateChatUpdated;
-using Application.Commands.PrivateChats.AddMemberToPrivateChat;
-using Application.Commands.PrivateChats.ChangePrivateChatImage;
-using Application.Commands.PrivateChats.CreatePrivateChat;
-using Application.Commands.PrivateChats.LeaveFromPrivateChat;
-using Application.Commands.PrivateChats.MakePrivateChatOwner;
-using Application.Commands.PrivateChats.RemovePrivateChatMember;
-using Application.Commands.PrivateChats.RenamePrivateChat;
 using Application.Common.Exceptions;
 using Application.Models;
 using Application.Providers;
-using Application.Queries.GetPrivateChatDetails;
-using Application.Queries.GetPrivateChats;
+using Application.Queries.GetGroupChatDetails;
+using Application.Queries.GetPersonalChats;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,25 +34,25 @@ namespace WebApi.Controllers
         /// Gets all Private Chats the currently authorized user are member of
         /// </summary>
         /// <returns>List of the private chats</returns>
-        /// <response code="200">Ok. List of the private chats</response>
+        /// <response code="200">Ok. List of the private chat look ups</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<PrivateChat>>> GetAllPrivateChats()
+        public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
             GetPrivateChatsRequest get = new();
-            List<PrivateChat> list = await Mediator.Send(get);
+            List<PrivateChatLookUp> list = await Mediator.Send(get);
             return Ok(list);
         }
 
         /// <summary>
-        /// Get details about the given private chat. The details include Title, Image, OwnerId and Users
+        /// Get details about the given group chat. The details include Title, Image, OwnerId and Users
         /// </summary>
         /// <param name="chatId">Chat Id to get detailed information from</param>
-        /// <returns>Json private chat object</returns>
-        /// <response code="200">Ok. Json private chat object</response>
-        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <returns>Json group chat object</returns>
+        /// <response code="200">Ok. Json group chat object</response>
+        /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpGet]
@@ -60,12 +60,12 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<PrivateChat>> GetPrivateChatDetails(string chatId)
+        public async Task<ActionResult<GroupChat>> GetGroupChatDetails(string chatId)
         {
             try
             {
-                PrivateChat chat = await Mediator
-                    .Send(new GetPrivateChatDetailsRequest() { ChatId = chatId });
+                GroupChat chat = await Mediator
+                    .Send(new GetGroupChatDetailsRequest() { ChatId = chatId });
                 return Ok(chat);
             }
             catch (NoPermissionsException e)
@@ -79,7 +79,7 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates new private chat
+        /// Creates new group chat
         /// </summary>
         /// <param name="request">
         /// ```
@@ -88,21 +88,21 @@ namespace WebApi.Controllers
         /// usersId: number[] // users that are members of the chat from the beginning
         /// ```
         /// </param>
-        /// <returns>String representation of an ObjectId of a newly created private chat</returns>
-        /// <response code="201">Created. String representation of an ObjectId of a newly created private chat</response>
+        /// <returns>String representation of an ObjectId of a newly created group chat</returns>
+        /// <response code="201">Created. String representation of an ObjectId of a newly created group chat</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<string>> CreatePrivateChat(CreatePrivateChatRequest request)
+        public async Task<ActionResult<string>> CreateGroupChat(CreateGroupChatRequest request)
         {
             string chatId = await Mediator.Send(request);
             await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = chatId });
-            return Created($"{Request.Scheme}://{Request.Host}/api/PrivateChat/GetDetails?chatId=" + chatId, chatId);
+            return Created($"{Request.Scheme}://{Request.Host}/api/GroupChat/GetDetails?chatId=" + chatId, chatId);
         }
 
         /// <summary>
-        /// Adds the given user to the private chat as a new member
+        /// Adds the given user to the group chat as a new member
         /// </summary>
         /// <param name="request">
         /// ```
@@ -112,7 +112,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested private chat or member is not found</response>
+        /// <response code="400">Bad Request. The requested group chat or member is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
 
@@ -121,7 +121,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> AddMemberToPrivateChat(AddMemberToPrivateChatRequest request)
+        public async Task<ActionResult> AddMemberToGroupChat(AddMemberToGroupChatRequest request)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Changes image of the given private chat
+        /// Changes image of the given group chat
         /// </summary>
         /// <param name="request">
         /// ```
@@ -150,7 +150,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
@@ -158,7 +158,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> ChangePrivateChatImage(ChangePrivateChatImageRequest request)
+        public async Task<ActionResult> ChangeGroupChatImage(ChangeGroupChatImageRequest request)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace WebApi.Controllers
         }
         
         /// <summary>
-        /// Changes the title of the given private chat
+        /// Changes the title of the given group chat
         /// </summary>
         /// <param name="request">
         /// ```
@@ -187,7 +187,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
@@ -195,7 +195,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RenamePrivateChat(RenamePrivateChatRequest request)
+        public async Task<ActionResult> RenameGroupChat(RenameGroupChatRequest request)
         {
             try
             {
@@ -213,7 +213,7 @@ namespace WebApi.Controllers
             }
         }
         /// <summary>
-        /// Remove the currently authorized user from the private chat 
+        /// Remove the currently authorized user from the group chat 
         /// </summary>
         /// <param name="request">
         /// ```
@@ -223,7 +223,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested private chat is not found</response>
+        /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must be a member of the chat</response>
         [HttpPut]
@@ -231,7 +231,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> LeaveFromPrivateChat(LeaveFromPrivateChatRequest request)
+        public async Task<ActionResult> LeaveFromGroupChat(LeaveFromGroupChatRequest request)
         {
             try
             {
@@ -250,7 +250,7 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Transfer owner rights of the private chat to another member of the chat
+        /// Transfer owner rights of the group chat to another member of the chat
         /// </summary>
         /// <param name="request">
         /// ```
@@ -260,7 +260,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested private chat or user is not found</response>
+        /// <response code="400">Bad Request. The requested group chat or user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
@@ -268,7 +268,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> MakePrivateChatOwner(MakePrivateChatOwnerRequest request)
+        public async Task<ActionResult> MakeGroupChatOwner(MakeGroupChatOwnerRequest request)
         {
             try
             {
@@ -297,7 +297,7 @@ namespace WebApi.Controllers
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
-        /// <response code="400">Bad Request. The requested private chat or user is not found</response>
+        /// <response code="400">Bad Request. The requested group chat or user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPut]
@@ -305,7 +305,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemovePrivateChatMember(RemovePrivateChatMemberRequest request)
+        public async Task<ActionResult> RemoveGroupChatMember(RemoveGroupChatMemberRequest request)
         {
             try
             {
