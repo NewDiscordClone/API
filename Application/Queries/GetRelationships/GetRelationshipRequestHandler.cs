@@ -25,7 +25,7 @@ namespace Application.Queries.GetRelationships
                 relationshipDtos.Add(new RelationshipDto()
                 {
                     User = Mapper.Map<UserLookUp>(
-                        Context.FindSqlByIdAsync<User>(relationship.UserId, cancellationToken)),
+                        Context.SqlUsers.FindAsync(relationship.UserId)),
                     RelationshipType = relationship.RelationshipType
                 });
             }

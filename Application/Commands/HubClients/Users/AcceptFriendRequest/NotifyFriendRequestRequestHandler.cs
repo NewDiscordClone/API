@@ -16,8 +16,8 @@ namespace Application.Commands.HubClients.Users.AcceptFriendRequest
         public async Task Handle(NotifyAcceptFriendRequestRequest request, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
-            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
-            User other = await Context.FindSqlByIdAsync<User>(request.UserId, cancellationToken);
+            User user = await Context.SqlUsers.FindAsync(UserId);
+            User other = await Context.SqlUsers.FindAsync(request.UserId);
 
             await SendAsync(ClientMethods.AcceptFriendRequest, Mapper.Map<UserLookUp>(user), GetConnections(other));
         }

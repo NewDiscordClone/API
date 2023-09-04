@@ -12,7 +12,7 @@ namespace Application.Commands.Servers.CreateServer
         {
             Context.SetToken(cancellationToken);
 
-            UserLookUp ownerLookUp = Mapper.Map<UserLookUp>(await Context.FindSqlByIdAsync<User>(UserId, cancellationToken));
+            UserLookUp ownerLookUp = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(UserId));
 
             Server server = new()
             {

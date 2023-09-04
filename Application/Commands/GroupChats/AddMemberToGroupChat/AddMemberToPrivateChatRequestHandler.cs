@@ -21,9 +21,9 @@ namespace Application.Commands.GroupChats.AddMemberToGroupChat
             if (chat.Users.Any(u => u.Id == request.NewMemberId))
                 throw new NoPermissionsException("User is already a member of the chat");
 
-            User NewMember = await Context.FindSqlByIdAsync<User>(request.NewMemberId, cancellationToken);
+            User newMember = await Context.SqlUsers.FindAsync(request.NewMemberId);
 
-            chat.Users.Add(Mapper.Map<UserLookUp>(NewMember));
+            chat.Users.Add(Mapper.Map<UserLookUp>(newMember));
 
             await Context.GroupChats.UpdateAsync(chat);
         }

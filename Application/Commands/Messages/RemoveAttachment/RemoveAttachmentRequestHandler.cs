@@ -14,7 +14,7 @@ namespace Application.Commands.Messages.RemoveAttachment
 
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
-            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
+            User user = await Context.SqlUsers.FindAsync(UserId);
 
             if (message.User.Id != user.Id)
                 throw new NoPermissionsException("You don't have permission to edit the message");

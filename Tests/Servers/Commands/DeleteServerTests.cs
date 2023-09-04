@@ -35,7 +35,7 @@ namespace Tests.Servers.Commands
                 await Context.Servers.FindAsync(serverId));
             Assert.Empty(await Context.Channels.FilterAsync(channel => channel.ServerId == serverId));
             Assert.Equal(oldCount - 1, await Context.Servers.CountAsync(s => true));
-            Assert.NotNull(await Context.FindSqlByIdAsync<User>(userId, CancellationToken));
+            Assert.NotNull(await Context.SqlUsers.FindAsync(userId));
         }
 
         [Fact]

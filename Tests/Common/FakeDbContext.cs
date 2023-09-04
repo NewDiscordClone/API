@@ -10,6 +10,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using DataAccess;
 
 namespace Tests.Common
 {
@@ -53,6 +54,8 @@ namespace Tests.Common
         public ISimpleDbSet<Server> Servers { get; set; }
         public ISimpleDbSet<Invitation> Invitations => new SimpleFakeDbSet<Invitation>(new List<Invitation>());
         public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; } = new SimpleFakeDbSet<RelationshipList>(new List<RelationshipList>());
+        public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
+        public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
 
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 

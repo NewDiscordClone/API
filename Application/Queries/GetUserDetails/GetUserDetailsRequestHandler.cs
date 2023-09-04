@@ -13,7 +13,7 @@ namespace Application.Queries.GetUser
         {
             Context.SetToken(cancellationToken);
 
-            User user = await Context.FindSqlByIdAsync<User>(request.UserId, cancellationToken);
+            User user = await Context.SqlUsers.FindAsync(request.UserId);
             GetUserDetailsDto userDto = Mapper.Map<GetUserDetailsDto>(user);
 
             if (request.ServerId is not null)

@@ -27,7 +27,7 @@ namespace Application.Commands.Servers.JoinServer
                 throw new NoPermissionsException("You already a server member");
             if (server.BannedUsers.Contains(UserId))
                 throw new NoPermissionsException("You are banned from the server");
-            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
+            User user = await Context.SqlUsers.FindAsync(UserId);
             server.ServerProfiles.Add(new ServerProfile
             {
                 User = Mapper.Map<UserLookUp>(user),

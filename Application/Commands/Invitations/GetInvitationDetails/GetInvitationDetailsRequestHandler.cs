@@ -24,7 +24,7 @@ namespace Application.Commands.Invitations.GetInvitationDetails
                 throw new NoPermissionsException("The invitation is expired");
             }
             
-            User? user = invitation.UserId == null ? null : await Context.FindSqlByIdAsync<User>(invitation.UserId.Value, cancellationToken);
+            User? user = invitation.UserId == null ? null : await Context.SqlUsers.FindAsync(invitation.UserId.Value);
             Server server = await Context.Servers.FindAsync(invitation.ServerId);
 
             return new InvitationDetailsDto

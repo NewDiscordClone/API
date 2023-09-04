@@ -17,6 +17,7 @@ namespace DataAccess
         public SimpleMongoDbSet(IMongoCollection<TEntity> collection, CancellationToken cancellationToken = default)
         {
             _collection = collection;
+            CancellationToken = cancellationToken;
         }
 
         public Task<TEntity> FindAsync(object id)

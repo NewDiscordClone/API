@@ -22,7 +22,7 @@ namespace Application.Commands.Servers.ChangeServerProfileRoles
                                           throw new NoPermissionsException("The user are not a member of the server");
             serverProfile.Roles = new List<Role>();
             foreach (var roleId in request.Roles)
-                serverProfile.Roles.Add(await Context.FindSqlByIdAsync<Role>(roleId, cancellationToken));
+                serverProfile.Roles.Add(await Context.SqlRoles.FindAsync(roleId));
             await Context.Servers.UpdateAsync(server);
         }
     }

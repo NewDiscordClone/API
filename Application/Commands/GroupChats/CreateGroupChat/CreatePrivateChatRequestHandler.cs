@@ -13,7 +13,7 @@ namespace Application.Commands.GroupChats.CreateGroupChat
             Context.SetToken(cancellationToken);
 
             List<UserLookUp> users = new();
-            request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.FindSqlByIdAsync<User>(userId, cancellationToken).Result)));
+            request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.SqlUsers.FindAsync(userId).Result)));
 
             GroupChat privateChat = new GroupChat()
             {
