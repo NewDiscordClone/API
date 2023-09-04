@@ -17,7 +17,8 @@ namespace Application.Commands.Invitations.GetInvitationDetails
         {
             Context.SetToken(cancellationToken);
             Invitation invitation = await Context.Invitations.FindAsync(request.InvitationId);
-            if (invitation.ExpireTime < DateTime.Now)
+            if (invitation.ExpireTime is not null &&
+                   invitation.ExpireTime < DateTime.Now)
             {
                 await Context.Invitations.DeleteAsync(invitation);
                 throw new NoPermissionsException("The invitation is expired");
