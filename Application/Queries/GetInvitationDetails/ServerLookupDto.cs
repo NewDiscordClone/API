@@ -5,7 +5,7 @@ using Application.Models;
 using AutoMapper;
 using MongoDB.Bson;
 
-namespace Application.Commands.Invitations.GetInvitationDetails
+namespace Application.Queries.GetInvitationDetails
 {
     public record ServerLookupDto : IMapWith<Server>
     {

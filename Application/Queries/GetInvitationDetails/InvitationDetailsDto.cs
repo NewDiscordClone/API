@@ -2,7 +2,7 @@
 using Application.Models;
 using AutoMapper;
 
-namespace Application.Commands.Invitations.GetInvitationDetails
+namespace Application.Queries.GetInvitationDetails
 {
     public class InvitationDetailsDto
     {
