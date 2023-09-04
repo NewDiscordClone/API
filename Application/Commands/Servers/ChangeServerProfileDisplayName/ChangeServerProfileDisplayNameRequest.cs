@@ -13,7 +13,6 @@ namespace Application.Commands.Servers.ChangeServerProfileDisplayName
         [Required]
         public string NewDisplayName { get; init; }
         [Required]
-        [DefaultValue(1)]
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }

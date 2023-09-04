@@ -15,28 +15,28 @@ namespace Tests.Common
             _mapper = mapper;
             _userA = new User
             {
-                Id = _ids.UserAId,
+                Id = _ids.UserAId = Guid.NewGuid(),
                 UserName = "User A",
                 Avatar = null,
                 Email = "email@test1.com",
             };
             _userB = new User
             {
-                Id = _ids.UserBId,
+                Id = _ids.UserBId = Guid.NewGuid(),
                 UserName = "User B",
                 Avatar = null,
                 Email = "email@test2.com",
             };
             _userC = new User
             {
-                Id = _ids.UserCId,
+                Id = _ids.UserCId= Guid.NewGuid(),
                 UserName = "User C",
                 Avatar = null,
                 Email = "email@test3.com",
             };
             _userD = new User
             {
-                Id = _ids.UserDId,
+                Id = _ids.UserDId= Guid.NewGuid(),
                 UserName = "User D",
                 Avatar = null,
                 Email = "email@test4.com",

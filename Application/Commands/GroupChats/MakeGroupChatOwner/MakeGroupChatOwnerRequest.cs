@@ -13,7 +13,6 @@ namespace Application.Commands.GroupChats.MakeGroupChatOwner
         public string ChatId { get; init; }
         
         [Required]
-        [DefaultValue(1)]
-        public int MemberId { get; init; }
+        public Guid MemberId { get; init; }
     }
 }

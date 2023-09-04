@@ -13,7 +13,7 @@ namespace Tests.GroupChats.Queries
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat4;
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
             
             SetAuthorizedUserId(userId);
 

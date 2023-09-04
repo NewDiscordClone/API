@@ -13,7 +13,7 @@ namespace Tests.Servers.Queries
             //Arrange
             CreateDatabase();
             string serverId = Ids.ServerIdForDelete;
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
             
             SetAuthorizedUserId(userId);

@@ -15,8 +15,8 @@ namespace Tests.GroupChats.Commands
             CreateDatabase();
 
             var chatId = Ids.GroupChat3;
-            int newOwnerId = Ids.UserBId;
-            int oldOwner = Ids.UserAId;
+            Guid newOwnerId = Ids.UserBId;
+            Guid oldOwner = Ids.UserAId;
 
             SetAuthorizedUserId(oldOwner);
 
@@ -47,7 +47,7 @@ namespace Tests.GroupChats.Commands
             CreateDatabase();
 
             var chatId = Ids.GroupChat6;
-            int newOwnerId = Ids.UserCId;
+            Guid newOwnerId = Ids.UserCId;
 
             SetAuthorizedUserId(Ids.UserAId);
 
@@ -73,7 +73,7 @@ namespace Tests.GroupChats.Commands
             CreateDatabase();
 
             var chatId = Ids.GroupChat7;
-            int newOwnerId = Ids.UserAId;
+            Guid newOwnerId = Ids.UserAId;
 
             SetAuthorizedUserId(Ids.UserBId);
 

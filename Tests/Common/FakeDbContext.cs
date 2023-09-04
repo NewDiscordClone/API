@@ -14,7 +14,7 @@ using DataAccess;
 
 namespace Tests.Common
 {
-    public class FakeDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
+    public class FakeDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     {
         private readonly IMapper _mapper;
 
@@ -142,14 +142,14 @@ namespace Tests.Common
         {
             foreach (Claim claim in claims)
             {
-                await RoleClaims.AddAsync(new IdentityRoleClaim<int>
+                await RoleClaims.AddAsync(new IdentityRoleClaim<Guid>
                 {
                     ClaimType = claim.Type,
                     ClaimValue = claim.Value,
                     RoleId = role.Id
-                });
+                }, _token);
             }
-            await SaveChangesAsync();
+            await SaveChangesAsync(_token);
         }
     }
 }

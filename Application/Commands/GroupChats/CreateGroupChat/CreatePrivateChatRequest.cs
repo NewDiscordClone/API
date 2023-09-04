@@ -16,6 +16,6 @@ namespace Application.Commands.GroupChats.CreateGroupChat
 
         [Required]
         [MaxLength(11)]
-        public List<int> UsersId { get; init; }
+        public List<Guid> UsersId { get; init; }
     }
 }

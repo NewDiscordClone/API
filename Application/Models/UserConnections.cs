@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
     public class UserConnections
     {
         [BsonId]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public HashSet<string> Connections { get; set; }
     }
 }

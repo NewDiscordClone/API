@@ -4,6 +4,6 @@ namespace Application.Commands.Users.AcceptFriendRequest
 {
     public record AcceptFriendRequestRequest : IRequest
     {
-        public int UserId { get; init; }
+        public Guid UserId { get; init; }
     }
 }

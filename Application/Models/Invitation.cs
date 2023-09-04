@@ -17,13 +17,7 @@ namespace Application.Models
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string Id { get; set; }
-        /// <summary>
-        /// Unique Id as an ObjectId representation of a user that make the invitation
-        /// </summary>
-        /// <example>5f95a3c3d0ddad0017ea9291</example>
-        [StringLength(24, MinimumLength = 24)]
-        [DefaultValue("5f95a3c3d0ddad0017ea9291")]
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
         /// <summary>
         /// Unique Id as an ObjectId representation of a server to invite to
         /// </summary>

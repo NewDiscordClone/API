@@ -25,7 +25,7 @@ public class ChatHub : Hub
         _logger = logger;
         _userProvider = userProvider;
     }
-    private int UserId => _userProvider.GetUserId();
+    private Guid UserId => _userProvider.GetUserId();
     public override async Task OnConnectedAsync()
     {
         await _mediator.Send(new ConnectRequest() { ConnectionId = Context.ConnectionId });

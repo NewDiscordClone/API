@@ -7,8 +7,7 @@ namespace Application.Queries.GetServerDetails
 {
     public record RoleDto : IMapWith<Role>
     {
-        [DefaultValue(1)]
-        public int Id { get; init; }
+        public Guid Id { get; init; }
         [DefaultValue("Admin")]
         public string Name { get; init; }
         [DefaultValue("#FF0000")]

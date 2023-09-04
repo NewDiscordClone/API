@@ -9,8 +9,7 @@ namespace Application.Queries.GetServerDetails
     {
         [DefaultValue("𝕾𝖊𝖗𝖛𝖊𝖗 𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
         public string Name { get; init; }
-        [DefaultValue(1)]
-        public int UserId { get; init; }
+        public Guid UserId { get; init; }
         
         public RoleDto? MainRole { get; init; }
         public void Mapping(Profile profile)

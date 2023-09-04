@@ -4,10 +4,10 @@ namespace Tests.Common
 {
     public class Ids
     {
-        public int UserAId { get; set; } = 1;
-        public int UserBId { get; set; } = 2;
-        public int UserCId { get; set; } = 3;
-        public int UserDId { get; set; } = 4;
+        public Guid UserAId { get; set; }
+        public Guid UserBId { get; set; }
+        public Guid UserCId { get; set; }
+        public Guid UserDId { get; set; }
 
         public string ServerIdForDelete { get; set; }
         public string ServerIdForUpdate { get; set; }

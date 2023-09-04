@@ -15,7 +15,7 @@ namespace Tests.Servers.Commands
         {
             //Arrange
             CreateDatabase();
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
             long oldCount = await Context.Servers.CountAsync(s => true);
             const string serverName = "New server";
 

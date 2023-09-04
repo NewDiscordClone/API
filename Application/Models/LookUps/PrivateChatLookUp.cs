@@ -32,7 +32,7 @@ namespace Application.Models
         }
         public PrivateChatLookUp(){}
 
-        public PrivateChatLookUp(PersonalChat personalChat, int userid)
+        public PrivateChatLookUp(PersonalChat personalChat, Guid userid)
         {
             UserLookUp other = personalChat.Users.First(u => u.Id != userid);
             Id = personalChat.Id;

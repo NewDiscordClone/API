@@ -7,8 +7,7 @@ namespace Application.Queries.GetUser
 {
     public class GetUserDetailsRolesDto : IMapWith<Role>
     {
-        [DefaultValue(1)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [DefaultValue("Admin")]
         public string Name { get; set; }
         [DefaultValue("#FF0000")]

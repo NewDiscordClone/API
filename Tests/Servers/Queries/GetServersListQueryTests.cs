@@ -10,7 +10,7 @@ namespace Tests.Servers.Queries
         {
             // Arrange
             CreateDatabase();
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
 
             SetAuthorizedUserId(userId);
@@ -31,7 +31,7 @@ namespace Tests.Servers.Queries
         {
             // Arrange
             CreateDatabase();
-            int userId = int.MaxValue;
+            Guid userId = Guid.NewGuid();
             CancellationToken cancellationToken = CancellationToken.None;
 
             SetAuthorizedUserId(userId);

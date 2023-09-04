@@ -7,8 +7,7 @@ namespace Application.Models
 {
     public class UserLookUp : IMapWith<User>
     {
-        [DefaultValue(1)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [DefaultValue("𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
         public string DisplayName { get; set; }
         [DataType(DataType.ImageUrl)]

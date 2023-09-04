@@ -14,7 +14,6 @@ namespace Application.Commands.GroupChats.AddMemberToGroupChat
         public string ChatId { get; init; }
         
         [Required]
-        [DefaultValue(1)]
-        public int NewMemberId { get; init; }
+        public Guid NewMemberId { get; init; }
     }
 }

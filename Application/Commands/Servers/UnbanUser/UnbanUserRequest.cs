@@ -11,7 +11,6 @@ namespace Application.Commands.Servers.UnbanUser
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string ServerId { get; set; }
         [Required]
-        [DefaultValue(1)]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

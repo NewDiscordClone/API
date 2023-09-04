@@ -13,7 +13,7 @@ using System.Security.Claims;
 
 namespace DataAccess
 {
-    public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     {
         private IMongoClient _mongoClient { get; }
         private string _mongoDbName { get; }
@@ -149,14 +149,14 @@ namespace DataAccess
         {
             foreach (Claim claim in claims)
             {
-                await RoleClaims.AddAsync(new IdentityRoleClaim<int>
+                await RoleClaims.AddAsync(new IdentityRoleClaim<Guid>
                 {
                     ClaimType = claim.Type,
                     ClaimValue = claim.Value,
                     RoleId = role.Id
-                });
+                }, _token);
             }
-            await SaveChangesAsync();
+            await SaveChangesAsync(_token);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Tests.PrivateChats.Queries
         {
             //Arrange
             CreateDatabase();
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 

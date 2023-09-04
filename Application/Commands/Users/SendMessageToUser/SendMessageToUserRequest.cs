@@ -7,8 +7,7 @@ namespace Application.Commands.Users.SendMessageToUser
 {
     public record SendMessageToUserRequest : IRequest<MessageChatDto>
     {
-        [DefaultValue(1)]
-        public int UserId { get; init; }
+        public Guid UserId { get; init; }
         
         [MaxLength(2000)]
         [DefaultValue("MessageText")]

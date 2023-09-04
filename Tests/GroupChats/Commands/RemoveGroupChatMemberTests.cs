@@ -14,7 +14,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat6;
-            int removeMemberId = Ids.UserAId;
+            Guid removeMemberId = Ids.UserAId;
             int oldCount = 4;
 
             SetAuthorizedUserId(Ids.UserBId);
@@ -43,7 +43,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat7;
-            int removeMemberId = Ids.UserAId;
+            Guid removeMemberId = Ids.UserAId;
 
             SetAuthorizedUserId(Ids.UserBId);
 

@@ -14,7 +14,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat7;
-            int userId = Ids.UserBId;
+            Guid userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 
@@ -43,7 +43,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat4;
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 
@@ -68,7 +68,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat4;
-            int userId = Ids.UserBId;
+            Guid userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 

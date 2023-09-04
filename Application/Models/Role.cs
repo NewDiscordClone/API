@@ -6,10 +6,9 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Application.Models;
 
-public class Role : IdentityRole<int>
+public class Role : IdentityRole<Guid>
 {
-    [DefaultValue(1)]
-    public override int Id { get; set; }
+    public override Guid Id { get; set; }
     [DefaultValue("Admin")]
     public override string Name { get; set; }
     [DefaultValue("#FF0000")]

@@ -11,10 +11,9 @@ public enum UserStatus
     DoNotDisturb,
     Offline
 }
-public class User : IdentityUser<int>
+public class User : IdentityUser<Guid>
 {
-    [DefaultValue(1)]
-    public override int Id { get; set; }
+    public override Guid Id { get; set; }
     [DefaultValue("username")]
     public override string UserName { get; set; }
 

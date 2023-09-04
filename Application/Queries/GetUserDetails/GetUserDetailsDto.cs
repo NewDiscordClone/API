@@ -8,8 +8,7 @@ namespace Application.Queries.GetUser
 {
     public record GetUserDetailsDto : IMapWith<User>
     {
-        [DefaultValue(1)]
-        public int Id { get; init; }
+        public Guid Id { get; init; }
         [DefaultValue("𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
         public string DisplayName { get; init; }
         [DefaultValue("username")]

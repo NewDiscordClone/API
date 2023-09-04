@@ -11,7 +11,7 @@ namespace Application
         private readonly IMapper? _mapper;
         
         protected IAppDbContext Context => _context?? throw new Exception("There is no constructor with IAppDbContext");
-        protected int UserId => UserProvider.GetUserId();
+        protected Guid UserId => UserProvider.GetUserId();
 
         public IAuthorizedUserProvider UserProvider => _userProvider;
         protected IMapper Mapper => _mapper ?? throw new Exception("There is no constructor with IMapper");

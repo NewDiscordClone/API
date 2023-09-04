@@ -17,7 +17,7 @@ namespace WebApi.Providers
             _context = context;
         }
 
-        public int GetUserId()
+        public Guid GetUserId()
         {
             string? userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -26,7 +26,7 @@ namespace WebApi.Providers
                 throw new NoSuchUserException();
             }
 
-            return int.Parse(userIdClaim);
+            return Guid.Parse(userIdClaim);
         }
         public async Task<bool> HasClaimsAsync(string serverId, IEnumerable<string> claimTypes)
         {
