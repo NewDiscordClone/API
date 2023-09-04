@@ -1,6 +1,10 @@
-﻿namespace Application.Commands.Messages.RemoveAttachment
+﻿using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Application.Commands.Messages.RemoveAttachment
 {
-    public record RemoveAttachmentRequest : IRequest<Chat>
+    public record RemoveAttachmentRequest : IRequest
     {
         /// <summary>
         /// Id of the message to which the reaction is attached

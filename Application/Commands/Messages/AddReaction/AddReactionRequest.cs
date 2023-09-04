@@ -1,6 +1,10 @@
-﻿namespace Application.Commands.Messages.AddReaction
+﻿using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Application.Commands.Messages.AddReaction
 {
-    public record AddReactionRequest : IRequest<Reaction>
+    public record AddReactionRequest : IRequest
     {
         /// <summary>
         /// Id of the message to which to add a reaction

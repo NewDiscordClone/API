@@ -1,6 +1,10 @@
-﻿namespace Application.Commands.Messages.RemoveAllReactions
+﻿using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Application.Commands.Messages.RemoveAllReactions
 {
-    public record RemoveAllReactionsRequest : IRequest<Chat>
+    public record RemoveAllReactionsRequest : IRequest
     {
         /// <summary>
         /// Id of the message for which all reactions should be removed

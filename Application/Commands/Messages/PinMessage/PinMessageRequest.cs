@@ -1,6 +1,10 @@
-﻿namespace Application.Commands.Messages.PinMessage
+﻿using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Application.Commands.Messages.PinMessage
 {
-    public record PinMessageRequest : IRequest<Message>
+    public record PinMessageRequest : IRequest
     {
         /// <summary>
         /// Id of the message to be pinned

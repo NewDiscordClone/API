@@ -1,6 +1,10 @@
-﻿namespace Application.Commands.Messages.EditMessage
+﻿using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Application.Commands.Messages.EditMessage
 {
-    public record EditMessageRequest : IRequest<Message>
+    public record EditMessageRequest : IRequest
     {
         /// <summary>
         /// Id of the message to be edited
