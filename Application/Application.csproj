@@ -20,4 +20,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\HubClients\Connections" />
+  </ItemGroup>
+
 </Project>

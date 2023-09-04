@@ -23,7 +23,6 @@ namespace Tests.Common
             ObjectId objectId = ConvertToId(id);
             return Entitites[FindIndex(objectId)];
         }
-
         public async Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression)
         {
             return Entitites.FindAll(new Predicate<TEntity>(expression.Compile()) ??

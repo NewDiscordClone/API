@@ -1,11 +1,6 @@
-using Application.Interfaces;
-using MediatR;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
 namespace Application.Commands.Servers.DeleteServer
 {
-    public record DeleteServerRequest : IRequest, IServerRequest
+    public record DeleteServerRequest : IRequest<Server>, IServerRequest
     {
         /// <summary>
         /// Id of the server to be deleted

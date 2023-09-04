@@ -1,9 +1,4 @@
-﻿using Application.Models;
-using MediatR;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace Application.Commands.Messages.RemoveAllReactions
+﻿namespace Application.Commands.Messages.RemoveAllReactions
 {
     public record RemoveAllReactionsRequest : IRequest<Chat>
     {

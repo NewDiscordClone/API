@@ -40,7 +40,6 @@ namespace Application.Commands.Messages.AddMessage
                 User = Mapper.Map<UserLookUp>(user),
                 Attachments = attachments
             };
-
             return await Context.Messages.AddAsync(message);
         }
 

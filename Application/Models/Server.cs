@@ -42,4 +42,6 @@ public class Server
     /// List of users profiles on server
     /// </summary>
     public List<ServerProfile> ServerProfiles { get; set; } = new();
+
+    public List<int> BannedUsers { get; set; } = new();
 }

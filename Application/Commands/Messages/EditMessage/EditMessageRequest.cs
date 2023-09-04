@@ -1,9 +1,4 @@
-﻿using Application.Models;
-using MediatR;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace Application.Commands.Messages.EditMessage
+﻿namespace Application.Commands.Messages.EditMessage
 {
     public record EditMessageRequest : IRequest<Message>
     {

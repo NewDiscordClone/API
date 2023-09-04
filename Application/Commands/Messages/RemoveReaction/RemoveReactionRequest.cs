@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Commands.Messages.RemoveReaction
 {
-    public class RemoveReactionRequest : IRequest<Message>
+    public class RemoveReactionRequest : IRequest
     {
         /// <summary>
         /// Id of the message to which the reaction is attached

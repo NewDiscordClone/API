@@ -1,17 +1,22 @@
 using Application.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace Application.Interfaces;
 
 public interface IAppDbContext
 {
+    ISimpleDbSet<UserConnections> UserConnections { get; }
     ISimpleDbSet<Message> Messages { get; }
     ISimpleDbSet<Chat> Chats { get; }
-    ISimpleDbSet<PrivateChat> PrivateChats { get; }
+    ISimpleDbSet<PersonalChat> PersonalChats { get; }
+    ISimpleDbSet<GroupChat> GroupChats { get; }
     ISimpleDbSet<Channel> Channels { get; }
     ISimpleDbSet<Media> Media { get; }
     ISimpleDbSet<Server> Servers { get; }
+    ISimpleDbSet<Invitation> Invitations { get; }
+    ISimpleDbSet<RelationshipList> RelationshipLists { get; }
     //DbSet<ServerProfile> ServerProfiles { get; }
     DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }

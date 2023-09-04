@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.Messages.RemoveReaction
 {
-    public class RemoveReactionRequestHandler : RequestHandlerBase, IRequestHandler<RemoveReactionRequest, Message>
+    public class RemoveReactionRequestHandler : RequestHandlerBase, IRequestHandler<RemoveReactionRequest>
     {
-        public async Task<Message> Handle(RemoveReactionRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveReactionRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -20,7 +20,6 @@ namespace Application.Commands.Messages.RemoveReaction
 
             message.Reactions.RemoveAt(request.ReactionIndex);
             await Context.Messages.UpdateAsync(message);
-            return message;
         }
 
         public RemoveReactionRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

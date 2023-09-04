@@ -1,9 +1,4 @@
-﻿using Application.Models;
-using MediatR;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace Application.Commands.Messages.RemoveAttachment
+﻿namespace Application.Commands.Messages.RemoveAttachment
 {
     public record RemoveAttachmentRequest : IRequest<Chat>
     {

@@ -1,9 +1,4 @@
-﻿using Application.Models;
-using MediatR;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace Application.Commands.Messages.AddReaction
+﻿namespace Application.Commands.Messages.AddReaction
 {
     public record AddReactionRequest : IRequest<Reaction>
     {

@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Application.Commands.Messages.RemoveAttachment
 {
-    public class RemoveAttachmentRequestHandler : RequestHandlerBase, IRequestHandler<RemoveAttachmentRequest, Chat>
+    public class RemoveAttachmentRequestHandler : RequestHandlerBase, IRequestHandler<RemoveAttachmentRequest>
     {
-        public async Task<Chat> Handle(RemoveAttachmentRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveAttachmentRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -25,7 +25,6 @@ namespace Application.Commands.Messages.RemoveAttachment
 
             await Context.Messages.UpdateAsync(message);
             await Context.CheckRemoveMedia(path[(path.LastIndexOf('/') - 1)..]);
-            return chat;
         }
 
         public RemoveAttachmentRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

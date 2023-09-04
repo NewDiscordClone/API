@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Commands.Channels.CreateChannel
 {
-    public class CreateChannelRequest : IRequest<Channel>
+    public class CreateChannelRequest : IRequest<string>
     {
         /// <summary>
         /// Name of the channel 

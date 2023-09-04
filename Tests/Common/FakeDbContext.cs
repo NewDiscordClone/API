@@ -23,192 +23,36 @@ namespace Tests.Common
             _mapper = mapper;
         }
 
-        public void Create(Ids ids)
+        public void Create(HardCodedData hardCodedData)
         {
             Database.EnsureCreated();
-            User userA = new()
-            {
-                Id = ids.UserAId,
-                UserName = "User A",
-                Avatar = null,
-                Email = "email@test1.com",
-            };
-            User userB = new()
-            {
-                Id = ids.UserBId,
-                UserName = "User B",
-                Avatar = null,
-                Email = "email@test2.com",
-            };
-            User userC = new()
-            {
-                Id = ids.UserCId,
-                UserName = "User C",
-                Avatar = null,
-                Email = "email@test3.com",
-            };
-            User userD = new()
-            {
-                Id = ids.UserDId,
-                UserName = "User D",
-                Avatar = null,
-                Email = "email@test4.com",
-            };
-            Users.AddRange(userA, userB, userC, userD);
-
-            Servers = new SimpleFakeDbSet<Server>(new List<Server>
-            {
-                new Server
-                {
-                    Id = ids.ServerIdForDelete = ObjectId.GenerateNewId().ToString(),
-                    Title = "Server 1",
-                    Owner = _mapper.Map<UserLookUp>(userA),
-                    ServerProfiles =
-                    {
-                        new ServerProfile
-                        {
-                            User = _mapper.Map<UserLookUp>(userA)
-                        }
-                    },
-
-                    // Roles = new List<Role>()
-                },
-                new Server
-                {
-                    Id = ids.ServerIdForUpdate = ObjectId.GenerateNewId().ToString(),
-                    Title = "Server 2",
-                    Owner = _mapper.Map<UserLookUp>(userB),
-                    ServerProfiles =
-                    {
-                        new ServerProfile
-                        {
-                            User = _mapper.Map<UserLookUp>(userB)
-                        }
-                    },
-                    // Roles = new List<Role>()
-                }
-            });
-            _chats = new SimpleTwoFakeDbSets<Chat, PrivateChat, Channel>(
-            new List<PrivateChat>()
-            {
-                new()
-                {
-                    Id = ids.PrivateChat3 = ObjectId.GenerateNewId().ToString(),
-                    Title = "PrivateChat 3",
-                    OwnerId = userA.Id,
-                    Users = { _mapper.Map<UserLookUp>(userA), _mapper.Map<UserLookUp>(userB) },
-                },
-                new()
-                {
-                    Id = ids.PrivateChat4 = ObjectId.GenerateNewId().ToString(),
-                    Title = "PrivateChat 4",
-                    OwnerId = userA.Id,
-                    Users = { _mapper.Map<UserLookUp>(userA), _mapper.Map<UserLookUp>(userC) }
-                },
-                new()
-                {
-                    Id = ids.PrivateChat5 = ObjectId.GenerateNewId().ToString(),
-                    Title = "PrivateChat 5",
-                    OwnerId = userB.Id,
-                    Users = { _mapper.Map<UserLookUp>(userB), _mapper.Map<UserLookUp>(userC) }
-                },
-                new()
-                {
-                    Id = ids.PrivateChat6 = ObjectId.GenerateNewId().ToString(),
-                    Title = "PrivateChat 6",
-                    OwnerId = userB.Id,
-                    Users =
-                    {
-                        _mapper.Map<UserLookUp>(userA),
-                        _mapper.Map<UserLookUp>(userB),
-                        _mapper.Map<UserLookUp>(userC),
-                        _mapper.Map<UserLookUp>(userD)
-                    }
-                },
-                new()
-                {
-                    Id = ids.PrivateChat7 = ObjectId.GenerateNewId().ToString(),
-                    Title = "PrivateChat 7",
-                    OwnerId = userB.Id,
-                    Users =
-                    {
-                        _mapper.Map<UserLookUp>(userB), _mapper.Map<UserLookUp>(userC), _mapper.Map<UserLookUp>(userD)
-                    }
-                }
-            }, new List<Channel>()
-            {
-                new Channel
-                {
-                    Id = ids.Channel1 = ObjectId.GenerateNewId().ToString(),
-                    Title = "Channel 1",
-                    ServerId = ids.ServerIdForDelete
-                },
-                new Channel
-                {
-                    Id = ids.Channel2 = ObjectId.GenerateNewId().ToString(),
-                    Title = "Channel 2",
-                    ServerId = ids.ServerIdForUpdate
-                }
-            });
-            Messages = new SimpleFakeDbSet<Message>(new List<Message>
-            {
-                new Message
-                {
-                    Id = ids.Message1 = ObjectId.GenerateNewId().ToString(),
-                    Text = "Message 1",
-                    SendTime = DateTime.Now,
-                    User = _mapper.Map<UserLookUp>(userA),
-                    ChatId = ids.PrivateChat3,
-                    Reactions =
-                    {
-                        new Reaction
-                        {
-                            Emoji = "☻",
-                            User = _mapper.Map<UserLookUp>(userB),
-                        },
-                        new Reaction
-                        {
-                            Emoji = "☺",
-                            User = _mapper.Map<UserLookUp>(userA),
-                        }
-                    }
-                },
-                new Message
-                {
-                    Id = ids.Message2 = ObjectId.GenerateNewId().ToString(),
-                    Text = "Message 2",
-                    SendTime = DateTime.Now,
-                    User = _mapper.Map<UserLookUp>(userB),
-                    IsPinned = true,
-                    ChatId = ids.PrivateChat3,
-                    Attachments =
-                    {
-                        new Attachment
-                        {
-                            IsInText = false,
-                            Path = "http://localhost:3000"
-                        }
-                    }
-                }
-            });
+            
+            Users.AddRange(hardCodedData.Users);
+            Servers = new SimpleFakeDbSet<Server>(hardCodedData.Servers);
+            _chats = new SimpleFakeDbSet<Chat>(hardCodedData.GroupChats.Cast<Chat>().Concat(hardCodedData.Channels).ToList());
+            Messages = new SimpleFakeDbSet<Message>(hardCodedData.Messages);
             SaveChanges();
         }
 
         private CancellationToken _token = default;
 
+        public ISimpleDbSet<UserConnections> UserConnections => null!;
         public ISimpleDbSet<Message> Messages { get; set; }
 
-        private SimpleTwoFakeDbSets<Chat, PrivateChat, Channel> _chats;
+        private SimpleFakeDbSet<Chat> _chats;
 
         public ISimpleDbSet<Chat> Chats => _chats;
 
-        public ISimpleDbSet<PrivateChat> PrivateChats => _chats.DbSet1;
+        public ISimpleDbSet<PersonalChat> PersonalChats => new SimpleDerivedFakeDbSet<Chat, PersonalChat>(_chats);
+        public ISimpleDbSet<GroupChat> GroupChats => new SimpleDerivedFakeDbSet<Chat, GroupChat>(_chats);
 
-        public ISimpleDbSet<Channel> Channels => _chats.DbSet2;
+        public ISimpleDbSet<Channel> Channels => new SimpleDerivedFakeDbSet<Chat, Channel>(_chats);
 
         public ISimpleDbSet<Media> Media { get; set; } = new SimpleFakeDbSet<Media>(new List<Media>());
 
         public ISimpleDbSet<Server> Servers { get; set; }
+        public ISimpleDbSet<Invitation> Invitations => new SimpleFakeDbSet<Invitation>(new List<Invitation>());
+        public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; } = new SimpleFakeDbSet<RelationshipList>(new List<RelationshipList>());
 
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
@@ -223,7 +67,7 @@ namespace Tests.Common
                 return;
 
             long count = 0;
-            count += await PrivateChats.CountAsync(c => c.Image != null && c.Image.Contains(id));
+            count += await GroupChats.CountAsync(c => c.Image != null && c.Image.Contains(id));
             count += await Messages.CountAsync(m => m.Attachments.Any(a => a.Path.Contains(id)));
             count += await Servers.CountAsync(s => s.Image != null && s.Image.Contains(id));
             count += await Users.Where(u => u.Avatar != null && u.Avatar.Contains(id)).CountAsync(_token);
