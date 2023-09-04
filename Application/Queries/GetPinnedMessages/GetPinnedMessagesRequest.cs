@@ -8,7 +8,7 @@ namespace Application.Queries.GetPinnedMessages
     public record GetPinnedMessagesRequest : IRequest<List<Message>>
     {
         /// <summary>
-        /// The unique identifier of the chat from which to retrieve pinned messages.
+        /// The unique identifier of the chat retrieve pinned messages from.
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

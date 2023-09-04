@@ -14,7 +14,7 @@ namespace Application.Commands.Users.SendMessageToUser
         public int UserId { get; init; }
 
         /// <summary>
-        /// The text of the message to be sent.
+        /// The text of the message, May contain links
         /// </summary>
         [MaxLength(2000)]
         [DefaultValue("MessageText")]

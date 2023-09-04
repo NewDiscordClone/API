@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Models;
 
-
+[BsonDiscriminator(RootClass = true)]
+[BsonKnownTypes(typeof(PersonalChat), typeof(GroupChat), typeof(Channel))]
 public abstract class Chat
 {
     /// <summary>

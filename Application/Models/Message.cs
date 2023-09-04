@@ -37,7 +37,7 @@ public class Message
     public bool IsPinned { get; set; } = false;
 
     /// <summary>
-    /// List of recalled users added to the post
+    /// List of reactions to the message
     /// </summary>
     public List<Reaction> Reactions { get; set; } = new();
 
