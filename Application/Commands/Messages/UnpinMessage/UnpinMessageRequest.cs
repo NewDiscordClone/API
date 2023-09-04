@@ -8,7 +8,7 @@ namespace Application.Commands.Messages.UnpinMessage
     public record UnpinMessageRequest : IRequest<Message>
     {
         /// <summary>
-        /// Id of message that need to be unpinned
+        /// Id of message to be unpinned
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

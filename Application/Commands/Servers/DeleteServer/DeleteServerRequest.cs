@@ -9,7 +9,7 @@ namespace Application.Commands.Servers.DeleteServer
     public record DeleteServerRequest : IRequest<Server>, IServerRequest
     {
         /// <summary>
-        /// Id of the server to be deleted
+        /// Id of the server to delete
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

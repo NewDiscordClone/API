@@ -5,7 +5,7 @@ namespace Application.Commands.Invitations.CreateInvitation
     public record CreateInvitationRequest : IRequest<string>
     {
         /// <summary>
-        /// The unique identifier of the server for which to create an invitation.
+        /// The unique identifier of the server to create an invitation for.
         /// </summary>
         public string ServerId { get; set; }
 

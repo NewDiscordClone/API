@@ -7,7 +7,7 @@ namespace Application.Commands.Messages.EditMessage
     public record EditMessageRequest : IRequest
     {
         /// <summary>
-        /// Id of the message to be edited
+        /// Id of the message to edit
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

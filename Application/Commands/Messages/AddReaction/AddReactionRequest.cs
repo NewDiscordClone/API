@@ -7,7 +7,7 @@ namespace Application.Commands.Messages.AddReaction
     public record AddReactionRequest : IRequest
     {
         /// <summary>
-        /// Id of the message to which to add a reaction
+        /// Id of the message to add a reaction to
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

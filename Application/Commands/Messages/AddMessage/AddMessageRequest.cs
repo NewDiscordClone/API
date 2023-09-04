@@ -15,7 +15,7 @@ namespace Application.Commands.Messages.AddMessage
         public string Text { get; init; }
 
         /// <summary>
-        /// Id of the chat where the message was sent
+        /// Id of the chat to send message to
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

@@ -7,7 +7,7 @@ namespace Application.Commands.GroupChats.MakeGroupChatOwner
     public record MakeGroupChatOwnerRequest : IRequest
     {
         /// <summary>
-        /// The unique identifier of the group chat for which to make a member the owner.
+        /// The unique identifier of the group chat to change an owner in.
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

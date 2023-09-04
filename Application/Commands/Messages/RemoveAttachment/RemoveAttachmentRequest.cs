@@ -7,7 +7,7 @@ namespace Application.Commands.Messages.RemoveAttachment
     public record RemoveAttachmentRequest : IRequest
     {
         /// <summary>
-        /// Id of the message to which the reaction is attached
+        /// Id of the message to which the attachment is attached
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
@@ -15,7 +15,7 @@ namespace Application.Commands.Messages.RemoveAttachment
         public string MessageId { get; init; }
 
         /// <summary>
-        /// Index of the attachment in the message's reactions collection 
+        /// Index of the attachment in the message's attachments collection 
         /// </summary>
         [Required]
         [DefaultValue(0)]

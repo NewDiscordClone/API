@@ -7,7 +7,7 @@ namespace Application.Commands.GroupChats.RemoveGroupChatMember
     public record RemoveGroupChatMemberRequest : IRequest
     {
         /// <summary>
-        /// The unique identifier of the group chat from which to remove a member.
+        /// The unique identifier of the group chat to remove a member from.
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
