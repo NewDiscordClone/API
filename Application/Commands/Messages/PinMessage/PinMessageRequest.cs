@@ -1,12 +1,15 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Application.Models;
+﻿using Application.Models;
 using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Commands.Messages.PinMessage
 {
-    public class PinMessageRequest : IRequest<Message>
+    public record PinMessageRequest : IRequest<Message>
     {
+        /// <summary>
+        /// Id of the message to be pinned
+        /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
