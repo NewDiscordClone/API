@@ -8,7 +8,7 @@ namespace Application.Commands.Servers.UpdateServer
     public record UpdateServerRequest : IRequest, IServerRequest
     {
         /// <summary>
-        /// Id of the server to be updated
+        /// Id of the server to update
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
@@ -16,14 +16,14 @@ namespace Application.Commands.Servers.UpdateServer
         public string ServerId { get; init; }
 
         /// <summary>
-        /// Server's name
+        /// Server's name (Optional)
         /// </summary>
         [StringLength(32, MinimumLength = 1)]
         [DefaultValue("Server 1")]
         public string? Title { get; init; }
 
         /// <summary>
-        /// Server's image url
+        /// Server's image url (Optional)
         /// </summary>
         [DataType(DataType.ImageUrl)]
         [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]

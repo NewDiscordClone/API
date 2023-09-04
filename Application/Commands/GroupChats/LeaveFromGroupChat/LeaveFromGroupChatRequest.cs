@@ -7,7 +7,7 @@ namespace Application.Commands.GroupChats.LeaveFromGroupChat
     public record LeaveFromGroupChatRequest : IRequest
     {
         /// <summary>
-        /// The unique identifier of the group chat from which to leave.
+        /// The unique identifier of the group chat to leave from.
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

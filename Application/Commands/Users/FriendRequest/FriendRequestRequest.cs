@@ -5,7 +5,7 @@ namespace Application.Commands.Users.FriendRequest
     public record FriendRequestRequest : IRequest<string?>
     {
         /// <summary>
-        /// The unique identifier of the user for whom to send a friend request.
+        /// The unique identifier of the user to send a friend request to.
         /// </summary>
         public int UserId { get; init; }
     }

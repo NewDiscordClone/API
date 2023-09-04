@@ -7,7 +7,7 @@ namespace Application.Commands.GroupChats.ChangeGroupChatImage
     public record ChangeGroupChatImageRequest : IRequest
     {
         /// <summary>
-        /// The unique identifier of the group chat for which to change the image
+        /// The unique identifier of the group chat to change the image for
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

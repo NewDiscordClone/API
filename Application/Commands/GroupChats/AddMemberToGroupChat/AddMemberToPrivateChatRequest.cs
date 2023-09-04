@@ -7,7 +7,7 @@ namespace Application.Commands.GroupChats.AddMemberToGroupChat
     public record AddMemberToGroupChatRequest : IRequest
     {
         /// <summary>
-        /// The unique identifier of the group chat to which to add a new member
+        /// The unique identifier of the group chat to add a new member to
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
