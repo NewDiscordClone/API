@@ -1,4 +1,5 @@
 using Application.Models;
+using Application.Models.LookUps;
 using MediatR;
 
 namespace Application.Queries.GetPersonalChats

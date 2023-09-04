@@ -31,7 +31,7 @@ namespace Tests.GroupChats.Commands
             //Assert
             Assert.NotNull(result);
             Assert.Equal(title, result.Title);
-            Assert.True(result.Users.Select(user => user.Id).SequenceEqual(userIdlist));
+            Assert.True(result.Users.Select(user => user).SequenceEqual(userIdlist));
         }
     }
 }

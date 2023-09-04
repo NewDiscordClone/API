@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Application.Interfaces;
 using AutoMapper;
 
-namespace Application.Models
+namespace Application.Models.LookUps
 {
     public class UserLookUp : IMapWith<User>
     {

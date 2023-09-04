@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Models.LookUps;
 using Application.Providers;
 using AutoMapper;
 using MediatR;

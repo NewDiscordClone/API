@@ -31,7 +31,7 @@ namespace Tests.GroupChats.Commands
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
             //Assert
-            Assert.DoesNotContain(chat.Users, user => user.Id == userId);
+            Assert.DoesNotContain(chat.Users, user => user == userId);
             var groupChat = chat as GroupChat;
             Assert.NotNull(groupChat);
             Assert.NotEqual(userId, groupChat.OwnerId);

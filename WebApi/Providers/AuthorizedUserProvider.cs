@@ -36,7 +36,7 @@ namespace WebApi.Providers
                 return false;
 
             ServerProfile? profile = server.ServerProfiles.
-                FirstOrDefault(profile => profile.User.Id == GetUserId());
+                FirstOrDefault(profile => profile.UserId == GetUserId());
 
 
             if (profile is null || profile.Roles is null)
@@ -102,7 +102,7 @@ namespace WebApi.Providers
                 return false;
 
             ServerProfile? profile = server.ServerProfiles.
-                FirstOrDefault(profile => profile.User.Id == GetUserId());
+                FirstOrDefault(profile => profile.UserId == GetUserId());
 
 
             if (profile is null || profile.Roles is null)

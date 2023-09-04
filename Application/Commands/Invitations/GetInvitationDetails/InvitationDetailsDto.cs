@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Models.LookUps;
 using AutoMapper;
 
 namespace Application.Commands.Invitations.GetInvitationDetails

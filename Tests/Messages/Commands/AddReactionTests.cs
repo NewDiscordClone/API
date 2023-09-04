@@ -31,7 +31,7 @@ namespace Tests.Messages.Commands
             //Assert
 
             Assert.NotEmpty(result);
-            Assert.Contains(result, r => r.User.Id == Ids.UserBId && r.Emoji == emoji);
+            Assert.Contains(result, r => r.User == Ids.UserBId && r.Emoji == emoji);
         }
     }
 }

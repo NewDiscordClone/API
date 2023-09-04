@@ -16,7 +16,7 @@ namespace Application.Commands.Messages.AddMessage
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
             User user = await Context.SqlUsers.FindAsync(UserId);
 
-            if (!chat.Users.Any(u => u.Id == UserId))
+            if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
             List<Attachment> attachments = new();
 
@@ -37,7 +37,7 @@ namespace Application.Commands.Messages.AddMessage
                 Text = request.Text,
                 ChatId = request.ChatId,
                 SendTime = DateTime.UtcNow,
-                User = Mapper.Map<UserLookUp>(user),
+                User = UserId,
                 Attachments = attachments
             };
             return await Context.Messages.AddAsync(message);

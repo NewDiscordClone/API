@@ -15,7 +15,7 @@ namespace Application.Commands.Servers.LeaveServer
         public async Task Handle(LeaveServerRequest request, CancellationToken cancellationToken)
         {
             Server server = await Context.Servers.FindAsync(request.ServerId);
-            ServerProfile serverProfile = server.ServerProfiles.Find(sp => sp.User.Id == UserId) ??
+            ServerProfile serverProfile = server.ServerProfiles.Find(sp => sp.UserId == UserId) ??
                                           throw new NoPermissionsException("You are not the member of the server");
             server.ServerProfiles.Remove(serverProfile);
             await Context.Servers.UpdateAsync(server);

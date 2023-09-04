@@ -17,7 +17,7 @@ namespace Application.Queries.GetPinnedMessages
 
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
 
-            if (!chat.Users.Any(u => u.Id == UserId))
+            if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
 
             return await Context.GetPinnedMessagesAsync(chat.Id);

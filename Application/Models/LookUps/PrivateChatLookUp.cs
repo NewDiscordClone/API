@@ -6,7 +6,7 @@ using Application.Queries.GetMessages;
 using AutoMapper;
 using MongoDB.Bson;
 
-namespace Application.Models
+namespace Application.Models.LookUps
 {
     public record PrivateChatLookUp : IMapWith<GroupChat>
     {
@@ -20,8 +20,6 @@ namespace Application.Models
         public string Title { get; init; }
         [DefaultValue("Subtitle")]
         public string Subtitle { get; init; }
-        
-        public List<UserLookUp> Users { get; init; } = new();
 
         public void Mapping(Profile profile)
         {
@@ -32,11 +30,9 @@ namespace Application.Models
         }
         public PrivateChatLookUp(){}
 
-        public PrivateChatLookUp(PersonalChat personalChat, Guid userid)
+        public PrivateChatLookUp(PersonalChat personalChat, UserLookUp other)
         {
-            UserLookUp other = personalChat.Users.First(u => u.Id != userid);
             Id = personalChat.Id;
-            Users = personalChat.Users;
             Image = other.Avatar;
             Title = other.DisplayName;
             Subtitle = other.TextStatus;

@@ -9,6 +9,7 @@ using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
 using Application.Commands.HubClients.PrivateChats.PrivateChatUpdated;
 using Application.Common.Exceptions;
 using Application.Models;
+using Application.Models.LookUps;
 using Application.Providers;
 using Application.Queries.GetGroupChatDetails;
 using Application.Queries.GetPersonalChats;

@@ -70,12 +70,12 @@ namespace Tests.Common
             {
                 Id = _ids.ServerIdForDelete = ObjectId.GenerateNewId().ToString(),
                 Title = "Server 1",
-                Owner = _mapper.Map<UserLookUp>(_userA),
+                Owner = _ids.UserAId,
                 ServerProfiles =
                 {
                     new ServerProfile
                     {
-                        User = _mapper.Map<UserLookUp>(_userA)
+                        UserId = _ids.UserAId
                     }
                 },
 
@@ -85,12 +85,12 @@ namespace Tests.Common
             {
                 Id = _ids.ServerIdForUpdate = ObjectId.GenerateNewId().ToString(),
                 Title = "Server 2",
-                Owner = _mapper.Map<UserLookUp>(_userB),
+                Owner = _ids.UserBId,
                 ServerProfiles =
                 {
                     new ServerProfile
                     {
-                        User = _mapper.Map<UserLookUp>(_userB)
+                        UserId = _ids.UserBId
                     }
                 },
                 // Roles = new List<Role>()
@@ -121,21 +121,21 @@ namespace Tests.Common
                 Id = _ids.GroupChat3 = ObjectId.GenerateNewId().ToString(),
                 Title = "PersonalChat 3",
                 OwnerId = _userA.Id,
-                Users = { _mapper.Map<UserLookUp>(_userA), _mapper.Map<UserLookUp>(_userB) },
+                Users = { _ids.UserAId, _ids.UserBId, },
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat4 = ObjectId.GenerateNewId().ToString(),
                 Title = "PersonalChat 4",
                 OwnerId = _userA.Id,
-                Users = { _mapper.Map<UserLookUp>(_userA) }
+                Users = { _ids.UserAId }
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat5 = ObjectId.GenerateNewId().ToString(),
                 Title = "PersonalChat 5",
                 OwnerId = _userB.Id,
-                Users = { _mapper.Map<UserLookUp>(_userB), _mapper.Map<UserLookUp>(_userC) }
+                Users = { _ids.UserBId, _ids.UserCId, }
             },
             new GroupChat()
             {
@@ -144,10 +144,10 @@ namespace Tests.Common
                 OwnerId = _userB.Id,
                 Users =
                 {
-                    _mapper.Map<UserLookUp>(_userA),
-                    _mapper.Map<UserLookUp>(_userB),
-                    _mapper.Map<UserLookUp>(_userC),
-                    _mapper.Map<UserLookUp>(_userD)
+                    _ids.UserAId,
+                    _ids.UserBId,
+                    _ids.UserCId,
+                    _ids.UserDId
                 }
             },
             new GroupChat()
@@ -157,7 +157,7 @@ namespace Tests.Common
                 OwnerId = _userB.Id,
                 Users =
                 {
-                    _mapper.Map<UserLookUp>(_userB), _mapper.Map<UserLookUp>(_userC), _mapper.Map<UserLookUp>(_userD)
+                    _ids.UserBId, _ids.UserCId, _ids.UserDId
                 }
             }
         };
@@ -169,19 +169,19 @@ namespace Tests.Common
                 Id = _ids.Message1 = ObjectId.GenerateNewId().ToString(),
                 Text = "Message 1",
                 SendTime = DateTime.Now,
-                User = _mapper.Map<UserLookUp>(_userA),
+                User = _ids.UserAId,
                 ChatId = _ids.GroupChat3,
                 Reactions =
                 {
                     new Reaction
                     {
                         Emoji = "☻",
-                        User = _mapper.Map<UserLookUp>(_userB),
+                        User = _ids.UserBId,
                     },
                     new Reaction
                     {
                         Emoji = "☺",
-                        User = _mapper.Map<UserLookUp>(_userA),
+                        User = _ids.UserAId,
                     }
                 }
             },
@@ -190,7 +190,7 @@ namespace Tests.Common
                 Id = _ids.Message2 = ObjectId.GenerateNewId().ToString(),
                 Text = "Message 2",
                 SendTime = DateTime.Now,
-                User = _mapper.Map<UserLookUp>(_userB),
+                User = _ids.UserBId,
                 IsPinned = true,
                 ChatId = _ids.GroupChat3,
                 Attachments =

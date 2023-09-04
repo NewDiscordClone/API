@@ -19,7 +19,7 @@ public class Server
     public string Title { get; set; }
     public string? Image { get; set; }
 
-    public UserLookUp Owner { get; set; }
+    public Guid Owner { get; set; }
     public List<ServerProfile> ServerProfiles { get; set; } = new();
 
     public List<Guid> BannedUsers { get; set; } = new();

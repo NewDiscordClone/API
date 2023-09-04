@@ -20,5 +20,5 @@ public abstract class Chat
     [DefaultValue("5f95a3c3d0ddad0017ea9291")]
     public string Id { get; set; }
 
-    public List<UserLookUp> Users { get; set; } = new();
+    public List<Guid> Users { get; set; } = new();
 }

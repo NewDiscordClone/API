@@ -35,7 +35,7 @@ namespace Tests.GroupChats.Commands
 
             //Assert
             Assert.Equal(oldUsersCount + 1, chat.Users.Count);
-            Assert.Contains(chat.Users, user => user.Id == newMemberId);
+            Assert.Contains(chat.Users, user => user == newMemberId);
         }
         [Fact]
         public async Task UserAlreadyExists_Fail()

@@ -34,7 +34,7 @@ namespace Tests.GroupChats.Commands
 
             //Assert
             Assert.Equal(oldCount - 1, chat.Users.Count);
-            Assert.DoesNotContain(chat.Users, user => user.Id == removeMemberId);
+            Assert.DoesNotContain(chat.Users, user => user == removeMemberId);
         }
 
         [Fact]

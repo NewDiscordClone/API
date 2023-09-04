@@ -16,14 +16,13 @@ namespace Application.Commands.Messages.AddReaction
 
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
-            User user = await Context.SqlUsers.FindAsync(UserId);
 
-            if (!chat.Users.Any(u => u.Id == UserId))
+            if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
 
             Reaction reaction = new()
             {
-                User = Mapper.Map<UserLookUp>(user),
+                User = UserId,
                 Emoji = request.Emoji,
             };
 

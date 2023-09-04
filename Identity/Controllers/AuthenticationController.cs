@@ -32,7 +32,7 @@ namespace Identity.Controllers
                 .Send(registrationRequest);
 
             string returnUrl = registrationRequest.ReturnUrl
-                ?? "/";
+                               ?? "/";
             if (result.Succeeded)
             {
                 return Redirect(returnUrl);

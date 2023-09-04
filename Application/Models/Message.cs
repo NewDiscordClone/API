@@ -25,7 +25,7 @@ public class Message
 
     public List<Reaction> Reactions { get; set; } = new();
     public List<Attachment> Attachments { get; set; } = new();
-    public UserLookUp User { get; set; }
+    public Guid User { get; set; }
     
     /// <summary>
     /// Chat Id as an string representation of an ObjectId type

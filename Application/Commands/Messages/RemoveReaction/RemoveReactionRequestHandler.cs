@@ -15,7 +15,7 @@ namespace Application.Commands.Messages.RemoveReaction
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Reaction reaction = message.Reactions[request.ReactionIndex];
 
-            if (reaction.User.Id != UserId)
+            if (reaction.User != UserId)
                 throw new NoPermissionsException("This isn't your reaction");
 
             message.Reactions.RemoveAt(request.ReactionIndex);

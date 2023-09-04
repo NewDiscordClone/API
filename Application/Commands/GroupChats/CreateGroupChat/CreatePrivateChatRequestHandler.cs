@@ -12,8 +12,8 @@ namespace Application.Commands.GroupChats.CreateGroupChat
         {
             Context.SetToken(cancellationToken);
 
-            List<UserLookUp> users = new();
-            request.UsersId.ForEach(userId => users.Add(Mapper.Map<UserLookUp>(Context.SqlUsers.FindAsync(userId).Result)));
+            List<Guid> users = new();
+            request.UsersId.ForEach(userId => users.Add(userId));
 
             GroupChat privateChat = new GroupChat()
             {

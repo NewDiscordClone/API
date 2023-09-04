@@ -20,9 +20,9 @@ namespace Application.Commands.Servers.ChangeServerProfileDisplayName
             Server server = await Context.Servers.FindAsync(request.ServerId);
 
             request.UserId ??= UserId;
-            ServerProfile? serverProfile = server.ServerProfiles.Find(sp => sp.User.Id == request.UserId) ??
+            ServerProfile? serverProfile = server.ServerProfiles.Find(sp => sp.UserId == request.UserId) ??
                                            throw new Exception("The user are not a member of the server");
-            if (serverProfile.User.Id != UserId && server.Owner.Id != UserId) //TODO: Замінити на логіку перевірки claim
+            if (serverProfile.UserId != UserId && server.Owner != UserId) //TODO: Замінити на логіку перевірки claim
                 throw new NoPermissionsException("You are not allowed to change someone else's display name");
             serverProfile.DisplayName = request.NewDisplayName;
             await Context.Servers.UpdateAsync(server);

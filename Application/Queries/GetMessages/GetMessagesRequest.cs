@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Application.Models;
+using Application.Models.LookUps;
 using MediatR;
 using MongoDB.Bson;
 
 namespace Application.Queries.GetMessages
 {
-    public record GetMessagesRequest : IRequest<List<Message>>
+    public record GetMessagesRequest : IRequest<List<MessageDto>>
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

@@ -13,6 +13,8 @@ namespace Tests.Messages.Queries
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat3;
+            
+            SetAuthorizedUserId(Ids.UserAId);
 
             GetPinnedMessagesRequest request = new()
             {
