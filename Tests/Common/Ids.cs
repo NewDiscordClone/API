@@ -15,11 +15,11 @@ namespace Tests.Common
         public string Channel1 { get; set; }
         public string Channel2 { get; set; }
 
-        public string PrivateChat3 { get; set; }
-        public string PrivateChat4 { get; set; }
-        public string PrivateChat5 { get; set; }
-        public string PrivateChat6 { get; set; }
-        public string PrivateChat7 { get; set; } 
+        public string GroupChat3 { get; set; }
+        public string GroupChat4 { get; set; }
+        public string GroupChat5 { get; set; }
+        public string GroupChat6 { get; set; }
+        public string GroupChat7 { get; set; } 
         
         public string Message1 { get; set; } 
         public string Message2 { get; set; } 

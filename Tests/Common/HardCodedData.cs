@@ -114,33 +114,33 @@ namespace Tests.Common
             }
         };
 
-        public List<PrivateChat> PrivateChats => new List<PrivateChat>()
+        public List<GroupChat> GroupChats => new List<GroupChat>()
         {
             new GroupChat()
             {
-                Id = _ids.PrivateChat3 = ObjectId.GenerateNewId().ToString(),
-                Title = "PrivateChat 3",
+                Id = _ids.GroupChat3 = ObjectId.GenerateNewId().ToString(),
+                Title = "PersonalChat 3",
                 OwnerId = _userA.Id,
                 Users = { _mapper.Map<UserLookUp>(_userA), _mapper.Map<UserLookUp>(_userB) },
             },
             new GroupChat()
             {
-                Id = _ids.PrivateChat4 = ObjectId.GenerateNewId().ToString(),
-                Title = "PrivateChat 4",
+                Id = _ids.GroupChat4 = ObjectId.GenerateNewId().ToString(),
+                Title = "PersonalChat 4",
                 OwnerId = _userA.Id,
                 Users = { _mapper.Map<UserLookUp>(_userA) }
             },
             new GroupChat()
             {
-                Id = _ids.PrivateChat5 = ObjectId.GenerateNewId().ToString(),
-                Title = "PrivateChat 5",
+                Id = _ids.GroupChat5 = ObjectId.GenerateNewId().ToString(),
+                Title = "PersonalChat 5",
                 OwnerId = _userB.Id,
                 Users = { _mapper.Map<UserLookUp>(_userB), _mapper.Map<UserLookUp>(_userC) }
             },
             new GroupChat()
             {
-                Id = _ids.PrivateChat6 = ObjectId.GenerateNewId().ToString(),
-                Title = "PrivateChat 6",
+                Id = _ids.GroupChat6 = ObjectId.GenerateNewId().ToString(),
+                Title = "PersonalChat 6",
                 OwnerId = _userB.Id,
                 Users =
                 {
@@ -152,8 +152,8 @@ namespace Tests.Common
             },
             new GroupChat()
             {
-                Id = _ids.PrivateChat7 = ObjectId.GenerateNewId().ToString(),
-                Title = "PrivateChat 7",
+                Id = _ids.GroupChat7 = ObjectId.GenerateNewId().ToString(),
+                Title = "PersonalChat 7",
                 OwnerId = _userB.Id,
                 Users =
                 {
@@ -170,7 +170,7 @@ namespace Tests.Common
                 Text = "Message 1",
                 SendTime = DateTime.Now,
                 User = _mapper.Map<UserLookUp>(_userA),
-                ChatId = _ids.PrivateChat3,
+                ChatId = _ids.GroupChat3,
                 Reactions =
                 {
                     new Reaction
@@ -192,7 +192,7 @@ namespace Tests.Common
                 SendTime = DateTime.Now,
                 User = _mapper.Map<UserLookUp>(_userB),
                 IsPinned = true,
-                ChatId = _ids.PrivateChat3,
+                ChatId = _ids.GroupChat3,
                 Attachments =
                 {
                     new Attachment

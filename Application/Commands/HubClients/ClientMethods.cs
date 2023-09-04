@@ -12,5 +12,7 @@
         public const string PrivateChatUpdated = "PrivateChatUpdated";
         public const string ServerUpdated = "ServerUpdated";
         public const string ServerDeleted = "ServerDeleted";
+        public const string FriendRequest = "FriendRequest";
+        public const string AcceptFriendRequest = "AcceptFriendRequest";
     }
 }
