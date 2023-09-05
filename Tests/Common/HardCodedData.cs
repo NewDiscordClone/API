@@ -41,6 +41,68 @@ namespace Tests.Common
                 Avatar = null,
                 Email = "email@test4.com",
             };
+
+            Servers = new List<Server>
+            {
+                new Server
+                {
+                    Id = _ids.Server1 = ObjectId.GenerateNewId().ToString(),
+                    Title = "Server 1",
+                    Owner = _ids.UserAId,
+                    ServerProfiles =
+                    {
+                        new ServerProfile
+                        {
+                            UserId = _ids.UserAId
+                        },
+                        new ServerProfile
+                        {
+                            UserId = _ids.UserCId
+                        }
+                    },
+                    BannedUsers = new List<Guid>()
+                    {
+                        _ids.UserDId
+                    }
+                    // Roles = new List<Role>()
+                },
+                new Server
+                {
+                    Id = _ids.Server2 = ObjectId.GenerateNewId().ToString(),
+                    Title = "Server 2",
+                    Owner = _ids.UserBId,
+                    ServerProfiles =
+                    {
+                        new ServerProfile
+                        {
+                            UserId = _ids.UserBId
+                        }
+                    },
+                    // Roles = new List<Role>()
+                },
+                new Server
+                {
+                    Id = _ids.Server3 = ObjectId.GenerateNewId().ToString(),
+                    Title = "Server 3",
+                    Owner = _ids.UserCId,
+                    ServerProfiles =
+                    {
+                        new ServerProfile
+                        {
+                            UserId = _ids.UserAId
+                        },
+                        new ServerProfile
+                        {
+                            UserId = _ids.UserBId
+                        },
+                        new ServerProfile
+                        {
+                            UserId = _ids.UserCId
+                        }
+                    },
+                    // Roles = new List<Role>()
+                }
+            };
         }
 
         private readonly User _userA;
@@ -65,60 +127,7 @@ namespace Tests.Common
             }
         };
 
-        public List<Server> Servers => new List<Server>
-        {
-            new Server
-            {
-                Id = _ids.Server1 = ObjectId.GenerateNewId().ToString(),
-                Title = "Server 1",
-                Owner = _ids.UserAId,
-                ServerProfiles =
-                {
-                    new ServerProfile
-                    {
-                        UserId = _ids.UserAId
-                    }
-                },
-
-                // Roles = new List<Role>()
-            },
-            new Server
-            {
-                Id = _ids.Server2 = ObjectId.GenerateNewId().ToString(),
-                Title = "Server 2",
-                Owner = _ids.UserBId,
-                ServerProfiles =
-                {
-                    new ServerProfile
-                    {
-                        UserId = _ids.UserBId
-                    }
-                },
-                // Roles = new List<Role>()
-            },
-            new Server
-            {
-                Id = _ids.Server3 = ObjectId.GenerateNewId().ToString(),
-                Title = "Server 3",
-                Owner = _ids.UserCId,
-                ServerProfiles =
-                {
-                    new ServerProfile
-                    {
-                        UserId = _ids.UserAId
-                    },
-                    new ServerProfile
-                    {
-                        UserId = _ids.UserBId
-                    },
-                    new ServerProfile
-                    {
-                        UserId = _ids.UserCId
-                    }
-                },
-                // Roles = new List<Role>()
-            }
-        };
+        public List<Server> Servers { get; private set; }
 
         public List<Channel> Channels => new List<Channel>()
         {
@@ -243,6 +252,28 @@ namespace Tests.Common
                         Path = "http://localhost:3000"
                     }
                 }
+            }
+        };
+
+        public List<Invitation> Invitations => new()
+        {
+            new Invitation
+            {
+                Id = _ids.Invitation1 = ObjectId.GenerateNewId().ToString(),
+                ServerId = _ids.Server1,
+                UserId = _ids.UserAId,
+                ExpireTime = DateTime.Now + new TimeSpan(1, 0, 0, 0)
+            },
+            new Invitation
+            {
+                Id = _ids.Invitation2 = ObjectId.GenerateNewId().ToString(),
+                ServerId = _ids.Server2
+            },
+            new Invitation
+            {
+                Id = _ids.Invitation3 = ObjectId.GenerateNewId().ToString(),
+                ServerId = _ids.Server3,
+                ExpireTime = DateTime.Now - new TimeSpan(1, 0, 0,0)
             }
         };
     }

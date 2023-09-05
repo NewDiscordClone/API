@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using MediatR;
@@ -14,6 +15,12 @@ namespace Application.Commands.Invitations.CreateInvitation
         public async Task<string> Handle(CreateInvitationRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
+            Server server = await Context.Servers.FindAsync(request.ServerId);
+
+            //TODO: Перевірити на те що у юзера є відповідний клейм
+            if (!server.ServerProfiles.Any(u => u.UserId == UserId))
+                throw new NoPermissionsException("You are not a member of the server");
+            
             Invitation invitation = new Invitation()
             {
                 ServerId = request.ServerId,

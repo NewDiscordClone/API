@@ -32,6 +32,7 @@ namespace Tests.Common
             Servers = new SimpleFakeDbSet<Server>(hardCodedData.Servers);
             _chats = new SimpleFakeDbSet<Chat>(hardCodedData.GroupChats.Cast<Chat>().Concat(hardCodedData.Channels).ToList());
             Messages = new SimpleFakeDbSet<Message>(hardCodedData.Messages);
+            Invitations = new SimpleFakeDbSet<Invitation>(hardCodedData.Invitations);
             SaveChanges();
         }
 
@@ -52,7 +53,7 @@ namespace Tests.Common
         public ISimpleDbSet<Media> Media { get; set; } = new SimpleFakeDbSet<Media>(new List<Media>());
 
         public ISimpleDbSet<Server> Servers { get; set; }
-        public ISimpleDbSet<Invitation> Invitations => new SimpleFakeDbSet<Invitation>(new List<Invitation>());
+        public ISimpleDbSet<Invitation> Invitations { get; set; } = new SimpleFakeDbSet<Invitation>(new List<Invitation>());
         public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; } = new SimpleFakeDbSet<RelationshipList>(new List<RelationshipList>());
         public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
         public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);

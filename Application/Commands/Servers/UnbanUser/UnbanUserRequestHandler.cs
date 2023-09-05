@@ -20,9 +20,7 @@ namespace Application.Commands.Servers.UnbanUser
             if (server.Owner != UserId) //TODO: Замінити на логіку перевірки claim
                 throw new NoPermissionsException("You don't have the appropriate rights");
             
-            ServerProfile userToRemove = server.ServerProfiles.Find(sp => sp.UserId == request.UserId) ??
-                                         throw new Exception("The user are not a member of the server");
-            server.BannedUsers.Remove(userToRemove.UserId);
+            server.BannedUsers.Remove(request.UserId);
             
             await Context.Servers.UpdateAsync(server);
         }
