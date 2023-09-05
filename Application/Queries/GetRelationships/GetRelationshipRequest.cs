@@ -2,8 +2,6 @@
 
 namespace Application.Queries.GetRelationships
 {
-    public class GetRelationshipRequest : IRequest<List<RelationshipDto>>
-    {
-        
-    }
+    public record GetRelationshipRequest()
+        : IRequest<List<RelationshipDto>>;
 }

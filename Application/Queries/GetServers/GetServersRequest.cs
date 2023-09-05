@@ -2,7 +2,7 @@
 
 namespace Application.Queries.GetServer
 {
-    public class GetServersRequest : IRequest<List<GetServerLookupDto>>
+    public record GetServersRequest : IRequest<List<GetServerLookupDto>>
     {
     }
 }

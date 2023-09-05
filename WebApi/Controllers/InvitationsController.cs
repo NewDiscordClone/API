@@ -1,9 +1,9 @@
-﻿using Application.Commands.Invitations.GetInvitationDetails;
-using Application.Commands.Invitations.MakeInvitation;
+﻿using Application.Commands.Invitations.CreateInvitation;
 using Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Queries.GetInvitationDetails;
 
 namespace WebApi.Controllers
 {
@@ -59,7 +59,7 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<string>> Invite(MakeInvitationRequest request)
+        public async Task<ActionResult<string>> Invite(CreateInvitationRequest request)
         {
             string id = await Mediator.Send(request);
             return Created($"{this.Request.Scheme}://{this.Request.Host}/api/Invitation/" + id, id);

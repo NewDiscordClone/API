@@ -1,17 +1,23 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using Application.Models;
+﻿using Application.Models;
 using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Commands.Channels.CreateChannel
 {
     public class CreateChannelRequest : IRequest<string>
     {
+        /// <summary>
+        /// Name of the channel 
+        /// </summary>
         [Required]
-        [MaxLength(100)] 
+        [MaxLength(100)]
         [DefaultValue("Channel")]
         public string Title { get; init; }
 
+        /// <summary>
+        /// Id of the server where chat will be created
+        /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]

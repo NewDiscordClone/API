@@ -16,8 +16,8 @@ namespace Tests.GroupChats.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetPrivateChatsRequest request = new();
-            GetPrivateChatsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetPersonalChatsRequest request = new();
+            GetPersonalChatsHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<PrivateChatLookUp> chats = await handler.Handle(request, CancellationToken);

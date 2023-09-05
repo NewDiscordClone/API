@@ -3,15 +3,15 @@ using Application.Models;
 using Application.Providers;
 using MediatR;
 
-namespace Application.Commands.Invitations.MakeInvitation
+namespace Application.Commands.Invitations.CreateInvitation
 {
-    public class MakeInvitationRequestHandler : RequestHandlerBase, IRequestHandler<MakeInvitationRequest, string>
+    public class CreateInvitationRequestHandler : RequestHandlerBase, IRequestHandler<CreateInvitationRequest, string>
     {
-        public MakeInvitationRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public CreateInvitationRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
         {
         }
 
-        public async Task<string> Handle(MakeInvitationRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateInvitationRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             Invitation invitation = new Invitation()

@@ -42,7 +42,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
-            GetPrivateChatsRequest get = new();
+            GetPersonalChatsRequest get = new();
             List<PrivateChatLookUp> list = await Mediator.Send(get);
             return Ok(list);
         }

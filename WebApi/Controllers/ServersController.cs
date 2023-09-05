@@ -1,8 +1,6 @@
-using Application.Commands.Invitations.GetInvitationDetails;
-using Application.Commands.Invitations.MakeInvitation;
-using Application.Commands.Servers.BanUser;
 using Application.Commands.HubClients.Servers.ServerDeleted;
 using Application.Commands.HubClients.Servers.ServerUpdated;
+using Application.Commands.Servers.BanUser;
 using Application.Commands.Servers.ChangeServerProfileDisplayName;
 using Application.Commands.Servers.ChangeServerProfileRoles;
 using Application.Commands.Servers.CreateServer;
@@ -268,7 +266,7 @@ namespace WebApi.Controllers
                 return BadRequest(e);
             }
         }
-        
+
         /// <summary>
         /// Removes User from the server users list and put him in a black list.
         /// The User can't come back even if it would have an invitation
@@ -305,7 +303,7 @@ namespace WebApi.Controllers
                 return BadRequest(e);
             }
         }
-        
+
         /// <summary>
         /// Removes User from the server's black list. Now the user could return if it would have an invitation
         /// </summary>
