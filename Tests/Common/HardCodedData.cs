@@ -29,14 +29,14 @@ namespace Tests.Common
             };
             _userC = new User
             {
-                Id = _ids.UserCId= Guid.NewGuid(),
+                Id = _ids.UserCId = Guid.NewGuid(),
                 UserName = "User C",
                 Avatar = null,
                 Email = "email@test3.com",
             };
             _userD = new User
             {
-                Id = _ids.UserDId= Guid.NewGuid(),
+                Id = _ids.UserDId = Guid.NewGuid(),
                 UserName = "User D",
                 Avatar = null,
                 Email = "email@test4.com",
@@ -47,6 +47,7 @@ namespace Tests.Common
         private readonly User _userB;
         private readonly User _userC;
         private readonly User _userD;
+
         public List<User> Users => new List<User>()
         {
             _userA,
@@ -68,7 +69,7 @@ namespace Tests.Common
         {
             new Server
             {
-                Id = _ids.ServerIdForDelete = ObjectId.GenerateNewId().ToString(),
+                Id = _ids.Server1 = ObjectId.GenerateNewId().ToString(),
                 Title = "Server 1",
                 Owner = _ids.UserAId,
                 ServerProfiles =
@@ -83,7 +84,7 @@ namespace Tests.Common
             },
             new Server
             {
-                Id = _ids.ServerIdForUpdate = ObjectId.GenerateNewId().ToString(),
+                Id = _ids.Server2 = ObjectId.GenerateNewId().ToString(),
                 Title = "Server 2",
                 Owner = _ids.UserBId,
                 ServerProfiles =
@@ -94,8 +95,29 @@ namespace Tests.Common
                     }
                 },
                 // Roles = new List<Role>()
+            },
+            new Server
+            {
+                Id = _ids.Server3 = ObjectId.GenerateNewId().ToString(),
+                Title = "Server 3",
+                Owner = _ids.UserCId,
+                ServerProfiles =
+                {
+                    new ServerProfile
+                    {
+                        UserId = _ids.UserAId
+                    },
+                    new ServerProfile
+                    {
+                        UserId = _ids.UserBId
+                    },
+                    new ServerProfile
+                    {
+                        UserId = _ids.UserCId
+                    }
+                },
+                // Roles = new List<Role>()
             }
-
         };
 
         public List<Channel> Channels => new List<Channel>()
@@ -104,13 +126,33 @@ namespace Tests.Common
             {
                 Id = _ids.Channel1 = ObjectId.GenerateNewId().ToString(),
                 Title = "Channel 1",
-                ServerId = _ids.ServerIdForDelete
+                ServerId = _ids.Server1,
+                Users = new List<Guid>
+                {
+                    _ids.UserAId,
+                }
             },
             new Channel
             {
                 Id = _ids.Channel2 = ObjectId.GenerateNewId().ToString(),
                 Title = "Channel 2",
-                ServerId = _ids.ServerIdForUpdate
+                ServerId = _ids.Server2,
+                Users = new List<Guid>
+                {
+                    _ids.UserBId,
+                }
+            },
+            new Channel
+            {
+                Id = _ids.Channel3 = ObjectId.GenerateNewId().ToString(),
+                Title = "Channel 3",
+                ServerId = _ids.Server3,
+                Users = new List<Guid>
+                {
+                    _ids.UserAId,
+                    _ids.UserBId,
+                    _ids.UserCId,
+                }
             }
         };
 

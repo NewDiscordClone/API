@@ -12,7 +12,7 @@ namespace Tests.Servers.Queries
         {
             //Arrange
             CreateDatabase();
-            string serverId = Ids.ServerIdForDelete;
+            string serverId = Ids.Server1;
             Guid userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
             

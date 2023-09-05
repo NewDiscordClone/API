@@ -14,7 +14,7 @@ namespace Tests.Servers.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserBId;
-            string serverId = Ids.ServerIdForUpdate;
+            string serverId = Ids.Server2;
             const string newTitle = "Updated title";
 
             Mock<IAuthorizedUserProvider> userProvider = new();
@@ -44,7 +44,7 @@ namespace Tests.Servers.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            string serverId = Ids.ServerIdForUpdate;
+            string serverId = Ids.Server2;
             const string newTitle = "Updated title";
 
             Mock<IAuthorizedUserProvider> userProvider = new();

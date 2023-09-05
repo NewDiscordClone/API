@@ -12,7 +12,7 @@
 //        public async Task Success()
 //        {
 //            //Arrange
-//            string serverId = Ids.ServerIdForUpdate;
+//            string serverId = Ids.Server2;
 
 //            Mock<IMediator> mediator = new();
 //            mediator.Setup(mediator => mediator.Send(It.IsAny<UpdateServerRequest>(), CancellationToken))
