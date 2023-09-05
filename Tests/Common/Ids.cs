@@ -28,5 +28,7 @@ namespace Tests.Common
         public string Invitation1 { get; set; }
         public string Invitation2 { get; set; }
         public string Invitation3 { get; set; }
+        public string PersonalChat8 { get; set; }
+        public string PersonalChat9 { get; set; }
     }
 }

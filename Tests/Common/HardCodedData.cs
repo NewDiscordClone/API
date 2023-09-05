@@ -165,12 +165,12 @@ namespace Tests.Common
             }
         };
 
-        public List<GroupChat> GroupChats => new List<GroupChat>()
+        public List<GroupChat> GroupChats => new()
         {
             new GroupChat()
             {
                 Id = _ids.GroupChat3 = ObjectId.GenerateNewId().ToString(),
-                Title = "PersonalChat 3",
+                Title = "PersonalChat 2",
                 OwnerId = _userA.Id,
                 Users = { _ids.UserAId, _ids.UserBId, },
             },
@@ -210,6 +210,20 @@ namespace Tests.Common
                 {
                     _ids.UserBId, _ids.UserCId, _ids.UserDId
                 }
+            }
+        };
+
+        public List<PersonalChat> PersonalChats => new()
+        {
+            new PersonalChat()
+            {
+                Id = _ids.PersonalChat8 = ObjectId.GenerateNewId().ToString(),
+                Users = { _ids.UserAId, _ids.UserBId, }
+            },
+            new PersonalChat()
+            {
+                Id = _ids.PersonalChat9 = ObjectId.GenerateNewId().ToString(),
+                Users = { _ids.UserBId, _ids.UserDId }
             }
         };
 
@@ -273,7 +287,57 @@ namespace Tests.Common
             {
                 Id = _ids.Invitation3 = ObjectId.GenerateNewId().ToString(),
                 ServerId = _ids.Server3,
-                ExpireTime = DateTime.Now - new TimeSpan(1, 0, 0,0)
+                ExpireTime = DateTime.Now - new TimeSpan(1, 0, 0, 0)
+            }
+        };
+
+        public List<RelationshipList> Relationships => new()
+        {
+            new RelationshipList
+            {
+                Id = _ids.UserAId,
+                Relationships = new List<Relationship>()
+                {
+                    new()
+                    {
+                        UserId = _ids.UserBId,
+                        RelationshipType = RelationshipType.Friend
+                    }
+                }
+            },
+            new RelationshipList()
+            {
+                Id = _ids.UserBId,
+                Relationships = new List<Relationship>()
+                {
+                    new()
+                    {
+                        UserId = _ids.UserAId,
+                        RelationshipType = RelationshipType.Friend
+                    },
+                    new()
+                    {
+                        UserId = _ids.UserDId,
+                        RelationshipType = RelationshipType.Waiting
+                    }
+                }
+            },
+            new RelationshipList()
+            {
+                Id = _ids.UserDId,
+                Relationships = new List<Relationship>()
+                {
+                    new()
+                    {
+                        UserId = _ids.UserBId,
+                        RelationshipType = RelationshipType.Pending
+                    },
+                    new()
+                    {
+                        UserId = _ids.UserAId,
+                        RelationshipType = RelationshipType.Blocked
+                    }
+                }
             }
         };
     }

@@ -126,7 +126,7 @@ namespace DataAccess
         }
     }
     
-    public class SimpleMongoDbSet<TEntity, TKey> : ISimpleDbSet<TEntity> where TEntity : class
+    public class SimpleMongoDbSet<TEntity, TKey> : ISimpleDbSet<TEntity> where TEntity : class where TKey : notnull
     {
         public CancellationToken CancellationToken { get; set; } = default;
 
@@ -210,9 +210,8 @@ namespace DataAccess
 
         private static TKey ConvertToId(object? id)
         {
-            if (id is not TKey key) throw new ArgumentException("Id is not a string or ObjectId instance");
+            if (id is not TKey key) throw new ArgumentException($"Id is not a string or {typeof(TKey).Name} instance");
             return key;
-
         }
 
         private static FilterDefinition<TEntity> GetIdFilter(TKey id)

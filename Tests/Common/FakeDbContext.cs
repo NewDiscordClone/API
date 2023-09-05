@@ -27,12 +27,17 @@ namespace Tests.Common
         public void Create(HardCodedData hardCodedData)
         {
             Database.EnsureCreated();
-            
+
             Users.AddRange(hardCodedData.Users);
             Servers = new SimpleFakeDbSet<Server>(hardCodedData.Servers);
-            _chats = new SimpleFakeDbSet<Chat>(hardCodedData.GroupChats.Cast<Chat>().Concat(hardCodedData.Channels).ToList());
+            _chats = new SimpleFakeDbSet<Chat>(
+                hardCodedData.GroupChats.Cast<Chat>()
+                    .Concat(hardCodedData.Channels)
+                    .Concat(hardCodedData.PersonalChats)
+                    .ToList());
             Messages = new SimpleFakeDbSet<Message>(hardCodedData.Messages);
             Invitations = new SimpleFakeDbSet<Invitation>(hardCodedData.Invitations);
+            RelationshipLists = new SimpleFakeDbSet<RelationshipList, Guid>(hardCodedData.Relationships);
             SaveChanges();
         }
 
@@ -53,8 +58,8 @@ namespace Tests.Common
         public ISimpleDbSet<Media> Media { get; set; } = new SimpleFakeDbSet<Media>(new List<Media>());
 
         public ISimpleDbSet<Server> Servers { get; set; }
-        public ISimpleDbSet<Invitation> Invitations { get; set; } = new SimpleFakeDbSet<Invitation>(new List<Invitation>());
-        public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; } = new SimpleFakeDbSet<RelationshipList>(new List<RelationshipList>());
+        public ISimpleDbSet<Invitation> Invitations { get; set; }
+        public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; }
         public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
         public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
 
@@ -107,7 +112,7 @@ namespace Tests.Common
                 .FirstOrDefaultAsync(predicate, cancellationToken);
 
             return entity
-                ?? throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
+                   ?? throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
         }
 
         public async Task<List<Message>> GetMessagesAsync(string chatId, int skip, int take)
@@ -123,6 +128,7 @@ namespace Tests.Common
             list.Sort((m1, m2) => m1.PinnedTime.Value.Millisecond - m2.PinnedTime.Value.Millisecond);
             return list;
         }
+
         async Task IAppDbContext.SaveChangesAsync()
         {
             await SaveChangesAsync(_token);
@@ -150,6 +156,7 @@ namespace Tests.Common
                     RoleId = role.Id
                 }, _token);
             }
+
             await SaveChangesAsync(_token);
         }
     }

@@ -65,7 +65,7 @@ namespace DataAccess
         public ISimpleDbSet<Invitation> Invitations => 
             new SimpleMongoDbSet<Invitation>(MongoDb.GetCollection<Invitation>("invitations"), _token);
         public ISimpleDbSet<RelationshipList> RelationshipLists =>
-            new SimpleMongoDbSet<RelationshipList, int>(MongoDb.GetCollection<RelationshipList>("relationships"),
+            new SimpleMongoDbSet<RelationshipList, Guid>(MongoDb.GetCollection<RelationshipList>("relationships"),
                 _token);
 
         public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);

@@ -1,4 +1,5 @@
-﻿using System.Security.Policy;
+﻿using System.Globalization;
+using System.Security.Policy;
 using Application.Commands.Invitations.CreateInvitation;
 using Application.Common.Exceptions;
 using Application.Models;
@@ -33,7 +34,10 @@ namespace Tests.Invitations
             
             //Assert
             Assert.Equal(serverId, invitation.ServerId);
-            Assert.Equal(expiretime, invitation.ExpireTime);
+            Assert.NotNull(invitation.ExpireTime);
+            Assert.Equal(
+                expiretime.ToLocalTime().ToString(), 
+                invitation.ExpireTime.Value.ToLocalTime().ToString());
             Assert.Equal(user, invitation.UserId);
         }
         

@@ -39,7 +39,10 @@ namespace Tests.Common
             context.Servers.AddMany(hardCodedData.Servers);
             context.Channels.AddMany(hardCodedData.Channels);
             context.GroupChats.AddMany(hardCodedData.GroupChats);
+            context.PersonalChats.AddMany(hardCodedData.PersonalChats);
             context.Messages.AddMany(hardCodedData.Messages);
+            context.Invitations.AddMany(hardCodedData.Invitations);
+            context.RelationshipLists.AddMany(hardCodedData.Relationships);
 
             context.SaveChanges();
             return context;

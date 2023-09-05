@@ -11,7 +11,7 @@ namespace Application.Interfaces
          
         Task<TEntity> FindAsync(object id);
 
-        async Task<TEntity?>? FindOrDefaultAsync(object id)
+        async Task<TEntity?> FindOrDefaultAsync(object id)
         {
             try
             {

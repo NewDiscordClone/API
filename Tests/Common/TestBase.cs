@@ -31,7 +31,10 @@ namespace Tests.Common
 
         public void CreateDatabase()
         {
-            Context = TestDbContextFactory.CreateFake(out Ids); //Can be turned to TestDbContextFactory.Create(out Ids); for real database instances
+            Context = TestDbContextFactory.CreateFake(out Ids);
+            //Can be turned to
+            //Context = TestDbContextFactory.Create(out Ids); 
+            //for real database instances
         }
 
         public void Dispose()

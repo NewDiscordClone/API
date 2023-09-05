@@ -30,7 +30,7 @@ namespace Application.Queries.GetUser
         /// </summary>
         [DataType(DataType.ImageUrl)]
         [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]
-        public string AvatarPath { get; init; }
+        public string Avatar { get; init; }
 
         /// <summary>
         /// User's current status.
