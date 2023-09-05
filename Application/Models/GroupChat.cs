@@ -5,8 +5,7 @@ namespace Application.Models
 {
     public class GroupChat : PersonalChat
     {
-        [DefaultValue(1)]
-        public int OwnerId { get; set; }
+        public Guid OwnerId { get; set; }
         
         [DataType(DataType.ImageUrl)]
         [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]

@@ -14,7 +14,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat6;
-            int removeMemberId = Ids.UserAId;
+            Guid removeMemberId = Ids.UserAId;
             int oldCount = 4;
 
             SetAuthorizedUserId(Ids.UserBId);
@@ -34,7 +34,7 @@ namespace Tests.GroupChats.Commands
 
             //Assert
             Assert.Equal(oldCount - 1, chat.Users.Count);
-            Assert.DoesNotContain(chat.Users, user => user.Id == removeMemberId);
+            Assert.DoesNotContain(chat.Users, user => user == removeMemberId);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat7;
-            int removeMemberId = Ids.UserAId;
+            Guid removeMemberId = Ids.UserAId;
 
             SetAuthorizedUserId(Ids.UserBId);
 

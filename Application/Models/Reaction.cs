@@ -14,9 +14,9 @@ public class Reaction
     [RegularExpression(":\\w+:")]
     [DefaultValue(":smile:")]
     public string Emoji { get; set; }
-
+    
     /// <summary>
-    /// Reaction author lookup
+    /// Reaction author ID
     /// </summary>
-    public UserLookUp User { get; set; }
+    public Guid User { get; set; }
 }

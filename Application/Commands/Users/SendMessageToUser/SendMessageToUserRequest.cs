@@ -10,8 +10,7 @@ namespace Application.Commands.Users.SendMessageToUser
         /// <summary>
         /// The unique identifier of the user to send the message to.
         /// </summary>
-        [DefaultValue(1)]
-        public int UserId { get; init; }
+        public Guid UserId { get; init; }
 
         /// <summary>
         /// The text of the message, May contain links

@@ -18,13 +18,12 @@ namespace Application.Models
     /// <summary>
     /// Representation of a user.
     /// </summary>
-    public class User : IdentityUser<int>
+    public class User : IdentityUser<Guid>
     {
         /// <summary>
         /// Unique user identifier.
         /// </summary>
-        [DefaultValue(1)]
-        public override int Id { get; set; }
+        public override Guid Id { get; set; }
 
         /// <summary>
         /// Unique username for the user.

@@ -10,10 +10,11 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 using System.Security.Claims;
+using DataAccess;
 
 namespace Tests.Common
 {
-    public class FakeDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
+    public class FakeDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     {
         private readonly IMapper _mapper;
 
@@ -53,6 +54,8 @@ namespace Tests.Common
         public ISimpleDbSet<Server> Servers { get; set; }
         public ISimpleDbSet<Invitation> Invitations => new SimpleFakeDbSet<Invitation>(new List<Invitation>());
         public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; } = new SimpleFakeDbSet<RelationshipList>(new List<RelationshipList>());
+        public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
+        public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
 
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
 
@@ -139,14 +142,14 @@ namespace Tests.Common
         {
             foreach (Claim claim in claims)
             {
-                await RoleClaims.AddAsync(new IdentityRoleClaim<int>
+                await RoleClaims.AddAsync(new IdentityRoleClaim<Guid>
                 {
                     ClaimType = claim.Type,
                     ClaimValue = claim.Value,
                     RoleId = role.Id
-                });
+                }, _token);
             }
-            await SaveChangesAsync();
+            await SaveChangesAsync(_token);
         }
     }
 }

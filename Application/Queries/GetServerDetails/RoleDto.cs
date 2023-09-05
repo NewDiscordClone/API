@@ -10,8 +10,7 @@ namespace Application.Queries.GetServerDetails
         /// <summary>
         /// The unique identifier for the role.
         /// </summary>
-        [DefaultValue(1)]
-        public int Id { get; init; }
+        public Guid Id { get; init; }
 
         /// <summary>
         /// The name of the role.
@@ -24,6 +23,7 @@ namespace Application.Queries.GetServerDetails
         /// </summary>
         [DefaultValue("#FF0000")]
         public string Color { get; init; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Role, RoleDto>();

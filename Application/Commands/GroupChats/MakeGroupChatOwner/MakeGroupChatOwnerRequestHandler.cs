@@ -18,7 +18,7 @@ namespace Application.Commands.GroupChats.MakeGroupChatOwner
 
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("User is not an owner of the chat");
-            if (!chat.Users.Any(u => u.Id == request.MemberId))
+            if (!chat.Users.Any(u => u == request.MemberId))
                 throw new NoSuchUserException("User in not a member of the chat");
 
             chat.OwnerId = request.MemberId;

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models;
+using Application.Models.LookUps;
 using Application.Providers;
 using AutoMapper;
 using MediatR;
@@ -25,7 +26,7 @@ namespace Application.Queries.GetRelationships
                 relationshipDtos.Add(new RelationshipDto()
                 {
                     User = Mapper.Map<UserLookUp>(
-                        Context.FindSqlByIdAsync<User>(relationship.UserId, cancellationToken)),
+                        Context.SqlUsers.FindAsync(relationship.UserId)),
                     RelationshipType = relationship.RelationshipType
                 });
             }

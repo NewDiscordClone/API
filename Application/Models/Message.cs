@@ -33,6 +33,9 @@ public class Message
     /// </summary>
     public DateTime? PinnedTime { get; set; } = null;
 
+    /// <summary>
+    /// Flag that indicates whether the message is pinned or not
+    /// </summary>
     [DefaultValue(false)]
     public bool IsPinned { get; set; } = false;
 
@@ -45,12 +48,10 @@ public class Message
     /// List of message attachment urls
     /// </summary>
     public List<Attachment> Attachments { get; set; } = new();
-
     /// <summary>
-    /// Message author
+    /// Message author ID
     /// </summary>
-    public UserLookUp User { get; set; }
-
+    public Guid User { get; set; }
     /// <summary>
     /// Chat Id as an string representation of an ObjectId type
     /// </summary>

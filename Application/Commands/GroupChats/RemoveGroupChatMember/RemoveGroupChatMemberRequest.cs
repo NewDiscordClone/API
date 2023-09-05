@@ -18,8 +18,7 @@ namespace Application.Commands.GroupChats.RemoveGroupChatMember
         /// The unique identifier of the member to be removed from the group chat.
         /// </summary>
         [Required]
-        [DefaultValue(1)]
-        public int MemberId { get; init; }
+        public Guid MemberId { get; init; }
 
         /// <summary>
         /// Indicates whether to remove the member silently without sending notifications. (Optional, default is false)

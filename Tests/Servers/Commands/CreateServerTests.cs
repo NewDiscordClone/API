@@ -15,7 +15,7 @@ namespace Tests.Servers.Commands
         {
             //Arrange
             CreateDatabase();
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
             long oldCount = await Context.Servers.CountAsync(s => true);
             const string serverName = "New server";
 
@@ -32,7 +32,7 @@ namespace Tests.Servers.Commands
 
             //Assert
             Assert.Equal(serverName, resultServer.Title);
-            Assert.NotNull(resultServer.ServerProfiles.FirstOrDefault(profile => profile.UserId == userId));
+            Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);
             Assert.Equal(oldCount + 1, await Context.Servers.CountAsync(s => true));
         }
     }

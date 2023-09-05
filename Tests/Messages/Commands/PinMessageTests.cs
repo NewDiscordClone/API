@@ -13,6 +13,8 @@ namespace Tests.Messages.Commands
             CreateDatabase();
             var messageId = Ids.Message1;
 
+            SetAuthorizedUserId(Ids.UserAId);
+            
             PinMessageRequest request = new()
             {
                 MessageId = messageId

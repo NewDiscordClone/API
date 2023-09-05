@@ -40,7 +40,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<GetUserDetailsDto>> GetUser(
-            [FromQuery] int userId, [FromQuery] string serverId = null!)
+            [FromQuery] Guid userId, [FromQuery] string serverId = null!)
         {
             try
             {

@@ -11,8 +11,7 @@ namespace Application.Queries.GetUser
         /// <summary>
         /// Unique user identifier.
         /// </summary>
-        [DefaultValue(1)]
-        public int Id { get; init; }
+        public Guid Id { get; init; }
 
         /// <summary>
         /// Non-unique display name shown to other users.
@@ -46,10 +45,10 @@ namespace Application.Queries.GetUser
         public string? TextStatus { get; init; }
 
         public GetUserDetailsServerProfileDto? ServerProfile { get; set; }
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<User, GetUserDetailsDto>();
         }
-
     }
 }

@@ -1,8 +1,9 @@
 ﻿using Application.Models;
+using Application.Models.LookUps;
 using Application.Queries.GetPersonalChats;
 using Tests.Common;
 
-namespace Tests.PrivateChats.Queries
+namespace Tests.GroupChats.Queries
 {
     public class GetPrivateChatsListTests : TestBase
     {
@@ -11,7 +12,7 @@ namespace Tests.PrivateChats.Queries
         {
             //Arrange
             CreateDatabase();
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 
@@ -24,7 +25,7 @@ namespace Tests.PrivateChats.Queries
             //Assert
             Assert.NotEmpty(chats);
             Assert.Equal(3, chats.Count);
-            Assert.All(chats, chat => Assert.Contains(chat.Users, user => user.Id == userId));
+            Assert.All(chats, chat => Assert.Contains(Context.Chats.FindAsync(chat.Id).Result.Users, user => user == userId));
         }
     }
 }

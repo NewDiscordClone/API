@@ -18,7 +18,6 @@ namespace Application.Commands.GroupChats.MakeGroupChatOwner
         /// The unique identifier of the member to be made the owner.
         /// </summary>
         [Required]
-        [DefaultValue(1)]
-        public int MemberId { get; init; }
+        public Guid MemberId { get; init; }
     }
 }

@@ -19,7 +19,7 @@ namespace WebApi.Authorization.Handlers
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, ServerMemberRequirement requirement)
         {
-            int userId = _userProvider.GetUserId();
+            Guid userId = _userProvider.GetUserId();
             GetUserDetailsDto user = await _mediator.Send(new GetUserDetailsRequest
             {
                 UserId = userId,

@@ -6,11 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Models;
 
-public class Role : IdentityRole<int>
+public class Role : IdentityRole<Guid>
 {
-    [DefaultValue(1)]
-    public override int Id { get; set; }
-
+    public override Guid Id { get; set; }
+    
     [DefaultValue("Admin")]
     [StringLength(32, MinimumLength = 1)]
     public override string Name { get; set; }

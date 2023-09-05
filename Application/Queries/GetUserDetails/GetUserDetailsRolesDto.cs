@@ -10,8 +10,7 @@ namespace Application.Queries.GetUser
         /// <summary>
         /// The unique identifier for the role.
         /// </summary>
-        [DefaultValue(1)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// The name of the role.
@@ -30,5 +29,4 @@ namespace Application.Queries.GetUser
             profile.CreateMap<Role, GetUserDetailsRolesDto>();
         }
     }
-
 }

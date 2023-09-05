@@ -1,11 +1,11 @@
-﻿using Application.Models;
-using MediatR;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Application.Models.LookUps;
+using MediatR;
 
 namespace Application.Queries.GetMessages
 {
-    public record GetMessagesRequest : IRequest<List<Message>>
+    public record GetMessagesRequest : IRequest<List<MessageDto>>
     {
         /// <summary>
         /// The unique identifier of the chat from which to retrieve messages.

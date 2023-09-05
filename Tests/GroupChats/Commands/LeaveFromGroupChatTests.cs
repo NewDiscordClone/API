@@ -14,7 +14,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat7;
-            int userId = Ids.UserBId;
+            Guid userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 
@@ -31,7 +31,7 @@ namespace Tests.GroupChats.Commands
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
             //Assert
-            Assert.DoesNotContain(chat.Users, user => user.Id == userId);
+            Assert.DoesNotContain(chat.Users, user => user == userId);
             var groupChat = chat as GroupChat;
             Assert.NotNull(groupChat);
             Assert.NotEqual(userId, groupChat.OwnerId);
@@ -43,7 +43,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat4;
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 
@@ -68,7 +68,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat4;
-            int userId = Ids.UserBId;
+            Guid userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
 

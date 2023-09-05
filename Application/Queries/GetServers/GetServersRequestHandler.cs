@@ -14,7 +14,7 @@ namespace Application.Queries.GetServer
             Context.SetToken(cancellationToken);
 
             List<GetServerLookupDto> servers = new();
-            (await Context.Servers.FilterAsync(s => s.ServerProfiles.Any(sp => sp.User.Id == UserId)))
+            (await Context.Servers.FilterAsync(s => s.ServerProfiles.Any(sp => sp.UserId == UserId)))
                 .ForEach(s => servers.Add(
                     new GetServerLookupDto
                     {

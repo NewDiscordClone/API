@@ -2,7 +2,7 @@
 {
     public interface IAuthorizedUserProvider
     {
-        int GetUserId();
+        Guid GetUserId();
         bool IsAdmin(string serverId);
         Task<bool> IsAdminAsync(string serverId);
         bool HasClaims(string serverId, IEnumerable<string> claimTypes);

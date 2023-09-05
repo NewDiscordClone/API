@@ -7,6 +7,6 @@ namespace Application.Commands.Users.AcceptFriendRequest
         /// <summary>
         /// The unique identifier of the user who sent the friend request to accept it
         /// </summary>
-        public int UserId { get; init; }
+        public Guid UserId { get; init; }
     }
 }

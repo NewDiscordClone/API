@@ -13,7 +13,7 @@ using System.Security.Claims;
 
 namespace DataAccess
 {
-    public class AppDbContext : IdentityDbContext<User, Role, int>, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     {
         private IMongoClient _mongoClient { get; }
         private string _mongoDbName { get; }
@@ -68,6 +68,9 @@ namespace DataAccess
             new SimpleMongoDbSet<RelationshipList, int>(MongoDb.GetCollection<RelationshipList>("relationships"),
                 _token);
 
+        public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
+        public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
+
         //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
         public IMongoDatabase MongoDb { get; }
 
@@ -103,28 +106,6 @@ namespace DataAccess
         {
             _mongoClient.DropDatabase(_mongoDbName);
             base.Dispose();
-        }
-
-        public async Task<TEntity> FindSqlByIdAsync<TEntity>(int id, CancellationToken cancellationToken = default,
-            params string[] includedProperties) where TEntity : class
-        {
-            DbSet<TEntity> dbSet = Set<TEntity>();
-            IQueryable<TEntity> queryable = dbSet.AsQueryable();
-
-            foreach (string property in includedProperties)
-            {
-                queryable = queryable.Include(property);
-            }
-
-            // Define an expression that represents the ID property
-            Expression<Func<TEntity, bool>> predicate = entity =>
-                EF.Property<int>(entity, "Id") == id;
-
-            TEntity? entity = await queryable
-                .FirstOrDefaultAsync(predicate, cancellationToken);
-
-            return entity ??
-                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
         }
 
         public async Task<List<Message>> GetMessagesAsync(
@@ -168,14 +149,14 @@ namespace DataAccess
         {
             foreach (Claim claim in claims)
             {
-                await RoleClaims.AddAsync(new IdentityRoleClaim<int>
+                await RoleClaims.AddAsync(new IdentityRoleClaim<Guid>
                 {
                     ClaimType = claim.Type,
                     ClaimValue = claim.Value,
                     RoleId = role.Id
-                });
+                }, _token);
             }
-            await SaveChangesAsync();
+            await SaveChangesAsync(_token);
         }
     }
 }

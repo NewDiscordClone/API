@@ -15,9 +15,10 @@ public class ServerProfile
     [DefaultValue("𝕾𝖊𝖗𝖛𝖊𝖗 𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
     public string? DisplayName { get; set; }
     /// <summary>
-    /// User DTO with most popular data
+    /// User ID with most popular data
     /// </summary>
-    public virtual UserLookUp User { get; set; }
+    public virtual Guid UserId { get; set; }
+    
     /// <summary>
     /// List of user's roles on server
     /// </summary>

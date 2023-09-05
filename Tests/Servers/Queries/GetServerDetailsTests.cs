@@ -13,7 +13,7 @@ namespace Tests.Servers.Queries
             //Arrange
             CreateDatabase();
             string serverId = Ids.ServerIdForDelete;
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
             
             SetAuthorizedUserId(userId);
@@ -29,7 +29,7 @@ namespace Tests.Servers.Queries
             Assert.NotNull(result);
             Assert.Equal(serverId, result.Id);
             Assert.NotEmpty(result.Channels);
-
+            Assert.Contains(result.ServerProfiles, sp => sp.UserId == userId);
         }
     }
 }

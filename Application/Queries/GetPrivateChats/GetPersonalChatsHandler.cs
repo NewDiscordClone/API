@@ -1,5 +1,6 @@
 using Application.Interfaces;
 using Application.Models;
+using Application.Models.LookUps;
 using Application.Providers;
 using AutoMapper;
 using MediatR;
@@ -21,16 +22,26 @@ namespace Application.Queries.GetPersonalChats
         {
             Context.SetToken(cancellationToken);
             List<PrivateChatLookUp> chats = new();
-            foreach (PersonalChat personalChat in await Context.PersonalChats.FilterAsync(c => c.Users.Any(u => u.Id == UserId)))
+            foreach (var personalChat in await Context.PersonalChats.FilterAsync(c => c.Users.Any(u => u == UserId)))
             {
-                if (personalChat is GroupChat gchat)
+                if (personalChat is GroupChat gchat) 
                     chats.Add(Mapper.Map<PrivateChatLookUp>(gchat));
                 else
                 {
-                    chats.Add(new PrivateChatLookUp(personalChat, UserId));
+                    if (!personalChat.Users.Any(u => u != UserId))
+                        throw new AggregateException("There is no other user");
+                    Guid userid = personalChat.Users.First(u => u != UserId);
+                    chats.Add(
+                        new PrivateChatLookUp(
+                            personalChat,
+                            Mapper.Map<UserLookUp>(
+                                await Context.SqlUsers.FindAsync(userid)
+                            )
+                        )
+                    );
                 }
-
             }
+
             return chats;
         }
     }

@@ -12,18 +12,21 @@ namespace Application.Commands.Servers.CreateServer
         {
             Context.SetToken(cancellationToken);
 
-            UserLookUp ownerLookUp = Mapper.Map<UserLookUp>(await Context.FindSqlByIdAsync<User>(UserId, cancellationToken));
-
             Server server = new()
             {
                 Title = request.Title,
                 Image = request.Image,
-                Owner = ownerLookUp
+                Owner = UserId,
+                ServerProfiles = new List<ServerProfile>()
+                {
+                    new ServerProfile()
+                    {
+                        UserId = UserId
+                    }
+                }
             };
 
-            server.ServerProfiles.Add(new() { User = ownerLookUp });
-
-            await Context.Servers.AddAsync(server);
+            server = await Context.Servers.AddAsync(server);
             return server.Id;
         }
 

@@ -10,8 +10,7 @@ namespace Application.Queries.GetUser
         /// The unique identifier of the user to retrieve details for
         /// </summary>
         [Required]
-        [DefaultValue(1)]
-        public int UserId { get; init; }
+        public Guid UserId { get; init; }
 
         /// <summary>
         /// Id of the server for providing user's ServerProfile for this server

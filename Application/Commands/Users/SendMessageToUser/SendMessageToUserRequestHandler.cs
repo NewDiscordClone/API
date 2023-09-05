@@ -18,13 +18,9 @@ namespace Application.Commands.Users.SendMessageToUser
         public async Task<MessageChatDto> Handle(SendMessageToUserRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            User user = await Context.FindSqlByIdAsync<User>(UserId, cancellationToken);
-            User other = await Context.FindSqlByIdAsync<User>(request.UserId, cancellationToken);
 
-            RelationshipList? userRelationship =
-                await Context.RelationshipLists.FindAsync(UserId);
-            RelationshipList? otherRelationship =
-                await Context.RelationshipLists.FindAsync(request.UserId);
+            RelationshipList? userRelationship = await FindOrCreateRelationshipsAsync(UserId);
+            RelationshipList? otherRelationship = await FindOrCreateRelationshipsAsync(request.UserId);
 
             //TODO: Додати реалізацію перевірки налаштуваннь користувача з дозволів відправляти повідомлення
             Relationship? otherToUser = otherRelationship.Relationships.Find(r => r.UserId == UserId);
@@ -52,10 +48,10 @@ namespace Application.Commands.Users.SendMessageToUser
 
             Chat chat = await Context.PersonalChats.AddAsync(new PersonalChat
             {
-                Users = new List<UserLookUp>
+                Users = new List<Guid>
                 {
-                    Mapper.Map<UserLookUp>(user),
-                    Mapper.Map<UserLookUp>(other),
+                    UserId,
+                    request.UserId,
                 }
             });
             Message message = await new AddMessageRequestHandler(Context, UserProvider, Mapper).Handle(new AddMessageRequest
@@ -66,6 +62,22 @@ namespace Application.Commands.Users.SendMessageToUser
             }, cancellationToken); //Не впевнений що це правельне рішення
 
             return new MessageChatDto { ChatId = chat.Id, MessageId = message.Id };
+        }
+        
+        private async Task<RelationshipList> FindOrCreateRelationshipsAsync(Guid id)
+        {
+            try
+            {
+                return await Context.RelationshipLists.FindAsync(id);
+            }
+            catch (EntityNotFoundException)
+            {
+                return await Context.RelationshipLists.AddAsync(new RelationshipList()
+                {
+                    Id = id,
+                    Relationships = new List<Relationship>()
+                });
+            }
         }
     }
 }

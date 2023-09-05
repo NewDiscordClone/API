@@ -13,7 +13,7 @@ namespace Tests.GroupChats.Queries
             //Arrange
             CreateDatabase();
             var chatId = Ids.GroupChat4;
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
             
             SetAuthorizedUserId(userId);
 
@@ -25,7 +25,7 @@ namespace Tests.GroupChats.Queries
 
             //Assert
             Assert.NotNull(chat);
-            Assert.Contains(chat.Users, user => user.Id == userId);
+            Assert.Contains(chat.Users, user => user == userId);
             Assert.Equal(chatId, chat.Id);
         }
     }

@@ -11,8 +11,8 @@ namespace Tests.GroupChats.Commands
         {
             //Arrange
             CreateDatabase();
-            int userId = Ids.UserAId;
-            List<int> userIdlist = new() { userId, Ids.UserDId };
+            Guid userId = Ids.UserAId;
+            List<Guid> userIdlist = new() { userId, Ids.UserDId };
             const string title = "TestCreate";
 
             SetAuthorizedUserId(userId);
@@ -31,7 +31,7 @@ namespace Tests.GroupChats.Commands
             //Assert
             Assert.NotNull(result);
             Assert.Equal(title, result.Title);
-            Assert.True(result.Users.Select(user => user.Id).SequenceEqual(userIdlist));
+            Assert.True(result.Users.Select(user => user).SequenceEqual(userIdlist));
         }
     }
 }

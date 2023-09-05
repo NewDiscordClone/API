@@ -18,13 +18,16 @@ public interface IAppDbContext
     ISimpleDbSet<Invitation> Invitations { get; }
     ISimpleDbSet<RelationshipList> RelationshipLists { get; }
     //DbSet<ServerProfile> ServerProfiles { get; }
-    DbSet<Role> Roles { get; set; }
-    DbSet<User> Users { get; set; }
+
+    ISimpleDbSet<Role> SqlRoles { get; }
+
+    ISimpleDbSet<User> SqlUsers { get; }
+    // DbSet<Role> Roles { get; set; }
+    // DbSet<User> Users { get; set; }
     Task SaveChangesAsync();
 
     void SetToken(CancellationToken cancellationToken);
     Task CheckRemoveMedia(string id);
-    Task<TResult> FindSqlByIdAsync<TResult>(int id, CancellationToken cancellationToken = default, params string[] includedProperties) where TResult : class;
     Task<List<Message>> GetMessagesAsync(string chatId, int skip, int take);
     Task<List<Message>> GetPinnedMessagesAsync(string chatId);
     Task<List<Claim>> GetRoleClaimAsync(Role role);

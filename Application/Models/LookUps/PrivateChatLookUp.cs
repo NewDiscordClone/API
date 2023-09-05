@@ -3,7 +3,7 @@ using AutoMapper;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models
+namespace Application.Models.LookUps
 {
     public record PrivateChatLookUp : IMapWith<GroupChat>
     {
@@ -33,12 +33,6 @@ namespace Application.Models
         [DefaultValue("4 members")]
         public string Subtitle { get; init; }
 
-
-        /// <summary>
-        /// The list of users in the private chat.
-        /// </summary>
-        public List<UserLookUp> Users { get; init; } = new();
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<GroupChat, PrivateChatLookUp>()
@@ -46,14 +40,12 @@ namespace Application.Models
                     opt =>
                         opt.MapFrom(chat => chat.Users.Count + " members"));
         }
-
+        
         public PrivateChatLookUp() { }
 
-        public PrivateChatLookUp(PersonalChat personalChat, int userId)
+        public PrivateChatLookUp(PersonalChat personalChat, UserLookUp other)
         {
-            UserLookUp other = personalChat.Users.First(u => u.Id != userId);
             Id = personalChat.Id;
-            Users = personalChat.Users;
             Image = other.Avatar;
             Title = other.DisplayName;
             Subtitle = other.TextStatus;

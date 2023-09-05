@@ -14,7 +14,7 @@ namespace Application.Queries.GetGroupChatDetails
             Context.SetToken(cancellationToken);
 
             GroupChat chat = await Context.GroupChats.FindAsync(request.ChatId);
-            if (!chat.Users.Any(u => u.Id == UserId))
+            if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
             return Mapper.Map<GroupChat>(chat);
         }

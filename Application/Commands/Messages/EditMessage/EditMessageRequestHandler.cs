@@ -14,7 +14,7 @@ namespace Application.Commands.Messages.EditMessage
 
             Message message = await Context.Messages.FindAsync(request.MessageId);
 
-            if (message.User.Id != UserId)
+            if (message.User != UserId)
                 throw new NoPermissionsException("You don't have permission to edit the message");
 
             message.Text = request.NewText;

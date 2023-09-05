@@ -14,7 +14,7 @@ namespace Application.Commands.Servers.UpdateServer
 
             Server server = await Context.Servers.FindAsync(request.ServerId);
 
-            if (UserId != server.Owner.Id)
+            if (UserId != server.Owner)
                 throw new NoPermissionsException("You are not the owner of the server");
 
             if (request.Image != null && server.Image != null)

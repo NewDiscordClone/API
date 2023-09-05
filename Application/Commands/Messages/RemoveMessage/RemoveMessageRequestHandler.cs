@@ -15,7 +15,7 @@ namespace Application.Commands.Messages.RemoveMessage
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
-            if (message.User.Id != UserId)
+            if (message.User != UserId)
             {
                 //TODO: Перевірити юзера на відповідну роль на сервері
                 // Channel? channel = await Context.Channels

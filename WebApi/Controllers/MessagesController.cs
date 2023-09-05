@@ -12,6 +12,7 @@ using Application.Commands.Messages.RemoveReaction;
 using Application.Commands.Messages.UnpinMessage;
 using Application.Common.Exceptions;
 using Application.Models;
+using Application.Models.LookUps;
 using Application.Providers;
 using Application.Queries.GetMessages;
 using Application.Queries.GetPinnedMessages;
@@ -49,11 +50,11 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<List<Message>>> GetMessages(string chatId, int messagesCount)
+        public async Task<ActionResult<List<MessageDto>>> GetMessages(string chatId, int messagesCount)
         {
             try
             {
-                List<Message> messages = await Mediator.Send(new GetMessagesRequest()
+                List<MessageDto> messages = await Mediator.Send(new GetMessagesRequest()
                     { ChatId = chatId, MessagesCount = messagesCount });
                 return Ok(messages);
             }

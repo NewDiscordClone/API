@@ -17,7 +17,7 @@ namespace WebApi.Providers
             _context = context;
         }
 
-        public int GetUserId()
+        public Guid GetUserId()
         {
             string? userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -26,7 +26,7 @@ namespace WebApi.Providers
                 throw new NoSuchUserException();
             }
 
-            return int.Parse(userIdClaim);
+            return Guid.Parse(userIdClaim);
         }
         public async Task<bool> HasClaimsAsync(string serverId, IEnumerable<string> claimTypes)
         {
@@ -36,7 +36,7 @@ namespace WebApi.Providers
                 return false;
 
             ServerProfile? profile = server.ServerProfiles.
-                FirstOrDefault(profile => profile.User.Id == GetUserId());
+                FirstOrDefault(profile => profile.UserId == GetUserId());
 
 
             if (profile is null || profile.Roles is null)
@@ -102,7 +102,7 @@ namespace WebApi.Providers
                 return false;
 
             ServerProfile? profile = server.ServerProfiles.
-                FirstOrDefault(profile => profile.User.Id == GetUserId());
+                FirstOrDefault(profile => profile.UserId == GetUserId());
 
 
             if (profile is null || profile.Roles is null)

@@ -36,12 +36,12 @@ public class Server
     /// <summary>
     ///  User that created server
     /// </summary>
-    public UserLookUp Owner { get; set; }
+    public Guid Owner { get; set; }
 
     /// <summary>
     /// List of users profiles on server
     /// </summary>
     public List<ServerProfile> ServerProfiles { get; set; } = new();
 
-    public List<int> BannedUsers { get; set; } = new();
+    public List<Guid> BannedUsers { get; set; } = new();
 }

@@ -15,7 +15,7 @@ namespace Application.Commands.Servers.DeleteServer
 
             Server server = await Context.Servers.FindAsync(request.ServerId);
 
-            if (UserId != server.Owner.Id)
+            if (UserId != server.Owner)
                 throw new NoPermissionsException("You are not the owner of the server");
 
             await Context.Servers.DeleteAsync(server);

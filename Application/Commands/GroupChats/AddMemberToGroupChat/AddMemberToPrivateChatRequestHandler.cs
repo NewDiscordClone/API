@@ -16,14 +16,13 @@ namespace Application.Commands.GroupChats.AddMemberToGroupChat
 
             GroupChat chat = await Context.GroupChats.FindAsync(request.ChatId);
 
-            if (!chat.Users.Any(u => u.Id == UserId))
+            if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
-            if (chat.Users.Any(u => u.Id == request.NewMemberId))
+            if (chat.Users.Any(u => u == request.NewMemberId))
                 throw new NoPermissionsException("User is already a member of the chat");
 
-            User NewMember = await Context.FindSqlByIdAsync<User>(request.NewMemberId, cancellationToken);
 
-            chat.Users.Add(Mapper.Map<UserLookUp>(NewMember));
+            chat.Users.Add(request.NewMemberId);
 
             await Context.GroupChats.UpdateAsync(chat);
         }

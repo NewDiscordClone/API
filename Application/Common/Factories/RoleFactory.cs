@@ -30,7 +30,7 @@ namespace Application.Common.Factories
                 Color = "#FFF000",
                 ServerId = serverId
             };
-            _context.Roles.AddRangeAsync(ownerRole, memberRole);
+            _context.SqlRoles.AddMany(new []{ownerRole, memberRole});
             _context.AddClaimToRoleAsync(memberRole, new Claim(ServerClaims.ChangeServerName, "true"));
 
             return new() { ownerRole, memberRole };

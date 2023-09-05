@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
+using Application.Models.LookUps;
 using Application.Providers;
 using AutoMapper;
 using MediatR;
@@ -23,8 +24,7 @@ namespace Application.Queries.GetInvitationDetails
                 await Context.Invitations.DeleteAsync(invitation);
                 throw new NoPermissionsException("The invitation is expired");
             }
-
-            User? user = invitation.UserId == null ? null : await Context.FindSqlByIdAsync<User>(invitation.UserId.Value, cancellationToken);
+            User? user = invitation.UserId == null ? null : await Context.SqlUsers.FindAsync(invitation.UserId.Value);
             Server server = await Context.Servers.FindAsync(invitation.ServerId);
 
             return new InvitationDetailsDto

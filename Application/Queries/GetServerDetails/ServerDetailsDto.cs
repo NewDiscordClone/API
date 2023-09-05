@@ -32,7 +32,7 @@ namespace Application.Queries.GetServerDetails
         /// <summary>
         /// List of user profiles on this server.
         /// </summary>
-        public List<ServerProfileLookupDto> ServerProfiles { get; init; }
+        public List<ServerProfileLookupDto> ServerProfiles { get; init; } = new();
 
         /// <summary>
         /// List of channels on this server. (Not mapped to the database.)

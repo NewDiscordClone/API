@@ -22,10 +22,9 @@ namespace Tests.Common
                     typeof(IAppDbContext).Assembly)));
             Mapper = mapperConfig.CreateMapper();
             _userProvider = new();
-            SetAuthorizedUserId(1);
         }
 
-        protected void SetAuthorizedUserId(int id)
+        protected void SetAuthorizedUserId(Guid id)
         {
             _userProvider.Setup(provider => provider.GetUserId()).Returns(id);
         }

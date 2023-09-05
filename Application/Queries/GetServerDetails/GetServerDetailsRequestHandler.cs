@@ -16,7 +16,7 @@ namespace Application.Queries.GetServerDetails
 
             Server server = await Context.Servers.FindAsync(request.ServerId);
 
-            if (server.ServerProfiles.Find(sp => sp.User.Id == UserId) == null)
+            if (server.ServerProfiles.Find(sp => sp.UserId == UserId) == null)
                 throw new NoPermissionsException("User are not a member of the Server");
 
             ServerDetailsDto res = Mapper.Map<ServerDetailsDto>(server);

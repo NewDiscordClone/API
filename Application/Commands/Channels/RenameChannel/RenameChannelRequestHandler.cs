@@ -15,7 +15,7 @@ namespace Application.Commands.Channels.RenameChannel
             Channel chat = await Context.Channels.FindAsync(request.ChatId);
 
             //TODO: Перевірити що у юзера є відповідні права
-            if (!chat.Users.Any(u => u.Id == UserId))
+            if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
 
             chat.Title = request.NewTitle;

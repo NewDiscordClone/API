@@ -8,7 +8,7 @@ namespace WebApi.Controllers
     {
         protected readonly IMediator Mediator;
         private readonly IAuthorizedUserProvider _userProvider;
-        protected int UserId => _userProvider.GetUserId();
+        protected Guid UserId => _userProvider.GetUserId();
         //int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         protected ApiControllerBase(IMediator mediator, IAuthorizedUserProvider userProvider)
         {

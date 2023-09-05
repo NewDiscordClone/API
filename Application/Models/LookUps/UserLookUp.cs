@@ -3,20 +3,18 @@ using AutoMapper;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models
+namespace Application.Models.LookUps
 {
     /// <summary>
     /// User dto for collections
     /// </summary>
     public class UserLookUp : IMapWith<User>
     {
-        [DefaultValue(1)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Non-unique user name
         /// </summary>
-        [StringLength(32, MinimumLength = 1)]
         [DefaultValue("𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
         public string DisplayName { get; set; }
 

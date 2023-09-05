@@ -14,8 +14,8 @@ namespace Application.Commands.Channels.CreateChannel
 
             //TODO: Перевірити що у юзера є відповідні права
             Server server = await Context.Servers.FindAsync(request.ServerId);
-            List<UserLookUp> users = new();
-            server.ServerProfiles.ForEach(profile => users.Add(Mapper.Map<UserLookUp>(profile.User)));
+            List<Guid> users = new();
+            server.ServerProfiles.ForEach(profile => users.Add(profile.UserId));
             Channel channel = new()
             {
                 Title = request.Title,

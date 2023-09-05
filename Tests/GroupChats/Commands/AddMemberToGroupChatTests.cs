@@ -14,7 +14,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
 
-            int newMemberId = Ids.UserAId;
+            Guid newMemberId = Ids.UserAId;
             var chatId = Ids.GroupChat5;
             int oldUsersCount = 2;
 
@@ -35,14 +35,14 @@ namespace Tests.GroupChats.Commands
 
             //Assert
             Assert.Equal(oldUsersCount + 1, chat.Users.Count);
-            Assert.Contains(chat.Users, user => user.Id == newMemberId);
+            Assert.Contains(chat.Users, user => user == newMemberId);
         }
         [Fact]
         public async Task UserAlreadyExists_Fail()
         {
             //Arrange
             CreateDatabase();
-            int newMemberId = Ids.UserCId;
+            Guid newMemberId = Ids.UserCId;
             var chatId = Ids.GroupChat5;
 
             SetAuthorizedUserId(Ids.UserBId);

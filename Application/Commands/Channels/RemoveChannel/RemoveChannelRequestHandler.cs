@@ -16,7 +16,7 @@ namespace Application.Commands.Channels.RemoveChannel
             Channel chat = await Context.Channels.FindAsync(request.ChatId);
 
             //TODO: Перевірити що у юзера є відповідні права
-            if (!chat.Users.Any(u => u.Id == UserId))
+            if (!chat.Users.Any(u => u == UserId))
                 throw new NoSuchUserException("User is not a member of the chat");
 
             await Context.Chats.DeleteAsync(chat);
