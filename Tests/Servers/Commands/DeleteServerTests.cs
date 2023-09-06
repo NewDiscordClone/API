@@ -26,7 +26,7 @@ namespace Tests.Servers.Commands
             DeleteServerRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             await handler.Handle(request, CancellationToken);
 
             //Assert

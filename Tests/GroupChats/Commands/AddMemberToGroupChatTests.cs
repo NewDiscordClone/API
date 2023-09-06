@@ -29,7 +29,7 @@ namespace Tests.GroupChats.Commands
             AddMemberToGroupChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             await handler.Handle(request, CancellationToken);
             PersonalChat chat =await Context.PersonalChats.FindAsync(chatId);
 

@@ -23,7 +23,7 @@ namespace Tests.Channels.Commands
             };
             CreateChannelRequestHandler handler = new(Context, UserProvider, Mapper);
             //Act
-            Context.SetToken(CancellationToken);
+            
             string channelId = await handler.Handle(request, CancellationToken);
             Server server = await Context.Servers.FindAsync(serverId);
             Channel channel = await Context.Channels.FindAsync(channelId);

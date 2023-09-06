@@ -25,7 +25,7 @@ namespace Tests.Servers.Commands
             CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             string result = await handler.Handle(request, CancellationToken);
             //Assert
             ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)

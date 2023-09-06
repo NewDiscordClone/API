@@ -25,7 +25,7 @@ namespace Tests.Channels.Commands
             RenameChannelRequestHandler handler = new(Context, UserProvider);
             
             //Act
-            Context.SetToken(CancellationToken);
+            
             await handler.Handle(request, CancellationToken);
             Channel channel = await Context.Channels.FindAsync(channelId);
             
@@ -51,7 +51,7 @@ namespace Tests.Channels.Commands
             
             //Act
             //Assert
-            Context.SetToken(CancellationToken);
+            
             await Assert.ThrowsAsync<NoPermissionsException>(async () =>
                 await handler.Handle(request, CancellationToken));
             Channel channel = await Context.Channels.FindAsync(channelId);

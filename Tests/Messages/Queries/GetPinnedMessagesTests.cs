@@ -23,7 +23,7 @@ namespace Tests.Messages.Queries
             GetPinnedMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             List<Message> result = await handler.Handle(request, CancellationToken);
 
             //Assert

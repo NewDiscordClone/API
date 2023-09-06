@@ -26,7 +26,7 @@ namespace Tests.Messages.Commands
             RemoveAttachmentRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             await handler.Handle(request, CancellationToken);
             Message? message = await Context.Messages.FindAsync(messageId);
 

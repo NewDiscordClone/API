@@ -276,7 +276,7 @@ namespace Tests.Common
                 Id = _ids.Invitation1 = ObjectId.GenerateNewId().ToString(),
                 ServerId = _ids.Server1,
                 UserId = _ids.UserAId,
-                ExpireTime = DateTime.Now + new TimeSpan(1, 0, 0, 0)
+                ExpireTime = DateTime.Now.AddDays(1)
             },
             new Invitation
             {
@@ -287,7 +287,7 @@ namespace Tests.Common
             {
                 Id = _ids.Invitation3 = ObjectId.GenerateNewId().ToString(),
                 ServerId = _ids.Server3,
-                ExpireTime = DateTime.Now - new TimeSpan(1, 0, 0, 0)
+                ExpireTime = DateTime.Now.AddDays(-1)
             }
         };
 

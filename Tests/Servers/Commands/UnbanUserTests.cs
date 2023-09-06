@@ -35,7 +35,7 @@ namespace Tests.Servers.Commands
             Assert.DoesNotContain(server.BannedUsers, user => user == userId);
         }
         [Fact]
-        public async Task Fail_YouDontHaveRights()
+        public async Task Fail_DontHavePermissions()
         {
             //Arrange
             CreateDatabase();

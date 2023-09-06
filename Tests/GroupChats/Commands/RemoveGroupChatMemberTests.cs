@@ -28,7 +28,7 @@ namespace Tests.GroupChats.Commands
                 new(Context, UserProvider);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             await handler.Handle(request, CancellationToken);
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 

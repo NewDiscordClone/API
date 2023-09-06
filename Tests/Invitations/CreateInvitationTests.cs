@@ -15,7 +15,7 @@ namespace Tests.Invitations
             //Arrange
             CreateDatabase();
             string serverId = Ids.Server1;
-            DateTime expiretime = DateTime.Now + new TimeSpan(1, 0, 0, 0);
+            DateTime expiretime = DateTime.Now.AddDays(1);
             Guid user = Ids.UserAId;
             
             SetAuthorizedUserId(user);
@@ -47,7 +47,7 @@ namespace Tests.Invitations
             //Arrange
             CreateDatabase();
             string serverId = Ids.Server1;
-            DateTime expiretime = DateTime.Now + new TimeSpan(1, 0, 0, 0);
+            DateTime expiretime = DateTime.Now.AddDays(1);
             Guid user = Ids.UserBId;
             long oldCount = await Context.Invitations.CountAsync(i => true);
             

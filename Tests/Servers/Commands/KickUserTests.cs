@@ -35,7 +35,7 @@ namespace Tests.Servers.Commands
             Assert.DoesNotContain(server.ServerProfiles, sp => sp.UserId == userId);
         }
         [Fact]
-        public async Task Fail_YouDontHaveRights()
+        public async Task Fail_DontHavePermissions()
         {
             //Arrange
             CreateDatabase();
