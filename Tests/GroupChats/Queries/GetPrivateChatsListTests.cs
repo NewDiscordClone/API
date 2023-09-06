@@ -24,7 +24,7 @@ namespace Tests.GroupChats.Queries
 
             //Assert
             Assert.NotEmpty(chats);
-            Assert.Equal(3, chats.Count);
+            Assert.Equal(4, chats.Count);
             Assert.All(chats, chat => Assert.Contains(Context.Chats.FindAsync(chat.Id).Result.Users, user => user == userId));
         }
     }

@@ -16,7 +16,7 @@ namespace Application.Commands.Servers.LeaveServer
         {
             Server server = await Context.Servers.FindAsync(request.ServerId);
             ServerProfile serverProfile = server.ServerProfiles.Find(sp => sp.UserId == UserId) ??
-                                          throw new NoPermissionsException("You are not the member of the server");
+                                          throw new NoPermissionsException("You are not a member of the server");
             server.ServerProfiles.Remove(serverProfile);
             await Context.Servers.UpdateAsync(server);
         }

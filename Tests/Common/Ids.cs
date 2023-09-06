@@ -9,11 +9,12 @@ namespace Tests.Common
         public Guid UserCId { get; set; }
         public Guid UserDId { get; set; }
 
-        public string ServerIdForDelete { get; set; }
-        public string ServerIdForUpdate { get; set; }
-
+        public string Server1 { get; set; }
+        public string Server2 { get; set; }
+        public string Server3 { get; set; }
         public string Channel1 { get; set; }
         public string Channel2 { get; set; }
+        public string Channel3 { get; set; }
 
         public string GroupChat3 { get; set; }
         public string GroupChat4 { get; set; }
@@ -22,6 +23,12 @@ namespace Tests.Common
         public string GroupChat7 { get; set; } 
         
         public string Message1 { get; set; } 
-        public string Message2 { get; set; } 
+        public string Message2 { get; set; }
+        
+        public string Invitation1 { get; set; }
+        public string Invitation2 { get; set; }
+        public string Invitation3 { get; set; }
+        public string PersonalChat8 { get; set; }
+        public string PersonalChat9 { get; set; }
     }
 }

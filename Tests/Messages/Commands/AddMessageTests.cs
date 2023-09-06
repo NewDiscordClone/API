@@ -62,7 +62,7 @@ namespace Tests.Messages.Commands
             AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert

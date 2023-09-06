@@ -25,6 +25,7 @@ namespace Tests.GroupChats.Commands
             CreateGroupChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
+            
             string id = await handler.Handle(request, CancellationToken);
             GroupChat result = await Context.GroupChats.FindAsync(id);
 

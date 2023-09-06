@@ -8,9 +8,9 @@ using MediatR;
 
 namespace Application.Queries.GetInvitationDetails
 {
-    public class GetInvitationRequestHandler : RequestHandlerBase, IRequestHandler<GetInvitationDetailsRequest, InvitationDetailsDto>
+    public class GetInvitationDetailsRequestHandler : RequestHandlerBase, IRequestHandler<GetInvitationDetailsRequest, InvitationDetailsDto>
     {
-        public GetInvitationRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        public GetInvitationDetailsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
 

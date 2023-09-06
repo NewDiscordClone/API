@@ -14,11 +14,10 @@ namespace Tests.Servers.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserBId;
-            string serverId = Ids.ServerIdForUpdate;
+            string serverId = Ids.Server2;
             const string newTitle = "Updated title";
-
-            Mock<IAuthorizedUserProvider> userProvider = new();
-            userProvider.Setup(p => p.GetUserId()).Returns(userId);
+            
+            SetAuthorizedUserId(userId);
 
             UpdateServerRequest request = new()
             {
@@ -26,14 +25,13 @@ namespace Tests.Servers.Commands
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, userProvider.Object);
+            UpdateServerRequestHandler handler = new(Context, UserProvider);
 
             //Act
             Context.SetToken(CancellationToken);
             await handler.Handle(request, CancellationToken);
-            Server updatedServer = await Context.Servers.FindAsync(serverId);
-
             //Assert
+            Server updatedServer = await Context.Servers.FindAsync(serverId);
             Assert.NotNull(updatedServer);
             Assert.Equal(newTitle, updatedServer.Title);
         }
@@ -44,11 +42,10 @@ namespace Tests.Servers.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            string serverId = Ids.ServerIdForUpdate;
+            string serverId = Ids.Server2;
             const string newTitle = "Updated title";
 
-            Mock<IAuthorizedUserProvider> userProvider = new();
-            userProvider.Setup(p => p.GetUserId()).Returns(userId);
+            SetAuthorizedUserId(userId);
 
             UpdateServerRequest request = new()
             {
@@ -56,7 +53,7 @@ namespace Tests.Servers.Commands
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, userProvider.Object);
+            UpdateServerRequestHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

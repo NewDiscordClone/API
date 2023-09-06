@@ -23,7 +23,7 @@ namespace Tests.Servers.Queries
 
             // Assert
             Assert.NotNull(result);
-            Assert.Single(result);
+            Assert.Equal(2, result.Count);
             Assert.Equal("Server 1", result[0].Title);
         }
         [Fact]

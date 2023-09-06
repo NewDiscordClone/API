@@ -26,7 +26,7 @@ namespace Tests.GroupChats.Commands
             RenameGroupChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             await handler.Handle(request, CancellationToken);
             GroupChat chat = await Context.GroupChats.FindAsync(chatId);
 

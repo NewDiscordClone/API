@@ -25,12 +25,12 @@ namespace Tests.Servers.Commands
             CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Context.SetToken(CancellationToken);
+            
             string result = await handler.Handle(request, CancellationToken);
+            //Assert
             ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)
                 .Handle(new GetServerDetailsRequest() { ServerId = result }, CancellationToken);
 
-            //Assert
             Assert.Equal(serverName, resultServer.Title);
             Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);
             Assert.Equal(oldCount + 1, await Context.Servers.CountAsync(s => true));

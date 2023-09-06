@@ -19,14 +19,20 @@ namespace Application.Queries.GetRelationships
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            RelationshipList relationships = await Context.RelationshipLists.FindAsync(UserId);
+            RelationshipList? relationships =
+                (await Context.RelationshipLists.FindOrDefaultAsync(UserId)) ?? 
+                new RelationshipList()
+                {
+                    Id = UserId, 
+                    Relationships = new List<Relationship>()
+                };
             List<RelationshipDto> relationshipDtos = new List<RelationshipDto>();
             foreach (var relationship in relationships.Relationships)
             {
                 relationshipDtos.Add(new RelationshipDto()
                 {
                     User = Mapper.Map<UserLookUp>(
-                        Context.SqlUsers.FindAsync(relationship.UserId)),
+                        await Context.SqlUsers.FindAsync(relationship.UserId)),
                     RelationshipType = relationship.RelationshipType
                 });
             }
