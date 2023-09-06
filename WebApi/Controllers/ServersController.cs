@@ -143,10 +143,14 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<string>> CrateServer(CreateServerRequest request)
+        public async Task<ActionResult<string>> CreateServer(CreateServerRequest request)
         {
             string id = await Mediator.Send(request);
-            return Created($"{this.Request.Scheme}://{this.Request.Host}/api/GetServerDetails?=" + id, id);
+            try
+            {return Created($"{this.Request.Scheme}://{this.Request.Host}/api/GetServerDetails?=" + id, id);}
+            catch (NullReferenceException)
+            { return Created($"https://localhost:7060/api/GetServerDetails?=" + id, id);}
+            
         }
 
         /// <summary>
