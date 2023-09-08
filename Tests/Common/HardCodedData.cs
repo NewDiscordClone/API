@@ -170,28 +170,28 @@ namespace Tests.Common
             new GroupChat()
             {
                 Id = _ids.GroupChat3 = ObjectId.GenerateNewId().ToString(),
-                Title = "PersonalChat 2",
+                Title = "GroupChat 2",
                 OwnerId = _userA.Id,
                 Users = { _ids.UserAId, _ids.UserBId, },
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat4 = ObjectId.GenerateNewId().ToString(),
-                Title = "PersonalChat 4",
+                Title = "GroupChat 4",
                 OwnerId = _userA.Id,
                 Users = { _ids.UserAId }
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat5 = ObjectId.GenerateNewId().ToString(),
-                Title = "PersonalChat 5",
+                Title = "GroupChat 5",
                 OwnerId = _userB.Id,
                 Users = { _ids.UserBId, _ids.UserCId, }
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat6 = ObjectId.GenerateNewId().ToString(),
-                Title = "PersonalChat 6",
+                Title = "", //No name
                 OwnerId = _userB.Id,
                 Users =
                 {
@@ -204,7 +204,7 @@ namespace Tests.Common
             new GroupChat()
             {
                 Id = _ids.GroupChat7 = ObjectId.GenerateNewId().ToString(),
-                Title = "PersonalChat 7",
+                Title = "GroupChat 7",
                 OwnerId = _userB.Id,
                 Users =
                 {

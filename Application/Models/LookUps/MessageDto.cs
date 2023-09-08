@@ -15,8 +15,6 @@ namespace Application.Models.LookUps
         /// <summary>
         /// Unique Id as an string representation of an ObjectId type
         /// </summary>
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string Id { get; set; }
@@ -58,11 +56,13 @@ namespace Application.Models.LookUps
         /// Message author look up
         /// </summary>
         public UserLookUp User { get; set; }
+        [StringLength(24, MinimumLength = 24)]
+        [DefaultValue("5f95a3c3d0ddad0017ea9291")]
+        public string? ServerId { get; set; }
 
         /// <summary>
         /// Chat Id as an string representation of an ObjectId type
         /// </summary>
-        [BsonRepresentation(BsonType.ObjectId)]
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string ChatId { get; set; }
@@ -70,9 +70,12 @@ namespace Application.Models.LookUps
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Message, MessageDto>()
-                .ForMember(m => m.User, 
-                    opt => 
-                        opt.MapFrom(m => new UserLookUp()));
+                .ForMember(m => m.User,
+                    opt =>
+                        opt.Ignore())
+                .ForMember(m => m.ServerId,
+                    opt =>
+                        opt.Ignore());
         }
     }
 }
