@@ -6,26 +6,38 @@ using AutoMapper;
 using MediatR;
 using MongoDB.Driver;
 
-namespace Application.Queries.GetPersonalChats
+namespace Application.Queries.GetPrivateChats
 {
-    public class GetPersonalChatsHandler : RequestHandlerBase,
-        IRequestHandler<GetPersonalChatsRequest, List<PrivateChatLookUp>>
+    public class GetPrivateChatsRequestHandler : RequestHandlerBase,
+        IRequestHandler<GetPrivateChatsRequest, List<PrivateChatLookUp>>
     {
-        public GetPersonalChatsHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
+        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
             IMapper mapper)
             : base(appDbContext, userProvider, mapper)
         {
         }
 
-        public async Task<List<PrivateChatLookUp>> Handle(GetPersonalChatsRequest request,
+        public async Task<List<PrivateChatLookUp>> Handle(GetPrivateChatsRequest request,
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             List<PrivateChatLookUp> chats = new();
             foreach (var personalChat in await Context.PersonalChats.FilterAsync(c => c.Users.Any(u => u == UserId)))
             {
-                if (personalChat is GroupChat gchat) 
-                    chats.Add(Mapper.Map<PrivateChatLookUp>(gchat));
+                if (personalChat is GroupChat gchat)
+                {
+                    PrivateChatLookUp lookUp = Mapper.Map<PrivateChatLookUp>(gchat);
+                    if (string.IsNullOrWhiteSpace(gchat.Title))
+                    {
+                        lookUp.Title = string.Join
+                        (", ",
+                            (await Context.SqlUsers
+                                .FilterAsync(u => gchat.Users.Contains(u.Id) && u.Id != UserId))
+                            .Select(u => u.DisplayName ?? u.UserName)
+                        );
+                    }
+                    chats.Add(lookUp);
+                }
                 else
                 {
                     if (!personalChat.Users.Any(u => u != UserId))

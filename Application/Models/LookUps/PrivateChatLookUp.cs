@@ -25,7 +25,7 @@ namespace Application.Models.LookUps
         /// The title of the private chat.
         /// </summary>
         [DefaultValue("Title")]
-        public string Title { get; init; }
+        public string Title { get; set; }
 
         /// <summary>
         /// The subtitle of the private chat with extra information such as users count for group chat or user's status for personal chat.
@@ -38,7 +38,10 @@ namespace Application.Models.LookUps
             profile.CreateMap<GroupChat, PrivateChatLookUp>()
                 .ForMember(dto => dto.Subtitle,
                     opt =>
-                        opt.MapFrom(chat => chat.Users.Count + " members"));
+                        opt.MapFrom(chat => chat.Users.Count + " members"))
+                .ForMember(dto => dto.Title,
+                    opt =>
+                        opt.Condition((_, _, title) => !string.IsNullOrWhiteSpace(title)));
         }
         
         public PrivateChatLookUp() { }

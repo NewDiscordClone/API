@@ -12,7 +12,7 @@ using Application.Models;
 using Application.Models.LookUps;
 using Application.Providers;
 using Application.Queries.GetGroupChatDetails;
-using Application.Queries.GetPersonalChats;
+using Application.Queries.GetPrivateChats;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +42,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
-            GetPersonalChatsRequest get = new();
+            GetPrivateChatsRequest get = new();
             List<PrivateChatLookUp> list = await Mediator.Send(get);
             return Ok(list);
         }

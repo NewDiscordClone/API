@@ -17,6 +17,7 @@ namespace Application.Commands.HubClients.Messages.MessageAdded
             MessageDto messageDto = Mapper.Map<MessageDto>(message);
             messageDto.User = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(message.User));
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
+            if (chat is Channel channel) messageDto.ServerId = channel.ServerId;
             
             await SendAsync(ClientMethods.MessageAdded, messageDto, GetConnections(chat));
         }
