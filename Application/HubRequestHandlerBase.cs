@@ -47,12 +47,6 @@ namespace Application.Application
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) :
-            base(userProvider)
-        {
-            _hubContextProvider = hubContextProvider;
-        }
-
         protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) :
             base(context, mapper)
         {

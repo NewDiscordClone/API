@@ -210,7 +210,7 @@ namespace DataAccess
 
         private static TKey ConvertToId(object? id)
         {
-            if (id is not TKey key) throw new ArgumentException($"Id is not a string or {typeof(TKey).Name} instance");
+            if (id is not TKey key) throw new ArgumentException($"Id is not a {typeof(TKey).Name} instance");
             return key;
         }
 

@@ -8,7 +8,7 @@ namespace Application.Commands.HubClients.Connection.Connect
 {
     public class ConnectRequestHandler : HubRequestHandlerBase, IRequestHandler<ConnectRequest>
     {
-        public ConnectRequestHandler(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
+        public ConnectRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IAuthorizedUserProvider userProvider) : base(hubContextProvider, context, userProvider)
         {
         }
 

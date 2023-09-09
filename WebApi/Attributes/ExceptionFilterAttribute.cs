@@ -11,7 +11,7 @@ namespace WebApi.Attributes
             context.Result = context.Exception switch
             {
                 NoPermissionsException noPermissionsException => new ForbidResult(noPermissionsException.Message),
-                InvalidOperationException or ArgumentException => new BadRequestResult(),
+                InvalidOperationException or ArgumentException or NullReferenceException => new BadRequestResult(),
                 EntityNotFoundException entityNotFoundException => new BadRequestObjectResult(entityNotFoundException.Id),
                 _ => throw context.Exception
             };

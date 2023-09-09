@@ -8,8 +8,8 @@ namespace Application.Commands.HubClients.Connection.Disconnect
 {
     public class DisconnectRequestHandler : HubRequestHandlerBase, IRequestHandler<DisconnectRequest>
     {
-        public DisconnectRequestHandler(IHubContextProvider hubContextProvider,
-            IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
+        public DisconnectRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context,
+            IAuthorizedUserProvider userProvider) : base(hubContextProvider, context, userProvider)
         {
         }
 

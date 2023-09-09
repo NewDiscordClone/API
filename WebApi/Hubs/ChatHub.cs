@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using Application.Commands.HubClients.Connection.Connect;
 using Application.Commands.HubClients.Connection.Disconnect;
+using Application.Common.Exceptions;
 using Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,18 +21,25 @@ public class ChatHub : Hub
         _mediator = mediator;
         _logger = logger;
         _userProvider = userProvider;
+        
     }
     private Guid UserId => _userProvider.GetUserId();
     public override async Task OnConnectedAsync()
     {
+        if (Context.User == null) throw new NoSuchUserException();
+        _userProvider.SetUser(Context.User);
+        
+        _logger.LogWarning($"User {UserId} connected");
         await _mediator.Send(new ConnectRequest() { ConnectionId = Context.ConnectionId });
-        _logger.LogInformation($"User {UserId} connected");
         await base.OnConnectedAsync();
     }
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
+        if (Context.User == null) throw new NoSuchUserException();
+        _userProvider.SetUser(Context.User);
+        
+        _logger.LogWarning($"User {UserId} disconnected");
         await _mediator.Send(new DisconnectRequest() { ConnectionId = Context.ConnectionId });
-        _logger.LogInformation($"User {UserId} disconnected");
         await base.OnDisconnectedAsync(exception);
     }
 }

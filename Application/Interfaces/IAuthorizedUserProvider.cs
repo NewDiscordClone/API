@@ -1,8 +1,11 @@
-﻿namespace Application.Providers
+﻿using System.Security.Claims;
+
+namespace Application.Providers
 {
     public interface IAuthorizedUserProvider
     {
         Guid GetUserId();
+        void SetUser(ClaimsPrincipal user);
         bool IsAdmin(string serverId);
         Task<bool> IsAdminAsync(string serverId);
         bool HasClaims(string serverId, IEnumerable<string> claimTypes);

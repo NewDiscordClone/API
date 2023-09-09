@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Providers;
 using System.Security.Claims;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WebApi.Providers
 {
@@ -10,24 +11,28 @@ namespace WebApi.Providers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAppDbContext _context;
+        private ClaimsPrincipal User;
 
         public AuthorizedUserProvider(IHttpContextAccessor httpContextAccessor, IAppDbContext context)
         {
             _httpContextAccessor = httpContextAccessor;
             _context = context;
+            User = httpContextAccessor.HttpContext?.User;
         }
 
         public Guid GetUserId()
         {
-            string? userIdClaim = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!string.IsNullOrEmpty(userIdClaim)) return Guid.Parse(userIdClaim);
 
-            if (string.IsNullOrEmpty(userIdClaim))
-            {
-                throw new NoSuchUserException();
-            }
-
-            return Guid.Parse(userIdClaim);
+            throw new NoSuchUserException();
         }
+
+        public void SetUser(ClaimsPrincipal user)
+        {
+            User = user;
+        }
+
         public async Task<bool> HasClaimsAsync(string serverId, IEnumerable<string> claimTypes)
         {
             Server? server = await _context.Servers.FindAsync(serverId);

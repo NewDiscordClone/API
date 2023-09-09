@@ -11,17 +11,13 @@ namespace Application
         private readonly IMapper? _mapper;
         
         protected IAppDbContext Context => _context?? throw new Exception("There is no constructor with IAppDbContext");
-        protected Guid UserId => UserProvider.GetUserId();
+        protected Guid UserId => UserProvider?.GetUserId() ?? throw new Exception("There is no constructor with IAuthorizedUserProvider");
 
         public IAuthorizedUserProvider UserProvider => _userProvider;
         protected IMapper Mapper => _mapper ?? throw new Exception("There is no constructor with IMapper");
         public RequestHandlerBase(IAppDbContext context)
         {
             _context = context;
-        }
-        public RequestHandlerBase(IAuthorizedUserProvider userProvider)
-        {
-            _userProvider = userProvider;
         }
         public RequestHandlerBase(IAppDbContext context, IMapper mapper)
         {
