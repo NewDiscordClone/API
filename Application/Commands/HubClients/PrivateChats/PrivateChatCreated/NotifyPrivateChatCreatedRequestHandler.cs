@@ -8,7 +8,8 @@ using MediatR;
 
 namespace Application.Commands.HubClients.PrivateChats.PrivateChatCreated
 {
-    public class NotifyPrivateChatCreatedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyPrivateChatCreatedRequest>
+    public class NotifyPrivateChatCreatedRequestHandler : HubRequestHandlerBase,
+        IRequestHandler<NotifyPrivateChatCreatedRequest>
     {
         public NotifyPrivateChatCreatedRequestHandler(
             IHubContextProvider hubContextProvider,
@@ -23,16 +24,29 @@ namespace Application.Commands.HubClients.PrivateChats.PrivateChatCreated
         {
             SetToken(cancellationToken);
             Chat chat = await Context.PersonalChats.FindAsync(request.ChatId);
-            User user = await Context.SqlUsers.FindAsync(UserId);
-
-            PrivateChatLookUp lookUp = chat switch
+            foreach (var user in chat.Users)
             {
-                GroupChat gChat => Mapper.Map<PrivateChatLookUp>(gChat),
-                PersonalChat pChat => new PrivateChatLookUp(pChat, Mapper.Map<UserLookUp>(user)),
-                _ => throw new ArgumentException("the given chat is not an private chat")
-            };
+                await SendToUser(chat, user);
+            }
+        }
 
-            await SendAsync(ClientMethods.PrivateChatCreated, lookUp, GetConnections(chat));
+        private async Task SendToUser(Chat chat, Guid userId)
+        {
+            User user = await Context.SqlUsers.FindAsync(userId);
+            PrivateChatLookUp lookUp = null;
+            switch(chat)
+            {
+                case GroupChat gChat:
+                    lookUp = Mapper.Map<PrivateChatLookUp>(gChat);
+                    break; 
+                case PersonalChat pChat:
+                    User other = await Context.SqlUsers.FindAsync(chat.Users.First(u => u != userId));
+                    lookUp = new PrivateChatLookUp(pChat, Mapper.Map<UserLookUp>(other));
+                    break;
+                default:
+                    throw new ArgumentException("the given chat is not an private chat");
+            };
+            await SendAsync(ClientMethods.PrivateChatCreated, lookUp, GetConnections(user));
         }
     }
 }
