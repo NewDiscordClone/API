@@ -13,13 +13,14 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
+            string otherName = "user_c"; 
             Guid otherId = Ids.UserCId; 
             
             SetAuthorizedUserId(userId);
 
             FriendRequestRequest request = new()
             {
-                UserId = otherId
+                UserName = otherName
             };
             FriendRequestRequestHandler handler = new(Context, UserProvider);
 
@@ -50,13 +51,14 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
+            string otherName = "user_d"; 
             Guid otherId = Ids.UserDId; 
             
             SetAuthorizedUserId(userId);
 
             FriendRequestRequest request = new()
             {
-                UserId = otherId
+                UserName = otherName
             };
             FriendRequestRequestHandler handler = new(Context, UserProvider);
 

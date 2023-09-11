@@ -19,10 +19,12 @@ namespace Application.Commands.Users.FriendRequest
             Context.SetToken(cancellationToken);
 
             RelationshipList userRelationship = await FindOrCreateRelationshipsAsync(UserId);
-            RelationshipList otherRelationship = await FindOrCreateRelationshipsAsync(request.UserId);
+            User? user = (await Context.SqlUsers.FilterAsync(u => u.UserName == request.UserName)).FirstOrDefault();
+            if (user == null) throw new EntityNotFoundException("The provided user isn't exist");
+            RelationshipList otherRelationship = await FindOrCreateRelationshipsAsync(user.Id);
             
             Relationship? otherToUser = otherRelationship.Relationships.Find(r => r.UserId == UserId);
-            Relationship? userToOther = userRelationship.Relationships.Find(r => r.UserId == request.UserId);
+            Relationship? userToOther = userRelationship.Relationships.Find(r => r.UserId == user.Id);
             //TODO: Додати реалізацію перевірки налаштуваннь користувача з дозволів відправляти запити дружби
             Chat? chat = null;
             switch (otherToUser)
@@ -41,7 +43,7 @@ namespace Application.Commands.Users.FriendRequest
                         Users = new List<Guid>
                         {
                             UserId,
-                            request.UserId,
+                            user.Id,
                         }
                     });
                     break;
@@ -54,7 +56,7 @@ namespace Application.Commands.Users.FriendRequest
             if (userToOther == null)
                 userRelationship.Relationships.Add(new Relationship
                 {
-                    UserId = request.UserId,
+                    UserId = user.Id,
                     RelationshipType = RelationshipType.Waiting
                 });
 

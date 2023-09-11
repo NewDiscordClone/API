@@ -16,28 +16,28 @@ namespace Tests.Common
             _userA = new User
             {
                 Id = _ids.UserAId = Guid.NewGuid(),
-                UserName = "User A",
+                UserName = "user_a",
                 Avatar = null,
                 Email = "email@test1.com",
             };
             _userB = new User
             {
                 Id = _ids.UserBId = Guid.NewGuid(),
-                UserName = "User B",
+                UserName = "user_b",
                 Avatar = null,
                 Email = "email@test2.com",
             };
             _userC = new User
             {
                 Id = _ids.UserCId = Guid.NewGuid(),
-                UserName = "User C",
+                UserName = "user_c",
                 Avatar = null,
                 Email = "email@test3.com",
             };
             _userD = new User
             {
                 Id = _ids.UserDId = Guid.NewGuid(),
-                UserName = "User D",
+                UserName = "user_d",
                 Avatar = null,
                 Email = "email@test4.com",
             };

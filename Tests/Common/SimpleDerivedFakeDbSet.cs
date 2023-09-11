@@ -9,8 +9,8 @@ using ZstdSharp;
 namespace Tests.Common
 {
     public class SimpleDerivedFakeDbSet<T, TD> : ISimpleDbSet<TD> 
-        where TD : class, 
-        T where T : class
+        where TD : class, T
+        where T : class
     {
         public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
         
