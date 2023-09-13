@@ -2,6 +2,7 @@
 using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
+using DataAccess;
 using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -10,7 +11,6 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq.Expressions;
 using System.Security.Claims;
-using DataAccess;
 
 namespace Tests.Common
 {

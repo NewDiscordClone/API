@@ -55,7 +55,7 @@ namespace WebApi.Controllers
             try
             {
                 List<MessageDto> messages = await Mediator.Send(new GetMessagesRequest()
-                    { ChatId = chatId, MessagesCount = messagesCount });
+                { ChatId = chatId, MessagesCount = messagesCount });
                 return Ok(messages);
             }
             catch (EntityNotFoundException e)
@@ -118,7 +118,7 @@ namespace WebApi.Controllers
             try
             {
                 Message message = await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageAddedRequest { MessageId = message.Id});
+                await Mediator.Send(new NotifyMessageAddedRequest { MessageId = message.Id });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -352,7 +352,7 @@ namespace WebApi.Controllers
             try
             {
                 Chat chat = await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = request.MessageId, ChatId = chat.Id});
+                await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = request.MessageId, ChatId = chat.Id });
                 return Ok();
             }
             catch (NoPermissionsException e)

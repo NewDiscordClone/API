@@ -1,7 +1,5 @@
 using Application.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 namespace Application.Interfaces;
 

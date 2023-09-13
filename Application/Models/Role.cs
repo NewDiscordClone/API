@@ -9,7 +9,7 @@ namespace Application.Models;
 public class Role : IdentityRole<Guid>
 {
     public override Guid Id { get; set; }
-    
+
     [DefaultValue("Admin")]
     [StringLength(32, MinimumLength = 1)]
     public override string Name { get; set; }

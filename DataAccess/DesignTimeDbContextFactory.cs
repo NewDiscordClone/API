@@ -31,16 +31,17 @@ public class DesignTimeDbContextFactory : /*IDesignTimeDbContextFactory<AppDbCon
                 Directory.GetCurrentDirectory(),
                 @"..\WebApi"
                 )
-            );  
-        
+            );
+
         IConfiguration configuration = new ConfigurationBuilder()
             .SetBasePath(configurationPath)
             .AddJsonFile("appsettings.json", optional: false)
             .Build();
 
         DbContextOptionsBuilder<AppDbContext> optionsBuilder = new();
-        var connectionString = configuration.GetConnectionString("SqlServer");
-        if (connectionString == null) throw new Exception("Connection string is null");
+        string? connectionString = configuration.GetConnectionString("SqlServer");
+        if (connectionString == null)
+            throw new Exception("Connection string is null");
         optionsBuilder.UseSqlServer(connectionString);
 
         return new AppDbContext(optionsBuilder.Options, configuration);

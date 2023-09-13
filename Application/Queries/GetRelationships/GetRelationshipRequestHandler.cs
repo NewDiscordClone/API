@@ -20,14 +20,14 @@ namespace Application.Queries.GetRelationships
         {
             Context.SetToken(cancellationToken);
             RelationshipList? relationships =
-                (await Context.RelationshipLists.FindOrDefaultAsync(UserId)) ?? 
+                (await Context.RelationshipLists.FindOrDefaultAsync(UserId)) ??
                 new RelationshipList()
                 {
-                    Id = UserId, 
+                    Id = UserId,
                     Relationships = new List<Relationship>()
                 };
-            List<RelationshipDto> relationshipDtos = new List<RelationshipDto>();
-            foreach (var relationship in relationships.Relationships)
+            List<RelationshipDto> relationshipDtos = new();
+            foreach (Relationship relationship in relationships.Relationships)
             {
                 relationshipDtos.Add(new RelationshipDto()
                 {

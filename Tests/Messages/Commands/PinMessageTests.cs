@@ -11,10 +11,10 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
 
             SetAuthorizedUserId(Ids.UserAId);
-            
+
             PinMessageRequest request = new()
             {
                 MessageId = messageId

@@ -13,8 +13,8 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            Guid otherId = Ids.UserCId; 
-            
+            Guid otherId = Ids.UserCId;
+
             SetAuthorizedUserId(userId);
 
             FriendRequestRequest request = new()
@@ -25,12 +25,12 @@ namespace Tests.Users.Commands
 
             //Act
             string? chatId = await handler.Handle(request, CancellationToken);
-            
+
             //Assert
             RelationshipList my = await Context.RelationshipLists.FindAsync(userId);
             RelationshipList other = await Context.RelationshipLists.FindAsync(otherId);
             Assert.NotEmpty(other.Relationships);
-            
+
             Relationship? myToOther = my.Relationships.Find(r => r.UserId == otherId);
             Relationship? otherToMe = other.Relationships.Find(r => r.UserId == userId);
             Assert.NotNull(myToOther);
@@ -50,8 +50,8 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            Guid otherId = Ids.UserDId; 
-            
+            Guid otherId = Ids.UserDId;
+
             SetAuthorizedUserId(userId);
 
             FriendRequestRequest request = new()
@@ -63,8 +63,8 @@ namespace Tests.Users.Commands
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(
-                async () =>await handler.Handle(request, CancellationToken));
-            
+                async () => await handler.Handle(request, CancellationToken));
+
         }
     }
 }

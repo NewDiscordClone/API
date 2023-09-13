@@ -1,5 +1,4 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

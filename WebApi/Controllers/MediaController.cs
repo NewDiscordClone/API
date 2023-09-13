@@ -58,7 +58,7 @@ namespace WebApi.Controllers
             }
         }
 
-        
+
         private const int _maxFileSizeMb = 5;
         /// <summary>
         /// Uploads the media file to the database
@@ -85,7 +85,7 @@ namespace WebApi.Controllers
             if (file.Length >= _maxFileSizeMb * 1024 * 1024)
                 return BadRequest($"File is too big, please upload files less than {_maxFileSizeMb} MB");
             Media media = await Mediator.Send(new UploadMediaRequest { File = file });
-            return Created($"{Request.Scheme}://{Request.Host}/api/Media/"+media.Id, "Operation is successful");
+            return Created($"{Request.Scheme}://{Request.Host}/api/Media/" + media.Id, "Operation is successful");
         }
     }
 }

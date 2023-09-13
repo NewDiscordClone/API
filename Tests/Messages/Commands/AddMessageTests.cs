@@ -1,6 +1,5 @@
 ﻿using Application.Commands.Messages.AddMessage;
 using Application.Models;
-using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -62,7 +61,7 @@ namespace Tests.Messages.Commands
             AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            
+
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert

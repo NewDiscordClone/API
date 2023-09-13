@@ -20,12 +20,12 @@ namespace Application.Commands.Invitations.CreateInvitation
             //TODO: Перевірити на те що у юзера є відповідний клейм
             if (!server.ServerProfiles.Any(u => u.UserId == UserId))
                 throw new NoPermissionsException("You are not a member of the server");
-            
-            Invitation invitation = new Invitation()
+
+            Invitation invitation = new()
             {
                 ServerId = request.ServerId,
                 ExpireTime = request.ExpireTime,
-                UserId = request.IncludeUser ? UserId: null
+                UserId = request.IncludeUser ? UserId : null
             };
             return (await Context.Invitations.AddAsync(invitation)).Id;
         }

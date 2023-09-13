@@ -147,10 +147,10 @@ namespace WebApi.Controllers
         {
             string id = await Mediator.Send(request);
             try
-            {return Created($"{this.Request.Scheme}://{this.Request.Host}/api/GetServerDetails?=" + id, id);}
+            { return Created($"{this.Request.Scheme}://{this.Request.Host}/api/GetServerDetails?=" + id, id); }
             catch (NullReferenceException)
-            { return Created($"https://localhost:7060/api/GetServerDetails?=" + id, id);}
-            
+            { return Created($"https://localhost:7060/api/GetServerDetails?=" + id, id); }
+
         }
 
         /// <summary>

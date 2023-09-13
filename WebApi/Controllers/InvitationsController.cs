@@ -1,9 +1,9 @@
 ﻿using Application.Commands.Invitations.CreateInvitation;
 using Application.Providers;
+using Application.Queries.GetInvitationDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Application.Queries.GetInvitationDetails;
 
 namespace WebApi.Controllers
 {
@@ -14,7 +14,7 @@ namespace WebApi.Controllers
         public InvitationsController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
         {
         }
-        
+
         /// <summary>
         /// Gets Invitation details
         /// </summary>

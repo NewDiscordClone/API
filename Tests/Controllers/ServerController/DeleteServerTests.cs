@@ -26,10 +26,10 @@ namespace Tests.Controllers.ServerController
                 ServerId = serverId,
             };
             DeleteServerRequestHandler handler = new(Context, UserProvider);
-            
+
             AddMediatorHandler(request, handler);
 
-            ServersController controller = new ServersController(Mediator, UserProvider);
+            ServersController controller = new(Mediator, UserProvider);
 
             //Act
             ActionResult result = await controller.DeleteServer(request);
@@ -59,11 +59,11 @@ namespace Tests.Controllers.ServerController
             };
             DeleteServerRequestHandler handler = new(Context, UserProvider);
 
-            
+
             AddMediatorHandler(request, handler);
 
-            ServersController controller = new ServersController(Mediator, UserProvider);
-            
+            ServersController controller = new(Mediator, UserProvider);
+
             //Act
             ActionResult result = await controller.DeleteServer(request);
             //Assert

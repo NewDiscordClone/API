@@ -17,14 +17,14 @@ namespace Tests.Servers.Commands
             int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
 
             SetAuthorizedUserId(Ids.UserAId);
-            
+
             UnbanUserRequest request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
             UnbanUserRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             await handler.Handle(request, CancellationToken);
 
@@ -44,14 +44,14 @@ namespace Tests.Servers.Commands
             int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
 
             SetAuthorizedUserId(Ids.UserCId);
-            
+
             UnbanUserRequest request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
             UnbanUserRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(

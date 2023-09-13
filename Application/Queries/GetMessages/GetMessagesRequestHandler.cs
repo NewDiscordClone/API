@@ -16,12 +16,13 @@ namespace Application.Queries.GetMessages
         {
             Context.SetToken(cancellationToken);
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
-            if (!chat.Users.Any(u => u == UserId)) throw new NoPermissionsException("You are not a member of the Chat");
+            if (!chat.Users.Any(u => u == UserId))
+                throw new NoPermissionsException("You are not a member of the Chat");
 
-            List<MessageDto> result = new List<MessageDto>();
-            foreach (var message in await Context.GetMessagesAsync(request.ChatId, request.MessagesCount, _pageSize))
+            List<MessageDto> result = new();
+            foreach (Message message in await Context.GetMessagesAsync(request.ChatId, request.MessagesCount, _pageSize))
             {
-                var res = Mapper.Map<MessageDto>(message);
+                MessageDto res = Mapper.Map<MessageDto>(message);
                 res.User = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(message.User));
                 result.Add(res);
             }

@@ -43,7 +43,7 @@ namespace Application.Models.LookUps
                     opt =>
                         opt.Condition((_, _, title) => !string.IsNullOrWhiteSpace(title)));
         }
-        
+
         public PrivateChatLookUp() { }
 
         public PrivateChatLookUp(PersonalChat personalChat, UserLookUp other)

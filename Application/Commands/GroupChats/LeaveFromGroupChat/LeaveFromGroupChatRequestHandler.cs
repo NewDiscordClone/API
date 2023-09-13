@@ -12,9 +12,10 @@ namespace Application.Commands.GroupChats.LeaveFromGroupChat
         public async Task Handle(LeaveFromGroupChatRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            
+
             GroupChat pchat = await Context.GroupChats.FindAsync(request.ChatId);
-            if(pchat is not GroupChat chat) throw new Exception("This is not group chat");
+            if (pchat is not GroupChat chat)
+                throw new Exception("This is not group chat");
 
             if (!chat.Users.Any(u => u == UserId))
                 throw new NoSuchUserException("User is not a member of the chat");
@@ -25,7 +26,8 @@ namespace Application.Commands.GroupChats.LeaveFromGroupChat
             }
             else
             {
-                if (!chat.Users.Contains(UserId)) throw new NoSuchUserException();
+                if (!chat.Users.Contains(UserId))
+                    throw new NoSuchUserException();
                 chat.Users.Remove(chat.Users.Find(u => u == UserId));
                 if (chat.OwnerId == UserId)
                     chat.OwnerId = chat.Users.First(u => u != UserId);

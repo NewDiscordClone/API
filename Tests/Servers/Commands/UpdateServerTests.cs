@@ -1,7 +1,6 @@
 ﻿using Application.Commands.Servers.UpdateServer;
 using Application.Common.Exceptions;
 using Application.Models;
-using Application.Providers;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -16,7 +15,7 @@ namespace Tests.Servers.Commands
             Guid userId = Ids.UserBId;
             string serverId = Ids.Server2;
             const string newTitle = "Updated title";
-            
+
             SetAuthorizedUserId(userId);
 
             UpdateServerRequest request = new()

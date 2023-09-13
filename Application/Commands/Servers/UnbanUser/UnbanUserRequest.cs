@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿using MediatR;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using MediatR;
 
 namespace Application.Commands.Servers.UnbanUser
 {

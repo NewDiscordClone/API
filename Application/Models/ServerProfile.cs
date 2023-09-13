@@ -18,7 +18,7 @@ public class ServerProfile
     /// User ID with most popular data
     /// </summary>
     public virtual Guid UserId { get; set; }
-    
+
     /// <summary>
     /// List of user's roles on server
     /// </summary>

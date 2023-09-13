@@ -4,7 +4,6 @@ using IdentityServer4;
 using IdentityServer4.Configuration;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
-using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
 namespace Identity

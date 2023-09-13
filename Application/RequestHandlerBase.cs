@@ -9,8 +9,8 @@ namespace Application
         private readonly IAppDbContext _context;
         private readonly IAuthorizedUserProvider _userProvider;
         private readonly IMapper? _mapper;
-        
-        protected IAppDbContext Context => _context?? throw new Exception("There is no constructor with IAppDbContext");
+
+        protected IAppDbContext Context => _context ?? throw new Exception("There is no constructor with IAppDbContext");
         protected Guid UserId => UserProvider.GetUserId();
 
         public IAuthorizedUserProvider UserProvider => _userProvider;
@@ -33,7 +33,7 @@ namespace Application
             _context = context;
             _userProvider = userProvider;
         }
-        
+
         public RequestHandlerBase(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
         {
             _context = context;

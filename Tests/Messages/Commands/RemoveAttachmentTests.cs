@@ -1,6 +1,5 @@
 ﻿using Application.Commands.Messages.RemoveAttachment;
 using Application.Models;
-using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Messages.Commands
@@ -12,7 +11,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message2;
+            string messageId = Ids.Message2;
             int attachmentIndex = 0;
 
             SetAuthorizedUserId(Ids.UserBId);
@@ -26,7 +25,7 @@ namespace Tests.Messages.Commands
             RemoveAttachmentRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
             Message? message = await Context.Messages.FindAsync(messageId);
 

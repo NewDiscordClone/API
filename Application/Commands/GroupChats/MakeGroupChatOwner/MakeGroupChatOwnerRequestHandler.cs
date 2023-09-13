@@ -14,7 +14,8 @@ namespace Application.Commands.GroupChats.MakeGroupChatOwner
             Context.SetToken(cancellationToken);
 
             GroupChat pchat = await Context.GroupChats.FindAsync(request.ChatId);
-            if (pchat is not GroupChat chat) throw new Exception("This is not group chat");
+            if (pchat is not GroupChat chat)
+                throw new Exception("This is not group chat");
 
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("User is not an owner of the chat");

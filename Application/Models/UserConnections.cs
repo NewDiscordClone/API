@@ -1,7 +1,6 @@
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-﻿namespace Application.Models
+namespace Application.Models
 {
     public class UserConnections
     {

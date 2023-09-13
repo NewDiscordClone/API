@@ -1,6 +1,5 @@
 ﻿using Application.Application;
 using Application.Interfaces;
-using Application.Models;
 using MediatR;
 
 namespace Application.Commands.HubClients.Servers.ServerDeleted

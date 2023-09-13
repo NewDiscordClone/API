@@ -1,5 +1,4 @@
-﻿using Application.Models;
-using Application.Models.LookUps;
+﻿using Application.Models.LookUps;
 using Application.Queries.GetMessages;
 using Tests.Common;
 
@@ -12,9 +11,9 @@ namespace Tests.Messages.Queries
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat3;
+            string chatId = Ids.GroupChat3;
             int messagesCount = 2;
-            
+
             SetAuthorizedUserId(Ids.UserAId);
 
             GetMessagesRequest request = new()
@@ -37,9 +36,9 @@ namespace Tests.Messages.Queries
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat3;
+            string chatId = Ids.GroupChat3;
             int messagesCount = 1;
-            
+
             SetAuthorizedUserId(Ids.UserAId);
 
             GetMessagesRequest request = new()

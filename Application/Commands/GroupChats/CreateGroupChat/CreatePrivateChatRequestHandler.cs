@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Commands.GroupChats.CreateGroupChat
 {
-    public class CreateGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatRequest,string>
+    public class CreateGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatRequest, string>
     {
         public async Task<string> Handle(CreateGroupChatRequest request, CancellationToken cancellationToken)
         {
@@ -15,7 +15,7 @@ namespace Application.Commands.GroupChats.CreateGroupChat
             List<Guid> users = new();
             request.UsersId.ForEach(userId => users.Add(userId));
 
-            GroupChat privateChat = new GroupChat()
+            GroupChat privateChat = new()
             {
                 Title = request.Title,
                 Image = request.Image,

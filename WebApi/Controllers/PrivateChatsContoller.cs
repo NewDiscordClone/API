@@ -176,7 +176,7 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Changes the title of the given group chat
         /// </summary>

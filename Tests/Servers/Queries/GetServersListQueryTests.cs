@@ -35,8 +35,8 @@ namespace Tests.Servers.Queries
             CancellationToken cancellationToken = CancellationToken.None;
 
             SetAuthorizedUserId(userId);
-            
-            GetServersRequestHandler handler = new(Context,UserProvider);
+
+            GetServersRequestHandler handler = new(Context, UserProvider);
 
             GetServersRequest request = new();
 

@@ -13,7 +13,7 @@ namespace Tests.Users.Queries
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            
+
             SetAuthorizedUserId(userId);
 
             GetRelationshipRequest request = new();
@@ -35,14 +35,14 @@ namespace Tests.Users.Queries
                 );
             });
         }
-        
+
         [Fact]
         public async Task Success_Empty()
         {
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserCId;
-            
+
             SetAuthorizedUserId(userId);
 
             GetRelationshipRequest request = new();

@@ -15,7 +15,7 @@ namespace Application.Commands.HubClients.Channels.UpdateChannel
         {
             SetToken(cancellationToken);
             Channel channel = await Context.Channels.FindAsync(request.ChannelId);
-            
+
             await SendAsync(ClientMethods.ChannelUpdated, channel, GetConnections(channel));
         }
     }

@@ -11,7 +11,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
             const string emoji = "☻";
 
             SetAuthorizedUserId(Ids.UserBId);

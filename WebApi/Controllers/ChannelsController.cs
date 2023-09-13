@@ -1,12 +1,10 @@
-﻿using System.ComponentModel;
-using Application.Commands.Channels.CreateChannel;
+﻿using Application.Commands.Channels.CreateChannel;
 using Application.Commands.Channels.RemoveChannel;
 using Application.Commands.Channels.RenameChannel;
 using Application.Commands.HubClients.Channels.ChannelCreated;
 using Application.Commands.HubClients.Channels.ChannelRemoved;
 using Application.Commands.HubClients.Channels.UpdateChannel;
 using Application.Common.Exceptions;
-using Application.Models;
 using Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -47,7 +45,7 @@ namespace WebApi.Controllers
             await Mediator.Send(new NotifyChannelCreatedRequest { ChannelId = chatId });
             return Created("", chatId);
         }
-        
+
         /// <summary>
         /// A request to set a new title for a provided channel
         /// </summary>

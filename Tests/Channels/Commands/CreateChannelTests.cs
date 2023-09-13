@@ -13,7 +13,7 @@ namespace Tests.Channels.Commands
             CreateDatabase();
             string serverId = Ids.Server3;
             const string title = "TestCreate";
-            
+
             SetAuthorizedUserId(Ids.UserAId);
 
             CreateChannelRequest request = new()
@@ -23,7 +23,7 @@ namespace Tests.Channels.Commands
             };
             CreateChannelRequestHandler handler = new(Context, UserProvider, Mapper);
             //Act
-            
+
             string channelId = await handler.Handle(request, CancellationToken);
             Server server = await Context.Servers.FindAsync(serverId);
             Channel channel = await Context.Channels.FindAsync(channelId);
@@ -31,10 +31,10 @@ namespace Tests.Channels.Commands
             //Assert
             Assert.Equal(serverId, channel.ServerId);
             Assert.Equal(title, channel.Title);
-            Assert.All(channel.Users, 
+            Assert.All(channel.Users,
                 user => Assert.Contains(server.ServerProfiles, sp => sp.UserId == user));
-            
-            
+
+
         }
     }
 }

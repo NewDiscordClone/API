@@ -1,7 +1,6 @@
 ﻿using Application.Commands.GroupChats.RemoveGroupChatMember;
 using Application.Common.Exceptions;
 using Application.Models;
-using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.GroupChats.Commands
@@ -13,7 +12,7 @@ namespace Tests.GroupChats.Commands
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat6;
+            string chatId = Ids.GroupChat6;
             Guid removeMemberId = Ids.UserAId;
             int oldCount = 4;
 
@@ -28,7 +27,7 @@ namespace Tests.GroupChats.Commands
                 new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
@@ -42,7 +41,7 @@ namespace Tests.GroupChats.Commands
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat7;
+            string chatId = Ids.GroupChat7;
             Guid removeMemberId = Ids.UserAId;
 
             SetAuthorizedUserId(Ids.UserBId);

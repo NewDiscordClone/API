@@ -11,7 +11,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message2;
+            string messageId = Ids.Message2;
 
             SetAuthorizedUserId(Ids.UserAId);
 

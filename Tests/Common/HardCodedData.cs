@@ -110,7 +110,7 @@ namespace Tests.Common
         private readonly User _userC;
         private readonly User _userD;
 
-        public List<User> Users => new List<User>()
+        public List<User> Users => new()
         {
             _userA,
             _userB,
@@ -118,7 +118,7 @@ namespace Tests.Common
             _userD
         };
 
-        public List<Role> Roles => new List<Role>()
+        public List<Role> Roles => new()
         {
             new()
             {
@@ -129,7 +129,7 @@ namespace Tests.Common
 
         public List<Server> Servers { get; private set; }
 
-        public List<Channel> Channels => new List<Channel>()
+        public List<Channel> Channels => new()
         {
             new Channel
             {
@@ -227,7 +227,7 @@ namespace Tests.Common
             }
         };
 
-        public List<Message> Messages => new List<Message>
+        public List<Message> Messages => new()
         {
             new Message
             {

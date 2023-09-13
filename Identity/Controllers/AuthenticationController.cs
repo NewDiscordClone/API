@@ -39,7 +39,7 @@ namespace Identity.Controllers
             }
             else
             {
-                foreach (var error in result.Errors)
+                foreach (IdentityError error in result.Errors)
                 {
                     string errorKey = GetErrorKey(error.Code);
                     ModelState.AddModelError(errorKey, error.Description);

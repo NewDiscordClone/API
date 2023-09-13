@@ -17,7 +17,8 @@ namespace Application.Commands.HubClients.Connection.Disconnect
         {
             UserConnections? userConnections = await Context.UserConnections.FindOrDefaultAsync(UserId)!;
 
-            if (userConnections == null) return;
+            if (userConnections == null)
+                return;
 
             userConnections.Connections.Remove(request.ConnectionId);
             if (userConnections.Connections.Count == 0)

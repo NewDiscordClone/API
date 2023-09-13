@@ -14,7 +14,7 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             string invitationId = Ids.Invitation1;
             Guid userId = Ids.UserBId;
-            
+
             SetAuthorizedUserId(userId);
 
             JoinServerRequest request = new()
@@ -22,10 +22,10 @@ namespace Tests.Servers.Commands
                 InvitationId = invitationId
             };
             JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
-            
+
             //Act 
             await handler.Handle(request, CancellationToken);
-            
+
             //Assert
             Invitation invitation = await Context.Invitations.FindAsync(invitationId);
             Server server = await Context.Servers.FindAsync(invitation.ServerId);
@@ -39,7 +39,7 @@ namespace Tests.Servers.Commands
             string invitationId = Ids.Invitation3;
             Guid userId = Ids.UserDId;
             long oldCount = await Context.Invitations.CountAsync(s => true);
-            
+
             SetAuthorizedUserId(userId);
 
             JoinServerRequest request = new()
@@ -47,7 +47,7 @@ namespace Tests.Servers.Commands
                 InvitationId = invitationId
             };
             JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
-            
+
             //Act 
             //Assert
             Invitation invitation = await Context.Invitations.FindAsync(invitationId);
@@ -56,7 +56,7 @@ namespace Tests.Servers.Commands
                 async () => await handler.Handle(request, CancellationToken));
             await Assert.ThrowsAsync<EntityNotFoundException>(
                 async () => await Context.Invitations.FindAsync(invitationId));
-            Assert.Equal(oldCount-1,await Context.Invitations.CountAsync(s => true));
+            Assert.Equal(oldCount - 1, await Context.Invitations.CountAsync(s => true));
             Assert.DoesNotContain(server.ServerProfiles, sp => sp.UserId == userId);
         }
         [Fact]
@@ -66,7 +66,7 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             string invitationId = Ids.Invitation2;
             Guid userId = Ids.UserBId;
-            
+
             SetAuthorizedUserId(userId);
 
             JoinServerRequest request = new()
@@ -74,7 +74,7 @@ namespace Tests.Servers.Commands
                 InvitationId = invitationId
             };
             JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
-            
+
             //Act 
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(
@@ -90,7 +90,7 @@ namespace Tests.Servers.Commands
             CreateDatabase();
             string invitationId = Ids.Invitation1;
             Guid userId = Ids.UserDId;
-            
+
             SetAuthorizedUserId(userId);
 
             JoinServerRequest request = new()
@@ -98,7 +98,7 @@ namespace Tests.Servers.Commands
                 InvitationId = invitationId
             };
             JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
-            
+
             //Act 
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(

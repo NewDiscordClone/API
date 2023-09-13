@@ -22,7 +22,7 @@ namespace Application.Queries.GetPrivateChats
         {
             Context.SetToken(cancellationToken);
             List<PrivateChatLookUp> chats = new();
-            foreach (var personalChat in await Context.PersonalChats.FilterAsync(c => c.Users.Any(u => u == UserId)))
+            foreach (PersonalChat personalChat in await Context.PersonalChats.FilterAsync(c => c.Users.Any(u => u == UserId)))
             {
                 if (personalChat is GroupChat gchat)
                 {

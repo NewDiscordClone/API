@@ -1,4 +1,3 @@
-using Application.Common.Exceptions;
 using Application.Interfaces;
 using Application.Models;
 using DataAccess.Configurations;
@@ -8,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace DataAccess
@@ -62,7 +60,7 @@ namespace DataAccess
         public ISimpleDbSet<Server> Servers =>
             new SimpleMongoDbSet<Server>(MongoDb.GetCollection<Server>("servers"), _token);
 
-        public ISimpleDbSet<Invitation> Invitations => 
+        public ISimpleDbSet<Invitation> Invitations =>
             new SimpleMongoDbSet<Invitation>(MongoDb.GetCollection<Invitation>("invitations"), _token);
         public ISimpleDbSet<RelationshipList> RelationshipLists =>
             new SimpleMongoDbSet<RelationshipList, Guid>(MongoDb.GetCollection<RelationshipList>("relationships"),

@@ -1,7 +1,7 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using Application.Models.LookUps;
 using MediatR;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Queries.GetMessages
 {

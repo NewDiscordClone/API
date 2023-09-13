@@ -12,7 +12,7 @@ namespace Tests.Users.Queries
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            
+
             SetAuthorizedUserId(userId);
 
             GetUserDetailsRequest request = new()
@@ -20,10 +20,10 @@ namespace Tests.Users.Queries
                 UserId = userId
             };
             GetUserDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
-            
+
             //Act
             GetUserDetailsDto result = await handler.Handle(request, CancellationToken);
-            
+
             //Assert
             User user = await Context.SqlUsers.FindAsync(userId);
             Assert.Equal(user.UserName, result.Username);
@@ -40,7 +40,7 @@ namespace Tests.Users.Queries
             CreateDatabase();
             Guid userId = Ids.UserBId;
             string serverId = Ids.Server3;
-            
+
             SetAuthorizedUserId(Ids.UserAId);
 
             GetUserDetailsRequest request = new()
@@ -49,10 +49,10 @@ namespace Tests.Users.Queries
                 ServerId = serverId
             };
             GetUserDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
-            
+
             //Act
             GetUserDetailsDto result = await handler.Handle(request, CancellationToken);
-            
+
             //Assert
             User user = await Context.SqlUsers.FindAsync(userId);
             ServerProfile? serverProfile = (await Context.Servers.FindAsync(serverId))

@@ -1,8 +1,7 @@
-﻿using System.Linq.Expressions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Interfaces;
-using Application.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DataAccess
 {
@@ -19,7 +18,7 @@ namespace DataAccess
             _context = context;
             CancellationToken = cancellationToken;
         }
-        
+
         public async Task<TEntity> FindAsync(object id)
         {
             return await FindByIdAsync(id);
@@ -38,14 +37,14 @@ namespace DataAccess
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
-            var result = await _original.AddAsync(entity, CancellationToken);
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TEntity> result = await _original.AddAsync(entity, CancellationToken);
             await _context.SaveChangesAsync(CancellationToken);
             return result.Entity;
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            var result = _original.Update(entity);
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TEntity> result = _original.Update(entity);
             await _context.SaveChangesAsync(CancellationToken);
             return result.Entity;
         }
@@ -74,7 +73,8 @@ namespace DataAccess
 
         private async Task<TEntity> FindByIdAsync(object id)
         {
-            if (id == null) throw new ArgumentException("Id is null");
+            if (id == null)
+                throw new ArgumentException("Id is null");
             return await _original.FindAsync(new[] { id }, CancellationToken) ??
                    throw new EntityNotFoundException($"Entity {typeof(TEntity).Name} ({id}) not found", id.ToString());
         }

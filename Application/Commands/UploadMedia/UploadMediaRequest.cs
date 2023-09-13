@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Application.Models;
+﻿using Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Commands.UploadMedia
 {

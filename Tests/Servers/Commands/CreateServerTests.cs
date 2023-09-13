@@ -1,9 +1,5 @@
 ﻿using Application.Commands.Servers.CreateServer;
-using Application.Models;
-using Application.Interfaces;
 using Application.Queries.GetServerDetails;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.Servers.Commands
@@ -25,7 +21,7 @@ namespace Tests.Servers.Commands
             CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            
+
             string result = await handler.Handle(request, CancellationToken);
             //Assert
             ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)

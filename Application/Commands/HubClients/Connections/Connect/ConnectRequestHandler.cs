@@ -18,7 +18,7 @@ namespace Application.Commands.HubClients.Connection.Connect
             if (userConnections == null)
             {
                 userConnections = new UserConnections
-                    { UserId = UserId, Connections = new HashSet<string>() { request.ConnectionId } };
+                { UserId = UserId, Connections = new HashSet<string>() { request.ConnectionId } };
                 await Context.UserConnections.AddAsync(userConnections);
             }
             else

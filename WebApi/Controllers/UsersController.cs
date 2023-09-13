@@ -45,7 +45,7 @@ namespace WebApi.Controllers
             try
             {
                 GetUserDetailsDto user = await Mediator.Send(new GetUserDetailsRequest
-                    { UserId = userId, ServerId = serverId });
+                { UserId = userId, ServerId = serverId });
                 return Ok(user);
             }
             catch (Exception e)
@@ -130,7 +130,8 @@ namespace WebApi.Controllers
             try
             {
                 string? newChat = await Mediator.Send(request);
-                if (newChat != null) await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = newChat });
+                if (newChat != null)
+                    await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = newChat });
                 return NoContent();
             }
             catch (NoPermissionsException)

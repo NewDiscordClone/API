@@ -1,7 +1,6 @@
 ﻿using Application.Commands.GroupChats.MakeGroupChatOwner;
 using Application.Common.Exceptions;
 using Application.Models;
-using MongoDB.Driver;
 using Tests.Common;
 
 namespace Tests.GroupChats.Commands
@@ -14,7 +13,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
 
-            var chatId = Ids.GroupChat3;
+            string chatId = Ids.GroupChat3;
             Guid newOwnerId = Ids.UserBId;
             Guid oldOwner = Ids.UserAId;
 
@@ -30,12 +29,12 @@ namespace Tests.GroupChats.Commands
                 new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
             GroupChat chat = await Context.GroupChats.FindAsync(chatId);
 
             //Assert
-            var groupChat = chat as GroupChat;
+            GroupChat groupChat = chat as GroupChat;
             Assert.NotNull(groupChat);
             Assert.Equal(newOwnerId, groupChat.OwnerId);
         }
@@ -46,7 +45,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
 
-            var chatId = Ids.GroupChat6;
+            string chatId = Ids.GroupChat6;
             Guid newOwnerId = Ids.UserCId;
 
             SetAuthorizedUserId(Ids.UserAId);
@@ -72,7 +71,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
 
-            var chatId = Ids.GroupChat7;
+            string chatId = Ids.GroupChat7;
             Guid newOwnerId = Ids.UserAId;
 
             SetAuthorizedUserId(Ids.UserBId);

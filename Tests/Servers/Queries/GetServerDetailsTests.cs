@@ -1,6 +1,4 @@
-﻿using Application.Interfaces;
-using Application.Queries.GetServerDetails;
-using MongoDB.Bson;
+﻿using Application.Queries.GetServerDetails;
 using Tests.Common;
 
 namespace Tests.Servers.Queries
@@ -15,9 +13,9 @@ namespace Tests.Servers.Queries
             string serverId = Ids.Server1;
             Guid userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
-            
+
             SetAuthorizedUserId(userId);
-            
+
             GetServerDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
 
             GetServerDetailsRequest request = new() { ServerId = serverId };
