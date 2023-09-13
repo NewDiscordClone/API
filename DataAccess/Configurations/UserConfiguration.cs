@@ -1,8 +1,8 @@
-﻿using Application.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Sparkle.Application.Models;
 
-namespace DataAccess.Configurations
+namespace Sparkle.DataAccess.Configurations
 {
     public class UserConfiguration : IEntityTypeConfiguration<User>
     {

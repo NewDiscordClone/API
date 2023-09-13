@@ -1,8 +1,8 @@
-﻿using Application.Commands.Messages.PinMessage;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Commands.PinMessage;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class PinMessageTests : TestBase
     {
@@ -11,10 +11,10 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
 
             SetAuthorizedUserId(Ids.UserAId);
-            
+
             PinMessageRequest request = new()
             {
                 MessageId = messageId

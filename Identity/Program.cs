@@ -1,10 +1,10 @@
-using Application.Models;
-using DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.FileProviders;
+using Sparkle.Application.Models;
+using Sparkle.DataAccess;
 using System.Reflection;
 
-namespace Identity
+namespace Sparkle.Identity
 {
     public class Program
     {

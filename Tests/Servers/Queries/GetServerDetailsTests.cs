@@ -1,9 +1,7 @@
-﻿using Application.Interfaces;
-using Application.Queries.GetServerDetails;
-using MongoDB.Bson;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Queries
+namespace Sparkle.Tests.Servers.Queries
 {
     public class GetServerDetailsTests : TestBase
     {
@@ -15,9 +13,9 @@ namespace Tests.Servers.Queries
             string serverId = Ids.Server1;
             Guid userId = Ids.UserAId;
             CancellationToken cancellationToken = CancellationToken.None;
-            
+
             SetAuthorizedUserId(userId);
-            
+
             GetServerDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
 
             GetServerDetailsRequest request = new() { ServerId = serverId };

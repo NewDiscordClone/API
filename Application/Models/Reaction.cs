@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models;
+namespace Sparkle.Application.Models;
 
 /// <summary>
 /// Represents emoji reaction under the message
@@ -14,7 +14,7 @@ public class Reaction
     [RegularExpression(":\\w+:")]
     [DefaultValue(":smile:")]
     public string Emoji { get; set; }
-    
+
     /// <summary>
     /// Reaction author ID
     /// </summary>

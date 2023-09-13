@@ -4,12 +4,12 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models;
+namespace Sparkle.Application.Models;
 
 public class Role : IdentityRole<Guid>
 {
     public override Guid Id { get; set; }
-    
+
     [DefaultValue("Admin")]
     [StringLength(32, MinimumLength = 1)]
     public override string Name { get; set; }

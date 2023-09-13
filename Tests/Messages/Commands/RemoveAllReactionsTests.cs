@@ -1,9 +1,8 @@
-﻿using Application.Commands.Messages.RemoveAllReactions;
-using Application.Models;
-using MongoDB.Driver;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Commands.RemoveAllReactions;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class RemoveAllReactionsTests : TestBase
     {
@@ -12,7 +11,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
 
             SetAuthorizedUserId(Ids.UserBId);
 
@@ -23,7 +22,7 @@ namespace Tests.Messages.Commands
             RemoveAllReactionsRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
             Message message = await Context.Messages.FindAsync(messageId);
 

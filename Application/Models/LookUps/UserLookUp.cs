@@ -1,9 +1,9 @@
-﻿using Application.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models.LookUps
+namespace Sparkle.Application.Models.LookUps
 {
     /// <summary>
     /// User dto for collections

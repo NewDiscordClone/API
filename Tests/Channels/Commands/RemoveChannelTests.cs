@@ -1,8 +1,8 @@
-﻿using Application.Commands.Channels.RemoveChannel;
-using Application.Common.Exceptions;
-using Tests.Common;
+﻿using Sparkle.Application.Channels.Commands.RemoveChannel;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Tests.Common;
 
-namespace Tests.Channels.Commands
+namespace Sparkle.Tests.Channels.Commands
 {
     public class RemoveChannelTests : TestBase
     {
@@ -14,7 +14,7 @@ namespace Tests.Channels.Commands
             string channelId = Ids.Channel3;
             string serverId = Ids.Server3;
             long oldCount = await Context.Servers.CountAsync(s => true);
-            
+
             SetAuthorizedUserId(Ids.UserCId);
             RemoveChannelRequest request = new()
             {
@@ -23,7 +23,7 @@ namespace Tests.Channels.Commands
             RemoveChannelRequestHandler handler = new(Context, UserProvider);
             //Act
             await handler.Handle(request, CancellationToken);
-            
+
             //Assert
             await Assert.ThrowsAsync<EntityNotFoundException>(
                 async () => await Context.Channels.FindAsync(channelId));
@@ -39,7 +39,7 @@ namespace Tests.Channels.Commands
             string channelId = Ids.Channel3;
             string serverId = Ids.Server3;
             long oldCount = await Context.Servers.CountAsync(s => true);
-            
+
             SetAuthorizedUserId(Ids.UserDId);
             RemoveChannelRequest request = new()
             {

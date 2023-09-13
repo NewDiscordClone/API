@@ -1,12 +1,8 @@
-﻿using Application.Commands.Servers.CreateServer;
-using Application.Models;
-using Application.Interfaces;
-using Application.Queries.GetServerDetails;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Servers.Commands.CreateServer;
+using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class CreateServerTests : TestBase
     {
@@ -25,7 +21,7 @@ namespace Tests.Servers.Commands
             CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            
+
             string result = await handler.Handle(request, CancellationToken);
             //Assert
             ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)

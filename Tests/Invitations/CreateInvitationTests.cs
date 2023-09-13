@@ -1,11 +1,9 @@
-﻿using System.Globalization;
-using System.Security.Policy;
-using Application.Commands.Invitations.CreateInvitation;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Invitations.Commands.CreateInvitation;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Invitations
+namespace Sparkle.Tests.Invitations
 {
     public class CreateInvitationTests : TestBase
     {
@@ -17,9 +15,9 @@ namespace Tests.Invitations
             string serverId = Ids.Server1;
             DateTime expiretime = DateTime.Now.AddDays(1);
             Guid user = Ids.UserAId;
-            
+
             SetAuthorizedUserId(user);
-            
+
             CreateInvitationRequest request = new()
             {
                 ServerId = serverId,
@@ -27,20 +25,20 @@ namespace Tests.Invitations
                 ExpireTime = expiretime
             };
             CreateInvitationRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             string invitationId = await handler.Handle(request, CancellationToken);
             Invitation invitation = await Context.Invitations.FindAsync(invitationId);
-            
+
             //Assert
             Assert.Equal(serverId, invitation.ServerId);
             Assert.NotNull(invitation.ExpireTime);
             Assert.Equal(
-                expiretime.ToLocalTime().ToString(), 
+                expiretime.ToLocalTime().ToString(),
                 invitation.ExpireTime.Value.ToLocalTime().ToString());
             Assert.Equal(user, invitation.UserId);
         }
-        
+
         [Fact]
         public async Task Fail_NoPermissionsException()
         {
@@ -50,9 +48,9 @@ namespace Tests.Invitations
             DateTime expiretime = DateTime.Now.AddDays(1);
             Guid user = Ids.UserBId;
             long oldCount = await Context.Invitations.CountAsync(i => true);
-            
+
             SetAuthorizedUserId(user);
-            
+
             CreateInvitationRequest request = new()
             {
                 ServerId = serverId,
@@ -60,7 +58,7 @@ namespace Tests.Invitations
                 ExpireTime = expiretime
             };
             CreateInvitationRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(

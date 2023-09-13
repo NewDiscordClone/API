@@ -1,9 +1,9 @@
-﻿using Application.Common;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Sparkle.Application.Common;
+using Sparkle.WebApi.Authorization;
+using Sparkle.WebApi.Authorization.Requirements;
 using System.Text.RegularExpressions;
-using WebApi.Authorization;
-using WebApi.Authorization.Requirements;
 
 namespace WebApi.Providers
 {

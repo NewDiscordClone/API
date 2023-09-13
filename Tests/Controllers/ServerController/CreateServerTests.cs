@@ -1,13 +1,11 @@
-﻿using System.Net.Http.Headers;
-using Application.Commands.Servers.CreateServer;
-using Application.Queries.GetServerDetails;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Tests.Common;
-using WebApi.Controllers;
+using Sparkle.Application.Common.Servers.Commands.CreateServer;
+using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+using Sparkle.Tests.Common;
+using Sparkle.WebApi.Controllers;
 
-namespace Tests.Controllers.ServerController
+namespace Sparkle.Tests.Controllers.ServerController
 {
     public class CreateServerTests : TestBase
     {

@@ -1,13 +1,12 @@
-﻿using Application.Common.Exceptions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
-using ExceptionFilterAttribute = WebApi.Attributes.ExceptionFilterAttribute;
+using Sparkle.Application.Common.Exceptions;
+using ExceptionFilterAttribute = Sparkle.WebApi.Attributes.ExceptionFilterAttribute;
 
-namespace Tests
+namespace Sparkle.Tests
 {
     public class ExceptionFilterTests
     {
@@ -19,7 +18,7 @@ namespace Tests
         };
         public async Task<IActionResult?> GetResultAsync(ExceptionFilterAttribute attribute, Exception exception)
         {
-            ExceptionContext context = new ExceptionContext(_actionContext, new List<IFilterMetadata>())
+            ExceptionContext context = new(_actionContext, new List<IFilterMetadata>())
             {
                 Exception = exception,
             };
@@ -28,9 +27,9 @@ namespace Tests
         }
         [Fact]
         public async Task Success()
-        { 
+        {
             //Arrange
-            ExceptionFilterAttribute attribute = new ExceptionFilterAttribute();
+            ExceptionFilterAttribute attribute = new();
             //Act
             //Assert
             Assert.IsType<ForbidResult>(await GetResultAsync(attribute, new NoPermissionsException()));

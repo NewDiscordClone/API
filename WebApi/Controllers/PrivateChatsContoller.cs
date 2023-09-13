@@ -1,27 +1,25 @@
-﻿using Application.Commands.GroupChats.AddMemberToGroupChat;
-using Application.Commands.GroupChats.ChangeGroupChatImage;
-using Application.Commands.GroupChats.CreateGroupChat;
-using Application.Commands.GroupChats.LeaveFromGroupChat;
-using Application.Commands.GroupChats.MakeGroupChatOwner;
-using Application.Commands.GroupChats.RemoveGroupChatMember;
-using Application.Commands.GroupChats.RenameGroupChat;
-using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
-using Application.Commands.HubClients.PrivateChats.PrivateChatUpdated;
-using Application.Common.Exceptions;
-using Application.Models;
-using Application.Models.LookUps;
-using Application.Providers;
-using Application.Queries.GetGroupChatDetails;
-using Application.Queries.GetPrivateChats;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
+using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
+using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
+using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
+using Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner;
+using Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember;
+using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
+using Sparkle.Application.GroupChats.Queries.GetGroupChatDetails;
+using Sparkle.Application.GroupChats.Queries.GetPrivateChats;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatUpdated;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class PrivateChatsController : ApiControllerBase
@@ -176,7 +174,7 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         /// <summary>
         /// Changes the title of the given group chat
         /// </summary>

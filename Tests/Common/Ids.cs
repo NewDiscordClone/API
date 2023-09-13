@@ -1,6 +1,4 @@
-﻿using MongoDB.Bson;
-
-namespace Tests.Common
+﻿namespace Sparkle.Tests.Common
 {
     public class Ids
     {
@@ -20,11 +18,11 @@ namespace Tests.Common
         public string GroupChat4 { get; set; }
         public string GroupChat5 { get; set; }
         public string GroupChat6 { get; set; }
-        public string GroupChat7 { get; set; } 
-        
-        public string Message1 { get; set; } 
+        public string GroupChat7 { get; set; }
+
+        public string Message1 { get; set; }
         public string Message2 { get; set; }
-        
+
         public string Invitation1 { get; set; }
         public string Invitation2 { get; set; }
         public string Invitation3 { get; set; }

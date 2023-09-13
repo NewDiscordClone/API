@@ -1,18 +1,18 @@
-﻿using Application.Common.Exceptions;
-using Application.Interfaces;
-using Application.Models;
-using AutoMapper;
-using DataAccess.Configurations;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
+using Sparkle.DataAccess;
+using Sparkle.DataAccess.Configurations;
 using System.Linq.Expressions;
 using System.Security.Claims;
-using DataAccess;
 
-namespace Tests.Common
+namespace Sparkle.Tests.Common
 {
     public class FakeDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     {

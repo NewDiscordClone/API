@@ -1,10 +1,9 @@
-﻿using Application.Commands.Servers.UpdateServer;
-using Application.Common.Exceptions;
-using Application.Models;
-using Application.Providers;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.UpdateServer;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class UpdateServerTests : TestBase
     {
@@ -16,7 +15,7 @@ namespace Tests.Servers.Commands
             Guid userId = Ids.UserBId;
             string serverId = Ids.Server2;
             const string newTitle = "Updated title";
-            
+
             SetAuthorizedUserId(userId);
 
             UpdateServerRequest request = new()
@@ -25,7 +24,7 @@ namespace Tests.Servers.Commands
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, UserProvider);
+            UpdateServerCommandHandler handler = new(Context, UserProvider);
 
             //Act
             Context.SetToken(CancellationToken);
@@ -53,7 +52,7 @@ namespace Tests.Servers.Commands
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, UserProvider);
+            UpdateServerCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

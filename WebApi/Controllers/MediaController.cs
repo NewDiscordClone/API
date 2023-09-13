@@ -1,17 +1,15 @@
-﻿using Application.Commands.UploadMedia;
-using Application.Common.Exceptions;
-using Application.Models;
-using Application.Providers;
-using Application.Queries.GetMedia;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Medias.Commands.UploadMedia;
+using Sparkle.Application.Medias.Queries.GetMedia;
+using Sparkle.Application.Models;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [ExceptionFilter]
     [ApiController]
     public class MediaController : ApiControllerBase
     {
@@ -58,7 +56,7 @@ namespace WebApi.Controllers
             }
         }
 
-        
+
         private const int _maxFileSizeMb = 5;
         /// <summary>
         /// Uploads the media file to the database
@@ -85,7 +83,7 @@ namespace WebApi.Controllers
             if (file.Length >= _maxFileSizeMb * 1024 * 1024)
                 return BadRequest($"File is too big, please upload files less than {_maxFileSizeMb} MB");
             Media media = await Mediator.Send(new UploadMediaRequest { File = file });
-            return Created($"{Request.Scheme}://{Request.Host}/api/Media/"+media.Id, "Operation is successful");
+            return Created($"{Request.Scheme}://{Request.Host}/api/Media/" + media.Id, "Operation is successful");
         }
     }
 }

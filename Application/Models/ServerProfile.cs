@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models;
+namespace Sparkle.Application.Models;
 
 /// <summary>
 /// Representation of user's profile on server
@@ -18,7 +18,7 @@ public class ServerProfile
     /// User ID with most popular data
     /// </summary>
     public virtual Guid UserId { get; set; }
-    
+
     /// <summary>
     /// List of user's roles on server
     /// </summary>

@@ -1,12 +1,12 @@
-﻿using Application.Common.Exceptions;
-using Application.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DataAccess
+namespace Sparkle.DataAccess
 {
     public class SimpleMongoDbSet<TEntity> : ISimpleDbSet<TEntity> where TEntity : class
     {
@@ -125,7 +125,7 @@ namespace DataAccess
             return result;
         }
     }
-    
+
     public class SimpleMongoDbSet<TEntity, TKey> : ISimpleDbSet<TEntity> where TEntity : class where TKey : notnull
     {
         public CancellationToken CancellationToken { get; set; } = default;
@@ -210,7 +210,8 @@ namespace DataAccess
 
         private static TKey ConvertToId(object? id)
         {
-            if (id is not TKey key) throw new ArgumentException($"Id is not a string or {typeof(TKey).Name} instance");
+            if (id is not TKey key)
+                throw new ArgumentException($"Id is not a string or {typeof(TKey).Name} instance");
             return key;
         }
 

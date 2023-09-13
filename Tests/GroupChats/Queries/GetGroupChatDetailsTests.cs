@@ -1,9 +1,8 @@
-﻿using Application.Models;
-using Application.Interfaces;
-using Application.Queries.GetGroupChatDetails;
-using Tests.Common;
+﻿using Sparkle.Application.GroupChats.Queries.GetGroupChatDetails;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.GroupChats.Queries
+namespace Sparkle.Tests.GroupChats.Queries
 {
     public class GetGroupChatDetailsTests : TestBase
     {
@@ -12,9 +11,9 @@ namespace Tests.GroupChats.Queries
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat4;
+            string chatId = Ids.GroupChat4;
             Guid userId = Ids.UserAId;
-            
+
             SetAuthorizedUserId(userId);
 
             GetGroupChatDetailsRequest request = new() { ChatId = chatId };

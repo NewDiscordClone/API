@@ -1,10 +1,9 @@
-﻿using Application.Commands.GroupChats.AddMemberToGroupChat;
-using Application.Common.Exceptions;
-using Application.Models;
-using MongoDB.Driver;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.GroupChats.Commands
+namespace Sparkle.Tests.GroupChats.Commands
 {
     public class AddMemberToGroupChatTests : TestBase
     {
@@ -15,7 +14,7 @@ namespace Tests.GroupChats.Commands
             CreateDatabase();
 
             Guid newMemberId = Ids.UserAId;
-            var chatId = Ids.GroupChat5;
+            string chatId = Ids.GroupChat5;
             int oldUsersCount = 2;
 
             SetAuthorizedUserId(Ids.UserBId);
@@ -29,9 +28,9 @@ namespace Tests.GroupChats.Commands
             AddMemberToGroupChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
-            PersonalChat chat =await Context.PersonalChats.FindAsync(chatId);
+            PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
             //Assert
             Assert.Equal(oldUsersCount + 1, chat.Users.Count);
@@ -43,7 +42,7 @@ namespace Tests.GroupChats.Commands
             //Arrange
             CreateDatabase();
             Guid newMemberId = Ids.UserCId;
-            var chatId = Ids.GroupChat5;
+            string chatId = Ids.GroupChat5;
 
             SetAuthorizedUserId(Ids.UserBId);
 

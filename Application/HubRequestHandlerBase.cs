@@ -1,10 +1,9 @@
-﻿using Application.Interfaces;
-using Application.Models;
-using Application.Providers;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Application
+namespace Sparkle.Application
 {
     public abstract class HubRequestHandlerBase : RequestHandlerBase
     {

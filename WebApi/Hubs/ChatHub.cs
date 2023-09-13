@@ -1,11 +1,11 @@
-using Application.Commands.HubClients.Connection.Connect;
-using Application.Commands.HubClients.Connection.Disconnect;
-using Application.Providers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Connections.Connect;
+using Sparkle.Application.HubClients.Connections.Disconect;
 
-namespace Application.Hubs;
+namespace Sparkle.WebApi.Hubs;
 
 [Authorize]
 public class ChatHub : Hub

@@ -1,9 +1,8 @@
-﻿using Application.Models;
-using Application.Queries.GetPinnedMessages;
-using MongoDB.Driver;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Queries.GetPinnedMessages;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Queries
+namespace Sparkle.Tests.Messages.Queries
 {
     public class GetPinnedMessagesTests : TestBase
     {
@@ -12,8 +11,8 @@ namespace Tests.Messages.Queries
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat3;
-            
+            string chatId = Ids.GroupChat3;
+
             SetAuthorizedUserId(Ids.UserAId);
 
             GetPinnedMessagesRequest request = new()
@@ -23,7 +22,7 @@ namespace Tests.Messages.Queries
             GetPinnedMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            
+
             List<Message> result = await handler.Handle(request, CancellationToken);
 
             //Assert

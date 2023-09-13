@@ -1,10 +1,6 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Application.Models;
+namespace Sparkle.Application.Models;
 
 public class PersonalChat : Chat
 {
-    
+
 }
