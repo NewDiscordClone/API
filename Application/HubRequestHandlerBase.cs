@@ -13,9 +13,9 @@ namespace Application.Application
 
         private CancellationToken _token;
 
-        protected IEnumerable<string> GetConnections(User user)
+        protected IEnumerable<string> GetConnections(Guid userId)
         {
-            return Context.UserConnections.FindAsync(user.Id).Result.Connections;
+            return Context.UserConnections.FindAsync(userId).Result.Connections;
         }
         protected IEnumerable<string> GetConnections(Chat chat)
         {

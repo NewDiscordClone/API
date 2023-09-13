@@ -6,12 +6,12 @@ using Application.Providers;
 using AutoMapper;
 using MediatR;
 
-namespace Application.Commands.HubClients.PrivateChats.PrivateChatCreated
+namespace Application.Commands.HubClients.PrivateChats.PrivateChatSaved
 {
-    public class NotifyPrivateChatCreatedRequestHandler : HubRequestHandlerBase,
-        IRequestHandler<NotifyPrivateChatCreatedRequest>
+    public class NotifyPrivateChatSavedRequestHandler : HubRequestHandlerBase,
+        IRequestHandler<NotifyPrivateChatSavedRequest>
     {
-        public NotifyPrivateChatCreatedRequestHandler(
+        public NotifyPrivateChatSavedRequestHandler(
             IHubContextProvider hubContextProvider,
             IAppDbContext context,
             IAuthorizedUserProvider userProvider,
@@ -20,7 +20,7 @@ namespace Application.Commands.HubClients.PrivateChats.PrivateChatCreated
         {
         }
 
-        public async Task Handle(NotifyPrivateChatCreatedRequest request, CancellationToken cancellationToken)
+        public async Task Handle(NotifyPrivateChatSavedRequest request, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
             Chat chat = await Context.PersonalChats.FindAsync(request.ChatId);
@@ -32,8 +32,7 @@ namespace Application.Commands.HubClients.PrivateChats.PrivateChatCreated
 
         private async Task SendToUser(Chat chat, Guid userId)
         {
-            User user = await Context.SqlUsers.FindAsync(userId);
-            PrivateChatLookUp lookUp = null;
+            PrivateChatLookUp lookUp;
             switch(chat)
             {
                 case GroupChat gChat:
@@ -46,7 +45,7 @@ namespace Application.Commands.HubClients.PrivateChats.PrivateChatCreated
                 default:
                     throw new ArgumentException("the given chat is not an private chat");
             };
-            await SendAsync(ClientMethods.PrivateChatCreated, lookUp, GetConnections(user));
+            await SendAsync(ClientMethods.PrivateChatSaved, lookUp, GetConnections(userId));
         }
     }
 }

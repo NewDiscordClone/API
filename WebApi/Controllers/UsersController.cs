@@ -1,6 +1,6 @@
 #nullable enable
 using Application.Commands.HubClients.Messages.MessageAdded;
-using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
+using Application.Commands.HubClients.PrivateChats.PrivateChatSaved;
 using Application.Commands.Users.AcceptFriendRequest;
 using Application.Commands.Users.FriendRequest;
 using Application.Commands.Users.SendMessageToUser;
@@ -90,7 +90,7 @@ namespace WebApi.Controllers
             try
             {
                 MessageChatDto messageChat = await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = messageChat.ChatId });
+                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = messageChat.ChatId });
                 await Mediator.Send(new NotifyMessageAddedRequest { MessageId = messageChat.MessageId });
                 return NoContent();
             }
@@ -130,7 +130,7 @@ namespace WebApi.Controllers
             try
             {
                 string? newChat = await Mediator.Send(request);
-                if (newChat != null) await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = newChat });
+                if (newChat != null) await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = newChat });
                 return NoContent();
             }
             catch (NoPermissionsException)

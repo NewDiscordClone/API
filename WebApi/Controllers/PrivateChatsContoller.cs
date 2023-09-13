@@ -5,8 +5,8 @@ using Application.Commands.GroupChats.LeaveFromGroupChat;
 using Application.Commands.GroupChats.MakeGroupChatOwner;
 using Application.Commands.GroupChats.RemoveGroupChatMember;
 using Application.Commands.GroupChats.RenameGroupChat;
-using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
-using Application.Commands.HubClients.PrivateChats.PrivateChatUpdated;
+using Application.Commands.HubClients.PrivateChats.PrivateChatRemoved;
+using Application.Commands.HubClients.PrivateChats.PrivateChatSaved;
 using Application.Common.Exceptions;
 using Application.Models;
 using Application.Models.LookUps;
@@ -98,7 +98,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<string>> CreateGroupChat(CreateGroupChatRequest request)
         {
             string chatId = await Mediator.Send(request);
-            await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = chatId });
             return Created($"{Request.Scheme}://{Request.Host}/api/GroupChat/GetDetails?chatId=" + chatId, chatId);
         }
 
@@ -127,7 +127,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
+                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -164,7 +164,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
+                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoPermissionsException e)
@@ -201,7 +201,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
+                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoPermissionsException e)
@@ -237,7 +237,8 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
+                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
+                await Mediator.Send(new NotifyPrivateChatRemovedRequest { UserId = UserId, ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoSuchUserException e)
@@ -274,6 +275,7 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
+                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoPermissionsException e)
@@ -311,7 +313,8 @@ namespace WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatUpdatedRequest { ChatId = request.ChatId });
+                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
+                await Mediator.Send(new NotifyPrivateChatRemovedRequest { UserId = request.MemberId, ChatId = request.ChatId });
                 return NoContent();
             }
             catch (NoPermissionsException e)
