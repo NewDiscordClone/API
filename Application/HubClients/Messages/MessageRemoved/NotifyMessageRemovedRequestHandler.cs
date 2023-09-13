@@ -1,10 +1,8 @@
-﻿using Application.Application;
-using Application.Common.Interfaces;
-using Application.HubClients;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.HubClients.Messages.MessageRemoved
+namespace Sparkle.Application.HubClients.Messages.MessageRemoved
 {
     public class NotifyMessageRemovedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyMessageRemovedRequest>
     {

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Commands.RemoveAttachment
+namespace Sparkle.Application.Messages.Commands.RemoveAttachment
 {
     public record RemoveAttachmentRequest : IRequest
     {

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Commands.EditMessage
+namespace Sparkle.Application.Messages.Commands.EditMessage
 {
     public record EditMessageRequest : IRequest
     {

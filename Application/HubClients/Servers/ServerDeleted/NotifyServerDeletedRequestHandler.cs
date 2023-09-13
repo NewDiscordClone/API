@@ -1,9 +1,7 @@
-﻿using Application.Application;
-using Application.Common.Interfaces;
-using Application.HubClients;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Interfaces;
 
-namespace Application.HubClients.Servers.ServerDeleted
+namespace Sparkle.Application.HubClients.Servers.ServerDeleted
 {
     public class NotifyServerDeletedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyServerDeletedRequest>
     {

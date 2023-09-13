@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Queries.GetPinnedMessages
+namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 {
     public record GetPinnedMessagesRequest : IRequest<List<Message>>
     {

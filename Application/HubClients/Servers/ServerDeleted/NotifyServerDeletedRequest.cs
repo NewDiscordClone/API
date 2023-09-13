@@ -1,7 +1,7 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Models;
 
-namespace Application.HubClients.Servers.ServerDeleted
+namespace Sparkle.Application.HubClients.Servers.ServerDeleted
 {
     public record NotifyServerDeletedRequest : IRequest
     {

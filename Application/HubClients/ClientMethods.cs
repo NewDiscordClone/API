@@ -1,4 +1,4 @@
-﻿namespace Application.HubClients
+﻿namespace Sparkle.Application.HubClients
 {
     public static class ClientMethods
     {

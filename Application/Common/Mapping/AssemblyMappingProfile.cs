@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
 using System.Reflection;
 
-namespace Application.Common.Mapping
+namespace Sparkle.Application.Common.Mapping
 {
     public class AssemblyMappingProfile : Profile
     {

@@ -1,8 +1,8 @@
-﻿using Application.Channels.Commands.CreateChannel;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Channels.Commands.CreateChannel;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Channels.Commands
+namespace Sparkle.Tests.Channels.Commands
 {
     public class CreateChannelTests : TestBase
     {

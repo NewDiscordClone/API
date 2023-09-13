@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.GroupChats.Commands.MakeGroupChatOwner;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.GroupChats.Commands
+namespace Sparkle.Tests.GroupChats.Commands
 {
     public class MakeGroupChatOwnerTests : TestBase
     {

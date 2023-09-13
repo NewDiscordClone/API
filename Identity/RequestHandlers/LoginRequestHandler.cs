@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using Identity.Requests;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Sparkle.Application.Models;
+using Sparkle.Identity.Requests;
 
-namespace Identity.RequestHandlers
+namespace Sparkle.Identity.RequestHandlers
 {
     public class LoginRequestHandler : IRequestHandler<LoginRequest, SignInResult>
     {

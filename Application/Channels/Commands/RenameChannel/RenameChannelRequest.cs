@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Channels.Commands.RenameChannel
+namespace Sparkle.Application.Channels.Commands.RenameChannel
 {
     public record RenameChannelRequest : IRequest
     {

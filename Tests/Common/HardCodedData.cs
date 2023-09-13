@@ -1,8 +1,8 @@
-﻿using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using MongoDB.Bson;
+using Sparkle.Application.Models;
 
-namespace Tests.Common
+namespace Sparkle.Tests.Common
 {
     public class HardCodedData
     {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     /// <summary>
     /// Controller for testing authorization.

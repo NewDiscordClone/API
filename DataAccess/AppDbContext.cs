@@ -1,15 +1,15 @@
-using Application.Common.Interfaces;
-using Application.Models;
-using DataAccess.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
+using Sparkle.DataAccess.Configurations;
 using System.Security.Claims;
 
-namespace DataAccess
+namespace Sparkle.DataAccess
 {
     public class AppDbContext : IdentityDbContext<User, Role, Guid>, IAppDbContext
     {

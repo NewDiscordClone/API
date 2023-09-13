@@ -1,10 +1,10 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Channels.Commands.RemoveChannel
+namespace Sparkle.Application.Channels.Commands.RemoveChannel
 {
     public class RemoveChannelRequestHandler : RequestHandlerBase, IRequestHandler<RemoveChannelRequest>
     {

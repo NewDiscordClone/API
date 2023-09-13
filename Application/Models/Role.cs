@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models;
+namespace Sparkle.Application.Models;
 
 public class Role : IdentityRole<Guid>
 {

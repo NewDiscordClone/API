@@ -1,9 +1,8 @@
-﻿using Application.Application;
-using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.HubClients.Connections.Connect
+namespace Sparkle.Application.HubClients.Connections.Connect
 {
     public class ConnectRequestHandler : HubRequestHandlerBase, IRequestHandler<ConnectRequest>
     {

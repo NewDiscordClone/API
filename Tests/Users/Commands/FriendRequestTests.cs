@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Models;
-using Application.Users.Commands.FriendRequest;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Models;
+using Sparkle.Application.Users.Commands.FriendRequest;
+using Sparkle.Tests.Common;
 
-namespace Tests.Users.Commands
+namespace Sparkle.Tests.Users.Commands
 {
     public class FriendRequestTests : TestBase
     {

@@ -1,10 +1,8 @@
-﻿using Application.Application;
-using Application.Common.Interfaces;
-using Application.HubClients;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.HubClients.Channels.ChannelCreated
+namespace Sparkle.Application.HubClients.Channels.ChannelCreated
 {
     public class NotifyChannelCreatedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyChannelCreatedRequest>
     {

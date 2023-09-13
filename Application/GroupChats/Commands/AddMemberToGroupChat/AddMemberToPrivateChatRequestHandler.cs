@@ -1,11 +1,11 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.GroupChats.Commands.AddMemberToGroupChat
+namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
 {
     public class AddMemberToGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<AddMemberToGroupChatRequest>
     {

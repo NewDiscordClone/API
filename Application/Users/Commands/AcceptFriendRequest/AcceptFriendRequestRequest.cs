@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Users.Commands.AcceptFriendRequest
+namespace Sparkle.Application.Users.Commands.AcceptFriendRequest
 {
     public record AcceptFriendRequestRequest : IRequest
     {

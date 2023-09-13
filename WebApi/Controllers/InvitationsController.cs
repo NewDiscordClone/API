@@ -1,11 +1,11 @@
-﻿using Application.Common.Interfaces;
-using Application.Invitations.Commands.CreateInvitation;
-using Application.Invitations.Queries.GetInvitationDetails;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Invitations.Commands.CreateInvitation;
+using Sparkle.Application.Invitations.Queries.GetInvitationDetails;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -62,7 +62,7 @@ namespace WebApi.Controllers
         public async Task<ActionResult<string>> Invite(CreateInvitationRequest request)
         {
             string id = await Mediator.Send(request);
-            return Created($"{this.Request.Scheme}://{this.Request.Host}/api/Invitation/" + id, id);
+            return Created($"{Request.Scheme}://{Request.Host}/api/Invitation/" + id, id);
         }
     }
 }

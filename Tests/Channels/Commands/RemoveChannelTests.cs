@@ -1,8 +1,8 @@
-﻿using Application.Channels.Commands.RemoveChannel;
-using Application.Common.Exceptions;
-using Tests.Common;
+﻿using Sparkle.Application.Channels.Commands.RemoveChannel;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Tests.Common;
 
-namespace Tests.Channels.Commands
+namespace Sparkle.Tests.Channels.Commands
 {
     public class RemoveChannelTests : TestBase
     {

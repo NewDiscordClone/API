@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
-namespace Application.Common.Servers.Queries.GetServerDetails
+namespace Sparkle.Application.Common.Servers.Queries.GetServerDetails
 {
     public record RoleDto : IMapWith<Role>
     {

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Channels.Commands.RemoveChannel
+namespace Sparkle.Application.Channels.Commands.RemoveChannel
 {
     public class RemoveChannelRequest : IRequest
     {

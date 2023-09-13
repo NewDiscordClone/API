@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Commands.PinMessage
+namespace Sparkle.Application.Messages.Commands.PinMessage
 {
     public record PinMessageRequest : IRequest
     {

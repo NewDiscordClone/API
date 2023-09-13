@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Common.Servers.Commands.BanUser
+namespace Sparkle.Application.Common.Servers.Commands.BanUser
 {
     public record BanUserRequest : IRequest
     {

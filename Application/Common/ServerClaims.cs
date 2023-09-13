@@ -1,4 +1,4 @@
-﻿namespace Application.Common
+﻿namespace Sparkle.Application.Common
 {
     public static class ServerClaims
     {

@@ -1,11 +1,10 @@
-﻿using Application.Common.Interfaces;
-using Application.Queries.GetUser;
-using Application.Users.Queries.GetUserDetails;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using WebApi.Authorization.Requirements;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Users.Queries.GetUserDetails;
+using Sparkle.WebApi.Authorization.Requirements;
 
-namespace WebApi.Authorization.Handlers
+namespace Sparkle.WebApi.Authorization.Handlers
 {
     public class ServerMemberAuthorizationHandler : AuthorizationHandler<ServerMemberRequirement>
     {

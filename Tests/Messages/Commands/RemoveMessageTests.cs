@@ -1,8 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Messages.Commands.RemoveMessage;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Messages.Commands.RemoveMessage;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class RemoveMessageTests : TestBase
     {
@@ -23,7 +23,7 @@ namespace Tests.Messages.Commands
             RemoveMessageRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
 
             //Assert

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Application.Common.Interfaces
+namespace Sparkle.Application.Common.Interfaces
 {
     public interface ISimpleDbSet<TEntity> where TEntity : class
     {

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.GroupChats.Commands.RenameGroupChat
+namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
 {
     public class RenameGroupChatRequest : IRequest
     {

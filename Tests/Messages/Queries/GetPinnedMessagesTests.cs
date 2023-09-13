@@ -1,8 +1,8 @@
-﻿using Application.Messages.Queries.GetPinnedMessages;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Queries.GetPinnedMessages;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Queries
+namespace Sparkle.Tests.Messages.Queries
 {
     public class GetPinnedMessagesTests : TestBase
     {

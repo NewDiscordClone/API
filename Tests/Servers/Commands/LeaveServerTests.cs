@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Servers.Commands.LeaveServer;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.LeaveServer;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class LeaveServerTests : TestBase
     {

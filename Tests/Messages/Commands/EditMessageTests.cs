@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Messages.Commands.EditMessage;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Messages.Commands.EditMessage;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class EditMessageTests : TestBase
     {

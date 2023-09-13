@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Common.Servers.Commands.CreateServer
+namespace Sparkle.Application.Common.Servers.Commands.CreateServer
 {
     public class CreateServerRequestHandler : RequestHandlerBase, IRequestHandler<CreateServerRequest, string>
     {

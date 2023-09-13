@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Messages.Commands.RemoveAttachment
+namespace Sparkle.Application.Messages.Commands.RemoveAttachment
 {
     public class RemoveAttachmentRequestHandler : RequestHandlerBase, IRequestHandler<RemoveAttachmentRequest>
     {
@@ -12,7 +12,6 @@ namespace Application.Messages.Commands.RemoveAttachment
             Context.SetToken(cancellationToken);
 
             Message message = await Context.Messages.FindAsync(request.MessageId);
-            Chat chat = await Context.Chats.FindAsync(message.ChatId);
             User user = await Context.SqlUsers.FindAsync(UserId);
 
             if (message.User != user.Id)

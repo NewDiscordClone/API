@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.GroupChats.Commands.CreateGroupChat
+namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
 {
     public record CreateGroupChatRequest : IRequest<string>
     {

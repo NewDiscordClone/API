@@ -1,9 +1,9 @@
-﻿using Application.Channels.Commands.RenameChannel;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Channels.Commands.RenameChannel;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Channels.Commands
+namespace Sparkle.Tests.Channels.Commands
 {
     public class RenameChannelTests : TestBase
     {

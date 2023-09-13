@@ -1,20 +1,18 @@
-﻿using Application.Channels.Commands.CreateChannel;
-using Application.Channels.Commands.RemoveChannel;
-using Application.Channels.Commands.RenameChannel;
-using Application.Commands.HubClients.Channels.ChannelCreated;
-using Application.Commands.HubClients.Channels.ChannelRemoved;
-using Application.Commands.HubClients.Channels.UpdateChannel;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Channels.Commands.CreateChannel;
+using Sparkle.Application.Channels.Commands.RemoveChannel;
+using Sparkle.Application.Channels.Commands.RenameChannel;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Channels.ChannelCreated;
+using Sparkle.Application.HubClients.Channels.ChannelRemoved;
+using Sparkle.Application.HubClients.Channels.ChannelUpdated;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class ChannelsController : ApiControllerBase
@@ -65,7 +63,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RenameChannel([FromBody] RenameChannelRequest request)
+        public async Task<ActionResult> RenameChannel(RenameChannelRequest request)
         {
             try
             {
@@ -95,7 +93,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveChannel([FromBody] RemoveChannelRequest request)
+        public async Task<ActionResult> RemoveChannel(RemoveChannelRequest request)
         {
             try
             {

@@ -1,10 +1,10 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Common.Servers.Queries.GetServers
+namespace Sparkle.Application.Common.Servers.Queries.GetServers
 {
     public record GetServerLookupDto : IMapWith<Server>
     {

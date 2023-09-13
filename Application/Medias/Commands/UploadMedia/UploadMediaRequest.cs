@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Sparkle.Application.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Media.Commands.UploadMedia
+namespace Sparkle.Application.Medias.Commands.UploadMedia
 {
     public class UploadMediaRequest : IRequest<Media>
     {

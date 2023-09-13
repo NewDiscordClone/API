@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Invitations.Queries.GetInvitationDetails
+namespace Sparkle.Application.Invitations.Queries.GetInvitationDetails
 {
     public record GetInvitationDetailsRequest : IRequest<InvitationDetailsDto>
     {

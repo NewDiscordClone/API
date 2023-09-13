@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Channels.Commands.CreateChannel
+namespace Sparkle.Application.Channels.Commands.CreateChannel
 {
     public class CreateChannelRequest : IRequest<string>
     {

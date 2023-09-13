@@ -1,6 +1,6 @@
-﻿using Application.Models;
+﻿using Sparkle.Application.Models;
 
-namespace Application.Common.Interfaces
+namespace Sparkle.Application.Common.Interfaces
 {
     public interface IRoleFactory
     {

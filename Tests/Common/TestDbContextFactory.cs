@@ -1,11 +1,11 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Mapping;
-using AutoMapper;
-using DataAccess;
+﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Mapping;
+using Sparkle.DataAccess;
 
-namespace Tests.Common
+namespace Sparkle.Tests.Common
 {
     public static class TestDbContextFactory
     {

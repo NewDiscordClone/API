@@ -1,12 +1,10 @@
-﻿using Application.Application;
-using Application.Common.Interfaces;
-using Application.HubClients;
-using Application.Models;
-using Application.Models.LookUps;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
-namespace Application.HubClients.Users.AcceptFriendRequest
+namespace Sparkle.Application.HubClients.Users.AcceptFriendRequest
 {
     public class NotifyAcceptFriendRequestRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyAcceptFriendRequestRequest>
     {

@@ -1,7 +1,7 @@
-﻿using Application.Common.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
 
-namespace Application
+namespace Sparkle.Application
 {
     public abstract class RequestHandlerBase
     {

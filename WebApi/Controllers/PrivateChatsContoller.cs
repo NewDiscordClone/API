@@ -1,27 +1,25 @@
-﻿using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
-using Application.Commands.HubClients.PrivateChats.PrivateChatUpdated;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.GroupChats.Commands.AddMemberToGroupChat;
-using Application.GroupChats.Commands.ChangeGroupChatImage;
-using Application.GroupChats.Commands.CreateGroupChat;
-using Application.GroupChats.Commands.LeaveFromGroupChat;
-using Application.GroupChats.Commands.MakeGroupChatOwner;
-using Application.GroupChats.Commands.RemoveGroupChatMember;
-using Application.GroupChats.Commands.RenameGroupChat;
-using Application.GroupChats.Queries.GetPrivateChats;
-using Application.Models;
-using Application.Models.LookUps;
-using Application.Queries.GetGroupChatDetails;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
+using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
+using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
+using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
+using Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner;
+using Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember;
+using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
+using Sparkle.Application.GroupChats.Queries.GetGroupChatDetails;
+using Sparkle.Application.GroupChats.Queries.GetPrivateChats;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatUpdated;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
-    [ExceptionFilter]
     [ApiController]
     [Authorize]
     public class PrivateChatsController : ApiControllerBase

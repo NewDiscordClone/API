@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Invitations.Commands.CreateInvitation;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Invitations.Commands.CreateInvitation;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Invitations
+namespace Sparkle.Tests.Invitations
 {
     public class CreateInvitationTests : TestBase
     {

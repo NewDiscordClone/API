@@ -1,11 +1,11 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Application.Common.Servers.Queries.GetServerDetails
+namespace Sparkle.Application.Common.Servers.Queries.GetServerDetails
 {
     public record ServerDetailsDto : IMapWith<Server>
     {

@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Users.Commands.SendMessageToUser
+namespace Sparkle.Application.Users.Commands.SendMessageToUser
 {
     public record SendMessageToUserRequest : IRequest<MessageChatDto>
     {

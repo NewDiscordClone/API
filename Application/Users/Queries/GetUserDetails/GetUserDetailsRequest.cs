@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries.GetUserDetails
 {
     public record GetUserDetailsRequest : IRequest<GetUserDetailsDto>
     {

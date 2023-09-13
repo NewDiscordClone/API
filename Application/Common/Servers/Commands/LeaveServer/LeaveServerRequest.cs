@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Common.Servers.Commands.LeaveServer
+namespace Sparkle.Application.Common.Servers.Commands.LeaveServer
 {
     public record LeaveServerRequest : IRequest
     {

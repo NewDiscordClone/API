@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Channels.Commands.CreateChannel
+namespace Sparkle.Application.Channels.Commands.CreateChannel
 {
     public class CreateChannelRequestHandler : RequestHandlerBase, IRequestHandler<CreateChannelRequest, string>
     {

@@ -1,12 +1,12 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace DataAccess
+namespace Sparkle.DataAccess
 {
     public class SimpleMongoDbSet<TEntity> : ISimpleDbSet<TEntity> where TEntity : class
     {

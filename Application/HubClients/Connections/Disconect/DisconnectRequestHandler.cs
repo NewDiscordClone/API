@@ -1,9 +1,8 @@
-﻿using Application.Application;
-using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.HubClients.Connections.Disconect
+namespace Sparkle.Application.HubClients.Connections.Disconect
 {
     public class DisconnectRequestHandler : HubRequestHandlerBase, IRequestHandler<DisconnectRequest>
     {

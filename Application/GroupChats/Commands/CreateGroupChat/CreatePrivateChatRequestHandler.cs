@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.GroupChats.Commands.CreateGroupChat
+namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
 {
     public class CreateGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatRequest, string>
     {

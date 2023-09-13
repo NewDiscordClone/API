@@ -1,17 +1,15 @@
-﻿using Application.Commands.UploadMedia;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using Application.Queries.GetMedia;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Medias.Commands.UploadMedia;
+using Sparkle.Application.Medias.Queries.GetMedia;
+using Sparkle.Application.Models;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [ExceptionFilter]
     [ApiController]
     public class MediaController : ApiControllerBase
     {

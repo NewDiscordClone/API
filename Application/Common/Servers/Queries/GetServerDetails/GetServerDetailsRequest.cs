@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Common.Servers.Queries.GetServerDetails
+namespace Sparkle.Application.Common.Servers.Queries.GetServerDetails
 {
     public record GetServerDetailsRequest : IRequest<ServerDetailsDto>
     {

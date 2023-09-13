@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Connections.Connect
+namespace Sparkle.Application.HubClients.Connections.Connect
 {
     public record ConnectRequest : IRequest
     {

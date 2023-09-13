@@ -1,11 +1,9 @@
-﻿using Application.Application;
-using Application.Common.Interfaces;
-using Application.HubClients;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.HubClients.Messages.MessageUpdated
+namespace Sparkle.Application.HubClients.Messages.MessageUpdated
 {
     public class NotifyMessageUpdatedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyMessageUpdatedRequest>
     {

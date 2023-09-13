@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Interfaces
+﻿namespace Sparkle.Application.Common.Interfaces
 {
     public interface IAuthorizedUserProvider
     {

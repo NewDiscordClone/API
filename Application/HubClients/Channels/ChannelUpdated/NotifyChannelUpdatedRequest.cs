@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Channels.ChannelUpdated
+namespace Sparkle.Application.HubClients.Channels.ChannelUpdated
 {
     public record NotifyChannelUpdatedRequest : IRequest
     {

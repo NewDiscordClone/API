@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Messages.Commands.RemoveReaction;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Messages.Commands.RemoveReaction;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class RemoveReactionsTests : TestBase
     {
@@ -25,7 +25,7 @@ namespace Tests.Messages.Commands
             RemoveReactionRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
             Message message = await Context.Messages.FindAsync(messageId);
 

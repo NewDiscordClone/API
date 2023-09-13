@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Invitations.Queries.GetInvitationDetails;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Invitations.Queries.GetInvitationDetails;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Invitations
+namespace Sparkle.Tests.Invitations
 {
     public class GetInvitationDetailsTests : TestBase
     {

@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Exceptions
+﻿namespace Sparkle.Application.Common.Exceptions
 {
     public class NoSuchUserException : Exception
     {

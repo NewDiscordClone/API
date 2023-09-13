@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
-namespace Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries.GetUserDetails
 {
     public record GetUserDetailsServerProfileDto : IMapWith<ServerProfile>
     {

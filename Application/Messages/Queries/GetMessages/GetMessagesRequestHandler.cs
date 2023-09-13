@@ -1,11 +1,11 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using Application.Models.LookUps;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
-namespace Application.Messages.Queries.GetMessages
+namespace Sparkle.Application.Messages.Queries.GetMessages
 {
     public class GetMessagesRequestHandler : RequestHandlerBase, IRequestHandler<GetMessagesRequest, List<MessageDto>>
     {

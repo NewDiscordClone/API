@@ -1,11 +1,11 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Servers.Commands.DeleteServer;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Tests.Common;
-using WebApi.Controllers;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.DeleteServer;
+using Sparkle.Tests.Common;
+using Sparkle.WebApi.Controllers;
 
-namespace Tests.Controllers.ServerController
+namespace Sparkle.Tests.Controllers.ServerController
 {
     public class DeleteServerTests : TestBase
     {

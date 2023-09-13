@@ -1,8 +1,8 @@
-﻿using Application.GroupChats.Queries.GetGroupChatDetails;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.GroupChats.Queries.GetGroupChatDetails;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.GroupChats.Queries
+namespace Sparkle.Tests.GroupChats.Queries
 {
     public class GetGroupChatDetailsTests : TestBase
     {

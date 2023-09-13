@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Messages.MessageRemoved
+namespace Sparkle.Application.HubClients.Messages.MessageRemoved
 {
     public record NotifyMessageRemovedRequest : IRequest
     {

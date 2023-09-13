@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.GroupChats.Commands.RemoveGroupChatMember
+namespace Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember
 {
     public record RemoveGroupChatMemberRequest : IRequest
     {

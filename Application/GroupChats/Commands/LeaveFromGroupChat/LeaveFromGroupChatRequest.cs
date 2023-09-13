@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.GroupChats.Commands.LeaveFromGroupChat
+namespace Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat
 {
     public record LeaveFromGroupChatRequest : IRequest
     {

@@ -1,7 +1,7 @@
-﻿using Application.Models;
+﻿using Sparkle.Application.Models;
 using System.Text.RegularExpressions;
 
-namespace Application.Messages.Commands
+namespace Sparkle.Application.Messages.Commands
 {
     internal static class AttachmentsFromText
     {

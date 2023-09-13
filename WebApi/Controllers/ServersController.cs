@@ -1,27 +1,27 @@
-using Application.Commands.HubClients.Servers.ServerDeleted;
-using Application.Commands.HubClients.Servers.ServerUpdated;
-using Application.Commands.Servers.JoinServer;
-using Application.Commands.Servers.LeaveServer;
-using Application.Common;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Common.Servers.Commands.BanUser;
-using Application.Common.Servers.Commands.ChangeServerProfileDisplayName;
-using Application.Common.Servers.Commands.ChangeServerProfileRoles;
-using Application.Common.Servers.Commands.CreateServer;
-using Application.Common.Servers.Commands.DeleteServer;
-using Application.Common.Servers.Commands.KickUser;
-using Application.Common.Servers.Commands.UnbanUser;
-using Application.Common.Servers.Commands.UpdateServer;
-using Application.Common.Servers.Queries.GetServerDetails;
-using Application.Common.Servers.Queries.GetServers;
-using Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Servers.Commands.BanUser;
+using Sparkle.Application.Common.Servers.Commands.ChangeServerProfileDisplayName;
+using Sparkle.Application.Common.Servers.Commands.ChangeServerProfileRoles;
+using Sparkle.Application.Common.Servers.Commands.CreateServer;
+using Sparkle.Application.Common.Servers.Commands.DeleteServer;
+using Sparkle.Application.Common.Servers.Commands.JoinServer;
+using Sparkle.Application.Common.Servers.Commands.KickUser;
+using Sparkle.Application.Common.Servers.Commands.LeaveServer;
+using Sparkle.Application.Common.Servers.Commands.UnbanUser;
+using Sparkle.Application.Common.Servers.Commands.UpdateServer;
+using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+using Sparkle.Application.Common.Servers.Queries.GetServers;
+using Sparkle.Application.HubClients.Servers.ServerDeleted;
+using Sparkle.Application.HubClients.Servers.ServerUpdated;
+using Sparkle.Application.Models;
+using Sparkle.WebApi.Attributes;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -147,7 +147,7 @@ namespace WebApi.Controllers
         {
             string id = await Mediator.Send(request);
             try
-            { return Created($"{this.Request.Scheme}://{this.Request.Host}/api/GetServerDetails?=" + id, id); }
+            { return Created($"{Request.Scheme}://{Request.Host}/api/GetServerDetails?=" + id, id); }
             catch (NullReferenceException)
             { return Created($"https://localhost:7060/api/GetServerDetails?=" + id, id); }
 

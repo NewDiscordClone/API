@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.GroupChats.Commands.ChangeGroupChatImage
+namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage
 {
     public record ChangeGroupChatImageRequest : IRequest
     {

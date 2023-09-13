@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.PrivateChats.PrivateChatCreated
+namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated
 {
     public record NotifyPrivateChatCreatedRequest : IRequest
     {

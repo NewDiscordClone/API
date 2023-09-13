@@ -1,9 +1,9 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
 using MongoDB.Bson;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Media.Commands.UploadMedia
+namespace Sparkle.Application.Medias.Commands.UploadMedia
 {
     public class UploadMediaRequestHandler : RequestHandlerBase, IRequestHandler<UploadMediaRequest, Media>
     {

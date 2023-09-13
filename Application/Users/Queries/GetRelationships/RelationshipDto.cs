@@ -1,7 +1,7 @@
-﻿using Application.Models;
-using Application.Models.LookUps;
+﻿using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
-namespace Application.Users.Queries.GetRelationships
+namespace Sparkle.Application.Users.Queries.GetRelationships
 {
     public record RelationshipDto
     {

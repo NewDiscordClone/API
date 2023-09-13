@@ -1,8 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Servers.Commands.DeleteServer;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.DeleteServer;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class DeleteServerTests : TestBase
     {

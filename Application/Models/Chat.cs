@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models;
+namespace Sparkle.Application.Models;
 
 [BsonDiscriminator(RootClass = true)]
 [BsonKnownTypes(typeof(PersonalChat), typeof(GroupChat), typeof(Channel))]

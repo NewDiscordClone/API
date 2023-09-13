@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;
 
-namespace DataAccess
+namespace Sparkle.DataAccess
 {
     public class SimpleSqlDbSet<TEntity> : ISimpleDbSet<TEntity> where TEntity : class
     {

@@ -1,8 +1,8 @@
-﻿using Application.GroupChats.Commands.RenameGroupChat;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.GroupChats.Commands
+namespace Sparkle.Tests.GroupChats.Commands
 {
     public class RenameGroupChatTests : TestBase
     {

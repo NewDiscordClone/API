@@ -1,8 +1,8 @@
-﻿using Application.Models;
-using Application.Users.Queries.GetUserDetails;
-using Tests.Common;
+﻿using Sparkle.Application.Models;
+using Sparkle.Application.Users.Queries.GetUserDetails;
+using Sparkle.Tests.Common;
 
-namespace Tests.Users.Queries
+namespace Sparkle.Tests.Users.Queries
 {
     public class GetUserDetailsTests : TestBase
     {

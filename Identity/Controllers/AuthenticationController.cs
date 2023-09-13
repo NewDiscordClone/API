@@ -1,10 +1,10 @@
-﻿using Identity.Requests;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Identity.Requests;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace Identity.Controllers
+namespace Sparkle.Identity.Controllers
 {
     [Route("[controller]")]
     public class AuthenticationController : Controller
@@ -58,7 +58,7 @@ namespace Identity.Controllers
             {
                 return "Username";
             }
-            return String.Empty;
+            return string.Empty;
         }
 
         [HttpGet("[action]")]

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Common.Servers.Commands.CreateServer
+namespace Sparkle.Application.Common.Servers.Commands.CreateServer
 {
     public record CreateServerRequest : IRequest<string>
     {

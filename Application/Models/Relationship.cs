@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace Application.Models
+namespace Sparkle.Application.Models
 {
     public enum RelationshipType
     {

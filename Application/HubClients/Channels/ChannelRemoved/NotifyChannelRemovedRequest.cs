@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Channels.ChannelRemoved
+namespace Sparkle.Application.HubClients.Channels.ChannelRemoved
 {
     public record NotifyChannelRemovedRequest : IRequest
     {

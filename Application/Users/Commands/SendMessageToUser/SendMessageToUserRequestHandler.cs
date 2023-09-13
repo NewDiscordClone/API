@@ -1,11 +1,11 @@
-﻿using Application.Commands.Messages.AddMessage;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Messages.Commands.AddMessage;
+using Sparkle.Application.Models;
 
-namespace Application.Users.Commands.SendMessageToUser
+namespace Sparkle.Application.Users.Commands.SendMessageToUser
 {
     public class SendMessageToUserRequestHandler : RequestHandlerBase, IRequestHandler<SendMessageToUserRequest, MessageChatDto>
     {

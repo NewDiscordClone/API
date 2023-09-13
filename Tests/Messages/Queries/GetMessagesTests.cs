@@ -1,8 +1,8 @@
-﻿using Application.Messages.Queries.GetMessages;
-using Application.Models.LookUps;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Queries.GetMessages;
+using Sparkle.Application.Models.LookUps;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Queries
+namespace Sparkle.Tests.Messages.Queries
 {
     public class GetMessagesTests : TestBase
     {

@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Common.Servers.Commands.BanUser
+namespace Sparkle.Application.Common.Servers.Commands.BanUser
 {
     public class BanUserRequestHandler : RequestHandlerBase, IRequestHandler<BanUserRequest>
     {

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Common.Servers.Commands.ChangeServerProfileDisplayName
+namespace Sparkle.Application.Common.Servers.Commands.ChangeServerProfileDisplayName
 {
     public record ChangeServerProfileDisplayNameRequest : IRequest
     {

@@ -1,7 +1,7 @@
-using Application.Models;
+using Sparkle.Application.Models;
 using System.Security.Claims;
 
-namespace Application.Common.Interfaces;
+namespace Sparkle.Application.Common.Interfaces;
 
 public interface IAppDbContext
 {
@@ -11,7 +11,7 @@ public interface IAppDbContext
     ISimpleDbSet<PersonalChat> PersonalChats { get; }
     ISimpleDbSet<GroupChat> GroupChats { get; }
     ISimpleDbSet<Channel> Channels { get; }
-    ISimpleDbSet<Media> Media { get; }
+    ISimpleDbSet<Models.Media> Media { get; }
     ISimpleDbSet<Server> Servers { get; }
     ISimpleDbSet<Invitation> Invitations { get; }
     ISimpleDbSet<RelationshipList> RelationshipLists { get; }

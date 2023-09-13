@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models;
+namespace Sparkle.Application.Models;
 
 /// <summary>
 /// Representation of user's profile on server

@@ -1,21 +1,20 @@
 #nullable enable
-using Application.Commands.HubClients.Messages.MessageAdded;
-using Application.Commands.HubClients.PrivateChats.PrivateChatCreated;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using Application.Queries.GetUser;
-using Application.Users.Commands.AcceptFriendRequest;
-using Application.Users.Commands.FriendRequest;
-using Application.Users.Commands.SendMessageToUser;
-using Application.Users.Queries.GetRelationships;
-using Application.Users.Queries.GetUserDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Messages.MessageAdded;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated;
+using Sparkle.Application.Models;
+using Sparkle.Application.Users.Commands.AcceptFriendRequest;
+using Sparkle.Application.Users.Commands.FriendRequest;
+using Sparkle.Application.Users.Commands.SendMessageToUser;
+using Sparkle.Application.Users.Queries.GetRelationships;
+using Sparkle.Application.Users.Queries.GetUserDetails;
+using Sparkle.WebApi.Attributes;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ExceptionFilter]

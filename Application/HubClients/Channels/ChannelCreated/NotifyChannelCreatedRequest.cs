@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Channels.ChannelCreated
+namespace Sparkle.Application.HubClients.Channels.ChannelCreated
 {
     public record NotifyChannelCreatedRequest : IRequest
     {

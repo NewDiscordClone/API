@@ -1,11 +1,11 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Tests.Common
+namespace Sparkle.Tests.Common
 {
     public class SimpleDerivedFakeDbSet<T, TD> : ISimpleDbSet<TD>
         where TD : class,

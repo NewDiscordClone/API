@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Connections.Disconect
+namespace Sparkle.Application.HubClients.Connections.Disconect
 {
     public record DisconnectRequest : IRequest
     {

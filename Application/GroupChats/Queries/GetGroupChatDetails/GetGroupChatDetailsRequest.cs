@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.GroupChats.Queries.GetGroupChatDetails
+namespace Sparkle.Application.GroupChats.Queries.GetGroupChatDetails
 {
     public record GetGroupChatDetailsRequest : IRequest<GroupChat>
     {

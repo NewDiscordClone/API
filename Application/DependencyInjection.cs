@@ -1,9 +1,9 @@
-﻿using Application.Common.Factories;
-using Application.Common.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Sparkle.Application.Common.Factories;
+using Sparkle.Application.Common.Interfaces;
 using System.Reflection;
 
-namespace Application
+namespace Sparkle.Application
 {
     public static class DependencyInjection
     {

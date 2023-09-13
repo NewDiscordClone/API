@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Commands.AddMessage
+namespace Sparkle.Application.Messages.Commands.AddMessage
 {
     public record AddMessageRequest : IRequest<Message>
     {

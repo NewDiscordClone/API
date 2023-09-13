@@ -1,7 +1,7 @@
-using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Sparkle.DataAccess;
 
 public class DesignTimeDbContextFactory : /*IDesignTimeDbContextFactory<AppDbContext>*/ IDesignTimeDbContextFactory<AppDbContext>
 {

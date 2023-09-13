@@ -1,4 +1,4 @@
-﻿namespace Application.Users.Commands.SendMessageToUser
+﻿namespace Sparkle.Application.Users.Commands.SendMessageToUser
 {
     public class MessageChatDto
     {

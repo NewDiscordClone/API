@@ -1,9 +1,9 @@
-using Application.Models.LookUps;
 using MediatR;
+using Sparkle.Application.Models.LookUps;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Queries.GetMessages
+namespace Sparkle.Application.Messages.Queries.GetMessages
 {
     public record GetMessagesRequest : IRequest<List<MessageDto>>
     {

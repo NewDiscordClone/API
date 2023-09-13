@@ -1,7 +1,7 @@
-using Application.Models.LookUps;
 using MediatR;
+using Sparkle.Application.Models.LookUps;
 
-namespace Application.GroupChats.Queries.GetPrivateChats
+namespace Sparkle.Application.GroupChats.Queries.GetPrivateChats
 {
     public record GetPrivateChatsRequest : IRequest<List<PrivateChatLookUp>>
     {

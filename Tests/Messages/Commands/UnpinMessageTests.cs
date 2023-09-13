@@ -1,8 +1,8 @@
-﻿using Application.Messages.Commands.UnpinMessage;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Commands.UnpinMessage;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class UnpinMessageTests : TestBase
     {

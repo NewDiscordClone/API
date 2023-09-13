@@ -1,12 +1,11 @@
-﻿using Application.Common.Servers.Commands.UpdateServer;
-using Application.Models;
-using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Tests.Common;
-using WebApi.Controllers;
+using Sparkle.Application.Common.Servers.Commands.UpdateServer;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
+using Sparkle.WebApi.Controllers;
 
-namespace Tests.Controllers.ServerController
+namespace Sparkle.Tests.Controllers.ServerController
 {
     public class UpdateServerTests : TestBase
     {
@@ -18,7 +17,7 @@ namespace Tests.Controllers.ServerController
             Guid userId = Ids.UserBId;
             string serverId = Ids.Server2;
             const string newTitle = "Updated title";
-            
+
             SetAuthorizedUserId(userId);
 
             UpdateServerRequest request = new()
@@ -28,11 +27,11 @@ namespace Tests.Controllers.ServerController
                 Title = newTitle
             };
             UpdateServerCommandHandler handler = new(Context, UserProvider);
-            
+
             AddMediatorHandler(request, handler);
 
             ServersController controller = new(Mediator, UserProvider);
-            
+
             //Act
             ActionResult result = await controller.UpdateServer(request);
 
@@ -63,7 +62,7 @@ namespace Tests.Controllers.ServerController
             UpdateServerCommandHandler handler = new(Context, UserProvider);
 
             AddMediatorHandler(request, handler);
-            
+
             ServersController controller = new(Mediator, UserProvider);
 
             ActionResult result = await controller.UpdateServer(request);

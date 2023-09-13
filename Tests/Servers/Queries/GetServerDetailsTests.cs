@@ -1,7 +1,7 @@
-﻿using Application.Common.Servers.Queries.GetServerDetails;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Queries
+namespace Sparkle.Tests.Servers.Queries
 {
     public class GetServerDetailsTests : TestBase
     {

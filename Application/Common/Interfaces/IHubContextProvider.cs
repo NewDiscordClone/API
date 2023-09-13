@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace Application.Common.Interfaces
+namespace Sparkle.Application.Common.Interfaces
 {
     public interface IHubContextProvider
     {

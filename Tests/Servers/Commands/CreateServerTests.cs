@@ -1,8 +1,8 @@
-﻿using Application.Common.Servers.Commands.CreateServer;
-using Application.Common.Servers.Queries.GetServerDetails;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Servers.Commands.CreateServer;
+using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class CreateServerTests : TestBase
     {

@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 using System.Security.Claims;
 
-namespace WebApi.Providers
+namespace Sparkle.WebApi.Providers
 {
     public class AuthorizedUserProvider : IAuthorizedUserProvider
     {

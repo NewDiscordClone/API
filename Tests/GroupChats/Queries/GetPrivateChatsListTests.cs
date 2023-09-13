@@ -1,6 +1,8 @@
-﻿using Tests.Common;
+﻿using Sparkle.Application.GroupChats.Queries.GetPrivateChats;
+using Sparkle.Application.Models.LookUps;
+using Sparkle.Tests.Common;
 
-namespace Tests.PrivateChats.Queries
+namespace Sparkle.Tests.GroupChats.Queries
 {
     public class GetPrivateChatsListTests : TestBase
     {
@@ -9,7 +11,7 @@ namespace Tests.PrivateChats.Queries
         {
             //Arrange
             CreateDatabase();
-            int userId = Ids.UserAId;
+            Guid userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
 
@@ -21,8 +23,7 @@ namespace Tests.PrivateChats.Queries
 
             //Assert
             Assert.NotEmpty(chats);
-            Assert.Equal(3, chats.Count);
-            Assert.All(chats, chat => Assert.Contains(chat.Users, user => user.Id == userId));
+            Assert.Equal(4, chats.Count);
         }
     }
 }

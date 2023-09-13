@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Commands.RemoveMessage
+namespace Sparkle.Application.Messages.Commands.RemoveMessage
 {
     public record RemoveMessageRequest : IRequest<Chat>
     {

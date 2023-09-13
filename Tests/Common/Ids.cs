@@ -1,4 +1,4 @@
-﻿namespace Tests.Common
+﻿namespace Sparkle.Tests.Common
 {
     public class Ids
     {

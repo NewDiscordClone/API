@@ -1,10 +1,9 @@
-﻿using Amazon.Runtime.Internal;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Users.Commands.FriendRequest
+namespace Sparkle.Application.Users.Commands.FriendRequest
 {
     public class FriendRequestRequestHandler : RequestHandlerBase, IRequestHandler<FriendRequestRequest, string?>
     {

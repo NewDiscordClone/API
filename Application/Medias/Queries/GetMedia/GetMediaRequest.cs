@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Media.Queries.GetMedia
+namespace Sparkle.Application.Medias.Queries.GetMedia
 {
     public record GetMediaRequest : IRequest<Media>
     {

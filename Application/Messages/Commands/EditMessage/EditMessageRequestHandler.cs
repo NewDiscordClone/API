@@ -1,10 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Messages.Commands;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Messages.Commands.EditMessage
+namespace Sparkle.Application.Messages.Commands.EditMessage
 {
     public class EditMessageRequestHandler : RequestHandlerBase, IRequestHandler<EditMessageRequest>
     {

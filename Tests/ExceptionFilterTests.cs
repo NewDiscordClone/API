@@ -1,12 +1,12 @@
-﻿using Application.Common.Exceptions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
-using ExceptionFilterAttribute = WebApi.Attributes.ExceptionFilterAttribute;
+using Sparkle.Application.Common.Exceptions;
+using ExceptionFilterAttribute = Sparkle.WebApi.Attributes.ExceptionFilterAttribute;
 
-namespace Tests
+namespace Sparkle.Tests
 {
     public class ExceptionFilterTests
     {

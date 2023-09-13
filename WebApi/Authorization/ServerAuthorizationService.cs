@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
-namespace WebApi.Authorization
+namespace Sparkle.WebApi.Authorization
 {
     public class ServerAuthorizationService : DefaultAuthorizationService
     {

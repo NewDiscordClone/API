@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
-using MediatR;
+﻿using MediatR;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Interfaces;
 
-namespace Application.Common.Servers.Queries.GetServers
+namespace Sparkle.Application.Common.Servers.Queries.GetServers
 {
     public class GetServersRequestHandler : RequestHandlerBase,
         IRequestHandler<GetServersRequest, List<GetServerLookupDto>>

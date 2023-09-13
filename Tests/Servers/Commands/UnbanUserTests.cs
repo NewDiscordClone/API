@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Servers.Commands.UnbanUser;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.UnbanUser;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class UnbanUserTests : TestBase
     {

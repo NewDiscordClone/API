@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Messages.MessageAdded
+namespace Sparkle.Application.HubClients.Messages.MessageAdded
 {
     public record NotifyMessageAddedRequest : IRequest
     {

@@ -1,9 +1,9 @@
-using Application.Common.Interfaces;
 using MediatR;
+using Sparkle.Application.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Common.Servers.Commands.UpdateServer
+namespace Sparkle.Application.Common.Servers.Commands.UpdateServer
 {
     public record UpdateServerRequest : IRequest, IServerRequest
     {

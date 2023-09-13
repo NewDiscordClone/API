@@ -1,11 +1,11 @@
-using Application.Common.Interfaces;
-using Application.Models;
-using Application.Models.LookUps;
 using AutoMapper;
 using MediatR;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
-namespace Application.GroupChats.Queries.GetPrivateChats
+namespace Sparkle.Application.GroupChats.Queries.GetPrivateChats
 {
     public class GetPrivateChatsRequestHandler : RequestHandlerBase,
         IRequestHandler<GetPrivateChatsRequest, List<PrivateChatLookUp>>

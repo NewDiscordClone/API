@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
+﻿using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 using System.Security.Claims;
 
-namespace Application.Common.Factories
+namespace Sparkle.Application.Common.Factories
 {
     public class RoleFactory : IRoleFactory
     {
@@ -30,7 +30,7 @@ namespace Application.Common.Factories
                 Color = "#FFF000",
                 ServerId = serverId
             };
-            _context.SqlRoles.AddMany(new []{ownerRole, memberRole});
+            _context.SqlRoles.AddMany(new[] { ownerRole, memberRole });
             _context.AddClaimToRoleAsync(memberRole, new Claim(ServerClaims.ChangeServerName, "true"));
 
             return new() { ownerRole, memberRole };

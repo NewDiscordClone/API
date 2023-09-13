@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Messages.Commands.RemoveAllReactions
+namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
 {
     public class RemoveAllReactionsRequestHandler : RequestHandlerBase, IRequestHandler<RemoveAllReactionsRequest>
     {

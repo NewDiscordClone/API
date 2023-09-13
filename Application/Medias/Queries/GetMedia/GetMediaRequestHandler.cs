@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.Media.Queries.GetMedia
+namespace Sparkle.Application.Medias.Queries.GetMedia
 {
     public class GetMediaRequestHandler : RequestHandlerBase, IRequestHandler<GetMediaRequest, Media>
     {

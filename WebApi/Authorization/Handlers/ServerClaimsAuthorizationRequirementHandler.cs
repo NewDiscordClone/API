@@ -1,8 +1,8 @@
-﻿using Application.Common.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using WebApi.Authorization.Requirements;
+﻿using Microsoft.AspNetCore.Authorization;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.WebApi.Authorization.Requirements;
 
-namespace WebApi.Authorization.Handlers
+namespace Sparkle.WebApi.Authorization.Handlers
 {
     public class ServerClaimsAuthorizationRequirementHandler :
         AuthorizationHandler<ServerClaimsAuthorizationRequirement>

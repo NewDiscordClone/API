@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Requests
+namespace Sparkle.Identity.Requests
 {
     public record RegistrationRequest : IRequest<IdentityResult>
     {

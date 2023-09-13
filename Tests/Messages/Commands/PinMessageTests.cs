@@ -1,8 +1,8 @@
-﻿using Application.Messages.Commands.PinMessage;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Commands.PinMessage;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class PinMessageTests : TestBase
     {

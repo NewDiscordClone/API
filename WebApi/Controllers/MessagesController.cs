@@ -1,27 +1,27 @@
-﻿using Application.Commands.HubClients.Messages.MessageAdded;
-using Application.Commands.HubClients.Messages.MessageRemoved;
-using Application.Commands.HubClients.Messages.MessageUpdated;
-using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Messages.Commands.AddMessage;
-using Application.Messages.Commands.AddReaction;
-using Application.Messages.Commands.EditMessage;
-using Application.Messages.Commands.PinMessage;
-using Application.Messages.Commands.RemoveAllReactions;
-using Application.Messages.Commands.RemoveAttachment;
-using Application.Messages.Commands.RemoveMessage;
-using Application.Messages.Commands.RemoveReaction;
-using Application.Messages.Commands.UnpinMessage;
-using Application.Messages.Queries.GetMessages;
-using Application.Models;
-using Application.Models.LookUps;
-using Application.Queries.GetPinnedMessages;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Messages.MessageAdded;
+using Sparkle.Application.HubClients.Messages.MessageRemoved;
+using Sparkle.Application.HubClients.Messages.MessageUpdated;
+using Sparkle.Application.Messages.Commands.AddMessage;
+using Sparkle.Application.Messages.Commands.AddReaction;
+using Sparkle.Application.Messages.Commands.EditMessage;
+using Sparkle.Application.Messages.Commands.PinMessage;
+using Sparkle.Application.Messages.Commands.RemoveAllReactions;
+using Sparkle.Application.Messages.Commands.RemoveAttachment;
+using Sparkle.Application.Messages.Commands.RemoveMessage;
+using Sparkle.Application.Messages.Commands.RemoveReaction;
+using Sparkle.Application.Messages.Commands.UnpinMessage;
+using Sparkle.Application.Messages.Queries.GetMessages;
+using Sparkle.Application.Messages.Queries.GetPinnedMessages;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
+using Sparkle.WebApi.Attributes;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ExceptionFilter]

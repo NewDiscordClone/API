@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Messages.Commands.RemoveAllReactions
+namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
 {
     public record RemoveAllReactionsRequest : IRequest
     {

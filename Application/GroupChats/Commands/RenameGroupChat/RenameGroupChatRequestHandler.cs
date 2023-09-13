@@ -1,10 +1,10 @@
-﻿using Application.Common.Exceptions;
-using Application.Common.Interfaces;
-using Application.Models;
-using MediatR;
+﻿using MediatR;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
-namespace Application.GroupChats.Commands.RenameGroupChat
+namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
 {
     public class RenameGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<RenameGroupChatRequest>
     {

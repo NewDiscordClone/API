@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.HubClients.Users.AcceptFriendRequest
+namespace Sparkle.Application.HubClients.Users.AcceptFriendRequest
 {
     public class NotifyAcceptFriendRequestRequest : IRequest
     {

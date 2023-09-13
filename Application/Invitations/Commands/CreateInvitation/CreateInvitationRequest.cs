@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Invitations.Commands.CreateInvitation
+namespace Sparkle.Application.Invitations.Commands.CreateInvitation
 {
     public record CreateInvitationRequest : IRequest<string>
     {

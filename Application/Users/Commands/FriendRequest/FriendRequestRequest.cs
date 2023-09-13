@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Users.Commands.FriendRequest
+namespace Sparkle.Application.Users.Commands.FriendRequest
 {
     public record FriendRequestRequest : IRequest<string?>
     {
