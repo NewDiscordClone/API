@@ -1,5 +1,5 @@
-﻿using Application.Models;
-using Application.Queries.GetGroupChatDetails;
+﻿using Application.GroupChats.Queries.GetGroupChatDetails;
+using Application.Models;
 using Tests.Common;
 
 namespace Tests.GroupChats.Queries

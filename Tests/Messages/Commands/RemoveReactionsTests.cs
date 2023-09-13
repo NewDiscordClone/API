@@ -1,5 +1,5 @@
-﻿using Application.Commands.Messages.RemoveReaction;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Messages.Commands.RemoveReaction;
 using Application.Models;
 using Tests.Common;
 

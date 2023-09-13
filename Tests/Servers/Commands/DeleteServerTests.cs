@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.DeleteServer;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.DeleteServer;
 using Tests.Common;
 
 namespace Tests.Servers.Commands

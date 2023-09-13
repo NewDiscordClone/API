@@ -1,4 +1,4 @@
-﻿using Application.Commands.Servers.UpdateServer;
+﻿using Application.Common.Servers.Commands.UpdateServer;
 using Application.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +27,7 @@ namespace Tests.Controllers.ServerController
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, UserProvider);
+            UpdateServerCommandHandler handler = new(Context, UserProvider);
             
             AddMediatorHandler(request, handler);
 
@@ -60,7 +60,7 @@ namespace Tests.Controllers.ServerController
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, UserProvider);
+            UpdateServerCommandHandler handler = new(Context, UserProvider);
 
             AddMediatorHandler(request, handler);
             

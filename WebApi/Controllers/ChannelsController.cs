@@ -1,11 +1,11 @@
-﻿using Application.Commands.Channels.CreateChannel;
-using Application.Commands.Channels.RemoveChannel;
-using Application.Commands.Channels.RenameChannel;
+﻿using Application.Channels.Commands.CreateChannel;
+using Application.Channels.Commands.RemoveChannel;
+using Application.Channels.Commands.RenameChannel;
 using Application.Commands.HubClients.Channels.ChannelCreated;
 using Application.Commands.HubClients.Channels.ChannelRemoved;
 using Application.Commands.HubClients.Channels.UpdateChannel;
 using Application.Common.Exceptions;
-using Application.Providers;
+using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

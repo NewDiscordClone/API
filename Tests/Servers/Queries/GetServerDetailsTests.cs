@@ -1,4 +1,4 @@
-﻿using Application.Queries.GetServerDetails;
+﻿using Application.Common.Servers.Queries.GetServerDetails;
 using Tests.Common;
 
 namespace Tests.Servers.Queries

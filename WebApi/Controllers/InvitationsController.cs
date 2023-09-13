@@ -1,6 +1,6 @@
-﻿using Application.Commands.Invitations.CreateInvitation;
-using Application.Providers;
-using Application.Queries.GetInvitationDetails;
+﻿using Application.Common.Interfaces;
+using Application.Invitations.Commands.CreateInvitation;
+using Application.Invitations.Queries.GetInvitationDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

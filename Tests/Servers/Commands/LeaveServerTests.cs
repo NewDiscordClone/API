@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.LeaveServer;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.LeaveServer;
 using Application.Models;
 using Tests.Common;
 

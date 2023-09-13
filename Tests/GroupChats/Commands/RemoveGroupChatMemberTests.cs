@@ -1,5 +1,5 @@
-﻿using Application.Commands.GroupChats.RemoveGroupChatMember;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.GroupChats.Commands.RemoveGroupChatMember;
 using Application.Models;
 using Tests.Common;
 

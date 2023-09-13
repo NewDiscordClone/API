@@ -1,5 +1,5 @@
 ﻿using Application.Common.Exceptions;
-using Application.Interfaces;
+using Application.Common.Interfaces;
 using Application.Models;
 using AutoMapper;
 using DataAccess;

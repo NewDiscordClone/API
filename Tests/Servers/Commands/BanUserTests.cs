@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.BanUser;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.BanUser;
 using Application.Models;
 using Tests.Common;
 

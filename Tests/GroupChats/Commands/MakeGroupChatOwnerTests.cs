@@ -1,5 +1,5 @@
-﻿using Application.Commands.GroupChats.MakeGroupChatOwner;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.GroupChats.Commands.MakeGroupChatOwner;
 using Application.Models;
 using Tests.Common;
 

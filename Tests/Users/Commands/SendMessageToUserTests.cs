@@ -1,6 +1,6 @@
-﻿using Application.Commands.Users.SendMessageToUser;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Models;
+using Application.Users.Commands.SendMessageToUser;
 using Tests.Common;
 
 namespace Tests.Users.Commands

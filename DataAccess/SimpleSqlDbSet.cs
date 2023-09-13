@@ -1,5 +1,5 @@
 ﻿using Application.Common.Exceptions;
-using Application.Interfaces;
+using Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

@@ -1,4 +1,4 @@
-﻿using Application.Commands.Channels.CreateChannel;
+﻿using Application.Channels.Commands.CreateChannel;
 using Application.Models;
 using Tests.Common;
 

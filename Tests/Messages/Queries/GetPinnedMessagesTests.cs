@@ -1,5 +1,5 @@
-﻿using Application.Models;
-using Application.Queries.GetPinnedMessages;
+﻿using Application.Messages.Queries.GetPinnedMessages;
+using Application.Models;
 using Tests.Common;
 
 namespace Tests.Messages.Queries

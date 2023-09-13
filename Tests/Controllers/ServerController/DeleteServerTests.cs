@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.DeleteServer;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.DeleteServer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tests.Common;

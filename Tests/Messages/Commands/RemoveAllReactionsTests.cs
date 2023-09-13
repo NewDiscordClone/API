@@ -1,4 +1,4 @@
-﻿using Application.Commands.Messages.RemoveAllReactions;
+﻿using Application.Messages.Commands.RemoveAllReactions;
 using Application.Models;
 using Tests.Common;
 

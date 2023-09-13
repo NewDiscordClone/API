@@ -1,5 +1,6 @@
-﻿using Application.Providers;
+﻿using Application.Common.Interfaces;
 using Application.Queries.GetUser;
+using Application.Users.Queries.GetUserDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using WebApi.Authorization.Requirements;

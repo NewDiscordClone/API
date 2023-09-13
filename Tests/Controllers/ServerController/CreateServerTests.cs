@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
-using Application.Commands.Servers.CreateServer;
-using Application.Queries.GetServerDetails;
+using Application.Common.Servers.Commands.CreateServer;
+using Application.Common.Servers.Queries.GetServerDetails;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

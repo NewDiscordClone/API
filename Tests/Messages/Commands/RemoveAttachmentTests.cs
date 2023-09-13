@@ -1,4 +1,4 @@
-﻿using Application.Commands.Messages.RemoveAttachment;
+﻿using Application.Messages.Commands.RemoveAttachment;
 using Application.Models;
 using Tests.Common;
 

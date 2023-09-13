@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.UpdateServer;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.UpdateServer;
 using Application.Models;
 using Tests.Common;
 
@@ -24,7 +24,7 @@ namespace Tests.Servers.Commands
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, UserProvider);
+            UpdateServerCommandHandler handler = new(Context, UserProvider);
 
             //Act
             Context.SetToken(CancellationToken);
@@ -52,7 +52,7 @@ namespace Tests.Servers.Commands
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerRequestHandler handler = new(Context, UserProvider);
+            UpdateServerCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

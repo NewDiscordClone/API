@@ -1,7 +1,7 @@
 ﻿using Application.Commands.UploadMedia;
 using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Models;
-using Application.Providers;
 using Application.Queries.GetMedia;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

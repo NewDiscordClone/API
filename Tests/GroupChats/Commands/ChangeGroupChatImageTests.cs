@@ -1,4 +1,4 @@
-﻿using Application.Commands.GroupChats.ChangeGroupChatImage;
+﻿using Application.GroupChats.Commands.ChangeGroupChatImage;
 using Application.Models;
 using Tests.Common;
 

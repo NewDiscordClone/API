@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.KickUser;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.KickUser;
 using Application.Models;
 using Tests.Common;
 

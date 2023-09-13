@@ -1,4 +1,4 @@
-﻿using Application.Commands.Channels.RemoveChannel;
+﻿using Application.Channels.Commands.RemoveChannel;
 using Application.Common.Exceptions;
 using Tests.Common;
 

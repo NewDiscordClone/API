@@ -1,4 +1,4 @@
-﻿using Application.Commands.Messages.UnpinMessage;
+﻿using Application.Messages.Commands.UnpinMessage;
 using Application.Models;
 using Tests.Common;
 

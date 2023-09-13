@@ -1,5 +1,5 @@
-﻿using Application.Hubs;
-using Application.Interfaces;
+﻿using Application.Common.Interfaces;
+using Application.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
 namespace WebApi.Providers

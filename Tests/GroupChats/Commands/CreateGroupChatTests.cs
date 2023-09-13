@@ -1,4 +1,4 @@
-﻿using Application.Commands.GroupChats.CreateGroupChat;
+﻿using Application.GroupChats.Commands.CreateGroupChat;
 using Application.Models;
 using Tests.Common;
 

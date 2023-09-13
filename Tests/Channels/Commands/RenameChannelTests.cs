@@ -1,4 +1,4 @@
-﻿using Application.Commands.Channels.RenameChannel;
+﻿using Application.Channels.Commands.RenameChannel;
 using Application.Common.Exceptions;
 using Application.Models;
 using Tests.Common;

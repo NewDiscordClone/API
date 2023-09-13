@@ -1,5 +1,5 @@
 ﻿using Application.Models;
-using Application.Queries.GetUser;
+using Application.Users.Queries.GetUserDetails;
 using Tests.Common;
 
 namespace Tests.Users.Queries

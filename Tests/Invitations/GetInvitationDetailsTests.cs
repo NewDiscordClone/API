@@ -1,6 +1,6 @@
 ﻿using Application.Common.Exceptions;
+using Application.Invitations.Queries.GetInvitationDetails;
 using Application.Models;
-using Application.Queries.GetInvitationDetails;
 using Tests.Common;
 
 namespace Tests.Invitations

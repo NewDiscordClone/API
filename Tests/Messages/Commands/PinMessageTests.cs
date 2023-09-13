@@ -1,4 +1,4 @@
-﻿using Application.Commands.Messages.PinMessage;
+﻿using Application.Messages.Commands.PinMessage;
 using Application.Models;
 using Tests.Common;
 

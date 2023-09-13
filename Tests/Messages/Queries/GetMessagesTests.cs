@@ -1,5 +1,5 @@
-﻿using Application.Models.LookUps;
-using Application.Queries.GetMessages;
+﻿using Application.Messages.Queries.GetMessages;
+using Application.Models.LookUps;
 using Tests.Common;
 
 namespace Tests.Messages.Queries

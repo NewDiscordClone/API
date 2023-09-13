@@ -1,5 +1,5 @@
 ﻿using Application.Common.Exceptions;
-using Application.Interfaces;
+using Application.Common.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Linq.Expressions;

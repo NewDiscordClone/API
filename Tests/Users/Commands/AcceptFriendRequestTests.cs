@@ -1,6 +1,6 @@
-﻿using Application.Commands.Users.AcceptFriendRequest;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Models;
+using Application.Users.Commands.AcceptFriendRequest;
 using Tests.Common;
 
 namespace Tests.Users.Commands

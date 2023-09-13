@@ -1,6 +1,5 @@
-﻿using Application.Common.Mapping;
-using Application.Interfaces;
-using Application.Providers;
+﻿using Application.Common.Interfaces;
+using Application.Common.Mapping;
 using AutoMapper;
 using MediatR;
 

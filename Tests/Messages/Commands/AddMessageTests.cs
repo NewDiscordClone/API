@@ -1,4 +1,4 @@
-﻿using Application.Commands.Messages.AddMessage;
+﻿using Application.Messages.Commands.AddMessage;
 using Application.Models;
 using Tests.Common;
 

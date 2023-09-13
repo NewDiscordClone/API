@@ -1,6 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Models;
-using Application.Queries.GetRelationships;
+using Application.Users.Queries.GetRelationships;
 using Tests.Common;
 
 namespace Tests.Users.Queries

@@ -1,5 +1,5 @@
 ﻿using Application.Common.Factories;
-using Application.Interfaces;
+using Application.Common.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 

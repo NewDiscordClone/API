@@ -1,5 +1,5 @@
-﻿using Application.Commands.GroupChats.LeaveFromGroupChat;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.GroupChats.Commands.LeaveFromGroupChat;
 using Application.Models;
 using Tests.Common;
 

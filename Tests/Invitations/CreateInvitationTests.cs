@@ -1,5 +1,5 @@
-﻿using Application.Commands.Invitations.CreateInvitation;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Invitations.Commands.CreateInvitation;
 using Application.Models;
 using Tests.Common;
 

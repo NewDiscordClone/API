@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.JoinServer;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.JoinServer;
 using Application.Models;
 using Tests.Common;
 

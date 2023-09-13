@@ -1,6 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Models;
-using Application.Providers;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 

@@ -1,4 +1,4 @@
-﻿using Application.Commands.Messages.AddReaction;
+﻿using Application.Messages.Commands.AddReaction;
 using Application.Models;
 using Tests.Common;
 

@@ -1,4 +1,4 @@
-﻿using Application.Providers;
+﻿using Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using WebApi.Authorization.Requirements;
 

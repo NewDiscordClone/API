@@ -1,4 +1,4 @@
-﻿using Application.Commands.GroupChats.RenameGroupChat;
+﻿using Application.GroupChats.Commands.RenameGroupChat;
 using Application.Models;
 using Tests.Common;
 

@@ -1,8 +1,7 @@
 using Application;
+using Application.Common.Interfaces;
 using Application.Common.Mapping;
 using Application.Hubs;
-using Application.Interfaces;
-using Application.Providers;
 using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

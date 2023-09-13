@@ -1,5 +1,5 @@
-﻿using Application.Common.Mapping;
-using Application.Interfaces;
+﻿using Application.Common.Interfaces;
+using Application.Common.Mapping;
 using AutoMapper;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;

@@ -1,5 +1,5 @@
-﻿using Application.Commands.GroupChats.AddMemberToGroupChat;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.GroupChats.Commands.AddMemberToGroupChat;
 using Application.Models;
 using Tests.Common;
 

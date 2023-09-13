@@ -1,6 +1,6 @@
 using Application.Commands.HubClients.Connection.Connect;
 using Application.Commands.HubClients.Connection.Disconnect;
-using Application.Providers;
+using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;

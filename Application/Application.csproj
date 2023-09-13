@@ -7,6 +7,7 @@
 	  <NoWarn>$(NoWarn);1591</NoWarn>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 		  <DocumentationFile>..\..\..\WebApi\bin\Debug\net7.0\Application.xml</DocumentationFile>
+		  <RootNamespace>Sparkle.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,10 +19,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.20" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.20" />
     <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands\HubClients\Connections" />
   </ItemGroup>
 
 </Project>

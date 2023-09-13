@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.CreateServer;
-using Application.Queries.GetServerDetails;
+﻿using Application.Common.Servers.Commands.CreateServer;
+using Application.Common.Servers.Queries.GetServerDetails;
 using Tests.Common;
 
 namespace Tests.Servers.Commands

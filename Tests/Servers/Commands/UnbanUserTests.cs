@@ -1,5 +1,5 @@
-﻿using Application.Commands.Servers.UnbanUser;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
+using Application.Common.Servers.Commands.UnbanUser;
 using Application.Models;
 using Tests.Common;
 
