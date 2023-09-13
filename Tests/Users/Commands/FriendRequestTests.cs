@@ -1,9 +1,9 @@
-﻿using Application.Commands.Users.FriendRequest;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Models;
+using Sparkle.Application.Users.Commands.FriendRequest;
+using Sparkle.Tests.Common;
 
-namespace Tests.Users.Commands
+namespace Sparkle.Tests.Users.Commands
 {
     public class FriendRequestTests : TestBase
     {
@@ -13,9 +13,10 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
+            
             string otherName = "user_c"; 
             Guid otherId = Ids.UserCId; 
-            
+
             SetAuthorizedUserId(userId);
 
             FriendRequestRequest request = new()
@@ -26,12 +27,12 @@ namespace Tests.Users.Commands
 
             //Act
             string? chatId = await handler.Handle(request, CancellationToken);
-            
+
             //Assert
             RelationshipList my = await Context.RelationshipLists.FindAsync(userId);
             RelationshipList other = await Context.RelationshipLists.FindAsync(otherId);
             Assert.NotEmpty(other.Relationships);
-            
+
             Relationship? myToOther = my.Relationships.Find(r => r.UserId == otherId);
             Relationship? otherToMe = other.Relationships.Find(r => r.UserId == userId);
             Assert.NotNull(myToOther);
@@ -51,9 +52,9 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            string otherName = "user_d"; 
-            Guid otherId = Ids.UserDId; 
             
+            string otherName = "user_d"; 
+
             SetAuthorizedUserId(userId);
 
             FriendRequestRequest request = new()
@@ -65,8 +66,8 @@ namespace Tests.Users.Commands
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(
-                async () =>await handler.Handle(request, CancellationToken));
-            
+                async () => await handler.Handle(request, CancellationToken));
+
         }
     }
 }

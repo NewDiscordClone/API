@@ -1,9 +1,8 @@
-﻿using Application.Commands.Messages.AddMessage;
-using Application.Models;
-using MongoDB.Driver;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Commands.AddMessage;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class AddMessageTests : TestBase
     {
@@ -62,7 +61,7 @@ namespace Tests.Messages.Commands
             AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            
+
             Message result = await handler.Handle(request, CancellationToken);
 
             //Assert

@@ -1,10 +1,9 @@
-﻿using Application.Commands.GroupChats.LeaveFromGroupChat;
-using Application.Common.Exceptions;
-using Application.Models;
-using MongoDB.Driver;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.GroupChats.Commands
+namespace Sparkle.Tests.GroupChats.Commands
 {
     public class LeaveFromGroupChatTests : TestBase
     {
@@ -13,7 +12,7 @@ namespace Tests.GroupChats.Commands
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat7;
+            string chatId = Ids.GroupChat7;
             Guid userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);
@@ -26,13 +25,13 @@ namespace Tests.GroupChats.Commands
             LeaveFromGroupChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
             //Assert
             Assert.DoesNotContain(chat.Users, user => user == userId);
-            var groupChat = chat as GroupChat;
+            GroupChat? groupChat = chat as GroupChat;
             Assert.NotNull(groupChat);
             Assert.NotEqual(userId, groupChat.OwnerId);
         }
@@ -42,7 +41,7 @@ namespace Tests.GroupChats.Commands
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat4;
+            string chatId = Ids.GroupChat4;
             Guid userId = Ids.UserAId;
 
             SetAuthorizedUserId(userId);
@@ -55,11 +54,11 @@ namespace Tests.GroupChats.Commands
             LeaveFromGroupChatRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
 
             //Assert
-            await Assert.ThrowsAsync<EntityNotFoundException>( 
+            await Assert.ThrowsAsync<EntityNotFoundException>(
                 async () => await Context.PersonalChats.FindAsync(chatId));
         }
         [Fact]
@@ -67,7 +66,7 @@ namespace Tests.GroupChats.Commands
         {
             //Arrange
             CreateDatabase();
-            var chatId = Ids.GroupChat4;
+            string chatId = Ids.GroupChat4;
             Guid userId = Ids.UserBId;
 
             SetAuthorizedUserId(userId);

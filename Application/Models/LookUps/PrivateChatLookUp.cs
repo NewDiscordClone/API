@@ -1,9 +1,9 @@
-﻿using Application.Interfaces;
-using AutoMapper;
+﻿using AutoMapper;
+using Sparkle.Application.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models.LookUps
+namespace Sparkle.Application.Models.LookUps
 {
     public record PrivateChatLookUp : IMapWith<GroupChat>
     {
@@ -43,7 +43,7 @@ namespace Application.Models.LookUps
                     opt =>
                         opt.Condition((_, _, title) => !string.IsNullOrWhiteSpace(title)));
         }
-        
+
         public PrivateChatLookUp() { }
 
         public PrivateChatLookUp(PersonalChat personalChat, UserLookUp other)

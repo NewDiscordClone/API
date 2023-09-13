@@ -1,8 +1,8 @@
-﻿using Application.Providers;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Interfaces;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     public abstract class ApiControllerBase : ControllerBase
     {

@@ -1,8 +1,8 @@
-﻿using Application.Common.Exceptions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Sparkle.Application.Common.Exceptions;
 
-namespace WebApi.Attributes
+namespace Sparkle.WebApi.Attributes
 {
     public class ExceptionFilterAttribute : Microsoft.AspNetCore.Mvc.Filters.ExceptionFilterAttribute
     {

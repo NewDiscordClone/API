@@ -1,9 +1,9 @@
-﻿using Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Sparkle.Application.Common.Interfaces;
 
-namespace WebApi.Attributes
+namespace Sparkle.WebApi.Attributes
 {
     public partial class ServerAuthorizeAttribute : ActionFilterAttribute
     {

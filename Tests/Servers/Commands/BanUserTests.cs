@@ -1,9 +1,9 @@
-﻿using Application.Commands.Servers.BanUser;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.BanUser;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class BanUserTests : TestBase
     {
@@ -17,20 +17,20 @@ namespace Tests.Servers.Commands
             int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
 
             SetAuthorizedUserId(Ids.UserCId);
-            
+
             BanUserRequest request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
             BanUserRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             await handler.Handle(request, CancellationToken);
 
             //Assert
             Server server = await Context.Servers.FindAsync(serverId);
-            Assert.Equal(oldCount-1, server.ServerProfiles.Count);
+            Assert.Equal(oldCount - 1, server.ServerProfiles.Count);
             Assert.DoesNotContain(server.ServerProfiles, sp => sp.UserId == userId);
             Assert.Contains(server.BannedUsers, user => user == userId);
         }
@@ -44,14 +44,14 @@ namespace Tests.Servers.Commands
             int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
 
             SetAuthorizedUserId(Ids.UserBId);
-            
+
             BanUserRequest request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
             BanUserRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(
@@ -71,14 +71,14 @@ namespace Tests.Servers.Commands
             int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
 
             SetAuthorizedUserId(Ids.UserCId);
-            
+
             BanUserRequest request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
             BanUserRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             await handler.Handle(request, CancellationToken);
             //Assert

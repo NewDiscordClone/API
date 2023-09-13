@@ -1,20 +1,19 @@
-#nullable enable
-using Application.Commands.HubClients.Messages.MessageAdded;
-using Application.Commands.HubClients.PrivateChats.PrivateChatSaved;
-using Application.Commands.Users.AcceptFriendRequest;
-using Application.Commands.Users.FriendRequest;
-using Application.Commands.Users.SendMessageToUser;
-using Application.Common.Exceptions;
-using Application.Models;
-using Application.Providers;
-using Application.Queries.GetRelationships;
-using Application.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Messages.MessageAdded;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
+using Sparkle.Application.Models;
+using Sparkle.Application.Users.Commands.AcceptFriendRequest;
+using Sparkle.Application.Users.Commands.FriendRequest;
+using Sparkle.Application.Users.Commands.SendMessageToUser;
+using Sparkle.Application.Users.Queries.GetRelationships;
+using Sparkle.Application.Users.Queries.GetUserDetails;
+using Sparkle.WebApi.Attributes;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ExceptionFilter]
@@ -45,7 +44,7 @@ namespace WebApi.Controllers
             try
             {
                 GetUserDetailsDto user = await Mediator.Send(new GetUserDetailsRequest
-                    { UserId = userId, ServerId = serverId });
+                { UserId = userId, ServerId = serverId });
                 return Ok(user);
             }
             catch (Exception e)
@@ -130,7 +129,10 @@ namespace WebApi.Controllers
             try
             {
                 string? newChat = await Mediator.Send(request);
-                if (newChat != null) await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = newChat });
+                
+                if (newChat != null) 
+                    await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = newChat });
+                
                 return NoContent();
             }
             catch (NoPermissionsException)

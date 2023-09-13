@@ -1,10 +1,9 @@
-﻿using Application.Common.Mapping;
-using Application.Interfaces;
-using Application.Providers;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Mapping;
 
-namespace Tests.Common
+namespace Sparkle.Tests.Common
 {
     public class TestBase : IDisposable
     {
@@ -50,7 +49,7 @@ namespace Tests.Common
             _mediator.Setup(mediator => mediator.Send(It.IsAny<TRequest>(), CancellationToken))
                 .Returns(handler.Handle(request, CancellationToken));
         }
-        public void AddMediatorHandler<TRequest, TResult>(TRequest request, IRequestHandler<TRequest, TResult>  handler)
+        public void AddMediatorHandler<TRequest, TResult>(TRequest request, IRequestHandler<TRequest, TResult> handler)
             where TRequest : IRequest<TResult>
         {
             _mediator.Setup(mediator => mediator.Send(It.IsAny<TRequest>(), CancellationToken))

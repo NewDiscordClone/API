@@ -1,112 +1,106 @@
-using Application;
-using Application.Common.Mapping;
-using Application.Hubs;
-using Application.Interfaces;
-using Application.Providers;
-using DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
+using Sparkle.Application;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Mapping;
+using Sparkle.DataAccess;
+using Sparkle.WebApi;
+using Sparkle.WebApi.Attributes;
+using Sparkle.WebApi.Authorization;
+using Sparkle.WebApi.Authorization.Handlers;
+using Sparkle.WebApi.Hubs;
+using Sparkle.WebApi.Providers;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using WebApi.Providers;
-using WebApi.Attributes;
-using WebApi.Authorization;
-using WebApi.Authorization.Handlers;
+using ExceptionFilterAttribute = Sparkle.WebApi.Attributes.ExceptionFilterAttribute;
 
-namespace WebApi
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+IServiceCollection services = builder.Services;
+
+services.AddApplication();
+
+services.AddControllers(options =>
 {
-    internal static class Program
+    options.Filters.Add<ExceptionFilterAttribute>();
+});
+
+services.AddDatabase(builder.Configuration);
+
+services.AddAutoMapper(config =>
+{
+    config.AddProfile(new AssemblyMappingProfile(
+        Assembly.GetExecutingAssembly()));
+    config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
+});
+
+services.AddAuthentication(config =>
     {
-        private static void Main(string[] args)
-        {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-            IServiceCollection services = builder.Services;
+        config.DefaultAuthenticateScheme =
+            JwtBearerDefaults.AuthenticationScheme;
+        config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = "https://localhost:7198";
+        options.Audience = "MessageApi";
+        options.RequireHttpsMetadata = false;
+    });
 
-            services.AddApplication();
-            services.AddControllers().AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.ContractResolver =
-                    new CamelCasePropertyNamesContractResolver();
-            });
-            services.AddDatabase(builder.Configuration);
+services.AddAuthorization();
 
-            services.AddAutoMapper(config =>
-            {
-                config.AddProfile(new AssemblyMappingProfile(
-                    Assembly.GetExecutingAssembly()));
-                config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
-            });
+services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
 
-            services.AddAuthentication(config =>
-                {
-                    config.DefaultAuthenticateScheme =
-                        JwtBearerDefaults.AuthenticationScheme;
-                    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = "https://localhost:7198";
-                    options.Audience = "MessageApi";
-                    options.RequireHttpsMetadata = false;
-                });
+services.AddScoped<IHubContextProvider, HubContextProvider>();
 
-            services.AddAuthorization();
+services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
+services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
+services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
+services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
 
-            services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
-            
-            services.AddScoped<IHubContextProvider, HubContextProvider>();
-            
-            services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
-            services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
-            services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
-            services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
+services.AddHttpContextAccessor();
 
-            services.AddHttpContextAccessor();
-            
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(policy =>
-                {
-                    policy.WithOrigins("http://localhost:3000")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>,
-                 SwaggerConfigurationOptions>();
-            services.AddSwaggerGen();
+services.AddTransient<IConfigureOptions<SwaggerGenOptions>,
+     SwaggerConfigurationOptions>();
+services.AddSwaggerGen();
 
-            builder.Services.AddSignalR();
+builder.Services.AddSignalR();
 
-            WebApplication app = builder.Build();
+WebApplication app = builder.Build();
 
-            app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-            app.UseCors();
+app.UseCors();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
-            app.MapControllers();
+app.MapControllers();
 
-            app.MapHub<ChatHub>("chat");
+app.MapHub<ChatHub>("chat");
 
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapSwagger();
-                app.UseSwaggerUI(option =>
-                {
-                    option.SwaggerEndpoint("/swagger/sparkle/swagger.json", "WebApi");
-                    option.DisplayRequestDuration();
-                });
-            }
-
-            app.Run();
-        }
-    }
+if (app.Environment.IsDevelopment())
+{
+    app.MapSwagger();
+    app.UseSwaggerUI(option =>
+    {
+        option.SwaggerEndpoint("/swagger/sparkle/swagger.json", "WebApi");
+        option.DisplayRequestDuration();
+    });
 }
+
+app.Run();

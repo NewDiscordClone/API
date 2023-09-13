@@ -1,9 +1,9 @@
-﻿using Application.Commands.Users.AcceptFriendRequest;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Models;
+using Sparkle.Application.Users.Commands.AcceptFriendRequest;
+using Sparkle.Tests.Common;
 
-namespace Tests.Users.Commands
+namespace Sparkle.Tests.Users.Commands
 {
     public class AcceptFriendRequestTests : TestBase
     {
@@ -13,8 +13,8 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserDId;
-            Guid otherId = Ids.UserBId; 
-            
+            Guid otherId = Ids.UserBId;
+
             SetAuthorizedUserId(userId);
 
             AcceptFriendRequestRequest request = new()
@@ -25,13 +25,13 @@ namespace Tests.Users.Commands
 
             //Act
             await handler.Handle(request, CancellationToken);
-            
+
             //Assert
             RelationshipList my = await Context.RelationshipLists.FindAsync(userId);
             RelationshipList other = await Context.RelationshipLists.FindAsync(otherId);
             Assert.NotEmpty(my.Relationships);
             Assert.NotEmpty(other.Relationships);
-            
+
             Relationship? myToOther = my.Relationships.Find(r => r.UserId == otherId);
             Relationship? otherToMe = other.Relationships.Find(r => r.UserId == userId);
             Assert.NotNull(myToOther);
@@ -45,8 +45,8 @@ namespace Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            Guid otherId = Ids.UserCId; 
-            
+            Guid otherId = Ids.UserCId;
+
             SetAuthorizedUserId(userId);
 
             AcceptFriendRequestRequest request = new()

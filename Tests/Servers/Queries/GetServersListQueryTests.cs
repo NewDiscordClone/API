@@ -1,7 +1,7 @@
-﻿using Application.Queries.GetServer;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Servers.Queries.GetServers;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Queries
+namespace Sparkle.Tests.Servers.Queries
 {
     public class GetServersListQueryTests : TestBase
     {
@@ -35,8 +35,8 @@ namespace Tests.Servers.Queries
             CancellationToken cancellationToken = CancellationToken.None;
 
             SetAuthorizedUserId(userId);
-            
-            GetServersRequestHandler handler = new(Context,UserProvider);
+
+            GetServersRequestHandler handler = new(Context, UserProvider);
 
             GetServersRequest request = new();
 

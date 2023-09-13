@@ -1,11 +1,11 @@
-﻿using Application.Commands.Servers.DeleteServer;
-using Application.Common.Exceptions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Tests.Common;
-using WebApi.Controllers;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.DeleteServer;
+using Sparkle.Tests.Common;
+using Sparkle.WebApi.Controllers;
 
-namespace Tests.Controllers.ServerController
+namespace Sparkle.Tests.Controllers.ServerController
 {
     public class DeleteServerTests : TestBase
     {
@@ -26,10 +26,10 @@ namespace Tests.Controllers.ServerController
                 ServerId = serverId,
             };
             DeleteServerRequestHandler handler = new(Context, UserProvider);
-            
+
             AddMediatorHandler(request, handler);
 
-            ServersController controller = new ServersController(Mediator, UserProvider);
+            ServersController controller = new(Mediator, UserProvider);
 
             //Act
             ActionResult result = await controller.DeleteServer(request);
@@ -59,11 +59,11 @@ namespace Tests.Controllers.ServerController
             };
             DeleteServerRequestHandler handler = new(Context, UserProvider);
 
-            
+
             AddMediatorHandler(request, handler);
 
-            ServersController controller = new ServersController(Mediator, UserProvider);
-            
+            ServersController controller = new(Mediator, UserProvider);
+
             //Act
             ActionResult result = await controller.DeleteServer(request);
             //Assert

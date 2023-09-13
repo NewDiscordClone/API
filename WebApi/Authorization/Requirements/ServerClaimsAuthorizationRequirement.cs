@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace WebApi.Authorization.Requirements
+namespace Sparkle.WebApi.Authorization.Requirements
 {
     public record ServerClaimsAuthorizationRequirement : IAuthorizationRequirement
     {

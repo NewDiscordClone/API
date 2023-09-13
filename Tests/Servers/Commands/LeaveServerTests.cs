@@ -1,9 +1,9 @@
-﻿using Application.Commands.Servers.LeaveServer;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.LeaveServer;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class LeaveServerTests : TestBase
     {
@@ -17,19 +17,19 @@ namespace Tests.Servers.Commands
             int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
 
             SetAuthorizedUserId(userId);
-            
+
             LeaveServerRequest request = new()
             {
                 ServerId = serverId
             };
             LeaveServerRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             await handler.Handle(request, CancellationToken);
 
             //Assert
             Server server = await Context.Servers.FindAsync(serverId);
-            Assert.Equal(oldCount-1, server.ServerProfiles.Count);
+            Assert.Equal(oldCount - 1, server.ServerProfiles.Count);
             Assert.DoesNotContain(server.ServerProfiles, sp => sp.UserId == userId);
         }
         [Fact]
@@ -42,13 +42,13 @@ namespace Tests.Servers.Commands
             int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
 
             SetAuthorizedUserId(userId);
-            
+
             LeaveServerRequest request = new()
             {
                 ServerId = serverId
             };
             LeaveServerRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(

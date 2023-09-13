@@ -1,9 +1,9 @@
-﻿using Application.Commands.Channels.RenameChannel;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Channels.Commands.RenameChannel;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Channels.Commands
+namespace Sparkle.Tests.Channels.Commands
 {
     public class RenameChannelTests : TestBase
     {
@@ -14,7 +14,7 @@ namespace Tests.Channels.Commands
             CreateDatabase();
             string channelId = Ids.Channel3;
             const string newTitle = "NewTitle";
-            
+
             SetAuthorizedUserId(Ids.UserCId);
 
             RenameChannelRequest request = new()
@@ -23,12 +23,12 @@ namespace Tests.Channels.Commands
                 NewTitle = newTitle,
             };
             RenameChannelRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
             Channel channel = await Context.Channels.FindAsync(channelId);
-            
+
             //Assert
             Assert.Equal(newTitle, channel.Title);
         }
@@ -39,7 +39,7 @@ namespace Tests.Channels.Commands
             CreateDatabase();
             string channelId = Ids.Channel3;
             const string newTitle = "NewTitle";
-            
+
             SetAuthorizedUserId(Ids.UserDId);
 
             RenameChannelRequest request = new()
@@ -48,10 +48,10 @@ namespace Tests.Channels.Commands
                 NewTitle = newTitle,
             };
             RenameChannelRequestHandler handler = new(Context, UserProvider);
-            
+
             //Act
             //Assert
-            
+
             await Assert.ThrowsAsync<NoPermissionsException>(async () =>
                 await handler.Handle(request, CancellationToken));
             Channel channel = await Context.Channels.FindAsync(channelId);

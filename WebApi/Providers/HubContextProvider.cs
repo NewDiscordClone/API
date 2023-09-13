@@ -1,8 +1,8 @@
-﻿using Application.Hubs;
-using Application.Interfaces;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.WebApi.Hubs;
 
-namespace WebApi.Providers
+namespace Sparkle.WebApi.Providers
 {
     public class HubContextProvider : IHubContextProvider
     {

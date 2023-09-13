@@ -1,9 +1,9 @@
-﻿using Application.Commands.Messages.EditMessage;
-using Application.Common.Exceptions;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Messages.Commands.EditMessage;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class EditMessageTests : TestBase
     {
@@ -12,7 +12,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
             string newText =
                 "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 
@@ -40,7 +40,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message1;
+            string messageId = Ids.Message1;
             string newText =
                 "Edited text https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
 

@@ -1,9 +1,9 @@
-﻿using Application.Common.Exceptions;
-using Application.Models;
-using Application.Queries.GetRelationships;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Models;
+using Sparkle.Application.Users.Queries.GetRelationships;
+using Sparkle.Tests.Common;
 
-namespace Tests.Users.Queries
+namespace Sparkle.Tests.Users.Queries
 {
     public class GetRelationshipsTests : TestBase
     {
@@ -13,7 +13,7 @@ namespace Tests.Users.Queries
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            
+
             SetAuthorizedUserId(userId);
 
             GetRelationshipRequest request = new();
@@ -35,14 +35,14 @@ namespace Tests.Users.Queries
                 );
             });
         }
-        
+
         [Fact]
         public async Task Success_Empty()
         {
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserCId;
-            
+
             SetAuthorizedUserId(userId);
 
             GetRelationshipRequest request = new();

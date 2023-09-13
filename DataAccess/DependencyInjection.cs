@@ -1,9 +1,9 @@
-﻿using Application.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sparkle.Application.Common.Interfaces;
 
-namespace DataAccess
+namespace Sparkle.DataAccess
 {
     public static class DependencyInjection
     {

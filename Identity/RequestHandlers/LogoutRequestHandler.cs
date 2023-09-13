@@ -1,10 +1,10 @@
-﻿using Application.Models;
-using Identity.Requests;
-using IdentityServer4.Services;
+﻿using IdentityServer4.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Sparkle.Application.Models;
+using Sparkle.Identity.Requests;
 
-namespace Identity.RequestHandlers
+namespace Sparkle.Identity.RequestHandlers
 {
     public class LogoutRequestHandler : IRequestHandler<LogoutRequest, string?>
     {

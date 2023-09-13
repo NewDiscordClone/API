@@ -1,10 +1,9 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace Application.Models
+namespace Sparkle.Application.Models
 {
     public class Invitation
     {
@@ -25,7 +24,7 @@ namespace Application.Models
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string ServerId { get; set; }
-        
+
         public DateTime? ExpireTime { get; set; }
     }
 }

@@ -1,8 +1,8 @@
-﻿using Application.Commands.Messages.UnpinMessage;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.Messages.Commands.UnpinMessage;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.Messages.Commands
+namespace Sparkle.Tests.Messages.Commands
 {
     public class UnpinMessageTests : TestBase
     {
@@ -11,7 +11,7 @@ namespace Tests.Messages.Commands
         {
             //Arrange
             CreateDatabase();
-            var messageId = Ids.Message2;
+            string messageId = Ids.Message2;
 
             SetAuthorizedUserId(Ids.UserAId);
 

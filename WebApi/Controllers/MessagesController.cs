@@ -1,27 +1,27 @@
-﻿using Application.Commands.HubClients.Messages.MessageAdded;
-using Application.Commands.HubClients.Messages.MessageRemoved;
-using Application.Commands.HubClients.Messages.MessageUpdated;
-using Application.Commands.Messages.AddMessage;
-using Application.Commands.Messages.AddReaction;
-using Application.Commands.Messages.EditMessage;
-using Application.Commands.Messages.PinMessage;
-using Application.Commands.Messages.RemoveAllReactions;
-using Application.Commands.Messages.RemoveAttachment;
-using Application.Commands.Messages.RemoveMessage;
-using Application.Commands.Messages.RemoveReaction;
-using Application.Commands.Messages.UnpinMessage;
-using Application.Common.Exceptions;
-using Application.Models;
-using Application.Models.LookUps;
-using Application.Providers;
-using Application.Queries.GetMessages;
-using Application.Queries.GetPinnedMessages;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Attributes;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Messages.MessageAdded;
+using Sparkle.Application.HubClients.Messages.MessageRemoved;
+using Sparkle.Application.HubClients.Messages.MessageUpdated;
+using Sparkle.Application.Messages.Commands.AddMessage;
+using Sparkle.Application.Messages.Commands.AddReaction;
+using Sparkle.Application.Messages.Commands.EditMessage;
+using Sparkle.Application.Messages.Commands.PinMessage;
+using Sparkle.Application.Messages.Commands.RemoveAllReactions;
+using Sparkle.Application.Messages.Commands.RemoveAttachment;
+using Sparkle.Application.Messages.Commands.RemoveMessage;
+using Sparkle.Application.Messages.Commands.RemoveReaction;
+using Sparkle.Application.Messages.Commands.UnpinMessage;
+using Sparkle.Application.Messages.Queries.GetMessages;
+using Sparkle.Application.Messages.Queries.GetPinnedMessages;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
+using Sparkle.WebApi.Attributes;
 
-namespace WebApi.Controllers
+namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ExceptionFilter]
@@ -55,7 +55,7 @@ namespace WebApi.Controllers
             try
             {
                 List<MessageDto> messages = await Mediator.Send(new GetMessagesRequest()
-                    { ChatId = chatId, MessagesCount = messagesCount });
+                { ChatId = chatId, MessagesCount = messagesCount });
                 return Ok(messages);
             }
             catch (EntityNotFoundException e)
@@ -118,7 +118,7 @@ namespace WebApi.Controllers
             try
             {
                 Message message = await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageAddedRequest { MessageId = message.Id});
+                await Mediator.Send(new NotifyMessageAddedRequest { MessageId = message.Id });
                 return Ok();
             }
             catch (NoPermissionsException e)
@@ -352,7 +352,7 @@ namespace WebApi.Controllers
             try
             {
                 Chat chat = await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = request.MessageId, ChatId = chat.Id});
+                await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = request.MessageId, ChatId = chat.Id });
                 return Ok();
             }
             catch (NoPermissionsException e)

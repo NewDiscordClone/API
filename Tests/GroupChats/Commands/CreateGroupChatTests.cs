@@ -1,8 +1,8 @@
-﻿using Application.Commands.GroupChats.CreateGroupChat;
-using Application.Models;
-using Tests.Common;
+﻿using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
+using Sparkle.Application.Models;
+using Sparkle.Tests.Common;
 
-namespace Tests.GroupChats.Commands
+namespace Sparkle.Tests.GroupChats.Commands
 {
     public class CreateGroupChatTests : TestBase
     {
@@ -25,7 +25,7 @@ namespace Tests.GroupChats.Commands
             CreateGroupChatRequestHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            
+
             string id = await handler.Handle(request, CancellationToken);
             GroupChat result = await Context.GroupChats.FindAsync(id);
 

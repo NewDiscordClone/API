@@ -1,10 +1,8 @@
-﻿using Application.Commands.Servers.DeleteServer;
-using Application.Common.Exceptions;
-using Application.Models;
-using Application.Providers;
-using Tests.Common;
+﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Servers.Commands.DeleteServer;
+using Sparkle.Tests.Common;
 
-namespace Tests.Servers.Commands
+namespace Sparkle.Tests.Servers.Commands
 {
     public class DeleteServerTests : TestBase
     {
@@ -16,7 +14,7 @@ namespace Tests.Servers.Commands
             Guid userId = Ids.UserAId;
             string serverId = Ids.Server1;
             long oldCount = await Context.Servers.CountAsync(s => true);
-            
+
             SetAuthorizedUserId(userId);
 
             DeleteServerRequest request = new()
@@ -26,7 +24,7 @@ namespace Tests.Servers.Commands
             DeleteServerRequestHandler handler = new(Context, UserProvider);
 
             //Act
-            
+
             await handler.Handle(request, CancellationToken);
 
             //Assert
@@ -46,7 +44,7 @@ namespace Tests.Servers.Commands
             string serverId = Ids.Server1;
 
             SetAuthorizedUserId(userId);
-            
+
             DeleteServerRequest request = new()
             {
                 ServerId = serverId,

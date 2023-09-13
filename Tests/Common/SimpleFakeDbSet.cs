@@ -1,12 +1,12 @@
-﻿using Application.Common.Exceptions;
-using Application.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Tests.Common
+namespace Sparkle.Tests.Common
 {
     public class SimpleFakeDbSet<TEntity> : ISimpleDbSet<TEntity> where TEntity : class
     {
@@ -111,7 +111,7 @@ namespace Tests.Common
             return result;
         }
     }
-    
+
     public class SimpleFakeDbSet<TEntity, TKey> : ISimpleDbSet<TEntity> where TEntity : class where TKey : notnull
     {
         public List<TEntity> Entitites { get; init; }
@@ -191,7 +191,8 @@ namespace Tests.Common
 
         private static TKey ConvertToId(object? id)
         {
-            if (id is not TKey key) throw new ArgumentException($"Id is not a string or {typeof(TKey).Name} instance");
+            if (id is not TKey key)
+                throw new ArgumentException($"Id is not a string or {typeof(TKey).Name} instance");
             return key;
         }
 

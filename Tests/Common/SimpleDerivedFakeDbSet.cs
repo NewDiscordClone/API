@@ -1,19 +1,18 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using Application.Common.Exceptions;
-using Application.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using ZstdSharp;
+using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces;
+using System.Linq.Expressions;
+using System.Reflection;
 
-namespace Tests.Common
+namespace Sparkle.Tests.Common
 {
-    public class SimpleDerivedFakeDbSet<T, TD> : ISimpleDbSet<TD> 
+    public class SimpleDerivedFakeDbSet<T, TD> : ISimpleDbSet<TD>
         where TD : class, T
         where T : class
     {
         public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
-        
+
         private SimpleFakeDbSet<T> _baseSet;
         public List<TD> Entitites => _baseSet.Entitites.OfType<TD>().ToList();
 
@@ -21,16 +20,18 @@ namespace Tests.Common
         {
             _baseSet = baseSet;
         }
-        
+
         public async Task<TD> FindAsync(object id)
         {
             ObjectId objectId = ConvertToId(id);
             return Entitites[FindIndex(objectId)];
         }
+
         public async Task<List<TD>> FilterAsync(Expression<Func<TD, bool>> expression)
         {
             return Entitites.FindAll(new Predicate<TD>(expression.Compile()) ??
-                throw new ArgumentException("Expression<Func<TEntity, bool>> is can't be cast to Predicate<TEntity>"));
+                                     throw new ArgumentException(
+                                         "Expression<Func<TEntity, bool>> is can't be cast to Predicate<TEntity>"));
         }
 
         public void AddMany(IEnumerable<TD> entities)
