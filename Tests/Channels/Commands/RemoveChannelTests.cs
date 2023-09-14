@@ -20,7 +20,7 @@ namespace Sparkle.Tests.Channels.Commands
             {
                 ChatId = channelId
             };
-            RemoveChannelRequestHandler handler = new(Context, UserProvider);
+            RemoveChannelCommandHandler handler = new(Context, UserProvider);
             //Act
             await handler.Handle(request, CancellationToken);
 
@@ -45,7 +45,7 @@ namespace Sparkle.Tests.Channels.Commands
             {
                 ChatId = channelId
             };
-            RemoveChannelRequestHandler handler = new(Context, UserProvider);
+            RemoveChannelCommandHandler handler = new(Context, UserProvider);
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(

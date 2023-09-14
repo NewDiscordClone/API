@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Channels.Commands.RemoveChannel
 {
-    public class RemoveChannelRequest : IRequest
+    public class RemoveChannelCommand : IRequest
     {
         /// <summary>
         /// Id of the channel to be removed 

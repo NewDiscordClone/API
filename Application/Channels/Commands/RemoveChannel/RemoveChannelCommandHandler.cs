@@ -6,13 +6,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Channels.Commands.RemoveChannel
 {
-    public class RemoveChannelRequestHandler : RequestHandlerBase, IRequestHandler<RemoveChannelRequest>
+    public class RemoveChannelCommandHandler : RequestHandlerBase, IRequestHandler<RemoveChannelCommand>
     {
-        public async Task Handle(RemoveChannelRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveChannelCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Channel chat = await Context.Channels.FindAsync(request.ChatId);
+            Channel chat = await Context.Channels.FindAsync(command.ChatId);
 
             //TODO: Перевірити що у юзера є відповідні права
             if (!chat.Users.Any(u => u == UserId))
@@ -21,7 +21,7 @@ namespace Sparkle.Application.Channels.Commands.RemoveChannel
             await Context.Chats.DeleteAsync(chat);
         }
 
-        public RemoveChannelRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
+        public RemoveChannelCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
             context, userProvider)
         {
         }

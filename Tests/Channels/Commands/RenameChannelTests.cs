@@ -22,7 +22,7 @@ namespace Sparkle.Tests.Channels.Commands
                 ChatId = channelId,
                 NewTitle = newTitle,
             };
-            RenameChannelRequestHandler handler = new(Context, UserProvider);
+            RenameChannelCommandHandler handler = new(Context, UserProvider);
 
             //Act
 
@@ -47,7 +47,7 @@ namespace Sparkle.Tests.Channels.Commands
                 ChatId = channelId,
                 NewTitle = newTitle,
             };
-            RenameChannelRequestHandler handler = new(Context, UserProvider);
+            RenameChannelCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

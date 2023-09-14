@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Channels.Commands.RenameChannel
 {
-    public record RenameChannelRequest : IRequest
+    public record RenameChannelCommand : IRequest
     {
         /// <summary>
         /// Id of the channel to be renamed
