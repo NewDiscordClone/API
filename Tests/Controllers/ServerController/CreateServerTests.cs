@@ -20,8 +20,8 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             SetAuthorizedUserId(userId);
 
-            CreateServerRequest request = new() { Title = serverName, Image = null };
-            CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
+            CreateServerCommand request = new() { Title = serverName, Image = null };
+            CreateServerCommandHandler handler = new(Context, UserProvider, Mapper);
 
             AddMediatorHandler(request, handler);
 
@@ -32,8 +32,8 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             //Assert
             CreatedResult createdResult = Assert.IsType<CreatedResult>(result.Result);
-            ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)
-                .Handle(new GetServerDetailsRequest() { ServerId = (string)createdResult.Value }, CancellationToken);
+            ServerDetailsDto resultServer = await new GetServerDetailsCommandHandler(Context, UserProvider, Mapper)
+                .Handle(new GetServerDetailsCommand() { ServerId = (string)createdResult.Value }, CancellationToken);
 
             Assert.Equal(serverName, resultServer.Title);
             Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);

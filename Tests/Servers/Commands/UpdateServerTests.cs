@@ -18,7 +18,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerRequest request = new()
+            UpdateServerCommand request = new()
             {
                 ServerId = serverId,
                 Image = null,
@@ -46,7 +46,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerRequest request = new()
+            UpdateServerCommand request = new()
             {
                 ServerId = serverId,
                 Image = null,

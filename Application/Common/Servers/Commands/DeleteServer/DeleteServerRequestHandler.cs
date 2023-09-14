@@ -5,10 +5,10 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Common.Servers.Commands.DeleteServer
 {
-    public class DeleteServerRequestHandler : RequestHandlerBase, IRequestHandler<DeleteServerRequest, Server>
+    public class DeleteServerRequestHandler : RequestHandlerBase, IRequestHandler<DeleteServerCommand, Server>
     {
 
-        public async Task<Server> Handle(DeleteServerRequest request, CancellationToken cancellationToken)
+        public async Task<Server> Handle(DeleteServerCommand request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 

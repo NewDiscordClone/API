@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Sparkle.Application.Common.Factories;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Mapping;
 using System.Reflection;
 
 namespace Sparkle.Application
@@ -12,6 +13,13 @@ namespace Sparkle.Application
             services.AddMediatR(config =>
             config.RegisterServicesFromAssembly(
                 Assembly.GetExecutingAssembly()));
+
+            services.AddAutoMapper(config =>
+            {
+                config.AddProfile(new AssemblyMappingProfile(
+                    Assembly.GetExecutingAssembly()));
+                config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
+            });
 
             services.AddScoped<IRoleFactory, RoleFactory>();
             return services;

@@ -17,11 +17,11 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            JoinServerRequest request = new()
+            JoinServerCommand request = new()
             {
                 InvitationId = invitationId
             };
-            JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
+            JoinServerCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act 
             await handler.Handle(request, CancellationToken);
@@ -42,11 +42,11 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            JoinServerRequest request = new()
+            JoinServerCommand request = new()
             {
                 InvitationId = invitationId
             };
-            JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
+            JoinServerCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act 
             //Assert
@@ -69,11 +69,11 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            JoinServerRequest request = new()
+            JoinServerCommand request = new()
             {
                 InvitationId = invitationId
             };
-            JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
+            JoinServerCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act 
             //Assert
@@ -93,11 +93,11 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            JoinServerRequest request = new()
+            JoinServerCommand request = new()
             {
                 InvitationId = invitationId
             };
-            JoinServerRequestHandler handler = new(Context, UserProvider, Mapper);
+            JoinServerCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act 
             //Assert

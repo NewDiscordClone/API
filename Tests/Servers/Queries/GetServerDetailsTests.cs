@@ -16,9 +16,9 @@ namespace Sparkle.Tests.Servers.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetServerDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetServerDetailsCommandHandler handler = new(Context, UserProvider, Mapper);
 
-            GetServerDetailsRequest request = new() { ServerId = serverId };
+            GetServerDetailsCommand request = new() { ServerId = serverId };
 
             //Act
             ServerDetailsDto result = await handler.Handle(request, cancellationToken);

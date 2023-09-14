@@ -20,7 +20,7 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerRequest request = new()
+            UpdateServerCommand request = new()
             {
                 ServerId = serverId,
                 Image = null,
@@ -53,7 +53,7 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerRequest request = new()
+            UpdateServerCommand request = new()
             {
                 ServerId = serverId,
                 Image = null,

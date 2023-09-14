@@ -17,7 +17,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            DeleteServerRequest request = new()
+            DeleteServerCommand request = new()
             {
                 ServerId = serverId,
             };
@@ -45,7 +45,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            DeleteServerRequest request = new()
+            DeleteServerCommand request = new()
             {
                 ServerId = serverId,
             };

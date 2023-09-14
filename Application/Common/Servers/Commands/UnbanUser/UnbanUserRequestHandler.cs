@@ -5,13 +5,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Common.Servers.Commands.UnbanUser
 {
-    public class UnbanUserRequestHandler : RequestHandlerBase, IRequestHandler<UnbanUserRequest>
+    public class UnbanUserRequestHandler : RequestHandlerBase, IRequestHandler<UnbanUserCommand>
     {
         public UnbanUserRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
         {
         }
 
-        public async Task Handle(UnbanUserRequest request, CancellationToken cancellationToken)
+        public async Task Handle(UnbanUserCommand request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             Server server = await Context.Servers.FindAsync(request.ServerId);

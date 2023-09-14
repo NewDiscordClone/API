@@ -17,15 +17,15 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            CreateServerRequest request = new() { Title = serverName, Image = null };
-            CreateServerRequestHandler handler = new(Context, UserProvider, Mapper);
+            CreateServerCommand request = new() { Title = serverName, Image = null };
+            CreateServerCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
 
             string result = await handler.Handle(request, CancellationToken);
             //Assert
-            ServerDetailsDto resultServer = await new GetServerDetailsRequestHandler(Context, UserProvider, Mapper)
-                .Handle(new GetServerDetailsRequest() { ServerId = result }, CancellationToken);
+            ServerDetailsDto resultServer = await new GetServerDetailsCommandHandler(Context, UserProvider, Mapper)
+                .Handle(new GetServerDetailsCommand() { ServerId = result }, CancellationToken);
 
             Assert.Equal(serverName, resultServer.Title);
             Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);

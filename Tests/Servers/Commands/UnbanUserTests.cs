@@ -18,7 +18,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            UnbanUserRequest request = new()
+            UnbanUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
@@ -45,7 +45,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserCId);
 
-            UnbanUserRequest request = new()
+            UnbanUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
