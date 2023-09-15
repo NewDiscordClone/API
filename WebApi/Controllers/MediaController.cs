@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Medias.Commands.UploadMedia;
 using Sparkle.Application.Medias.Queries.GetMedia;
@@ -9,8 +8,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [AllowAnonymous]
+    [Route("api/media")]
     public class MediaController : ApiControllerBase
     {
 
@@ -43,17 +41,12 @@ namespace Sparkle.WebApi.Controllers
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Index([FromRoute] string id, [FromQuery] bool details = false)
+        [AllowAnonymous]
+        public async Task<ActionResult> Get(string id, bool details = false)
         {
-            try
-            {
-                Media media = await Mediator.Send(new GetMediaRequest() { Id = id });//, Extension = ext 
-                return details ? Ok(media) : File(media.Data, media.ContentType);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            Media media = await Mediator.Send(new GetMediaQuery() { Id = id });
+
+            return details ? Ok(media) : File(media.Data, media.ContentType);
         }
 
 
@@ -62,27 +55,24 @@ namespace Sparkle.WebApi.Controllers
         /// Uploads the media file to the database
         /// </summary>
         /// <param name="file">
-        /// ```
         /// Length
         /// Filename
         /// ContentType
         /// BinaryData
-        /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="201">Created. Operation is successful</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
-        [Authorize]
         [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> Index([FromForm] IFormFile file)
+        public async Task<ActionResult> Upload(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
             if (file.Length >= _maxFileSizeMb * 1024 * 1024)
                 return BadRequest($"File is too big, please upload files less than {_maxFileSizeMb} MB");
-            Media media = await Mediator.Send(new UploadMediaRequest { File = file });
+            Media media = await Mediator.Send(new UploadMediaCommand { File = file });
             return Created($"{Request.Scheme}://{Request.Host}/api/Media/" + media.Id, "Operation is successful");
         }
     }

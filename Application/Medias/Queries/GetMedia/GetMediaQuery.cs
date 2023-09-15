@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Medias.Queries.GetMedia
 {
-    public record GetMediaRequest : IRequest<Media>
+    public record GetMediaQuery : IRequest<Media>
     {
         /// <summary>
         /// Id of the media recourse
