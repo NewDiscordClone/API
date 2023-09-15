@@ -1,5 +1,5 @@
-﻿using Sparkle.Application.Common.Servers.Commands.CreateServer;
-using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+﻿using Sparkle.Application.Servers.Commands.CreateServer;
+using Sparkle.Application.Servers.Queries.GetServerDetails;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands

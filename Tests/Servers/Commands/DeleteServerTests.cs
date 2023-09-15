@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.DeleteServer;
+using Sparkle.Application.Servers.Commands.DeleteServer;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands

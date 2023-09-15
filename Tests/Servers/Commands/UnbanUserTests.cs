@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.UnbanUser;
 using Sparkle.Application.Models;
+using Sparkle.Application.Servers.Commands.UnbanUser;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands

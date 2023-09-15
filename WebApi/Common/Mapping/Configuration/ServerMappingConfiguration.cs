@@ -1,6 +1,6 @@
 ﻿using Mapster;
-using Sparkle.Application.Common.Servers.Commands.ChangeServerProfileRoles;
-using Sparkle.Application.Common.Servers.Commands.UpdateServer;
+using Sparkle.Application.Servers.Commands.ChangeServerProfileRoles;
+using Sparkle.Application.Servers.Commands.UpdateServer;
 using Sparkle.Contracts.Servers;
 
 namespace Sparkle.WebApi.Common.Mapping.Configuration

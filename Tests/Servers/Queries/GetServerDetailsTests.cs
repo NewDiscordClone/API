@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+﻿using Sparkle.Application.Servers.Queries.GetServerDetails;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Queries

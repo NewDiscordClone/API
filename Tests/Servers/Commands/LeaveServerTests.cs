@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.LeaveServer;
 using Sparkle.Application.Models;
+using Sparkle.Application.Servers.Commands.LeaveServer;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands

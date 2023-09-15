@@ -2,8 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common.Servers.Commands.CreateServer;
-using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
+using Sparkle.Application.Servers.Commands.CreateServer;
+using Sparkle.Application.Servers.Queries.GetServerDetails;
 using Sparkle.Tests.Common;
 using Sparkle.WebApi.Controllers;
 using System.Reflection;
