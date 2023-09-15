@@ -2,7 +2,7 @@
 
 namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated
 {
-    public record NotifyPrivateChatCreatedRequest : IRequest
+    public record NotifyPrivateChatCreatedQuery : IRequest
     {
         public string ChatId { get; init; }
     }

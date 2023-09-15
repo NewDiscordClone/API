@@ -5,19 +5,20 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
 {
-    public class CreateGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatRequest, string>
+    public class CreateGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatCommand, string>
     {
-        public async Task<string> Handle(CreateGroupChatRequest request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
             List<Guid> users = new();
-            request.UsersId.ForEach(userId => users.Add(userId));
+            command.UsersId.ForEach(users.Add);
+            users.Add(UserId);
 
             GroupChat privateChat = new()
             {
-                Title = request.Title,
-                Image = request.Image,
+                Title = command.Title,
+                Image = command.Image,
                 Users = users,
                 OwnerId = UserId
             };
@@ -25,7 +26,7 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
             return (await Context.GroupChats.AddAsync(privateChat)).Id;
         }
 
-        public CreateGroupChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
     }

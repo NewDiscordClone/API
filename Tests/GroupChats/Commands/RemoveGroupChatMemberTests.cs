@@ -18,12 +18,12 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            RemoveGroupChatMemberRequest request = new()
+            RemoveGroupChatMemberCommand request = new()
             {
                 ChatId = chatId,
                 MemberId = removeMemberId
             };
-            RemoveGroupChatMemberRequestHandler handler =
+            RemoveGroupChatMemberCommandHandler handler =
                 new(Context, UserProvider);
 
             //Act
@@ -46,12 +46,12 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            RemoveGroupChatMemberRequest request = new()
+            RemoveGroupChatMemberCommand request = new()
             {
                 ChatId = chatId,
                 MemberId = removeMemberId
             };
-            RemoveGroupChatMemberRequestHandler handler =
+            RemoveGroupChatMemberCommandHandler handler =
                 new(Context, UserProvider);
 
             //Act

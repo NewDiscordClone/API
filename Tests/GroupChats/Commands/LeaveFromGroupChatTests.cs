@@ -17,12 +17,12 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(userId);
 
-            LeaveFromGroupChatRequest request = new()
+            LeaveFromGroupChatCommand request = new()
             {
                 ChatId = chatId,
             };
 
-            LeaveFromGroupChatRequestHandler handler = new(Context, UserProvider);
+            LeaveFromGroupChatCommandHandler handler = new(Context, UserProvider);
 
             //Act
 
@@ -46,12 +46,12 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(userId);
 
-            LeaveFromGroupChatRequest request = new()
+            LeaveFromGroupChatCommand request = new()
             {
                 ChatId = chatId,
             };
 
-            LeaveFromGroupChatRequestHandler handler = new(Context, UserProvider);
+            LeaveFromGroupChatCommandHandler handler = new(Context, UserProvider);
 
             //Act
 
@@ -71,12 +71,12 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(userId);
 
-            LeaveFromGroupChatRequest request = new()
+            LeaveFromGroupChatCommand request = new()
             {
                 ChatId = chatId,
             };
 
-            LeaveFromGroupChatRequestHandler handler = new(Context, UserProvider);
+            LeaveFromGroupChatCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

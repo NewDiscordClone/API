@@ -19,7 +19,7 @@ namespace Sparkle.Tests.Messages.Commands
             {
                 MessageId = messageId,
             };
-            UnpinMessageCommandHandler handler = new(Context, UserProvider);
+            UnpinMessageCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             MessageDto result = await handler.Handle(request, CancellationToken);

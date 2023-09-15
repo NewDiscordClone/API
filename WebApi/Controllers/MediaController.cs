@@ -10,7 +10,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [AllowAnonymous]
     public class MediaController : ApiControllerBase
     {
 

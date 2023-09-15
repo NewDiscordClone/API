@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember
 {
-    public record RemoveGroupChatMemberRequest : IRequest
+    public record RemoveGroupChatMemberCommand : IRequest
     {
         /// <summary>
         /// The unique identifier of the group chat to remove a member from.

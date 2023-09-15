@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat
 {
-    public record LeaveFromGroupChatRequest : IRequest
+    public record LeaveFromGroupChatCommand : IRequest
     {
         /// <summary>
         /// The unique identifier of the group chat to leave from.

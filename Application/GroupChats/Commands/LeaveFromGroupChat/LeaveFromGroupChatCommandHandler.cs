@@ -6,13 +6,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat
 {
-    public class LeaveFromGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<LeaveFromGroupChatRequest>
+    public class LeaveFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<LeaveFromGroupChatCommand>
     {
-        public async Task Handle(LeaveFromGroupChatRequest request, CancellationToken cancellationToken)
+        public async Task Handle(LeaveFromGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            GroupChat pchat = await Context.GroupChats.FindAsync(request.ChatId);
+            GroupChat pchat = await Context.GroupChats.FindAsync(command.ChatId);
             if (pchat is not GroupChat chat)
                 throw new Exception("This is not group chat");
 
@@ -35,7 +35,7 @@ namespace Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat
             }
         }
 
-        public LeaveFromGroupChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
+        public LeaveFromGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
             context, userProvider)
         {
         }

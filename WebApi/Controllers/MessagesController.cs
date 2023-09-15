@@ -71,8 +71,6 @@ namespace Sparkle.WebApi.Controllers
             return Ok(messages);
         }
 
-
-
         /// <summary>
         /// Adds message to the given chat and notify other members about it
         /// </summary>
@@ -136,7 +134,7 @@ namespace Sparkle.WebApi.Controllers
         /// This action can only be performed by the owner of the message
         /// </remarks>
         /// <param name="messageId">string ObjectId representation of the message to edit</param>
-        /// <param name="newMessage">New message text. May include links</param>
+        /// <param name="newMessage">New message text</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
@@ -151,6 +149,7 @@ namespace Sparkle.WebApi.Controllers
         {
             EditMessageCommand command = new() { MessageId = messageId, NewText = newMessage };
             await Mediator.Send(command);
+
             await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
 
             return NoContent();

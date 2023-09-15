@@ -6,22 +6,22 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
 {
-    public class RenameGroupChatRequestHandler : RequestHandlerBase, IRequestHandler<RenameGroupChatRequest>
+    public class RenameGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RenameGroupChatCommand>
     {
-        public async Task Handle(RenameGroupChatRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RenameGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            GroupChat chat = await Context.GroupChats.FindAsync(request.ChatId);
+            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId);
             if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
 
-            chat.Title = request.NewTitle;
+            chat.Title = command.NewTitle;
 
             await Context.GroupChats.UpdateAsync(chat);
         }
 
-        public RenameGroupChatRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
+        public RenameGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
             context, userProvider)
         {
         }

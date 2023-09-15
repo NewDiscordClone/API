@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
 {
-    public record CreateGroupChatRequest : IRequest<string>
+    public record CreateGroupChatCommand : IRequest<string>
     {
         /// <summary>
         /// The title of the group chat.

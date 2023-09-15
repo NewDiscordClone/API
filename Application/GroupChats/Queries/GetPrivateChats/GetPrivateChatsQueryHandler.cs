@@ -7,16 +7,16 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.GroupChats.Queries.GetPrivateChats
 {
-    public class GetPrivateChatsRequestHandler : RequestHandlerBase,
-        IRequestHandler<GetPrivateChatsRequest, List<PrivateChatLookUp>>
+    public class GetPrivateChatsQueryHandler : RequestHandlerBase,
+        IRequestHandler<GetPrivateChatsQuery, List<PrivateChatLookUp>>
     {
-        public GetPrivateChatsRequestHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
+        public GetPrivateChatsQueryHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
             IMapper mapper)
             : base(appDbContext, userProvider, mapper)
         {
         }
 
-        public async Task<List<PrivateChatLookUp>> Handle(GetPrivateChatsRequest request,
+        public async Task<List<PrivateChatLookUp>> Handle(GetPrivateChatsQuery query,
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);

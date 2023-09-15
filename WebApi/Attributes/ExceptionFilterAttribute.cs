@@ -8,13 +8,24 @@ namespace Sparkle.WebApi.Attributes
     {
         public override async Task OnExceptionAsync(ExceptionContext context)
         {
-            context.Result = context.Exception switch
+
+            Exception exception = context.Exception;
+            (int code, string message) = exception switch
             {
-                NoPermissionsException noPermissionsException => new ForbidResult(noPermissionsException.Message),
-                InvalidOperationException or ArgumentException => new BadRequestResult(),
-                EntityNotFoundException entityNotFoundException => new BadRequestObjectResult(entityNotFoundException.Id),
-                _ => throw context.Exception
+                InvalidOperationException or ArgumentException => (StatusCodes.Status400BadRequest, exception.Message),
+                EntityNotFoundException => (StatusCodes.Status404NotFound, exception.Message),
+                NoPermissionsException => (StatusCodes.Status403Forbidden, exception.Message),
+                _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
             };
+
+            ProblemDetails problemDetails = new()
+            {
+                Status = code,
+                Title = message,
+            };
+            context.Result = new ObjectResult(problemDetails);
+
+            context.ExceptionHandled = true;
 
             await base.OnExceptionAsync(context);
         }

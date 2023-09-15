@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application
+namespace Sparkle.Application.HubClients
 {
     public abstract class HubRequestHandlerBase : RequestHandlerBase
     {

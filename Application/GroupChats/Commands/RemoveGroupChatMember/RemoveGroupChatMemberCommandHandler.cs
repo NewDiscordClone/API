@@ -6,33 +6,33 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember
 {
-    public class RemoveGroupChatMemberRequestHandler : RequestHandlerBase,
-        IRequestHandler<RemoveGroupChatMemberRequest>
+    public class RemoveGroupChatMemberCommandHandler : RequestHandlerBase,
+        IRequestHandler<RemoveGroupChatMemberCommand>
     {
-        public async Task Handle(RemoveGroupChatMemberRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveGroupChatMemberCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            GroupChat pchat = await Context.GroupChats.FindAsync(request.ChatId);
+            GroupChat pchat = await Context.GroupChats.FindAsync(command.ChatId);
             if (pchat is not GroupChat chat)
                 throw new Exception("This is not group chat");
 
-            if (!chat.Users.Any(u => u == request.MemberId))
+            if (!chat.Users.Any(u => u == command.MemberId))
                 throw new NoSuchUserException();
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("You are not an owner of the chat");
-            if (UserId == request.MemberId)
+            if (UserId == command.MemberId)
                 throw new Exception("You can't remove yourself");
 
             //User member = await Context.FindSqlByIdAsync<User>(request.MemberId, cancellationToken);
-            if (!chat.Users.Contains(request.MemberId))
+            if (!chat.Users.Contains(command.MemberId))
                 throw new NoSuchUserException();
-            chat.Users.Remove(chat.Users.Find(u => u == request.MemberId));
+            chat.Users.Remove(chat.Users.Find(u => u == command.MemberId));
 
             await Context.GroupChats.UpdateAsync(chat);
         }
 
-        public RemoveGroupChatMemberRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :
+        public RemoveGroupChatMemberCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :
             base(context, userProvider)
         {
         }

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
@@ -25,8 +26,8 @@ namespace Sparkle.Application.Messages.Commands.UnpinMessage
             return Mapper.Map<MessageDto>(await Context.Messages.UpdateAsync(message));
         }
 
-        public UnpinMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
-            userProvider)
+        public UnpinMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
+            : base(context, userProvider, mapper)
         {
         }
     }

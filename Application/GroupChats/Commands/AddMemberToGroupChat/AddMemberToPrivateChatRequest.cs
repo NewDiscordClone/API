@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
 {
-    public record AddMemberToGroupChatRequest : IRequest
+    public record AddMemberToGroupChatCommand : IRequest
     {
         /// <summary>
         /// The unique identifier of the group chat to add a new member to

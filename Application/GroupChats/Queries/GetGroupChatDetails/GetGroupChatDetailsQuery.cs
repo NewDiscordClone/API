@@ -1,18 +1,18 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
+namespace Sparkle.Application.GroupChats.Queries.GetGroupChatDetails
 {
-    public class RenameGroupChatRequest : IRequest
+    public record GetGroupChatDetailsQuery : IRequest<GroupChat>
     {
+        /// <summary>
+        /// Id of the Group Chat
+        /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string ChatId { get; init; }
-
-        [Required]
-        [DefaultValue("NewTitle")]
-        public string NewTitle { get; init; }
     }
 }

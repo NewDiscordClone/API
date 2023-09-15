@@ -90,7 +90,7 @@ namespace Sparkle.WebApi.Controllers
             try
             {
                 MessageChatDto messageChat = await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = messageChat.ChatId });
+                await Mediator.Send(new NotifyPrivateChatCreatedQuery { ChatId = messageChat.ChatId });
                 await Mediator.Send(new NotifyMessageAddedQuery { MessageId = messageChat.MessageId });
                 return NoContent();
             }
@@ -131,7 +131,7 @@ namespace Sparkle.WebApi.Controllers
             {
                 string? newChat = await Mediator.Send(request);
                 if (newChat != null)
-                    await Mediator.Send(new NotifyPrivateChatCreatedRequest { ChatId = newChat });
+                    await Mediator.Send(new NotifyPrivateChatCreatedQuery { ChatId = newChat });
                 return NoContent();
             }
             catch (NoPermissionsException)
