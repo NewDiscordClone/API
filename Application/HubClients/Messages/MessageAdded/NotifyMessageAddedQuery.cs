@@ -2,7 +2,7 @@
 
 namespace Sparkle.Application.HubClients.Messages.MessageAdded
 {
-    public record NotifyMessageAddedRequest : IRequest
+    public record NotifyMessageAddedQuery : IRequest
     {
         public string MessageId { get; init; }
     }

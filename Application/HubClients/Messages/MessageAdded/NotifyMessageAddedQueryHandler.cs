@@ -6,12 +6,12 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.HubClients.Messages.MessageAdded
 {
-    public class NotifyMessageAddedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyMessageAddedRequest>
+    public class NotifyMessageAddedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyMessageAddedQuery>
     {
-        public async Task Handle(NotifyMessageAddedRequest request, CancellationToken cancellationToken)
+        public async Task Handle(NotifyMessageAddedQuery query, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
-            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Message message = await Context.Messages.FindAsync(query.MessageId);
             MessageDto messageDto = Mapper.Map<MessageDto>(message);
             messageDto.User = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(message.User));
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
@@ -21,7 +21,7 @@ namespace Sparkle.Application.HubClients.Messages.MessageAdded
             await SendAsync(ClientMethods.MessageAdded, messageDto, GetConnections(chat));
         }
 
-        public NotifyMessageAddedRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) :
+        public NotifyMessageAddedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) :
             base(hubContextProvider, context, mapper)
         { }
     }

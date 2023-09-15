@@ -16,11 +16,11 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            RemoveMessageRequest request = new()
+            RemoveMessageCommand request = new()
             {
                 MessageId = messageId,
             };
-            RemoveMessageRequestHandler handler = new(Context, UserProvider);
+            RemoveMessageCommandHandler handler = new(Context, UserProvider);
 
             //Act
 
@@ -40,11 +40,11 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            RemoveMessageRequest request = new()
+            RemoveMessageCommand request = new()
             {
                 MessageId = messageId,
             };
-            RemoveMessageRequestHandler handler = new(Context, UserProvider);
+            RemoveMessageCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

@@ -2,12 +2,12 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Messages.Commands.EditMessage
+namespace Sparkle.Application.Messages.Commands.AddReaction
 {
-    public record EditMessageRequest : IRequest
+    public record AddReactionCommand : IRequest
     {
         /// <summary>
-        /// Id of the message to edit
+        /// Id of the message to add a reaction to
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
@@ -15,13 +15,11 @@ namespace Sparkle.Application.Messages.Commands.EditMessage
         public string MessageId { get; init; }
 
         /// <summary>
-        /// New message text. May include links
+        /// Emoji code
         /// </summary>
         [Required]
-        [MaxLength(2000)]
-        [MinLength(1)]
-        [DefaultValue("NewTextString")]
-        public string NewText { get; init; }
+        [DefaultValue(":smile:")]
+        public string Emoji { get; init; }
     }
 
 }

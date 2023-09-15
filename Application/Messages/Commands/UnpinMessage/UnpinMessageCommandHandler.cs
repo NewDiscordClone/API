@@ -2,12 +2,13 @@
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Commands.UnpinMessage
 {
-    public class UnpinMessageRequestHandler : RequestHandlerBase, IRequestHandler<UnpinMessageRequest, Message>
+    public class UnpinMessageCommandHandler : RequestHandlerBase, IRequestHandler<UnpinMessageCommand, MessageDto>
     {
-        public async Task<Message> Handle(UnpinMessageRequest request, CancellationToken cancellationToken)
+        public async Task<MessageDto> Handle(UnpinMessageCommand request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -21,10 +22,10 @@ namespace Sparkle.Application.Messages.Commands.UnpinMessage
 
             message.IsPinned = false;
 
-            return await Context.Messages.UpdateAsync(message);
+            return Mapper.Map<MessageDto>(await Context.Messages.UpdateAsync(message));
         }
 
-        public UnpinMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
+        public UnpinMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
             userProvider)
         {
         }

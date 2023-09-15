@@ -17,12 +17,12 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            RemoveReactionRequest request = new()
+            RemoveReactionCommand request = new()
             {
                 MessageId = messageId,
                 ReactionIndex = reactionIndex
             };
-            RemoveReactionRequestHandler handler = new(Context, UserProvider);
+            RemoveReactionCommandHandler handler = new(Context, UserProvider);
 
             //Act
 
@@ -43,12 +43,12 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            RemoveReactionRequest request = new()
+            RemoveReactionCommand request = new()
             {
                 MessageId = messageId,
                 ReactionIndex = reactionIndex
             };
-            RemoveReactionRequestHandler handler = new(Context, UserProvider);
+            RemoveReactionCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

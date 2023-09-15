@@ -1,13 +1,14 @@
 ﻿using MediatR;
+using Sparkle.Application.Models.LookUps;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Messages.Commands.PinMessage
+namespace Sparkle.Application.Messages.Commands.UnpinMessage
 {
-    public record PinMessageRequest : IRequest
+    public record UnpinMessageCommand : IRequest<MessageDto>
     {
         /// <summary>
-        /// Id of the message to be pinned
+        /// Id of message to be unpinned
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]

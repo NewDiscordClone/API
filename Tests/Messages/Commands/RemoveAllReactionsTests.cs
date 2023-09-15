@@ -15,11 +15,11 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            RemoveAllReactionsRequest request = new()
+            RemoveAllReactionsCommand request = new()
             {
                 MessageId = messageId
             };
-            RemoveAllReactionsRequestHandler handler = new(Context, UserProvider);
+            RemoveAllReactionsCommandHandler handler = new(Context, UserProvider);
 
             //Act
 

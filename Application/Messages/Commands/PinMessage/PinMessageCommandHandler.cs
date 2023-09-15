@@ -5,13 +5,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.PinMessage
 {
-    public class PinMessageRequestHandler : RequestHandlerBase, IRequestHandler<PinMessageRequest>
+    public class PinMessageCommandHandler : RequestHandlerBase, IRequestHandler<PinMessageCommand>
     {
-        public async Task Handle(PinMessageRequest request, CancellationToken cancellationToken)
+        public async Task Handle(PinMessageCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Message message = await Context.Messages.FindAsync(command.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
 
@@ -25,7 +25,7 @@ namespace Sparkle.Application.Messages.Commands.PinMessage
             await Context.Messages.UpdateAsync(message);
         }
 
-        public PinMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
+        public PinMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
             userProvider)
         {
         }

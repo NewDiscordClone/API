@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Messages.Commands.RemoveMessage
 {
-    public record RemoveMessageRequest : IRequest<Chat>
+    public record RemoveMessageCommand : IRequest<Chat>
     {
         /// <summary>
         /// Id of the message to remove

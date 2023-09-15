@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Messages.Queries.GetMessages
 {
-    public record GetMessagesRequest : IRequest<List<MessageDto>>
+    public record GetMessagesQuery : IRequest<List<MessageDto>>
     {
         /// <summary>
         /// The unique identifier of the chat from which to retrieve messages.

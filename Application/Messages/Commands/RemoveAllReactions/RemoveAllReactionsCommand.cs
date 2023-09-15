@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
 {
-    public record RemoveAllReactionsRequest : IRequest
+    public record RemoveAllReactionsCommand : IRequest
     {
         /// <summary>
         /// Id of the message for which all reactions should be removed

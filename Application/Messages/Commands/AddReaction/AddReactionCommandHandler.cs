@@ -7,13 +7,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.AddReaction
 {
-    public class AddReactionRequestHandler : RequestHandlerBase, IRequestHandler<AddReactionRequest>
+    public class AddReactionCommandHandler : RequestHandlerBase, IRequestHandler<AddReactionCommand>
     {
-        public async Task Handle(AddReactionRequest request, CancellationToken cancellationToken)
+        public async Task Handle(AddReactionCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Message message = await Context.Messages.FindAsync(command.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
             if (!chat.Users.Any(u => u == UserId))
@@ -22,13 +22,13 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
             Reaction reaction = new()
             {
                 User = UserId,
-                Emoji = request.Emoji,
+                Emoji = command.Emoji,
             };
 
             await Context.Messages.UpdateAsync(message);
         }
 
-        public AddReactionRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
+        public AddReactionCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
             base(context, userProvider, mapper)
         {
         }

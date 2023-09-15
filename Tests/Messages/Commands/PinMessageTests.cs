@@ -15,11 +15,11 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            PinMessageRequest request = new()
+            PinMessageCommand request = new()
             {
                 MessageId = messageId
             };
-            PinMessageRequestHandler handler = new(Context, UserProvider);
+            PinMessageCommandHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);

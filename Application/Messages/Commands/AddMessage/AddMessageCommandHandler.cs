@@ -3,12 +3,13 @@ using MediatR;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Commands.AddMessage
 {
-    public class AddMessageRequestHandler : RequestHandlerBase, IRequestHandler<AddMessageRequest, Message>
+    public class AddMessageCommandHandler : RequestHandlerBase, IRequestHandler<AddMessageCommand, MessageDto>
     {
-        public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
+        public async Task<MessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -39,10 +40,10 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
                 User = UserId,
                 Attachments = attachments
             };
-            return await Context.Messages.AddAsync(message);
+            return Mapper.Map<MessageDto>(await Context.Messages.AddAsync(message));
         }
 
-        public AddMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
+        public AddMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
             base(context, userProvider, mapper)
         {
         }

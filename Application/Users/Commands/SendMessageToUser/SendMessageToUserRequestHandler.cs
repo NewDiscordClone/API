@@ -53,7 +53,7 @@ namespace Sparkle.Application.Users.Commands.SendMessageToUser
                     request.UserId,
                 }
             });
-            Message message = await new AddMessageRequestHandler(Context, UserProvider, Mapper).Handle(new AddMessageRequest
+            Message message = await new AddMessageCommandHandler(Context, UserProvider, Mapper).Handle(new AddMessageCommand
             {
                 ChatId = chat.Id,
                 Text = request.Text,

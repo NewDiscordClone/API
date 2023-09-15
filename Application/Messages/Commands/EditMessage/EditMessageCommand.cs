@@ -2,12 +2,12 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Messages.Commands.RemoveReaction
+namespace Sparkle.Application.Messages.Commands.EditMessage
 {
-    public class RemoveReactionRequest : IRequest
+    public record EditMessageCommand : IRequest
     {
         /// <summary>
-        /// Id of the message to which the reaction is attached
+        /// Id of the message to edit
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
@@ -15,10 +15,13 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
         public string MessageId { get; init; }
 
         /// <summary>
-        /// Index of the reaction in the message's reactions collection
+        /// New message text. May include links
         /// </summary>
         [Required]
-        [DefaultValue(0)]
-        public int ReactionIndex { get; init; }
+        [MaxLength(2000)]
+        [MinLength(1)]
+        [DefaultValue("NewTextString")]
+        public string NewText { get; init; }
     }
+
 }

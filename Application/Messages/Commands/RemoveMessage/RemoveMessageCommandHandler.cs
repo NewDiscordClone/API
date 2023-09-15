@@ -5,13 +5,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.RemoveMessage
 {
-    public class RemoveMessageRequestHandler : RequestHandlerBase, IRequestHandler<RemoveMessageRequest, Chat>
+    public class RemoveMessageCommandHandler : RequestHandlerBase, IRequestHandler<RemoveMessageCommand, Chat>
     {
-        public async Task<Chat> Handle(RemoveMessageRequest request, CancellationToken cancellationToken)
+        public async Task<Chat> Handle(RemoveMessageCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Message message = await Context.Messages.FindAsync(command.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
             if (message.User != UserId)
@@ -31,7 +31,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveMessage
             return chat;
         }
 
-        public RemoveMessageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
+        public RemoveMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
             userProvider)
         {
         }

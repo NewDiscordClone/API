@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 {
-    public record GetPinnedMessagesRequest : IRequest<List<Message>>
+    public record GetPinnedMessagesQuery : IRequest<List<MessageDto>>
     {
         /// <summary>
         /// The unique identifier of the chat retrieve pinned messages from.

@@ -16,13 +16,13 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            AddReactionRequest request = new()
+            AddReactionCommand request = new()
             {
                 Emoji = emoji,
                 MessageId = messageId
             };
 
-            AddReactionRequestHandler handler = new(Context, UserProvider, Mapper);
+            AddReactionCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             await handler.Handle(request, CancellationToken);

@@ -16,13 +16,13 @@ namespace Sparkle.Tests.Messages.Queries
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            GetMessagesRequest request = new()
+            GetMessagesQuery request = new()
             {
                 ChatId = chatId,
                 MessagesCount = messagesCount
             };
 
-            GetMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetMessagesQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<MessageDto> result = await handler.Handle(request, CancellationToken);
@@ -41,13 +41,13 @@ namespace Sparkle.Tests.Messages.Queries
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            GetMessagesRequest request = new()
+            GetMessagesQuery request = new()
             {
                 ChatId = chatId,
                 MessagesCount = messagesCount
             };
 
-            GetMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetMessagesQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<MessageDto> result = await handler.Handle(request, CancellationToken);

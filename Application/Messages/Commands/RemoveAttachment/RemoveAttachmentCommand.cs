@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAttachment
 {
-    public record RemoveAttachmentRequest : IRequest
+    public record RemoveAttachmentCommand : IRequest
     {
         /// <summary>
         /// Id of the message to which the attachment is attached

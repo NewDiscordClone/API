@@ -10,4 +10,8 @@
 	  <DocumentationFile>..\..\..\WebApi\bin\Debug\net7.0\Contracts.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
+  </ItemGroup>
+
 </Project>

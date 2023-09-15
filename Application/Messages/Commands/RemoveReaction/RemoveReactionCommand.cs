@@ -2,12 +2,12 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Messages.Commands.AddReaction
+namespace Sparkle.Application.Messages.Commands.RemoveReaction
 {
-    public record AddReactionRequest : IRequest
+    public class RemoveReactionCommand : IRequest
     {
         /// <summary>
-        /// Id of the message to add a reaction to
+        /// Id of the message to which the reaction is attached
         /// </summary>
         [Required]
         [StringLength(24, MinimumLength = 24)]
@@ -15,11 +15,10 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
         public string MessageId { get; init; }
 
         /// <summary>
-        /// Emoji code
+        /// Index of the reaction in the message's reactions collection
         /// </summary>
         [Required]
-        [DefaultValue(":smile:")]
-        public string Emoji { get; init; }
+        [DefaultValue(0)]
+        public int ReactionIndex { get; init; }
     }
-
 }

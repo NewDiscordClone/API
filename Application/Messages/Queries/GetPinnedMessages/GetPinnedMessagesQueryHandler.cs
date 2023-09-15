@@ -3,26 +3,28 @@ using MediatR;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 {
-    public class GetPinnedMessagesRequestHandler : RequestHandlerBase,
-        IRequestHandler<GetPinnedMessagesRequest, List<Message>>
+    public class GetPinnedMessagesQueryHandler : RequestHandlerBase,
+        IRequestHandler<GetPinnedMessagesQuery, List<MessageDto>>
     {
-        public async Task<List<Message>> Handle(GetPinnedMessagesRequest request,
+        public async Task<List<MessageDto>> Handle(GetPinnedMessagesQuery query,
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Chat chat = await Context.Chats.FindAsync(request.ChatId);
+            Chat chat = await Context.Chats.FindAsync(query.ChatId);
 
             if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
 
-            return await Context.GetPinnedMessagesAsync(chat.Id);
+            List<Message> messages = await Context.GetPinnedMessagesAsync(chat.Id);
+            return messages.ConvertAll(Mapper.Map<MessageDto>);
         }
 
-        public GetPinnedMessagesRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
+        public GetPinnedMessagesQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
             IMapper mapper) : base(
             context, userProvider, mapper)
         {

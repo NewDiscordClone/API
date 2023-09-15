@@ -15,11 +15,11 @@ namespace Sparkle.Tests.Messages.Queries
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            GetPinnedMessagesRequest request = new()
+            GetPinnedMessagesQuery request = new()
             {
                 ChatId = chatId
             };
-            GetPinnedMessagesRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetPinnedMessagesQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
 

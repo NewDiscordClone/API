@@ -4,13 +4,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
 {
-    public class RemoveAllReactionsRequestHandler : RequestHandlerBase, IRequestHandler<RemoveAllReactionsRequest>
+    public class RemoveAllReactionsCommandHandler : RequestHandlerBase, IRequestHandler<RemoveAllReactionsCommand>
     {
-        public async Task Handle(RemoveAllReactionsRequest request, CancellationToken cancellationToken)
+        public async Task Handle(RemoveAllReactionsCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(request.MessageId);
+            Message message = await Context.Messages.FindAsync(command.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
             message.Reactions = new List<Reaction>();
@@ -18,7 +18,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
             await Context.Messages.UpdateAsync(message);
         }
 
-        public RemoveAllReactionsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
+        public RemoveAllReactionsCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
             context, userProvider)
         {
         }
