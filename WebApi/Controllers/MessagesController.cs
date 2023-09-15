@@ -97,7 +97,7 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> AddMessage(string chatId, AddMessageRequest request)
         {
             AddMessageCommand command = _mapper.Map<AddMessageCommand>((request, chatId));
-            Message message = await Mediator.Send(command);
+            MessageDto message = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyMessageAddedQuery { MessageId = message.Id });
 
