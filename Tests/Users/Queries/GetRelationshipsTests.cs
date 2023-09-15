@@ -16,8 +16,8 @@ namespace Sparkle.Tests.Users.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetRelationshipRequest request = new();
-            GetRelationshipRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetRelationshipQuery request = new();
+            GetRelationshipQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<RelationshipDto> result = await handler.Handle(request, CancellationToken);
@@ -45,8 +45,8 @@ namespace Sparkle.Tests.Users.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetRelationshipRequest request = new();
-            GetRelationshipRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetRelationshipQuery request = new();
+            GetRelationshipQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<RelationshipDto> result = await handler.Handle(request, CancellationToken);

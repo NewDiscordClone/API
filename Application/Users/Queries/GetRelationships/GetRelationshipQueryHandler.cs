@@ -6,18 +6,19 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Users.Queries.GetRelationships
 {
-    public class GetRelationshipRequestHandler : RequestHandlerBase,
-        IRequestHandler<GetRelationshipRequest, List<RelationshipDto>>
+    public class GetRelationshipQueryHandler : RequestHandlerBase,
+        IRequestHandler<GetRelationshipQuery, List<RelationshipDto>>
     {
-        public GetRelationshipRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
+        public GetRelationshipQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
             IMapper mapper) : base(context, userProvider, mapper)
         {
         }
 
-        public async Task<List<RelationshipDto>> Handle(GetRelationshipRequest request,
+        public async Task<List<RelationshipDto>> Handle(GetRelationshipQuery query,
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
+
             RelationshipList? relationships =
                 await Context.RelationshipLists.FindOrDefaultAsync(UserId) ??
                 new RelationshipList()
@@ -25,16 +26,13 @@ namespace Sparkle.Application.Users.Queries.GetRelationships
                     Id = UserId,
                     Relationships = new List<Relationship>()
                 };
-            List<RelationshipDto> relationshipDtos = new();
-            foreach (Relationship relationship in relationships.Relationships)
-            {
-                relationshipDtos.Add(new RelationshipDto()
+
+            List<RelationshipDto> relationshipDtos = relationships.Relationships
+                .ConvertAll(relationship => new RelationshipDto()
                 {
-                    User = Mapper.Map<UserLookUp>(
-                        await Context.SqlUsers.FindAsync(relationship.UserId)),
+                    User = Mapper.Map<UserLookUp>(Context.SqlUsers.FindAsync(relationship.UserId)),
                     RelationshipType = relationship.RelationshipType
                 });
-            }
 
             return relationshipDtos;
         }

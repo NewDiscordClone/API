@@ -5,21 +5,21 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Commands.AcceptFriendRequest
 {
-    public class AcceptFriendRequestRequestHandler : RequestHandlerBase, IRequestHandler<AcceptFriendRequestRequest>
+    public class AcceptFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<AcceptFriendRequestCommand>
     {
-        public AcceptFriendRequestRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
+        public AcceptFriendRequestCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
             context, userProvider)
         {
         }
 
-        public async Task Handle(AcceptFriendRequestRequest request, CancellationToken cancellationToken)
+        public async Task Handle(AcceptFriendRequestCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             RelationshipList? userRelationship = await FindOrCreateRelationshipsAsync(UserId);
-            RelationshipList? otherRelationship = await FindOrCreateRelationshipsAsync(request.UserId);
+            RelationshipList? otherRelationship = await FindOrCreateRelationshipsAsync(command.UserId);
 
             Relationship? otherToUser = otherRelationship.Relationships.Find(r => r.UserId == UserId);
-            Relationship? userToOther = userRelationship.Relationships.Find(r => r.UserId == request.UserId);
+            Relationship? userToOther = userRelationship.Relationships.Find(r => r.UserId == command.UserId);
             if (userToOther is { RelationshipType: RelationshipType.Pending } &&
                 otherToUser is { RelationshipType: RelationshipType.Waiting })
             {

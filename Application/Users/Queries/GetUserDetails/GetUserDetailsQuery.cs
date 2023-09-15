@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Users.Queries.GetUserDetails
 {
-    public record GetUserDetailsRequest : IRequest<GetUserDetailsDto>
+    public record GetUserDetailsQuery : IRequest<GetUserDetailsDto>
     {
         /// <summary>
         /// The unique identifier of the user to retrieve details for

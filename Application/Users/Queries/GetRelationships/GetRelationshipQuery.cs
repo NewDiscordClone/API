@@ -2,6 +2,6 @@
 
 namespace Sparkle.Application.Users.Queries.GetRelationships
 {
-    public record GetRelationshipRequest()
+    public record GetRelationshipQuery()
         : IRequest<List<RelationshipDto>>;
 }

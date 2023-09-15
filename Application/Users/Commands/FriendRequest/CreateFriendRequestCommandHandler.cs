@@ -5,14 +5,14 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Commands.FriendRequest
 {
-    public class FriendRequestRequestHandler : RequestHandlerBase, IRequestHandler<FriendRequestRequest, string?>
+    public class CreateFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<CreateFriendRequestCommand, string?>
     {
-        public FriendRequestRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
+        public CreateFriendRequestCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
             userProvider)
         {
         }
 
-        public async Task<string?> Handle(FriendRequestRequest request, CancellationToken cancellationToken)
+        public async Task<string?> Handle(CreateFriendRequestCommand request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -60,7 +60,7 @@ namespace Sparkle.Application.Users.Commands.FriendRequest
                 userToOther.RelationshipType = RelationshipType.Waiting;
             await Context.RelationshipLists.UpdateAsync(userRelationship);
 
-            return chat == null ? null : chat.Id;
+            return chat?.Id;
         }
 
         private async Task<RelationshipList> FindOrCreateRelationshipsAsync(Guid id)

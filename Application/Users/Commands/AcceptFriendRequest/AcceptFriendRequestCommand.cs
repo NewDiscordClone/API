@@ -2,7 +2,7 @@
 
 namespace Sparkle.Application.Users.Commands.AcceptFriendRequest
 {
-    public record AcceptFriendRequestRequest : IRequest
+    public record AcceptFriendRequestCommand : IRequest
     {
         /// <summary>
         /// The unique identifier of the user who sent the friend request to accept it

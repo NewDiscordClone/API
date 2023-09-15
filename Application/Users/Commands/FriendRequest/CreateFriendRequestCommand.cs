@@ -2,7 +2,7 @@
 
 namespace Sparkle.Application.Users.Commands.FriendRequest
 {
-    public record FriendRequestRequest : IRequest<string?>
+    public record CreateFriendRequestCommand : IRequest<string?>
     {
         /// <summary>
         /// The unique identifier of the user to send a friend request to.
