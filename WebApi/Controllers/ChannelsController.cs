@@ -22,8 +22,8 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Create a text channel attached to a server
         /// </summary>
-        /// <param name="request">
-        /// Request body
+        ///<param name="name">Name of the channel to be created</param>
+        ///<param name="serverId">Id of the server to attach the channel to</param>
         /// </param>
         /// <returns>
         /// String that represents ObjectId of the created Channel instance
@@ -32,10 +32,17 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<string>> CreateChannel(CreateChannelRequest request)
+        public async Task<ActionResult<string>> CreateChannel(string serverId, [Required] string name)
         {
-            string chatId = await Mediator.Send(request);
+            CreateChannelCommand command = new()
+            {
+                ServerId = serverId,
+                Title = name
+            };
+            string chatId = await Mediator.Send(command);
+
             await Mediator.Send(new NotifyChannelCreatedRequest { ChannelId = chatId });
+
             return Created("", chatId);
         }
 

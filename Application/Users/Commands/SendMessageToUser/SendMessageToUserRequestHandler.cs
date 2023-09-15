@@ -4,6 +4,7 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Messages.Commands.AddMessage;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Users.Commands.SendMessageToUser
 {
@@ -53,7 +54,7 @@ namespace Sparkle.Application.Users.Commands.SendMessageToUser
                     request.UserId,
                 }
             });
-            Message message = await new AddMessageCommandHandler(Context, UserProvider, Mapper).Handle(new AddMessageCommand
+            MessageDto message = await new AddMessageCommandHandler(Context, UserProvider, Mapper).Handle(new AddMessageCommand
             {
                 ChatId = chat.Id,
                 Text = request.Text,

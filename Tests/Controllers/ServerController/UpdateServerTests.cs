@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MapsterMapper;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common.Servers.Commands.UpdateServer;
 using Sparkle.Application.Models;
+using Sparkle.Contracts.Servers;
 using Sparkle.Tests.Common;
 using Sparkle.WebApi.Controllers;
+using System.Reflection;
 
 namespace Sparkle.Tests.Controllers.ServerController
 {
@@ -20,20 +23,20 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerCommand request = new()
+            UpdateServerRequest request = new()
             {
-                ServerId = serverId,
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerCommandHandler handler = new(Context, UserProvider);
 
-            AddMediatorHandler(request, handler);
+            Mock<IMediator> mockMediator = new();
+            Mock<IMapper> mockMapper = new();
+            mockMapper.Object.Config.Scan(Assembly.GetExecutingAssembly());
 
-            ServersController controller = new(Mediator, UserProvider);
+            ServersController controller = new(mockMediator.Object, UserProvider, mockMapper.Object);
 
             //Act
-            ActionResult result = await controller.UpdateServer(request);
+            ActionResult result = await controller.UpdateServer(serverId, request);
 
             //Assert
             NoContentResult noContent = Assert.IsType<NoContentResult>(result);
@@ -53,22 +56,22 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerCommand request = new()
+            UpdateServerRequest request = new()
             {
-                ServerId = serverId,
                 Image = null,
                 Title = newTitle
             };
-            UpdateServerCommandHandler handler = new(Context, UserProvider);
+            Mock<IMediator> mockMediator = new();
 
-            AddMediatorHandler(request, handler);
+            Mock<IMapper> mockMapper = new();
+            mockMapper.Object.Config.Scan(Assembly.GetExecutingAssembly());
 
-            ServersController controller = new(Mediator, UserProvider);
+            ServersController controller = new(mockMediator.Object, UserProvider, mockMapper.Object);
 
-            ActionResult result = await controller.UpdateServer(request);
+            ActionResult result = await controller.UpdateServer(serverId, request);
             //Act
             //Assert
-            ForbidResult forbidResult = Assert.IsType<ForbidResult>(result);
+            Assert.IsType<ForbidResult>(result);
         }
     }
 }

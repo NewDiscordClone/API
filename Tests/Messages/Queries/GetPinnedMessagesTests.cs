@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Messages.Queries.GetPinnedMessages;
-using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Messages.Queries
@@ -23,7 +23,7 @@ namespace Sparkle.Tests.Messages.Queries
 
             //Act
 
-            List<Message> result = await handler.Handle(request, CancellationToken);
+            List<MessageDto> result = await handler.Handle(request, CancellationToken);
 
             //Assert
             Assert.True(result.All(message => Context.Messages.FindAsync(message.Id).Result.IsPinned));

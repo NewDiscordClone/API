@@ -12,7 +12,7 @@ namespace Sparkle.Tests.Messages.Commands
             //Arrange
             CreateDatabase();
             string messageId = Ids.Message1;
-            const string emoji = "☻";
+            const string emoji = ":add-reaction-test:";
 
             SetAuthorizedUserId(Ids.UserBId);
 

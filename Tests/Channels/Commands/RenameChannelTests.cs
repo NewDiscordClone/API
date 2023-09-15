@@ -17,7 +17,7 @@ namespace Sparkle.Tests.Channels.Commands
 
             SetAuthorizedUserId(Ids.UserCId);
 
-            RenameChannelRequest request = new()
+            RenameChannelCommand command = new()
             {
                 ChatId = channelId,
                 NewTitle = newTitle,
@@ -26,7 +26,7 @@ namespace Sparkle.Tests.Channels.Commands
 
             //Act
 
-            await handler.Handle(request, CancellationToken);
+            await handler.Handle(command, CancellationToken);
             Channel channel = await Context.Channels.FindAsync(channelId);
 
             //Assert
@@ -42,7 +42,7 @@ namespace Sparkle.Tests.Channels.Commands
 
             SetAuthorizedUserId(Ids.UserDId);
 
-            RenameChannelRequest request = new()
+            RenameChannelCommand request = new()
             {
                 ChatId = channelId,
                 NewTitle = newTitle,

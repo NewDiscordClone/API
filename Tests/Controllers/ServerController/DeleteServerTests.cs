@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MapsterMapper;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.DeleteServer;
 using Sparkle.Tests.Common;
 using Sparkle.WebApi.Controllers;
+using System.Reflection;
 
 namespace Sparkle.Tests.Controllers.ServerController
 {
@@ -21,18 +23,14 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             SetAuthorizedUserId(userId);
 
-            DeleteServerCommand request = new()
-            {
-                ServerId = serverId,
-            };
-            DeleteServerRequestHandler handler = new(Context, UserProvider);
+            Mock<IMediator> mockMediator = new();
+            Mock<IMapper> mockMapper = new();
+            mockMapper.Object.Config.Scan(Assembly.GetExecutingAssembly());
 
-            AddMediatorHandler(request, handler);
-
-            ServersController controller = new(Mediator, UserProvider);
+            ServersController controller = new(mockMediator.Object, UserProvider, mockMapper.Object);
 
             //Act
-            ActionResult result = await controller.DeleteServer(request);
+            ActionResult result = await controller.DeleteServer(serverId);
 
             //Assert
             NoContentResult noContentResult = Assert.IsType<NoContentResult>(result);
@@ -53,19 +51,14 @@ namespace Sparkle.Tests.Controllers.ServerController
 
             SetAuthorizedUserId(userId);
 
-            DeleteServerCommand request = new()
-            {
-                ServerId = serverId,
-            };
-            DeleteServerRequestHandler handler = new(Context, UserProvider);
+            Mock<IMediator> mockMediator = new();
+            Mock<IMapper> mockMapper = new();
+            mockMapper.Object.Config.Scan(Assembly.GetExecutingAssembly());
 
-
-            AddMediatorHandler(request, handler);
-
-            ServersController controller = new(Mediator, UserProvider);
+            ServersController controller = new(mockMediator.Object, UserProvider, mockMapper.Object);
 
             //Act
-            ActionResult result = await controller.DeleteServer(request);
+            ActionResult result = await controller.DeleteServer(serverId);
             //Assert
             ForbidResult forbidResult = Assert.IsType<ForbidResult>(result);
         }

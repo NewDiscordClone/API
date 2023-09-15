@@ -53,7 +53,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<List<MessageDto>>> GetMessages(string chatId, int messagesCount, bool onlyPinned = false)
+        public async Task<ActionResult<List<MessageDto>>> GetMessages(string chatId, int messagesCount = 0, bool onlyPinned = false)
         {
             IRequest<List<MessageDto>> query;
 
@@ -80,7 +80,6 @@ namespace Sparkle.WebApi.Controllers
         /// <param name="request">
         /// ```
         /// text: string // Up to 2000 characters
-        /// chatId: string // represents ObjectId of the chat to send the message to
         /// attachments: Attachment[] // Attachments that user includes to the message
         /// ```
         /// </param>
@@ -102,7 +101,7 @@ namespace Sparkle.WebApi.Controllers
             await Mediator.Send(new NotifyMessageAddedQuery { MessageId = message.Id });
 
             //TODO: Create GetMessage request and send it to the client
-            return CreatedAtAction("", message);
+            return Created("", message);
         }
 
         /// <summary>

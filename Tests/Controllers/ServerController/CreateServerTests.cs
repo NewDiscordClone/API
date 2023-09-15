@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MapsterMapper;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Servers.Commands.CreateServer;
 using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
 using Sparkle.Tests.Common;
 using Sparkle.WebApi.Controllers;
+using System.Reflection;
 
 namespace Sparkle.Tests.Controllers.ServerController
 {
@@ -21,11 +24,11 @@ namespace Sparkle.Tests.Controllers.ServerController
             SetAuthorizedUserId(userId);
 
             CreateServerCommand request = new() { Title = serverName, Image = null };
-            CreateServerCommandHandler handler = new(Context, UserProvider, Mapper);
+            Mock<IMediator> mockMediator = new();
+            Mock<IMapper> mockMapper = new();
+            mockMapper.Object.Config.Scan(Assembly.GetExecutingAssembly());
 
-            AddMediatorHandler(request, handler);
-
-            ServersController controller = new(Mediator, UserProvider);
+            ServersController controller = new(mockMediator.Object, UserProvider, mockMapper.Object);
 
             //Act
             ActionResult<string> result = await controller.CreateServer(request);
@@ -33,7 +36,7 @@ namespace Sparkle.Tests.Controllers.ServerController
             //Assert
             CreatedResult createdResult = Assert.IsType<CreatedResult>(result.Result);
             ServerDetailsDto resultServer = await new GetServerDetailsCommandHandler(Context, UserProvider, Mapper)
-                .Handle(new GetServerDetailsCommand() { ServerId = (string)createdResult.Value }, CancellationToken);
+                .Handle(new GetServerDetailsCommand() { ServerId = (string)createdResult.Value! }, CancellationToken);
 
             Assert.Equal(serverName, resultServer.Title);
             Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);

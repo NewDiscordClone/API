@@ -25,6 +25,8 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
                 Emoji = command.Emoji,
             };
 
+            message.Reactions.Add(reaction);
+
             await Context.Messages.UpdateAsync(message);
         }
 

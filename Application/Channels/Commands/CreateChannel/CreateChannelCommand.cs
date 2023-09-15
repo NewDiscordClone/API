@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Channels.Commands.CreateChannel
 {
-    public class CreateChannelRequest : IRequest<string>
+    public class CreateChannelCommand : IRequest<string>
     {
         /// <summary>
         /// Name of the channel 

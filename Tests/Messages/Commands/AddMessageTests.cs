@@ -1,5 +1,6 @@
 ﻿using Sparkle.Application.Messages.Commands.AddMessage;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Messages.Commands
@@ -33,7 +34,7 @@ namespace Sparkle.Tests.Messages.Commands
             AddMessageCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Message result = await handler.Handle(request, CancellationToken);
+            MessageDto result = await handler.Handle(request, CancellationToken);
 
             //Assert
 
@@ -62,7 +63,7 @@ namespace Sparkle.Tests.Messages.Commands
 
             //Act
 
-            Message result = await handler.Handle(request, CancellationToken);
+            MessageDto result = await handler.Handle(request, CancellationToken);
 
             //Assert
 

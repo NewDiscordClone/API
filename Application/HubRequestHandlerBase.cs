@@ -38,7 +38,8 @@ namespace Sparkle.Application
 
         protected async Task SendAsync<T>(string method, T arg, IEnumerable<string> connections)
         {
-            await Clients.Clients(connections).SendAsync(method, arg, _token);
+            IReadOnlyList<string> readOnlyConnections = connections.ToList().AsReadOnly();
+            await Clients.Clients(readOnlyConnections).SendAsync(method, arg, _token);
         }
 
         protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context) : base(context)
