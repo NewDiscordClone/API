@@ -18,13 +18,13 @@ namespace Sparkle.Tests.Invitations
 
             SetAuthorizedUserId(user);
 
-            CreateInvitationRequest request = new()
+            CreateInvitationCommand request = new()
             {
                 ServerId = serverId,
                 IncludeUser = true,
                 ExpireTime = expiretime
             };
-            CreateInvitationRequestHandler handler = new(Context, UserProvider);
+            CreateInvitationCommandHandler handler = new(Context, UserProvider);
 
             //Act
             string invitationId = await handler.Handle(request, CancellationToken);
@@ -51,13 +51,13 @@ namespace Sparkle.Tests.Invitations
 
             SetAuthorizedUserId(user);
 
-            CreateInvitationRequest request = new()
+            CreateInvitationCommand request = new()
             {
                 ServerId = serverId,
                 IncludeUser = true,
                 ExpireTime = expiretime
             };
-            CreateInvitationRequestHandler handler = new(Context, UserProvider);
+            CreateInvitationCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

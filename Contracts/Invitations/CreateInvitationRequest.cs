@@ -1,14 +1,7 @@
-﻿using MediatR;
-
-namespace Sparkle.Application.Invitations.Commands.CreateInvitation
+﻿namespace Sparkle.Contracts.Invitations
 {
-    public record CreateInvitationRequest : IRequest<string>
+    public record CreateInvitationRequest
     {
-        /// <summary>
-        /// The unique identifier of the server to create an invitation for.
-        /// </summary>
-        public string ServerId { get; set; }
-
         /// <summary>
         /// Indicates whether to include user information in the invitation.
         /// </summary>

@@ -7,16 +7,16 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Invitations.Queries.GetInvitationDetails
 {
-    public class GetInvitationDetailsRequestHandler : RequestHandlerBase, IRequestHandler<GetInvitationDetailsRequest, InvitationDetailsDto>
+    public class GetInvitationDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GetInvitationDetailsQuery, InvitationDetailsDto>
     {
-        public GetInvitationDetailsRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        public GetInvitationDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
 
-        public async Task<InvitationDetailsDto> Handle(GetInvitationDetailsRequest request, CancellationToken cancellationToken)
+        public async Task<InvitationDetailsDto> Handle(GetInvitationDetailsQuery query, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            Invitation invitation = await Context.Invitations.FindAsync(request.InvitationId);
+            Invitation invitation = await Context.Invitations.FindAsync(query.InvitationId);
             if (invitation.ExpireTime is not null &&
                    invitation.ExpireTime < DateTime.Now)
             {
