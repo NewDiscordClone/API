@@ -16,7 +16,8 @@ namespace Sparkle.Tests
             RouteData = new RouteData(),
             ActionDescriptor = new ActionDescriptor()
         };
-        public async Task<IActionResult?> GetResultAsync(ExceptionFilterAttribute attribute, Exception exception)
+
+        private async Task<IActionResult?> GetResultAsync(ExceptionFilterAttribute attribute, Exception exception)
         {
             ExceptionContext context = new(_actionContext, new List<IFilterMetadata>())
             {
@@ -25,18 +26,87 @@ namespace Sparkle.Tests
             await attribute.OnExceptionAsync(context);
             return context.Result;
         }
-        [Fact]
-        public async Task Success()
+
+        private static void CheckProblemDetailsResult(
+            IActionResult? result,
+            int expectedStatusCode,
+            string expectedTitle)
         {
-            //Arrange
+            Assert.IsType<ObjectResult>(result);
+            Assert.IsType<ProblemDetails>((result as ObjectResult)?.Value);
+            ProblemDetails? problem = (result as ObjectResult)!.Value! as ProblemDetails;
+            Assert.Equal(expectedStatusCode, problem?.Status);
+            Assert.Equal(expectedTitle, problem?.Title);
+        }
+
+        [Fact]
+        public async Task NoPermissionsException_Returns403Forbidden()
+        {
+            // Arrange
             ExceptionFilterAttribute attribute = new();
-            //Act
-            //Assert
-            Assert.IsType<ForbidResult>(await GetResultAsync(attribute, new NoPermissionsException()));
-            Assert.IsType<BadRequestObjectResult>(await GetResultAsync(attribute, new EntityNotFoundException("kinda id")));
-            Assert.IsType<BadRequestResult>(await GetResultAsync(attribute, new ArgumentException()));
-            Assert.IsType<BadRequestResult>(await GetResultAsync(attribute, new InvalidOperationException()));
-            await Assert.ThrowsAsync<Exception>(async () => await GetResultAsync(attribute, new Exception()));
+            NoPermissionsException exception = new("Permission denied");
+
+            // Act
+            IActionResult? result = await GetResultAsync(attribute, exception);
+
+            // Assert
+            CheckProblemDetailsResult(result, StatusCodes.Status403Forbidden, "Permission denied");
+        }
+
+        [Fact]
+        public async Task EntityNotFoundException_Returns404NotFound()
+        {
+            // Arrange
+            ExceptionFilterAttribute attribute = new();
+            EntityNotFoundException exception = new("kinda id");
+
+            // Act
+            IActionResult? result = await GetResultAsync(attribute, exception);
+
+            // Assert
+            CheckProblemDetailsResult(result, StatusCodes.Status404NotFound, "Entity kinda id not found");
+        }
+
+        [Fact]
+        public async Task ArgumentException_Returns400BadRequest()
+        {
+            // Arrange
+            ExceptionFilterAttribute attribute = new();
+            ArgumentException exception = new("Invalid argument");
+
+            // Act
+            IActionResult? result = await GetResultAsync(attribute, exception);
+
+            // Assert
+            CheckProblemDetailsResult(result, StatusCodes.Status400BadRequest, "Invalid argument");
+        }
+
+        [Fact]
+        public async Task InvalidOperationException_Returns400BadRequest()
+        {
+            // Arrange
+            ExceptionFilterAttribute attribute = new();
+            InvalidOperationException exception = new("Invalid operation");
+
+            // Act
+            IActionResult? result = await GetResultAsync(attribute, exception);
+
+            // Assert
+            CheckProblemDetailsResult(result, StatusCodes.Status400BadRequest, "Invalid operation");
+        }
+
+        [Fact]
+        public async Task Exception_Returns500InternalServerError()
+        {
+            // Arrange
+            ExceptionFilterAttribute attribute = new();
+            Exception exception = new("Internal error");
+
+            // Act
+            IActionResult? result = await GetResultAsync(attribute, exception);
+
+            // Assert
+            CheckProblemDetailsResult(result, StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
         }
     }
 }

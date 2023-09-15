@@ -6,18 +6,18 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage
 {
-    public class ChangeGroupChatImageRequestHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatImageRequest>
+    public class ChangeGroupChatImageCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatImageCommand>
     {
-        public async Task Handle(ChangeGroupChatImageRequest request, CancellationToken cancellationToken)
+        public async Task Handle(ChangeGroupChatImageCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            GroupChat chat = await Context.GroupChats.FindAsync(request.ChatId);
+            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId);
             if (!chat.Users.Any(u => u == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
             string? oldImage = chat.Image;
 
-            chat.Image = request.NewImage;
+            chat.Image = command.NewImage;
 
             chat = await Context.GroupChats.UpdateAsync(chat);
 
@@ -26,7 +26,7 @@ namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage
 
         }
 
-        public ChangeGroupChatImageRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        public ChangeGroupChatImageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
         {
         }
     }

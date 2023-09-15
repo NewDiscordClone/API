@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.KickUser;
 using Sparkle.Application.Models;
+using Sparkle.Application.Servers.Commands.KickUser;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands
@@ -18,12 +18,12 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserCId);
 
-            KickUserRequest request = new()
+            KickUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
-            KickUserRequestHandler handler = new(Context, UserProvider);
+            KickUserCommandHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);
@@ -44,12 +44,12 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            KickUserRequest request = new()
+            KickUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
-            KickUserRequestHandler handler = new(Context, UserProvider);
+            KickUserCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert
@@ -70,12 +70,12 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserCId);
 
-            KickUserRequest request = new()
+            KickUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
-            KickUserRequestHandler handler = new(Context, UserProvider);
+            KickUserCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

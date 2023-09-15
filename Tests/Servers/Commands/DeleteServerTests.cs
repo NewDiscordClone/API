@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.DeleteServer;
+using Sparkle.Application.Servers.Commands.DeleteServer;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands
@@ -17,7 +17,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            DeleteServerRequest request = new()
+            DeleteServerCommand request = new()
             {
                 ServerId = serverId,
             };
@@ -45,7 +45,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            DeleteServerRequest request = new()
+            DeleteServerCommand request = new()
             {
                 ServerId = serverId,
             };

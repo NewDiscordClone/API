@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Models
 {
+
     public class Media
     {
         [BsonId]

@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.UnbanUser;
 using Sparkle.Application.Models;
+using Sparkle.Application.Servers.Commands.UnbanUser;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands
@@ -18,7 +18,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            UnbanUserRequest request = new()
+            UnbanUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
@@ -45,7 +45,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserCId);
 
-            UnbanUserRequest request = new()
+            UnbanUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId

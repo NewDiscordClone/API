@@ -1,5 +1,6 @@
 ﻿using Sparkle.Application.Messages.Commands.AddMessage;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Messages.Commands
@@ -15,7 +16,7 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            AddMessageRequest request = new()
+            AddMessageCommand request = new()
             {
                 Attachments = new()
                 {
@@ -30,10 +31,10 @@ namespace Sparkle.Tests.Messages.Commands
                 Text = messageText
             };
 
-            AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
+            AddMessageCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Message result = await handler.Handle(request, CancellationToken);
+            MessageDto result = await handler.Handle(request, CancellationToken);
 
             //Assert
 
@@ -52,17 +53,17 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            AddMessageRequest request = new()
+            AddMessageCommand request = new()
             {
                 ChatId = Ids.GroupChat3,
                 Text = messageText
             };
 
-            AddMessageRequestHandler handler = new(Context, UserProvider, Mapper);
+            AddMessageCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
 
-            Message result = await handler.Handle(request, CancellationToken);
+            MessageDto result = await handler.Handle(request, CancellationToken);
 
             //Assert
 

@@ -16,12 +16,12 @@ namespace Sparkle.Tests.Channels.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            CreateChannelRequest request = new()
+            CreateChannelCommand request = new()
             {
                 Title = title,
                 ServerId = serverId
             };
-            CreateChannelRequestHandler handler = new(Context, UserProvider, Mapper);
+            CreateChannelCommandHandler handler = new(Context, UserProvider, Mapper);
             //Act
 
             string channelId = await handler.Handle(request, CancellationToken);

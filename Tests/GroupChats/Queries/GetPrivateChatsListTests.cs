@@ -15,8 +15,8 @@ namespace Sparkle.Tests.GroupChats.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetPrivateChatsRequest request = new();
-            GetPrivateChatsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetPrivateChatsQuery request = new();
+            GetPrivateChatsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<PrivateChatLookUp> chats = await handler.Handle(request, CancellationToken);

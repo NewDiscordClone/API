@@ -4,16 +4,15 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Sparkle.Application;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Common.Mapping;
 using Sparkle.DataAccess;
 using Sparkle.WebApi;
 using Sparkle.WebApi.Attributes;
 using Sparkle.WebApi.Authorization;
 using Sparkle.WebApi.Authorization.Handlers;
+using Sparkle.WebApi.Common.Mapping;
 using Sparkle.WebApi.Hubs;
 using Sparkle.WebApi.Providers;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
 using WebApi.Providers;
 using ExceptionFilterAttribute = Sparkle.WebApi.Attributes.ExceptionFilterAttribute;
 
@@ -30,12 +29,7 @@ services.AddControllers(options =>
 
 services.AddDatabase(builder.Configuration);
 
-services.AddAutoMapper(config =>
-{
-    config.AddProfile(new AssemblyMappingProfile(
-        Assembly.GetExecutingAssembly()));
-    config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
-});
+services.AddMapping();
 
 services.AddAuthentication(config =>
     {

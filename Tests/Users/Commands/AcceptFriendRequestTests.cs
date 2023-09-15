@@ -17,11 +17,11 @@ namespace Sparkle.Tests.Users.Commands
 
             SetAuthorizedUserId(userId);
 
-            AcceptFriendRequestRequest request = new()
+            AcceptFriendRequestCommand request = new()
             {
                 UserId = otherId
             };
-            AcceptFriendRequestRequestHandler handler = new(Context, UserProvider);
+            AcceptFriendRequestCommandHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);
@@ -49,11 +49,11 @@ namespace Sparkle.Tests.Users.Commands
 
             SetAuthorizedUserId(userId);
 
-            AcceptFriendRequestRequest request = new()
+            AcceptFriendRequestCommand request = new()
             {
                 UserId = otherId
             };
-            AcceptFriendRequestRequestHandler handler = new(Context, UserProvider);
+            AcceptFriendRequestCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

@@ -17,11 +17,11 @@ namespace Sparkle.Tests.Users.Commands
 
             SetAuthorizedUserId(userId);
 
-            FriendRequestRequest request = new()
+            CreateFriendRequestCommand request = new()
             {
                 UserId = otherId
             };
-            FriendRequestRequestHandler handler = new(Context, UserProvider);
+            CreateFriendRequestCommandHandler handler = new(Context, UserProvider);
 
             //Act
             string? chatId = await handler.Handle(request, CancellationToken);
@@ -54,11 +54,11 @@ namespace Sparkle.Tests.Users.Commands
 
             SetAuthorizedUserId(userId);
 
-            FriendRequestRequest request = new()
+            CreateFriendRequestCommand request = new()
             {
                 UserId = otherId
             };
-            FriendRequestRequestHandler handler = new(Context, UserProvider);
+            CreateFriendRequestCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

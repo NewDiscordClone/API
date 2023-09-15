@@ -16,11 +16,11 @@ namespace Sparkle.Tests.Invitations
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            GetInvitationDetailsRequest request = new()
+            GetInvitationDetailsQuery request = new()
             {
                 InvitationId = invitationId
             };
-            GetInvitationDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetInvitationDetailsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             InvitationDetailsDto result = await handler.Handle(request, CancellationToken);
@@ -42,11 +42,11 @@ namespace Sparkle.Tests.Invitations
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            GetInvitationDetailsRequest request = new()
+            GetInvitationDetailsQuery request = new()
             {
                 InvitationId = invitationId
             };
-            GetInvitationDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetInvitationDetailsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             InvitationDetailsDto result = await handler.Handle(request, CancellationToken);
@@ -67,11 +67,11 @@ namespace Sparkle.Tests.Invitations
 
             SetAuthorizedUserId(Ids.UserDId);
 
-            GetInvitationDetailsRequest request = new()
+            GetInvitationDetailsQuery request = new()
             {
                 InvitationId = invitationId
             };
-            GetInvitationDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetInvitationDetailsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             //Assert

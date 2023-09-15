@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.BanUser;
 using Sparkle.Application.Models;
+using Sparkle.Application.Servers.Commands.BanUser;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands
@@ -18,12 +18,12 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserCId);
 
-            BanUserRequest request = new()
+            BanUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
-            BanUserRequestHandler handler = new(Context, UserProvider);
+            BanUserCommandHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);
@@ -45,12 +45,12 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            BanUserRequest request = new()
+            BanUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
-            BanUserRequestHandler handler = new(Context, UserProvider);
+            BanUserCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert
@@ -72,12 +72,12 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(Ids.UserCId);
 
-            BanUserRequest request = new()
+            BanUserCommand request = new()
             {
                 ServerId = serverId,
                 UserId = userId
             };
-            BanUserRequestHandler handler = new(Context, UserProvider);
+            BanUserCommandHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);

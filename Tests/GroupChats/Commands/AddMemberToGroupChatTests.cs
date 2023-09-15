@@ -19,13 +19,13 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            AddMemberToGroupChatRequest request = new()
+            AddMemberToGroupChatCommand request = new()
             {
                 ChatId = chatId,
                 NewMemberId = newMemberId
             };
 
-            AddMemberToGroupChatRequestHandler handler = new(Context, UserProvider, Mapper);
+            AddMemberToGroupChatCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
 
@@ -46,13 +46,13 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            AddMemberToGroupChatRequest request = new()
+            AddMemberToGroupChatCommand request = new()
             {
                 ChatId = chatId,
                 NewMemberId = newMemberId
             };
 
-            AddMemberToGroupChatRequestHandler handler =
+            AddMemberToGroupChatCommandHandler handler =
                 new(Context, UserProvider, Mapper);
 
             //Act

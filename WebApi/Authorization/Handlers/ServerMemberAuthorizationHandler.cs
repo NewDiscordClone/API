@@ -20,7 +20,7 @@ namespace Sparkle.WebApi.Authorization.Handlers
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, ServerMemberRequirement requirement)
         {
             Guid userId = _userProvider.GetUserId();
-            GetUserDetailsDto user = await _mediator.Send(new GetUserDetailsRequest
+            GetUserDetailsDto user = await _mediator.Send(new GetUserDetailsQuery
             {
                 UserId = userId,
                 ServerId = requirement.ServerId
