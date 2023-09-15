@@ -15,7 +15,7 @@ namespace Sparkle.WebApi.Attributes
                 InvalidOperationException or ArgumentException => (StatusCodes.Status400BadRequest, exception.Message),
                 EntityNotFoundException => (StatusCodes.Status404NotFound, exception.Message),
                 NoPermissionsException => (StatusCodes.Status403Forbidden, exception.Message),
-                _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
+                _ => (StatusCodes.Status500InternalServerError, "An error occurred while processing your request")
             };
 
             ProblemDetails problemDetails = new()

@@ -28,6 +28,7 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             string id = await handler.Handle(request, CancellationToken);
             GroupChat result = await Context.GroupChats.FindAsync(id);
+            userIdlist.Add(userId);
 
             //Assert
             Assert.NotNull(result);

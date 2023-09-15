@@ -30,7 +30,7 @@ namespace Sparkle.Application.Users.Queries.GetRelationships
             List<RelationshipDto> relationshipDtos = relationships.Relationships
                 .ConvertAll(relationship => new RelationshipDto()
                 {
-                    User = Mapper.Map<UserLookUp>(Context.SqlUsers.FindAsync(relationship.UserId)),
+                    User = Mapper.Map<UserLookUp>(Context.SqlUsers.FindAsync(relationship.UserId).Result),
                     RelationshipType = relationship.RelationshipType
                 });
 

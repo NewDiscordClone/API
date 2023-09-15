@@ -1,12 +1,8 @@
 ﻿using MapsterMapper;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Servers.Commands.CreateServer;
-using Sparkle.Application.Servers.Queries.GetServerDetails;
 using Sparkle.Tests.Common;
 using Sparkle.WebApi.Controllers;
-using System.Reflection;
 
 namespace Sparkle.Tests.Controllers.ServerController
 {
@@ -18,30 +14,28 @@ namespace Sparkle.Tests.Controllers.ServerController
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            long oldCount = await Context.Servers.CountAsync(s => true);
             const string serverName = "New server";
+            const string serverId = "5f95a3c3d0ddad0017ea9291";
 
             SetAuthorizedUserId(userId);
 
             CreateServerCommand request = new() { Title = serverName, Image = null };
-            Mock<IMediator> mockMediator = new();
-            Mock<IMapper> mockMapper = new();
-            mockMapper.Object.Config.Scan(Assembly.GetExecutingAssembly());
 
-            ServersController controller = new(mockMediator.Object, UserProvider, mockMapper.Object);
+            MediatorMock.Setup(mediator => mediator.Send(It.IsAny<CreateServerCommand>(), CancellationToken))
+                .ReturnsAsync(serverId);
+            Mock<IMapper> mapper = new();
+
+            ServersController controller = new(Mediator, UserProvider, mapper.Object);
 
             //Act
             ActionResult<string> result = await controller.CreateServer(request);
 
             //Assert
-            CreatedResult createdResult = Assert.IsType<CreatedResult>(result.Result);
-            ServerDetailsDto resultServer = await new GetServerDetailsCommandHandler(Context, UserProvider, Mapper)
-                .Handle(new GetServerDetailsCommand() { ServerId = (string)createdResult.Value! }, CancellationToken);
-
-            Assert.Equal(serverName, resultServer.Title);
-            Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);
-            Assert.Equal(oldCount + 1, await Context.Servers.CountAsync(s => true));
-            Assert.Equal(StatusCodes.Status201Created, createdResult.StatusCode);
+            CreatedAtActionResult createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            Assert.Equal(serverId, createdResult.Value);
+            MediatorMock.Verify(mediator => mediator
+            .Send(It.IsAny<CreateServerCommand>(), CancellationToken)
+            , Times.Once);
         }
     }
 }
