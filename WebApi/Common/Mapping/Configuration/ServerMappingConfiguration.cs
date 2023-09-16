@@ -14,7 +14,9 @@ namespace Sparkle.WebApi.Common.Mapping.Configuration
                 .Map(dest => dest, src => src.Request);
 
             config.NewConfig<(string ServerId, Guid UserId, UpdateServerProfileRolesRequest Request), UpdateServerProfileRolesCommand>()
-                .Map(dest => dest.Roles, src => src.Request.Roles);
+                .Map(dest => dest.Roles, src => src.Request.Roles)
+                .Map(dest => dest.UserId, src => src.UserId)
+                .Map(dest => dest.ServerId, src => src.ServerId);
         }
     }
 }

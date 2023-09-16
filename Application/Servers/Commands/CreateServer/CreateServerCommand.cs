@@ -9,7 +9,6 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
         /// <summary>
         /// New Server's name
         /// </summary>
-        [Required, MaxLength(100)]
         public string Title { get; init; }
 
         /// <summary>
