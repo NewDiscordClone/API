@@ -5,7 +5,7 @@ using MediatR;
 namespace Sparkle.Application.Common.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
+      where TRequest : notnull
     {
         private readonly IValidator<TRequest>? _validator;
 
@@ -29,4 +29,5 @@ namespace Sparkle.Application.Common.Behaviors
             throw new ValidationException(result.Errors);
         }
     }
+
 }
