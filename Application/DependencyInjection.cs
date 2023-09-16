@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using Sparkle.Application.Common.Behaviors;
 using Sparkle.Application.Common.Factories;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Mapping;
@@ -13,6 +16,11 @@ namespace Sparkle.Application
             services.AddMediatR(config =>
             config.RegisterServicesFromAssembly(
                 Assembly.GetExecutingAssembly()));
+
+            services.AddScoped(
+              typeof(IPipelineBehavior<,>),
+              typeof(ValidationBehavior<,>));
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddAutoMapper(config =>
             {
