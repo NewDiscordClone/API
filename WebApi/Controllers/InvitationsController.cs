@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Invitations.Commands.CreateInvitation;
-using Sparkle.Application.Invitations.Queries.GetInvitationDetails;
+using Sparkle.Application.Invitations.Queries.InvitationDetails;
 using Sparkle.Contracts.Invitations;
 
 namespace Sparkle.WebApi.Controllers
@@ -30,7 +30,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<InvitationDetailsDto>> GetInvitation(string id)
         {
-            GetInvitationDetailsQuery query = new() { InvitationId = id };
+            InvitationDetailsQuery query = new() { InvitationId = id };
             InvitationDetailsDto details = await Mediator.Send(query);
 
             return Ok(details);
