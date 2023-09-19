@@ -5,15 +5,15 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
-namespace Sparkle.Application.Invitations.Queries.GetInvitationDetails
+namespace Sparkle.Application.Invitations.Queries.InvitationDetails
 {
-    public class GetInvitationDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GetInvitationDetailsQuery, InvitationDetailsDto>
+    public class InvitationDetailsQueryHandler : RequestHandlerBase, IRequestHandler<InvitationDetailsQuery, InvitationDetailsDto>
     {
-        public GetInvitationDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        public InvitationDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
 
-        public async Task<InvitationDetailsDto> Handle(GetInvitationDetailsQuery query, CancellationToken cancellationToken)
+        public async Task<InvitationDetailsDto> Handle(InvitationDetailsQuery query, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             Invitation invitation = await Context.Invitations.FindAsync(query.InvitationId);

@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Invitations.Queries.GetInvitationDetails
+namespace Sparkle.Application.Invitations.Queries.InvitationDetails
 {
-    public record GetInvitationDetailsQuery : IRequest<InvitationDetailsDto>
+    public record InvitationDetailsQuery : IRequest<InvitationDetailsDto>
     {
         /// <summary>
         /// The unique identifier of the invitation for which to retrieve details

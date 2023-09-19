@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Models.LookUps;
 
-namespace Sparkle.Application.Invitations.Queries.GetInvitationDetails
+namespace Sparkle.Application.Invitations.Queries.InvitationDetails
 {
     public class InvitationDetailsDto
     {

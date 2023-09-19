@@ -4,7 +4,7 @@ using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Invitations.Queries.GetInvitationDetails
+namespace Sparkle.Application.Invitations.Queries.InvitationDetails
 {
     public record ServerLookupDto : IMapWith<Server>
     {
