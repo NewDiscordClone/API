@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner;
+using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.Models;
 using Sparkle.Tests.Common;
 

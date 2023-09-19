@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.GroupChats.Queries.GetGroupChatDetails;
+﻿using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
 using Sparkle.Application.Models;
 using Sparkle.Tests.Common;
 
@@ -16,8 +16,8 @@ namespace Sparkle.Tests.GroupChats.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetGroupChatDetailsQuery request = new() { ChatId = chatId };
-            GetGroupChatDetailsQueryHandler handler = new(Context, UserProvider, Mapper);
+            GroupChatDetailsQuery request = new() { ChatId = chatId };
+            GroupChatDetailsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             PersonalChat chat = await handler.Handle(request, CancellationToken);

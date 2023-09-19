@@ -5,18 +5,18 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
-namespace Sparkle.Application.GroupChats.Queries.GetPrivateChats
+namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
 {
-    public class GetPrivateChatsQueryHandler : RequestHandlerBase,
-        IRequestHandler<GetPrivateChatsQuery, List<PrivateChatLookUp>>
+    public class PrivateChatsQueryHandler : RequestHandlerBase,
+        IRequestHandler<PrivateChatsQuery, List<PrivateChatLookUp>>
     {
-        public GetPrivateChatsQueryHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
+        public PrivateChatsQueryHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
             IMapper mapper)
             : base(appDbContext, userProvider, mapper)
         {
         }
 
-        public async Task<List<PrivateChatLookUp>> Handle(GetPrivateChatsQuery query,
+        public async Task<List<PrivateChatLookUp>> Handle(PrivateChatsQuery query,
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
