@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.RegularExpressions;
 
-namespace BuberDinner.Application.Common.Validation
+namespace Sparkle.Application.Common.Validation
 {
     public static partial class PasswordValidation
     {

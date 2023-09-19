@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace BuberDinner.Application.Common.Validation
+namespace Sparkle.Application.Common.Validation
 {
     public static class GuidValidation
     {

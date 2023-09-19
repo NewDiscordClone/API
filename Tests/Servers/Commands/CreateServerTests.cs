@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Servers.Commands.CreateServer;
-using Sparkle.Application.Servers.Queries.GetServerDetails;
+using Sparkle.Application.Servers.Queries.ServerDetails;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands
@@ -24,8 +24,8 @@ namespace Sparkle.Tests.Servers.Commands
 
             string result = await handler.Handle(request, CancellationToken);
             //Assert
-            ServerDetailsDto resultServer = await new GetServerDetailsCommandHandler(Context, UserProvider, Mapper)
-                .Handle(new GetServerDetailsCommand() { ServerId = result }, CancellationToken);
+            ServerDetailsDto resultServer = await new ServerDetailsQueryHandler(Context, UserProvider, Mapper)
+                .Handle(new ServerDetailsQuery() { ServerId = result }, CancellationToken);
 
             Assert.Equal(serverName, resultServer.Title);
             Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);

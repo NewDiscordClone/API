@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.Servers.Queries.GetServers;
+﻿using Sparkle.Application.Servers.Queries.ServersList;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Queries
@@ -14,12 +14,12 @@ namespace Sparkle.Tests.Servers.Queries
             CancellationToken cancellationToken = CancellationToken.None;
 
             SetAuthorizedUserId(userId);
-            GetServersQueryHandler handler = new(Context, UserProvider);
+            ServersListQueryHandler handler = new(Context, UserProvider);
 
-            GetServersQuery request = new();
+            ServersListQuery request = new();
 
             // Act
-            List<GetServerLookupDto> result = await handler.Handle(request, cancellationToken);
+            List<ServerLookUpDto> result = await handler.Handle(request, cancellationToken);
 
             // Assert
             Assert.NotNull(result);
@@ -36,12 +36,12 @@ namespace Sparkle.Tests.Servers.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetServersQueryHandler handler = new(Context, UserProvider);
+            ServersListQueryHandler handler = new(Context, UserProvider);
 
-            GetServersQuery request = new();
+            ServersListQuery request = new();
 
             // Act
-            List<GetServerLookupDto> result = await handler.Handle(request, cancellationToken);
+            List<ServerLookUpDto> result = await handler.Handle(request, cancellationToken);
 
             // Assert
             Assert.Empty(result);
