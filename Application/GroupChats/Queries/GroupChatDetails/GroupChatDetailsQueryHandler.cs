@@ -4,11 +4,11 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Queries.GetGroupChatDetails
+namespace Sparkle.Application.GroupChats.Queries.GroupChatDetails
 {
-    public class GetGroupChatDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GetGroupChatDetailsQuery, GroupChat>
+    public class GroupChatDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GroupChatDetailsQuery, GroupChat>
     {
-        public async Task<GroupChat> Handle(GetGroupChatDetailsQuery query, CancellationToken cancellationToken)
+        public async Task<GroupChat> Handle(GroupChatDetailsQuery query, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -18,7 +18,7 @@ namespace Sparkle.Application.GroupChats.Queries.GetGroupChatDetails
             return Mapper.Map<GroupChat>(chat);
         }
 
-        public GetGroupChatDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
+        public GroupChatDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
     }

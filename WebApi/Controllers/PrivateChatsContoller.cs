@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
 using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
+using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
-using Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
-using Sparkle.Application.GroupChats.Queries.GetGroupChatDetails;
-using Sparkle.Application.GroupChats.Queries.GetPrivateChats;
+using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatUpdated;
 using Sparkle.Application.Models;
@@ -38,7 +37,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
-            GetPrivateChatsQuery get = new();
+            PrivateChatsQuery get = new();
             List<PrivateChatLookUp> list = await Mediator.Send(get);
             return Ok(list);
         }
@@ -60,7 +59,7 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult<GroupChat>> GetGroupChatDetails(string chatId)
         {
             GroupChat chat = await Mediator
-                .Send(new GetGroupChatDetailsQuery() { ChatId = chatId });
+                .Send(new GroupChatDetailsQuery() { ChatId = chatId });
 
             return Ok(chat);
         }

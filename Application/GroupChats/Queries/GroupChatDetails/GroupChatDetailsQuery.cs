@@ -1,17 +1,14 @@
 ﻿using MediatR;
 using Sparkle.Application.Models;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.GroupChats.Queries.GetGroupChatDetails
+namespace Sparkle.Application.GroupChats.Queries.GroupChatDetails
 {
-    public record GetGroupChatDetailsQuery : IRequest<GroupChat>
+    public record GroupChatDetailsQuery : IRequest<GroupChat>
     {
         /// <summary>
         /// Id of the Group Chat
         /// </summary>
-        [Required]
-        [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string ChatId { get; init; }
     }

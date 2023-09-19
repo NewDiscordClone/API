@@ -11,7 +11,7 @@ namespace Sparkle.Application.Common.Validation
         /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
         /// <param name="maximumLength"></param>
         /// <param name="minimumLength"></param>
-        public static IRuleBuilder<T, string> RequiredLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength, int minimumLength = 1)
+        public static IRuleBuilderOptions<T, string> RequiredLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength, int minimumLength = 1)
         {
             return ruleBuilder.NotNull().NotEmpty().Length(minimumLength, maximumLength);
 
@@ -23,7 +23,7 @@ namespace Sparkle.Application.Common.Validation
         /// <typeparam name="T">Type of object being validated</typeparam>
         /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
         /// <param name="maximumLength"></param>
-        public static IRuleBuilder<T, string> RequiredMaximumLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength)
+        public static IRuleBuilderOptions<T, string> RequiredMaximumLength<T>(this IRuleBuilder<T, string> ruleBuilder, int maximumLength)
         {
             return ruleBuilder.RequiredLength(maximumLength);
         }
@@ -34,7 +34,7 @@ namespace Sparkle.Application.Common.Validation
         /// <typeparam name="T">Type of object being validated</typeparam>
         /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
         /// <param name="minimumLength"></param>
-        public static IRuleBuilder<T, string> RequiredMinimumLength<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength)
+        public static IRuleBuilderOptions<T, string> RequiredMinimumLength<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength)
         {
             return ruleBuilder.NotNull().NotEmpty().MinimumLength(minimumLength);
         }
