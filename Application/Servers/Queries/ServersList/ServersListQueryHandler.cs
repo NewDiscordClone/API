@@ -2,20 +2,20 @@
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
 
-namespace Sparkle.Application.Servers.Queries.GetServers
+namespace Sparkle.Application.Servers.Queries.ServersList
 {
-    public class GetServersQueryHandler : RequestHandlerBase,
-        IRequestHandler<GetServersQuery, List<GetServerLookupDto>>
+    public class ServersListQueryHandler : RequestHandlerBase,
+        IRequestHandler<ServersListQuery, List<ServerLookUpDto>>
     {
-        public async Task<List<GetServerLookupDto>> Handle(GetServersQuery query,
+        public async Task<List<ServerLookUpDto>> Handle(ServersListQuery query,
             CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            List<GetServerLookupDto> servers = new();
+            List<ServerLookUpDto> servers = new();
             (await Context.Servers.FilterAsync(s => s.ServerProfiles.Any(sp => sp.UserId == UserId)))
                 .ForEach(s => servers.Add(
-                    new GetServerLookupDto
+                    new ServerLookUpDto
                     {
                         Id = s.Id,
                         Image = s.Image,
@@ -24,7 +24,7 @@ namespace Sparkle.Application.Servers.Queries.GetServers
             return servers;
         }
 
-        public GetServersQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :
+        public ServersListQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :
             base(context, userProvider)
         {
         }

@@ -4,9 +4,9 @@ using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Servers.Queries.GetServers
+namespace Sparkle.Application.Servers.Queries.ServersList
 {
-    public record GetServerLookupDto : IMapWith<Server>
+    public record ServerLookUpDto : IMapWith<Server>
     {
         /// <summary>
         ///  The unique identifier of the server
@@ -28,7 +28,7 @@ namespace Sparkle.Application.Servers.Queries.GetServers
         public string? Image { get; init; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Server, GetServerLookupDto>();
+            profile.CreateMap<Server, ServerLookUpDto>();
         }
     }
 }

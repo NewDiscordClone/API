@@ -4,16 +4,16 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Servers.Queries.GetServerDetails
+namespace Sparkle.Application.Servers.Queries.ServerDetails
 {
-    public class GetServerDetailsCommandHandler : RequestHandlerBase,
-        IRequestHandler<GetServerDetailsCommand, ServerDetailsDto>
+    public class ServerDetailsQueryHandler : RequestHandlerBase,
+        IRequestHandler<ServerDetailsQuery, ServerDetailsDto>
     {
-        public async Task<ServerDetailsDto> Handle(GetServerDetailsCommand command, CancellationToken cancellationToken)
+        public async Task<ServerDetailsDto> Handle(ServerDetailsQuery query, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Server server = await Context.Servers.FindAsync(command.ServerId);
+            Server server = await Context.Servers.FindAsync(query.ServerId);
 
             if (server.ServerProfiles.Find(sp => sp.UserId == UserId) == null)
                 throw new NoPermissionsException("User are not a member of the Server");
@@ -24,7 +24,7 @@ namespace Sparkle.Application.Servers.Queries.GetServerDetails
             return res;
         }
 
-        public GetServerDetailsCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
+        public ServerDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
             IMapper mapper) : base(context, userProvider, mapper)
         {
         }

@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using System.ComponentModel;
 
-namespace Sparkle.Application.Servers.Queries.GetServerDetails
+namespace Sparkle.Application.Servers.Queries.ServerDetails
 {
     public record RoleDto : IMapWith<Role>
     {

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Sparkle.Application.Servers.Queries.GetServerDetails
+namespace Sparkle.Application.Servers.Queries.ServerDetails
 {
     public record ServerDetailsDto : IMapWith<Server>
     {

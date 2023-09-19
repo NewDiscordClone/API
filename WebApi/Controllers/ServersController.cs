@@ -16,8 +16,8 @@ using Sparkle.Application.Servers.Commands.KickUser;
 using Sparkle.Application.Servers.Commands.LeaveServer;
 using Sparkle.Application.Servers.Commands.UnbanUser;
 using Sparkle.Application.Servers.Commands.UpdateServer;
-using Sparkle.Application.Servers.Queries.GetServerDetails;
-using Sparkle.Application.Servers.Queries.GetServers;
+using Sparkle.Application.Servers.Queries.ServerDetails;
+using Sparkle.Application.Servers.Queries.ServersList;
 using Sparkle.Contracts.Servers;
 using Sparkle.WebApi.Attributes;
 using System.ComponentModel;
@@ -82,8 +82,8 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> GetServers()
         {
-            GetServersQuery get = new();
-            List<GetServerLookupDto> servers = await Mediator.Send(get);
+            ServersListQuery get = new();
+            List<ServerLookUpDto> servers = await Mediator.Send(get);
 
             return Ok(servers);
         }
@@ -105,7 +105,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<ServerDetailsDto>> GetServerDetails(string serverId)
         {
-            GetServerDetailsCommand command = new() { ServerId = serverId };
+            ServerDetailsQuery command = new() { ServerId = serverId };
             ServerDetailsDto server = await Mediator.Send(command);
 
             return Ok(server);
