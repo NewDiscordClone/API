@@ -31,4 +31,8 @@
     <None Include="C:\Users\dnesh\source\repos\SparkChats\API\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ServerProfiles\" />
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Sparkle.Application.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,7 +9,7 @@ namespace Sparkle.Application.Models;
 /// <summary>
 /// Representation of server
 /// </summary>
-public class Server
+public class Server : IUserProfileProvider
 {
     /// <summary>
     /// Unique Id as an string representation of an ObjectId type
@@ -44,4 +45,6 @@ public class Server
     public List<ServerProfile> ServerProfiles { get; set; } = new();
 
     public List<Guid> BannedUsers { get; set; } = new();
+
+    public List<UserProfile> Profiles => ServerProfiles.ConvertAll(profile => profile as UserProfile);
 }

@@ -7,6 +7,8 @@ namespace Sparkle.Application.Models;
 
 public class Channel : Chat
 {
+    private List<ServerProfile> _profiles = new();
+
     [DefaultValue("Test Channel")]
     public string Title { get; set; }
 
@@ -15,5 +17,5 @@ public class Channel : Chat
     [DefaultValue("5f95a3c3d0ddad0017ea9291")]
     public string ServerId { get; set; }
 
-
+    public override List<UserProfile> Profiles { get => _profiles.ConvertAll(profile => profile as UserProfile); }
 }

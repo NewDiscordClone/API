@@ -1,26 +1,25 @@
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Models;
 
 /// <summary>
 /// Representation of user's profile on server
 /// </summary>
-public class ServerProfile
+public class ServerProfile : UserProfile
 {
     /// <summary>
     /// Non-unique user name displays on server
     /// </summary>
-    [StringLength(32, MinimumLength = 1)]
     [DefaultValue("𝕾𝖊𝖗𝖛𝖊𝖗 𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
     public string? DisplayName { get; set; }
-    /// <summary>
-    /// User ID with most popular data
-    /// </summary>
-    public virtual Guid UserId { get; set; }
 
     /// <summary>
-    /// List of user's roles on server
+    /// List of roles of user on server
     /// </summary>
-    public virtual List<Role> Roles { get; set; }
+    public override List<Role> Roles { get => base.Roles; set => base.Roles = value; }
+
+    /// <summary>
+    /// Id of server where profile is
+    /// </summary>
+    public string ServerId { get; set; }
 }

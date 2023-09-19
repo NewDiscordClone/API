@@ -28,7 +28,7 @@ namespace WebApi.Providers
             if (!TryParsePolicyType(policyName, out ServerPolicies policyType))
                 return await FallbackPolicyProvider.GetPolicyAsync(policyName);
 
-            if (!TryParseServerId(policyName, out string serverId))
+            if (!TryParseProfileId(policyName, out string profileId))
                 throw new InvalidOperationException("No server id provided");
 
             AuthorizationPolicyBuilder policy = new();
@@ -37,34 +37,34 @@ namespace WebApi.Providers
             {
                 case ServerPolicies.SendMessages:
                 case ServerPolicies.ServerMember:
-                    policy.AddRequirements(new ServerMemberRequirement(serverId));
+                    policy.AddRequirements(new ServerMemberRequirement(profileId));
                     return policy.Build();
                 case ServerPolicies.ManageMessages:
-                    policy.RequireServerClaim(serverId, ServerClaims.ManageMessages);
+                    policy.RequireRoleClaims(profileId, ServerClaims.ManageMessages);
                     return policy.Build();
                 case ServerPolicies.MangeRoles:
-                    policy.RequireServerClaim(serverId,
+                    policy.RequireRoleClaims(profileId,
                         ServerClaims.ManageRoles);
                     return policy.Build();
                 case ServerPolicies.ManageServer:
-                    policy.RequireServerClaim(serverId,
+                    policy.RequireRoleClaims(profileId,
                         ServerClaims.ManageRoles);
                     return policy.Build();
                 case ServerPolicies.ChangeName:
-                    policy.RequireServerClaim(serverId, ServerClaims.ChangeServerName);
+                    policy.RequireRoleClaims(profileId, ServerClaims.ChangeServerName);
                     return policy.Build();
                 case ServerPolicies.ChangeSomeoneName:
-                    policy.RequireServerClaim(serverId, ServerClaims.ChangeSomeoneServerName);
+                    policy.RequireRoleClaims(profileId, ServerClaims.ChangeSomeoneServerName);
                     return policy.Build();
                 case ServerPolicies.RemoveMembers:
-                    policy.RequireServerClaim(serverId, ServerClaims.RemoveMembers);
+                    policy.RequireRoleClaims(profileId, ServerClaims.RemoveMembers);
                     return policy.Build();
                 default:
                     return await FallbackPolicyProvider.GetPolicyAsync(policyName);
             }
         }
 
-        private bool TryParseServerId(string policyName, out string serverId)
+        private bool TryParseProfileId(string policyName, out string serverId)
         {
             serverId = string.Empty;
 
@@ -73,7 +73,7 @@ namespace WebApi.Providers
                 return false;
             }
 
-            Regex serverIdRegex = GetServerIdRegex();
+            Regex serverIdRegex = GetProfileIdRegex();
             Match match = serverIdRegex.Match(policyName);
             if (match.Success)
             {
@@ -103,8 +103,8 @@ namespace WebApi.Providers
         [GeneratedRegex("^\\w+")]
         private static partial Regex GetPolicyNameRegex();
 
-        [GeneratedRegex("(?<=serverId:)[a-fA-F0-9]+")]
-        private static partial Regex GetServerIdRegex();
+        [GeneratedRegex("(?<=profileId:)[a-fA-F0-9]+")]
+        private static partial Regex GetProfileIdRegex();
     }
     public enum ServerPolicies
     {
