@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Channels.Commands.RemoveChannel
 {
-    public class RemoveChannelRequest : IRequest
+    public class RemoveChannelRequest : IRequest<Channel>
     {
         /// <summary>
         /// Id of the channel to be removed 

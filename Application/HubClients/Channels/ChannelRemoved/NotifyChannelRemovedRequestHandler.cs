@@ -13,9 +13,8 @@ namespace Sparkle.Application.HubClients.Channels.ChannelRemoved
         public async Task Handle(NotifyChannelRemovedRequest request, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
-            Channel channel = await Context.Channels.FindAsync(request.ChannelId);
 
-            await SendAsync(ClientMethods.ChannelDeleted, channel, GetConnections(channel));
+            await SendAsync(ClientMethods.ChannelDeleted, new {serverId = request.Channel.ServerId, channelId = request.Channel.Id}, GetConnections(request.Channel));
         }
     }
 }

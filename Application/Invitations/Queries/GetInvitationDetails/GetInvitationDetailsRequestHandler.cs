@@ -28,6 +28,7 @@ namespace Sparkle.Application.Invitations.Queries.GetInvitationDetails
 
             return new InvitationDetailsDto
             {
+                Id = request.InvitationId,
                 Server = Mapper.Map<ServerLookupDto>(server),
                 User = user == null ? null : Mapper.Map<UserLookUp>(user),
                 ExpireTime = invitation.ExpireTime

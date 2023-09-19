@@ -36,8 +36,8 @@ namespace Sparkle.WebApi.Controllers
         /// Joins to the server via invitation
         /// </summary>
         /// <param name="id">Id of the invitation to join to the server</param>
-        /// <returns>NoContent if the operation is successful</returns>
-        /// <response code="204">NoContent. Successful operation</response>
+        /// <returns>Ok if the operation is successful</returns>
+        /// <response code="204">Ok. ServerDetailsDto in Json</response>
         /// <response code="400">Bad Request. The invitation is expired, not available or incorrect</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [Route("{id}")]
@@ -45,12 +45,11 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> JoinServer(string id)
+        public async Task<ActionResult<ServerDetailsDto>> JoinServer(string id)
         {
             try
             {
-                await Mediator.Send(new JoinServerRequest() { InvitationId = id });
-                return NoContent();
+                return Ok(await Mediator.Send(new JoinServerRequest() { InvitationId = id }));
             }
             catch (Exception e)
             {

@@ -14,5 +14,6 @@
         public const string ServerDeleted = "ServerDeleted";
         public const string FriendRequest = "FriendRequest";
         public const string AcceptFriendRequest = "AcceptFriendRequest";
+        public const string StatusChanged = "StatusChanged";
     }
 }

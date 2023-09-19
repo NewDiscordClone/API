@@ -32,7 +32,7 @@ namespace Sparkle.WebApi.Controllers
         {
             try
             {
-                GetInvitationDetailsRequest get = new();
+                GetInvitationDetailsRequest get = new() {InvitationId = id };
                 InvitationDetailsDto details = await Mediator.Send(get);
                 return Ok(details);
             }

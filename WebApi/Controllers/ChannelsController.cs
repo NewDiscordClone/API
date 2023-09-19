@@ -9,6 +9,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Channels.ChannelCreated;
 using Sparkle.Application.HubClients.Channels.ChannelRemoved;
 using Sparkle.Application.HubClients.Channels.ChannelUpdated;
+using Sparkle.Application.Models;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -97,8 +98,8 @@ namespace Sparkle.WebApi.Controllers
         {
             try
             {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyChannelRemovedRequest() { ChannelId = request.ChatId });
+                Channel channel = await Mediator.Send(request);
+                await Mediator.Send(new NotifyChannelRemovedRequest() { Channel = channel });
                 return Ok();
             }
             catch (NoPermissionsException e)

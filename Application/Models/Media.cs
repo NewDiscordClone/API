@@ -16,6 +16,7 @@ namespace Sparkle.Application.Models
         public string FileName { get; set; }
         [DefaultValue("image/jpeg")]
         public string ContentType { get; set; }
-        public byte[] Data { get; set; }
+
+        [NonSerialized] public byte[] Data;
     }
 }

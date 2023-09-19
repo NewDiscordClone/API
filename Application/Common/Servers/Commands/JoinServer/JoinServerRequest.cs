@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
 
 namespace Sparkle.Application.Common.Servers.Commands.JoinServer
 {
-    public record JoinServerRequest : IRequest
+    public record JoinServerRequest : IRequest<ServerDetailsDto>
     {
         [Required]
         [StringLength(24, MinimumLength = 24)]

@@ -2,17 +2,18 @@
 using MediatR;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Servers.Queries.GetServerDetails;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Common.Servers.Commands.JoinServer
 {
-    public class JoinServerRequestHandler : RequestHandlerBase, IRequestHandler<JoinServerRequest>
+    public class JoinServerRequestHandler : RequestHandlerBase, IRequestHandler<JoinServerRequest, ServerDetailsDto>
     {
         public JoinServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
         }
 
-        public async Task Handle(JoinServerRequest request, CancellationToken cancellationToken)
+        public async Task<ServerDetailsDto> Handle(JoinServerRequest request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             Invitation invitation = await Context.Invitations.FindAsync(request.InvitationId);
@@ -33,7 +34,7 @@ namespace Sparkle.Application.Common.Servers.Commands.JoinServer
                 Roles = new List<Role>(),
                 DisplayName = user.DisplayName
             });
-            await Context.Servers.UpdateAsync(server);
+            return Mapper.Map<ServerDetailsDto>(await Context.Servers.UpdateAsync(server));
         }
     }
 }
