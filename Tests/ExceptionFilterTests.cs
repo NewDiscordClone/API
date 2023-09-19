@@ -106,7 +106,7 @@ namespace Sparkle.Tests
             IActionResult? result = await GetResultAsync(attribute, exception);
 
             // Assert
-            CheckProblemDetailsResult(result, StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
+            CheckProblemDetailsResult(result, StatusCodes.Status500InternalServerError, exception.Message);
         }
     }
 }
