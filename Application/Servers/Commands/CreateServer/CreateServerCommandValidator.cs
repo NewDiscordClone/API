@@ -8,7 +8,7 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
     {
         public CreateServerCommandValidator()
         {
-            RuleFor(x => x.Title).NotEmpty().MaximumLength(Constants.ServerProfile.DisplayNameMaxLength);
+            RuleFor(x => x.Title).NotEmpty().MaximumLength(Constants.Server.TitleMaxLength);
             RuleFor(x => x.Image)!.IsMedia();
         }
     }
