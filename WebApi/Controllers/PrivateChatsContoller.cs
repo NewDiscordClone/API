@@ -9,6 +9,7 @@ using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
 using Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
+using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
 using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatUpdated;
