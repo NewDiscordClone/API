@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner
+namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
 {
     public class ChangeGroupChatOwnerCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatOwnerCommand>
     {
