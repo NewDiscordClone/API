@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner
+namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
 {
     public record ChangeGroupChatOwnerCommand : IRequest
     {
