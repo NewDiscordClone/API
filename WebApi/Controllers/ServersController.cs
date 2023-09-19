@@ -21,7 +21,6 @@ using Sparkle.Application.Servers.Queries.GetServers;
 using Sparkle.Contracts.Servers;
 using Sparkle.WebApi.Attributes;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -286,7 +285,7 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> ChangeServerProfileDisplayName(
             [DefaultValue("5f95a3c3d0ddad0017ea9291")] string serverId,
             Guid userId,
-            [Required, DefaultValue("New name")] string newName)
+            string newName)
         {
             ChangeServerProfileDisplayNameCommand command = new()
             {
