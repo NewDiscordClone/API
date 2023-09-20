@@ -10,6 +10,8 @@ using Sparkle.Application.Roles.Commands.Create;
 using Sparkle.Application.Roles.Commands.Delete;
 using Sparkle.Application.Roles.Commands.Update;
 using Sparkle.Application.Roles.Commands.UpdateClaims;
+using Sparkle.Application.Roles.Queries.RoleDetails;
+using Sparkle.Application.Roles.Queries.ServerRolesList;
 using Sparkle.Contracts.Roles;
 using System.Security.Claims;
 
@@ -20,6 +22,22 @@ namespace Sparkle.WebApi.Controllers
     {
         public RoleController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator, userProvider, mapper)
         {
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetRoles(string serverId)
+        {
+            List<Role> roles = await Mediator.Send(new ServerRolesListQuery { ServerId = serverId });
+            IEnumerable<RoleResponse> response = roles.ConvertAll(Mapper.Map<RoleResponse>);
+            return Ok(response);
+        }
+
+        [HttpGet("{roleId}")]
+        public async Task<ActionResult> GetRole(Guid roleId)
+        {
+            Role role = await Mediator.Send(new RoleDetailsQuery { RoleId = roleId });
+            RoleResponse response = Mapper.Map<RoleResponse>(role);
+            return Ok(response);
         }
 
         /// <summary>
@@ -34,7 +52,7 @@ namespace Sparkle.WebApi.Controllers
             Role role = await Mediator.Send(command);
 
             RoleResponse response = Mapper.Map<RoleResponse>(role);
-            return Created("", response);
+            return CreatedAtAction(nameof(GetRole), new { roleId = role.Id }, response);
         }
 
         /// <summary>
