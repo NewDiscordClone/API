@@ -2,7 +2,7 @@
 {
     public class UserProfile
     {
-        public string Id { get; set; } = null!;
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Roles of user 

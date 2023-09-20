@@ -17,5 +17,5 @@ public class Channel : Chat
     [DefaultValue("5f95a3c3d0ddad0017ea9291")]
     public string ServerId { get; set; }
     public List<ServerProfile> ServerProfiles { get => _profiles; init => _profiles = value; }
-    public override List<UserProfile> Profiles { get => _profiles.ConvertAll(profile => profile as UserProfile); }
+    public override List<UserProfile> Profiles => _profiles.ConvertAll(profile => profile as UserProfile);
 }

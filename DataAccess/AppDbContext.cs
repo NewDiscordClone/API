@@ -36,6 +36,7 @@ namespace Sparkle.DataAccess
             MongoDb = client.GetDatabase(dbName);
         }
 
+
         private CancellationToken _token = default;
 
         public ISimpleDbSet<UserConnections> UserConnections =>
@@ -69,8 +70,9 @@ namespace Sparkle.DataAccess
         public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
         public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
         public IMongoDatabase MongoDb { get; }
-        public ISimpleDbSet<UserProfile> UserProfiles => throw new NotImplementedException();
+        public ISimpleDbSet<UserProfile> UserProfiles => new SimpleSqlDbSet<UserProfile>(UserProfilesDbSet, this, _token);
 
+        protected DbSet<UserProfile> UserProfilesDbSet { get; set; }
         public void SetToken(CancellationToken cancellationToken)
         {
             _token = cancellationToken;
@@ -96,6 +98,12 @@ namespace Sparkle.DataAccess
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UserConfiguration());
+
+            builder.Entity<UserProfile>()
+                .HasDiscriminator<string>("ProfileType")
+                .HasValue<UserProfile>("user")
+                .HasValue<ServerProfile>("server");
+
             base.OnModelCreating(builder);
         }
 
