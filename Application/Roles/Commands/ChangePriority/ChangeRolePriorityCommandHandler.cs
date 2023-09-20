@@ -10,12 +10,12 @@ namespace Sparkle.Application.Roles.Commands.ChangePriority
         {
         }
 
-        public async Task<Role> Handle(ChangeRolePriorityCommand request, CancellationToken cancellationToken)
+        public async Task<Role> Handle(ChangeRolePriorityCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Role role = await Context.SqlRoles.FindAsync(request.RoleId);
-            role.Priority = request.Priority;
+            Role role = await Context.SqlRoles.FindAsync(command.RoleId);
+            role.Priority = command.Priority;
 
             await Context.SaveChangesAsync();
             return role;

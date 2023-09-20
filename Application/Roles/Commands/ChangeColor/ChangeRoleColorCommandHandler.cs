@@ -10,12 +10,12 @@ namespace Sparkle.Application.Roles.Commands.ChangeColor
         {
         }
 
-        public async Task<Role> Handle(ChangeRoleColorCommand request, CancellationToken cancellationToken)
+        public async Task<Role> Handle(ChangeRoleColorCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Role role = await Context.SqlRoles.FindAsync(request.RoleId);
-            role.Color = request.Color;
+            Role role = await Context.SqlRoles.FindAsync(command.RoleId);
+            role.Color = command.Color;
 
             await Context.SaveChangesAsync();
             return role;

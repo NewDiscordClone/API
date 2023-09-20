@@ -10,18 +10,18 @@ namespace Sparkle.Application.Roles.Commands.Update
         {
         }
 
-        public async Task<Role> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
+        public async Task<Role> Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            Role role = await Context.SqlRoles.FindAsync(request.Id);
+            Role role = await Context.SqlRoles.FindAsync(command.Id);
 
             await Context.RemoveClaimsFromRoleAsync(role);
 
-            role.Name = request.Name;
-            role.Color = request.Color;
-            role.Priority = request.Priority;
+            role.Name = command.Name;
+            role.Color = command.Color;
+            role.Priority = command.Priority;
 
-            await Context.AddClaimsToRoleAsync(role, request.Claims);
+            await Context.AddClaimsToRoleAsync(role, command.Claims);
             await Context.SaveChangesAsync();
 
             return role;

@@ -10,12 +10,12 @@ namespace Sparkle.Application.Roles.Commands.ChangeName
         {
         }
 
-        public async Task<Role> Handle(ChangeRoleNameCommand request, CancellationToken cancellationToken)
+        public async Task<Role> Handle(ChangeRoleNameCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Role role = await Context.SqlRoles.FindAsync(request.RoleId);
-            role.Name = request.Name;
+            Role role = await Context.SqlRoles.FindAsync(command.RoleId);
+            role.Name = command.Name;
 
             await Context.SaveChangesAsync();
             return role;

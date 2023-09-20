@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace Sparkle.Application.Roles.Commands.Update
 {
-    public class UpdateRoleCommand : IRequest<Role>
+    public record UpdateRoleCommand : IRequest<Role>
     {
         public Guid Id { get; init; }
         public string Name { get; init; }
