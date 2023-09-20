@@ -33,8 +33,8 @@ namespace Sparkle.Tests.GroupChats.Commands
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
             //Assert
-            Assert.Equal(oldUsersCount + 1, chat.Users.Count);
-            Assert.Contains(chat.Users, user => user == newMemberId);
+            Assert.Equal(oldUsersCount + 1, chat.Profiles.Count);
+            Assert.Contains(chat.Profiles, profile => profile.UserId == newMemberId);
         }
         [Fact]
         public async Task UserAlreadyExists_Fail()

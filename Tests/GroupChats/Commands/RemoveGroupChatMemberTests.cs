@@ -32,8 +32,8 @@ namespace Sparkle.Tests.GroupChats.Commands
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
             //Assert
-            Assert.Equal(oldCount - 1, chat.Users.Count);
-            Assert.DoesNotContain(chat.Users, user => user == removeMemberId);
+            Assert.Equal(oldCount - 1, chat.Profiles.Count);
+            Assert.DoesNotContain(chat.Profiles, profile => profile.UserId == removeMemberId);
         }
 
         [Fact]
