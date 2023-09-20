@@ -16,7 +16,7 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
             User user = await Context.SqlUsers.FindAsync(UserId);
 
-            if (!chat.Users.Any(u => u == UserId))
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
             List<Attachment> attachments = new();
 

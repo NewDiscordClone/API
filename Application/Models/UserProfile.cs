@@ -7,7 +7,7 @@
         /// <summary>
         /// Roles of user 
         /// </summary>
-        public virtual List<Role> Roles { get; set; } = null!;
+        public virtual List<Role> Roles { get; set; } = new();
 
         /// <summary>
         /// Id of user in the system

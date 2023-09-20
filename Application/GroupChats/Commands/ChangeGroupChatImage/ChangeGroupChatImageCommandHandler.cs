@@ -13,7 +13,7 @@ namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage
             Context.SetToken(cancellationToken);
 
             GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId);
-            if (!chat.Users.Any(u => u == UserId))
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
             string? oldImage = chat.Image;
 

@@ -34,12 +34,19 @@ namespace Sparkle.Application.Users.Commands.FriendRequest
                         RelationshipType = RelationshipType.Pending
                     });
                     await Context.RelationshipLists.UpdateAsync(otherRelationship);
+                    //TODO Добавить роли новым пользователям
                     chat = await Context.PersonalChats.AddAsync(new PersonalChat
                     {
-                        Users = new List<Guid>
+                        Profiles = new List<UserProfile>
                         {
-                            UserId,
-                            request.UserId,
+                            new()
+                            {
+                                UserId = UserId
+                            },
+                            new()
+                            {
+                                UserId = request.UserId
+                            }
                         }
                     });
                     break;

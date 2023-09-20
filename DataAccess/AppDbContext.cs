@@ -68,9 +68,8 @@ namespace Sparkle.DataAccess
 
         public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
         public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
-
-        //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
         public IMongoDatabase MongoDb { get; }
+        public ISimpleDbSet<UserProfile> UserProfiles => throw new NotImplementedException();
 
         public void SetToken(CancellationToken cancellationToken)
         {

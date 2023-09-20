@@ -17,7 +17,7 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 
             Chat chat = await Context.Chats.FindAsync(query.ChatId);
 
-            if (!chat.Users.Any(u => u == UserId))
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
 
             List<Message> messages = await Context.GetPinnedMessagesAsync(chat.Id);

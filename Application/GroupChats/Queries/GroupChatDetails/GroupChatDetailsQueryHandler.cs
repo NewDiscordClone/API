@@ -13,9 +13,11 @@ namespace Sparkle.Application.GroupChats.Queries.GroupChatDetails
             Context.SetToken(cancellationToken);
 
             GroupChat chat = await Context.GroupChats.FindAsync(query.ChatId);
-            if (!chat.Users.Any(u => u == UserId))
+
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
-            return Mapper.Map<GroupChat>(chat);
+
+            return chat;
         }
 
         public GroupChatDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)

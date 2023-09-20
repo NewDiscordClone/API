@@ -21,7 +21,8 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
         {
             Context.SetToken(cancellationToken);
             List<PrivateChatLookUp> chats = new();
-            foreach (PersonalChat personalChat in await Context.PersonalChats.FilterAsync(c => c.Users.Any(u => u == UserId)))
+
+            foreach (PersonalChat personalChat in await Context.PersonalChats.FilterAsync(c => c.Profiles.Any(p => p.UserId == UserId)))
             {
                 if (personalChat is GroupChat gchat)
                 {
@@ -31,7 +32,7 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
                         lookUp.Title = string.Join
                         (", ",
                             (await Context.SqlUsers
-                                .FilterAsync(u => gchat.Users.Contains(u.Id) && u.Id != UserId))
+                                .FilterAsync(u => gchat.Profiles.Any(p => p.UserId == u.Id) && u.Id != UserId))
                             .Select(u => u.DisplayName ?? u.UserName)
                         );
                     }
@@ -39,9 +40,9 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
                 }
                 else
                 {
-                    if (!personalChat.Users.Any(u => u != UserId))
+                    if (!personalChat.Profiles.Any(u => u.UserId != UserId))
                         throw new AggregateException("There is no other user");
-                    Guid userid = personalChat.Users.First(u => u != UserId);
+                    Guid userid = personalChat.Profiles.Select(p => p.UserId).First(id => id != UserId);
                     chats.Add(
                         new PrivateChatLookUp(
                             personalChat,
