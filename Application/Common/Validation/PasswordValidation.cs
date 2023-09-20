@@ -1,4 +1,7 @@
-﻿namespace Sparkle.Application.Common.Validation
+﻿using FluentValidation;
+using Sparkle.Application.Common.RegularExpressions;
+
+namespace Sparkle.Application.Common.Validation
 {
     public static partial class PasswordValidation
     {
@@ -33,23 +36,21 @@
                 return ruleBuilder.IsPasswordWithoutDigit(miniMumLength);
             }
 
-            public static IRuleBuilderOptions<T, string> IsPassword<T>(this IRuleBuilder<T, string> ruleBuilder, int miniMumLength = 6)
-            {
-                return ruleBuilder
-                    .MinimumLength(miniMumLength)
-                    .HasUppercase()
-                    .HasLowercase()
-                    .HasDigit()
-                    .HasSpecialCharacter();
-            }
+            return ruleBuilder
+                .MinimumLength(miniMumLength)
+                .HasUppercase()
+                .HasLowercase()
+                .HasDigit()
+                .HasSpecialCharacter();
+        }
 
-            private static IRuleBuilderOptions<T, string> IsPasswordWithoutDigit<T>(this IRuleBuilder<T, string> ruleBuilder, int miniMumLength)
-            {
-                return ruleBuilder
-                    .MinimumLength(miniMumLength)
-                    .HasUppercase()
-                    .HasLowercase()
-                    .HasSpecialCharacter();
-            }
+        private static IRuleBuilderOptions<T, string> IsPasswordWithoutDigit<T>(this IRuleBuilder<T, string> ruleBuilder, int miniMumLength)
+        {
+            return ruleBuilder
+                .MinimumLength(miniMumLength)
+                .HasUppercase()
+                .HasLowercase()
+                .HasSpecialCharacter();
         }
     }
+}
