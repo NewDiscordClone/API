@@ -31,6 +31,9 @@ public interface IAppDbContext
     Task<List<Claim>> GetRoleClaimAsync(Role role);
     Task AddClaimToRoleAsync(Role role, Claim claim);
     Task AddClaimsToRoleAsync(Role role, IEnumerable<Claim> claims);
+    Task RemoveClaimsFromRoleAsync(Role role, IEnumerable<Claim> claims);
+    Task RemoveClaimsFromRoleAsync(Role role);
+    Task RemoveClaimFromRoleAsync(Role role, Claim claim);
 
 
 }
