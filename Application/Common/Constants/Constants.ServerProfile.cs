@@ -5,6 +5,7 @@
         public static class ServerProfile
         {
             public const int DisplayNameMaxLength = 32;
+            public const int RoleNameMaxLength = 100;
         }
     }
 }
