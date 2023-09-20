@@ -41,9 +41,10 @@ namespace Sparkle.Tests.Users.Commands
             Assert.NotNull(chatId);
             Chat chat = await Context.Chats.FindAsync(chatId);
             Assert.Equal(2, chat.Profiles.Count);
-            Assert.Contains(new UserProfile { UserId = userId }, chat.Profiles);
-            Assert.Contains(new UserProfile { UserId = otherId }, chat.Profiles);
+            Assert.Contains(userId, chat.Profiles.Select(p => p.UserId));
+            Assert.Contains(otherId, chat.Profiles.Select(p => p.UserId));
         }
+
         [Fact]
         public async Task Fail_Blocked()
         {

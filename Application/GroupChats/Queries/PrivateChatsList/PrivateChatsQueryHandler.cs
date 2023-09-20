@@ -32,10 +32,13 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
                         lookUp.Title = string.Join
                         (", ",
                             (await Context.SqlUsers
-                                .FilterAsync(u => gchat.Profiles.Any(p => p.UserId == u.Id) && u.Id != UserId))
+                                .FilterAsync(u => u.Id != UserId))
+                            .Where(u => gchat.Profiles.Any(p => p.UserId == u.Id))
                             .Select(u => u.DisplayName ?? u.UserName)
+                            .AsEnumerable()
                         );
                     }
+
                     chats.Add(lookUp);
                 }
                 else
