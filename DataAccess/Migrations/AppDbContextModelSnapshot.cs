@@ -257,7 +257,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Sparkle.Application.Models.UserProfile", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProfileType")
@@ -269,7 +268,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProfilesDbSet");
+                    b.ToTable("UserProfiles", (string)null);
 
                     b.HasDiscriminator<string>("ProfileType").HasValue("user");
 

@@ -13,5 +13,10 @@
         /// Id of user in the system
         /// </summary>
         public Guid UserId { get; set; }
+
+        public UserProfile()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 }

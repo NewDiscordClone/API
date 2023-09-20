@@ -6,7 +6,6 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.DataAccess.Configurations;
 using System.Security.Claims;
 
 namespace Sparkle.DataAccess
@@ -97,12 +96,7 @@ namespace Sparkle.DataAccess
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new UserConfiguration());
-
-            builder.Entity<UserProfile>()
-                .HasDiscriminator<string>("ProfileType")
-                .HasValue<UserProfile>("user")
-                .HasValue<ServerProfile>("server");
+            builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
             base.OnModelCreating(builder);
         }
