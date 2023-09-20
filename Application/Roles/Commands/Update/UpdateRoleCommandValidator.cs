@@ -15,7 +15,7 @@ namespace Sparkle.Application.Roles.Commands.Update
                Constants.ServerProfile.RoleNameMaxLength);
 
             RuleFor(c => c.Color).NotNull().NotEmpty();
-            RuleFor(c => c.Color).Color();
+            RuleFor(c => c.Color).IsColor();
 
             RuleFor(c => c.ServerId).NotNull().IsObjectId();
 

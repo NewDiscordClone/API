@@ -9,7 +9,7 @@ namespace Sparkle.Application.Roles.Commands.ChangeColor
         {
             RuleFor(c => c.RoleId).NotNull();
 
-            RuleFor(c => c.Color).NotNull().Color();
+            RuleFor(c => c.Color).NotNull().IsColor();
         }
     }
 }
