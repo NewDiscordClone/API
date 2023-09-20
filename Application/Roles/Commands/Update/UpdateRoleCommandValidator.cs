@@ -17,8 +17,6 @@ namespace Sparkle.Application.Roles.Commands.Update
             RuleFor(c => c.Color).NotNull().NotEmpty();
             RuleFor(c => c.Color).IsColor();
 
-            RuleFor(c => c.ServerId).NotNull().IsObjectId();
-
             RuleFor(c => c.Priority).NotNull().GreaterThanOrEqualTo(0);
 
             RuleFor(c => c.Claims).NotNull();

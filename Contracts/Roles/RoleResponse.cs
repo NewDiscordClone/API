@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Sparkle.Contracts.Roles
 {
@@ -35,6 +35,6 @@ namespace Sparkle.Contracts.Roles
         /// <summary>
         /// Claims of the role
         /// </summary>
-        public IEnumerable<Claim> Claims { get; set; }
+        public IEnumerable<IdentityRoleClaim<Guid>> Claims { get; set; }
     }
 }
