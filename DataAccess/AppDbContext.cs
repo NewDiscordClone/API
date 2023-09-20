@@ -159,7 +159,32 @@ namespace Sparkle.DataAccess
                     RoleId = role.Id
                 }, _token);
             }
-            await SaveChangesAsync(_token);
+        }
+
+        public async Task RemoveClaimsFromRoleAsync(Role role, IEnumerable<Claim> claims)
+        {
+            for (int i = claims.Count() - 1; i >= 0; i--)
+            {
+                Claim claim = claims.ElementAt(i);
+
+                await RemoveClaimFromRoleAsync(role, claim);
+            }
+        }
+
+        public async Task RemoveClaimsFromRoleAsync(Role role)
+        {
+            List<IdentityRoleClaim<Guid>> claimToRemove = await RoleClaims
+                .Where(rc => rc.RoleId == role.Id).ToListAsync();
+
+            RoleClaims.RemoveRange(claimToRemove);
+        }
+
+        public async Task RemoveClaimFromRoleAsync(Role role, Claim claim)
+        {
+            IdentityRoleClaim<Guid> claimToRemove = await RoleClaims
+                .FirstAsync(rc => rc.RoleId == role.Id && rc.ClaimType == claim.Type);
+
+            RoleClaims.Remove(claimToRemove);
         }
     }
 }
