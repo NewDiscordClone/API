@@ -98,6 +98,10 @@ namespace Sparkle.DataAccess
         {
             builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
+            builder.Entity<Role>()
+                .Property(r => r.Id)
+                .ValueGeneratedNever();
+
             base.OnModelCreating(builder);
         }
 

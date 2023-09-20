@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Constants;
-using Sparkle.Application.Common.RegularExpressions;
 using Sparkle.Application.Common.Validation;
+using Sparkle.Application.Roles.Common.Validation;
 
 namespace Sparkle.Application.Roles.Commands.Create
 {
@@ -13,8 +13,7 @@ namespace Sparkle.Application.Roles.Commands.Create
                 Constants.ServerProfile.RoleNameMaxLength);
 
             RuleFor(c => c.Color).NotNull().NotEmpty();
-            RuleFor(c => c.Color).Matches(Regexes.ColorRegex())
-                .WithMessage("Color must be in #RRGGBB format");
+            RuleFor(c => c.Color).Color();
 
             RuleFor(c => c.ServerId).NotNull().IsObjectId();
 
