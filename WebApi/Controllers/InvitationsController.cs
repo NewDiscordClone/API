@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
@@ -12,7 +13,7 @@ namespace Sparkle.WebApi.Controllers
     [ApiController]
     public class InvitationsController : ApiControllerBase
     {
-        public InvitationsController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
+        public InvitationsController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator, userProvider, mapper)
         {
         }
 
@@ -59,7 +60,7 @@ namespace Sparkle.WebApi.Controllers
             CreateInvitationCommand command = Mapper.Map<CreateInvitationCommand>((serverId, request));
             string id = await Mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetInvitation), id, id);
+            return CreatedAtAction(nameof(GetInvitation), new { id }, id);
         }
     }
 }

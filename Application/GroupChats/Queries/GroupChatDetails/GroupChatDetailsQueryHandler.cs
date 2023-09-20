@@ -1,10 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
-
-namespace Sparkle.Application.GroupChats.Queries.GroupChatDetails
+﻿namespace Sparkle.Application.GroupChats.Queries.GroupChatDetails
 {
     public class GroupChatDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GroupChatDetailsQuery, GroupChat>
     {

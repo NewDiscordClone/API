@@ -1,7 +1,4 @@
-﻿using FluentValidation;
-using Sparkle.Application.Common.RegularExpressions;
-
-namespace Sparkle.Application.Common.Validation
+﻿namespace Sparkle.Application.Common.Validation
 {
     public static partial class PasswordValidation
     {
@@ -29,15 +26,30 @@ namespace Sparkle.Application.Common.Validation
                 .WithMessage("Password must contain at least one special character");
         }
 
-
-        public static IRuleBuilderOptions<T, string> IsPassword<T>(this IRuleBuilder<T, string> ruleBuilder, int miniMumLength = 6)
+        public static IRuleBuilderOptions<T, string> IsPassword<T>(this IRuleBuilder<T, string> ruleBuilder, int miniMumLength = 6, bool requireDigit = true)
         {
-            return ruleBuilder
-                .MinimumLength(miniMumLength)
-                .HasUppercase()
-                .HasLowercase()
-                .HasDigit()
-                .HasSpecialCharacter();
+            if (requireDigit)
+            {
+                return ruleBuilder.IsPasswordWithoutDigit(miniMumLength);
+            }
+
+            public static IRuleBuilderOptions<T, string> IsPassword<T>(this IRuleBuilder<T, string> ruleBuilder, int miniMumLength = 6)
+            {
+                return ruleBuilder
+                    .MinimumLength(miniMumLength)
+                    .HasUppercase()
+                    .HasLowercase()
+                    .HasDigit()
+                    .HasSpecialCharacter();
+            }
+
+            private static IRuleBuilderOptions<T, string> IsPasswordWithoutDigit<T>(this IRuleBuilder<T, string> ruleBuilder, int miniMumLength)
+            {
+                return ruleBuilder
+                    .MinimumLength(miniMumLength)
+                    .HasUppercase()
+                    .HasLowercase()
+                    .HasSpecialCharacter();
+            }
         }
     }
-}
