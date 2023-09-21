@@ -15,7 +15,7 @@ namespace Sparkle.Application.Messages.Queries.GetMessages
         {
             Context.SetToken(cancellationToken);
             Chat chat = await Context.Chats.FindAsync(query.ChatId);
-            if (!chat.Users.Any(u => u == UserId))
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
 
             List<MessageDto> result = new();

@@ -62,8 +62,9 @@ namespace Sparkle.Tests.Common
         public ISimpleDbSet<RelationshipList> RelationshipLists { get; set; }
         public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
         public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
+        public ISimpleDbSet<UserProfile> UserProfiles => new SimpleSqlDbSet<UserProfile>(UserProfilesDbSet, this, _token);
 
-        //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
+        public DbSet<UserProfile> UserProfilesDbSet { get; set; } = null!;
 
         public void SetToken(CancellationToken cancellationToken)
         {

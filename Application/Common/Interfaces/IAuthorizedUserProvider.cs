@@ -1,16 +1,16 @@
 using System.Security.Claims;
+using Sparkle.Application.Models;
 
- namespace Sparkle.Application.Common.Interfaces
+namespace Sparkle.Application.Common.Interfaces
 {
     public interface IAuthorizedUserProvider
     {
         Guid GetUserId();
         void SetUser(ClaimsPrincipal user);
-        bool IsAdmin(string serverId);
-        Task<bool> IsAdminAsync(string serverId);
-        bool HasClaims(string serverId, IEnumerable<string> claimTypes);
-        bool HasClaims(string serverId, params string[] claimTypes);
-        Task<bool> HasClaimsAsync(string serverId, IEnumerable<string> claimTypes);
-        Task<bool> HasClaimsAsync(string serverId, params string[] claimTypes);
+        bool IsAdmin(UserProfile profile);
+        bool HasClaims(UserProfile profile, IEnumerable<string> claimTypes);
+        bool HasClaims(UserProfile profile, params string[] claimTypes);
+        Task<bool> HasClaimsAsync(UserProfile profile, IEnumerable<string> claimTypes);
+        Task<bool> HasClaimsAsync(UserProfile profile, params string[] claimTypes);
     }
 }

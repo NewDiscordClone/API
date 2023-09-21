@@ -32,17 +32,8 @@ namespace Sparkle.WebApi.Providers
             User = user;
         }
 
-        public async Task<bool> HasClaimsAsync(string serverId, IEnumerable<string> claimTypes)
+        public async Task<bool> HasClaimsAsync(UserProfile profile, IEnumerable<string> claimTypes)
         {
-            Server? server = await _context.Servers.FindAsync(serverId);
-
-            if (server is null)
-                return false;
-
-            ServerProfile? profile = server.ServerProfiles.
-                FirstOrDefault(profile => profile.UserId == GetUserId());
-
-
             if (profile is null || profile.Roles is null)
                 return false;
 
@@ -68,47 +59,33 @@ namespace Sparkle.WebApi.Providers
             return true;
         }
 
-        public async Task<bool> HasClaimsAsync(string serverId, params string[] claimTypes)
+        public async Task<bool> HasClaimsAsync(UserProfile profile, params string[] claimTypes)
         {
             if (claimTypes is null)
             {
                 throw new ArgumentNullException(nameof(claimTypes));
             }
 
-            return await HasClaimsAsync(serverId, (IEnumerable<string>)claimTypes);
+            return await HasClaimsAsync(profile, (IEnumerable<string>)claimTypes);
         }
 
-        public bool HasClaims(string serverId, params string[] claimTypes)
+        public bool HasClaims(UserProfile profile, params string[] claimTypes)
         {
             if (claimTypes is null)
             {
                 throw new ArgumentNullException(nameof(claimTypes));
             }
 
-            return HasClaims(serverId, (IEnumerable<string>)claimTypes);
+            return HasClaims(profile, (IEnumerable<string>)claimTypes);
         }
 
-        public bool HasClaims(string serverId, IEnumerable<string> claimTypes)
+        public bool HasClaims(UserProfile profile, IEnumerable<string> claimTypes)
         {
-            return HasClaimsAsync(serverId, claimTypes).Result;
+            return HasClaimsAsync(profile, claimTypes).Result;
         }
 
-        public bool IsAdmin(string serverId)
+        public bool IsAdmin(UserProfile profile)
         {
-            return IsAdminAsync(serverId).Result;
-        }
-
-        public async Task<bool> IsAdminAsync(string serverId)
-        {
-            Server? server = await _context.Servers.FindAsync(serverId);
-
-            if (server is null)
-                return false;
-
-            ServerProfile? profile = server.ServerProfiles.
-                FirstOrDefault(profile => profile.UserId == GetUserId());
-
-
             if (profile is null || profile.Roles is null)
                 return false;
 

@@ -22,9 +22,9 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
         {
             SetToken(cancellationToken);
             Chat chat = await Context.PersonalChats.FindAsync(request.ChatId);
-            foreach (var user in chat.Users)
+            foreach (var profile in chat.Profiles)
             {
-                await SendToUser(chat, user);
+                await SendToUser(chat, profile.UserId);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
                     lookUp = Mapper.Map<PrivateChatLookUp>(gChat);
                     break; 
                 case PersonalChat pChat:
-                    User other = await Context.SqlUsers.FindAsync(chat.Users.First(u => u != userId));
+                    User other = await Context.SqlUsers.FindAsync(chat.Profiles.First(p => p.UserId != userId));
                     lookUp = new PrivateChatLookUp(pChat, Mapper.Map<UserLookUp>(other));
                     break;
                 default:

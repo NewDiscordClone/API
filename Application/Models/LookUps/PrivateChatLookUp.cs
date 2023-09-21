@@ -38,7 +38,7 @@ namespace Sparkle.Application.Models.LookUps
             profile.CreateMap<GroupChat, PrivateChatLookUp>()
                 .ForMember(dto => dto.Subtitle,
                     opt =>
-                        opt.MapFrom(chat => chat.Users.Count + " members"))
+                        opt.MapFrom(chat => chat.Profiles.Count + " members"))
                 .ForMember(dto => dto.Title,
                     opt =>
                         opt.Condition((_, _, title) => !string.IsNullOrWhiteSpace(title)));

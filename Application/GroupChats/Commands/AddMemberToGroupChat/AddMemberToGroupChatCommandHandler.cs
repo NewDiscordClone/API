@@ -15,13 +15,13 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
 
             GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId);
 
-            if (!chat.Users.Any(u => u == UserId))
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
-            if (chat.Users.Any(u => u == command.NewMemberId))
+            if (chat.Profiles.Any(p => p.UserId == command.NewMemberId))
                 throw new NoPermissionsException("User is already a member of the chat");
 
-
-            chat.Users.Add(command.NewMemberId);
+            //TODO Добавить роли новому пользователю
+            chat.Profiles.Add(new() { UserId = command.NewMemberId });
 
             await Context.GroupChats.UpdateAsync(chat);
         }

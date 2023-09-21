@@ -18,9 +18,9 @@ namespace Sparkle.Application.HubClients
         }
         protected IEnumerable<string> GetConnections(Chat chat)
         {
-            return chat.Users
-                .Where(user => Context.UserConnections.FindOrDefaultAsync(user)?.Result != null)
-                .SelectMany(user => Context.UserConnections.FindAsync(user).Result.Connections);
+            return chat.Profiles
+                .Where(profile => Context.UserConnections.FindOrDefaultAsync(profile.UserId)?.Result != null)
+                .SelectMany(profile => Context.UserConnections.FindAsync(profile.UserId).Result.Connections);
         }
 
         protected IEnumerable<string> GetConnections(Server server)

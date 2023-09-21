@@ -6,7 +6,6 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.DataAccess.Configurations;
 using System.Security.Claims;
 
 namespace Sparkle.DataAccess
@@ -35,6 +34,7 @@ namespace Sparkle.DataAccess
             _mongoClient = client;
             MongoDb = client.GetDatabase(dbName);
         }
+
 
         private CancellationToken _token = default;
 
@@ -68,10 +68,10 @@ namespace Sparkle.DataAccess
 
         public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
         public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
-
-        //public DbSet<ServerProfile> ServerProfiles { get; set; } = null!;
         public IMongoDatabase MongoDb { get; }
+        public ISimpleDbSet<UserProfile> UserProfiles => new SimpleSqlDbSet<UserProfile>(UserProfilesDbSet, this, _token);
 
+        protected DbSet<UserProfile> UserProfilesDbSet { get; set; }
         public void SetToken(CancellationToken cancellationToken)
         {
             _token = cancellationToken;
@@ -96,7 +96,8 @@ namespace Sparkle.DataAccess
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
             base.OnModelCreating(builder);
         }
 

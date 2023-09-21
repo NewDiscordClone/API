@@ -136,9 +136,9 @@ namespace Sparkle.Tests.Common
                 Id = _ids.Channel1 = ObjectId.GenerateNewId().ToString(),
                 Title = "Channel 1",
                 ServerId = _ids.Server1,
-                Users = new List<Guid>
+                ServerProfiles = new List<ServerProfile>
                 {
-                    _ids.UserAId,
+                   new() { UserId = _ids.UserAId }
                 }
             },
             new Channel
@@ -146,9 +146,9 @@ namespace Sparkle.Tests.Common
                 Id = _ids.Channel2 = ObjectId.GenerateNewId().ToString(),
                 Title = "Channel 2",
                 ServerId = _ids.Server2,
-                Users = new List<Guid>
+                ServerProfiles = new ()
                 {
-                    _ids.UserBId,
+                   new(){ UserId = _ids.UserBId },
                 }
             },
             new Channel
@@ -156,11 +156,11 @@ namespace Sparkle.Tests.Common
                 Id = _ids.Channel3 = ObjectId.GenerateNewId().ToString(),
                 Title = "Channel 3",
                 ServerId = _ids.Server3,
-                Users = new List<Guid>
+                ServerProfiles = new()
                 {
-                    _ids.UserAId,
-                    _ids.UserBId,
-                    _ids.UserCId,
+                    new(){ UserId = _ids.UserAId },
+                    new(){ UserId = _ids.UserBId },
+                    new(){ UserId = _ids.UserCId },
                 }
             }
         };
@@ -172,33 +172,33 @@ namespace Sparkle.Tests.Common
                 Id = _ids.GroupChat3 = ObjectId.GenerateNewId().ToString(),
                 Title = "GroupChat 2",
                 OwnerId = _userA.Id,
-                Users = { _ids.UserAId, _ids.UserBId, },
+                Profiles = { new() { UserId = _ids.UserAId }, new() { UserId = _ids.UserBId  } }
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat4 = ObjectId.GenerateNewId().ToString(),
                 Title = "GroupChat 4",
                 OwnerId = _userA.Id,
-                Users = { _ids.UserAId }
+                Profiles = { new() { UserId = _ids.UserAId } }
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat5 = ObjectId.GenerateNewId().ToString(),
                 Title = "GroupChat 5",
                 OwnerId = _userB.Id,
-                Users = { _ids.UserBId, _ids.UserCId, }
+                Profiles = { new() { UserId = _ids.UserBId }, new() { UserId = _ids.UserCId } }
             },
             new GroupChat()
             {
                 Id = _ids.GroupChat6 = ObjectId.GenerateNewId().ToString(),
                 Title = "", //No name
                 OwnerId = _userB.Id,
-                Users =
+                Profiles =
                 {
-                    _ids.UserAId,
-                    _ids.UserBId,
-                    _ids.UserCId,
-                    _ids.UserDId
+                    new() { UserId = _ids.UserAId },
+                    new() { UserId = _ids.UserBId },
+                    new() { UserId = _ids.UserCId },
+                    new() { UserId = _ids.UserDId }
                 }
             },
             new GroupChat()
@@ -206,9 +206,11 @@ namespace Sparkle.Tests.Common
                 Id = _ids.GroupChat7 = ObjectId.GenerateNewId().ToString(),
                 Title = "GroupChat 7",
                 OwnerId = _userB.Id,
-                Users =
+                Profiles =
                 {
-                    _ids.UserBId, _ids.UserCId, _ids.UserDId
+                    new() { UserId = _ids.UserBId },
+                    new() { UserId = _ids.UserCId },
+                    new() { UserId = _ids.UserDId }
                 }
             }
         };
@@ -218,12 +220,12 @@ namespace Sparkle.Tests.Common
             new PersonalChat()
             {
                 Id = _ids.PersonalChat8 = ObjectId.GenerateNewId().ToString(),
-                Users = { _ids.UserAId, _ids.UserBId, }
+                Profiles = { new() { UserId = _ids.UserAId }, new() { UserId = _ids.UserBId } }
             },
             new PersonalChat()
             {
                 Id = _ids.PersonalChat9 = ObjectId.GenerateNewId().ToString(),
-                Users = { _ids.UserBId, _ids.UserDId }
+                Profiles = { new() { UserId = _ids.UserBId }, new() { UserId = _ids.UserDId } }
             }
         };
 

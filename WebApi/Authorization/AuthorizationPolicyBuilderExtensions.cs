@@ -5,15 +5,15 @@ namespace Sparkle.WebApi.Authorization
 {
     public static class AuthorizationPolicyBuilderExtensions
     {
-        public static AuthorizationPolicyBuilder RequireServerClaim
-            (this AuthorizationPolicyBuilder builder, string serverId, params string[] claimTypes)
+        public static AuthorizationPolicyBuilder RequireRoleClaims
+            (this AuthorizationPolicyBuilder builder, string profileId, params string[] claimTypes)
         {
-            return builder.RequireServerClaim(serverId, (IEnumerable<string>)claimTypes);
+            return builder.RequireRoleClaims(profileId, (IEnumerable<string>)claimTypes);
         }
-        public static AuthorizationPolicyBuilder RequireServerClaim
-            (this AuthorizationPolicyBuilder builder, string serverId, IEnumerable<string> claimTypes)
+        public static AuthorizationPolicyBuilder RequireRoleClaims
+            (this AuthorizationPolicyBuilder builder, string profileId, IEnumerable<string> claimTypes)
         {
-            builder.Requirements.Add(new ServerClaimsAuthorizationRequirement(serverId, claimTypes));
+            builder.Requirements.Add(new RoleClaimsAuthorizationRequirement(profileId, claimTypes));
             return builder;
         }
     }

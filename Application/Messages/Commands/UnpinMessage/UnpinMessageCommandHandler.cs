@@ -16,7 +16,7 @@ namespace Sparkle.Application.Messages.Commands.UnpinMessage
             Message message = await Context.Messages.FindAsync(request.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
-            if (!chat.Users.Any(u => u == UserId))
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("You are not a member of the Chat");
 
             //TODO: Перевірка на відповідну роль на сервері

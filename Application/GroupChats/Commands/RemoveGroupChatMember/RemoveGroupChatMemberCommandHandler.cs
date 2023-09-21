@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MongoDB.Driver;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
@@ -17,17 +16,16 @@ namespace Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember
             if (pchat is not GroupChat chat)
                 throw new Exception("This is not group chat");
 
-            if (!chat.Users.Any(u => u == command.MemberId))
-                throw new NoSuchUserException();
+            UserProfile? profile = chat.Profiles.Find(p => p.UserId == command.MemberId)
+                ?? throw new NoSuchUserException();
+
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("You are not an owner of the chat");
+
             if (UserId == command.MemberId)
                 throw new Exception("You can't remove yourself");
 
-            //User member = await Context.FindSqlByIdAsync<User>(request.MemberId, cancellationToken);
-            if (!chat.Users.Contains(command.MemberId))
-                throw new NoSuchUserException();
-            chat.Users.Remove(chat.Users.Find(u => u == command.MemberId));
+            chat.Profiles.Remove(profile);
 
             await Context.GroupChats.UpdateAsync(chat);
         }
