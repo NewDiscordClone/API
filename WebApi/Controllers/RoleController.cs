@@ -93,52 +93,62 @@ namespace Sparkle.WebApi.Controllers
         /// </summary>
         /// <param name="roleId">Id of the role to update</param>
         /// <param name="request">New role's data</param>
-        /// <response code="200">Ok. Operation is successful</response>
+        /// <response code="204">Operation is successful.</response>
         /// <response code="404">Not Found. The role is not found</response>
         [HttpPut("{roleId}")]
         public async Task<ActionResult> UpdateRole(Guid roleId, UpdateRoleRequest request)
         {
             UpdateRoleCommand command = Mapper.Map<UpdateRoleCommand>((roleId, request));
-            Role role = await Mediator.Send(command);
+            await Mediator.Send(command);
 
-            RoleResponse response = Mapper.Map<RoleResponse>(role);
-            return Ok(response);
+            return NoContent();
         }
 
         /// <summary>
-        /// Partially updates the role
+        /// Update role's name.
         /// </summary>
-        /// <param name="roleId">Id of the role to update</param>
-        /// <param name="name">New role's name</param>
-        /// <param name="color">New role's color in hex format</param>
-        /// <param name="priority">New role's priority</param>
-        /// <response code="200">Ok. Operation is successful</response>
-        /// <response code="404">Not Found. The role is not found</response>
-        [HttpPatch("{roleId}")]
-        public async Task<ActionResult> PartialUpdateRole(Guid roleId, string? name, string? color, int? priority)
+        /// <param name="roleId">ID of the role to update.</param>
+        /// <param name="name">New role's name.</param>
+        /// <response code="204">Operation is successful.</response>
+        /// <response code="400">Bad Request. Invalid input data.</response>
+        /// <response code="404">Not Found. The role is not found.</response>
+        [HttpPatch("{roleId}/name")]
+        public async Task<ActionResult> UpdateRoleName(Guid roleId, string name)
         {
-            List<IRequest<Role>> commands = new();
+            await Mediator.Send(new ChangeRoleNameCommand { RoleId = roleId, Name = name });
 
-            if (name is not null)
-                commands.Add(new ChangeRoleNameCommand { RoleId = roleId, Name = name });
+            return NoContent();
+        }
 
-            if (color is not null)
-                commands.Add(new ChangeRoleColorCommand { RoleId = roleId, Color = color });
+        /// <summary>
+        /// Update role's name.
+        /// </summary>
+        /// <param name="roleId">ID of the role to update.</param>
+        /// <param name="color">New role's color.</param>
+        /// <response code="204">Operation is successful.</response>
+        /// <response code="400">Bad Request. Invalid input data.</response>
+        /// <response code="404">Not Found. The role is not found.</response>
+        [HttpPatch("{roleId}/color")]
+        public async Task<ActionResult> UpdateRoleColor(Guid roleId, string color)
+        {
+            await Mediator.Send(new ChangeRoleColorCommand { RoleId = roleId, Color = color });
 
-            if (priority is not null)
-                commands.Add(new ChangeRolePriorityCommand { RoleId = roleId, Priority = priority.Value });
+            return NoContent();
+        }
 
-            if (commands.Count == 0)
-                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "No changes specified");
-
-            Role? role = null;
-            foreach (IRequest<Role> command in commands)
-            {
-                role = await Mediator.Send(command);
-            }
-
-            RoleResponse response = Mapper.Map<RoleResponse>(role!);
-            return Ok(response);
+        /// <summary>
+        /// Update role's name.
+        /// </summary>
+        /// <param name="roleId">ID of the role to update.</param>
+        /// <param name="priority">New role's priority.</param>
+        /// <response code="204">Operation is successful.</response>
+        /// <response code="400">Bad Request. Invalid input data.</response>
+        /// <response code="404">Not Found. The role is not found.</response>
+        [HttpPatch("{roleId}/priority")]
+        public async Task<ActionResult> UpdateRolePriority(Guid roleId, int priority)
+        {
+            await Mediator.Send(new ChangeRolePriorityCommand { RoleId = roleId });
+            return NoContent();
         }
 
         /// <summary>
