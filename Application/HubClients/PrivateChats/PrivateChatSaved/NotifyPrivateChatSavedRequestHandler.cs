@@ -37,7 +37,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
                     lookUp = Mapper.Map<PrivateChatLookUp>(gChat);
                     break; 
                 case PersonalChat pChat:
-                    User other = await Context.SqlUsers.FindAsync(chat.Profiles.First(p => p.UserId != userId));
+                    User other = await Context.SqlUsers.FindAsync(chat.Profiles.First(p => p.UserId != userId).UserId);
                     lookUp = new PrivateChatLookUp(pChat, Mapper.Map<UserLookUp>(other));
                     break;
                 default:

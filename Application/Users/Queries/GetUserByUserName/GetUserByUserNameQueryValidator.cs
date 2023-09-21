@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Constants;
 
-namespace Sparkle.Application.Users.Queries.GetUserIdFromUserName
+namespace Sparkle.Application.Users.Queries.GetUserDetails
 {
-    public class GetUserIdFromUserNameQueryValidator : AbstractValidator<GetUserIdFromUserNameQuery>
+    public class GetUserByUserNameQueryValidator : AbstractValidator<GetUserByUserNameQuery>
     {
-        public GetUserIdFromUserNameQueryValidator()
+        public GetUserByUserNameQueryValidator()
         {
             RuleFor(x => x.UserName)
                 .NotEmpty()

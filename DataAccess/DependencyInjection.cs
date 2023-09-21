@@ -14,7 +14,6 @@ namespace Sparkle.DataAccess
             services.AddDbContext<AppDbContext>(options
                 =>
             {
-                options.LogTo(s => { }, LogLevel.None);
                 options.UseSqlServer(configuration
                     .GetConnectionString("SqlServer") ?? throw new Exception("Connection doesn't exist"));
             });

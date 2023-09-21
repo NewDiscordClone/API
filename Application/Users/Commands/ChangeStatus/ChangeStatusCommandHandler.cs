@@ -6,20 +6,20 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Users.Commands.ChangeStatus
 {
-    public class ChangeStatusRequestHandler : RequestHandlerBase, IRequestHandler<ChangeStatusRequest>
+    public class ChangeStatusCommandHandler : RequestHandlerBase, IRequestHandler<ChangeStatusCommand>
     {
-        public ChangeStatusRequestHandler(
+        public ChangeStatusCommandHandler(
             IAppDbContext context,
             IAuthorizedUserProvider userProvider, IMapper mapper) :
             base(context, userProvider, mapper)
         {
         }
 
-        public async Task Handle(ChangeStatusRequest request, CancellationToken cancellationToken)
+        public async Task Handle(ChangeStatusCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             User user = await Context.SqlUsers.FindAsync(UserId);
-            user.Status = request.Status;
+            user.Status = command.Status;
             await Context.SqlUsers.UpdateAsync(user);
         }
     }

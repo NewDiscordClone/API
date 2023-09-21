@@ -37,8 +37,7 @@ namespace Sparkle.WebApi.Controllers
         /// <para>If the details param is set to true, returns json with the detailed information about the media</para>
         /// </response>
         /// <response code="400">Bad Request. The requested media is not found</response>
-        [HttpGet]
-        [Route("{id}.{ext}")]
+        [HttpGet("{id}.{ext}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [AllowAnonymous]

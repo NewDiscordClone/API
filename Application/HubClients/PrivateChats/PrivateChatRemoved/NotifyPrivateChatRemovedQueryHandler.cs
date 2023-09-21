@@ -3,9 +3,9 @@ using Sparkle.Application.Common.Interfaces;
 
 namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatRemoved
 {
-    public class NotifyPrivateChatRemovedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyPrivateChatRemovedQuery>
+    public class NotifyPrivateChatRemovedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyPrivateChatRemovedQuery>
     {
-        public NotifyPrivateChatRemovedRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context) : base(hubContextProvider, context)
+        public NotifyPrivateChatRemovedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context) : base(hubContextProvider, context)
         {
         }
 

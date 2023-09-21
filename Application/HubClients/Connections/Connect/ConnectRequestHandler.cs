@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Users.UserUpdated;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.Connections.Connect
@@ -30,8 +29,6 @@ namespace Sparkle.Application.HubClients.Connections.Connect
                 User user = await Context.SqlUsers.FindAsync(UserId);
                 user.Status = UserStatus.Online;
                 await Context.SqlUsers.UpdateAsync(user);
-                await new NotifyUserUpdatedRequestHandler(_hubContextProvider, Context, UserProvider, Mapper)
-                    .Handle(new NotifyUserUpdatedRequest(), cancellationToken);
             }
             else
             {
