@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.HubClients.ChangeStatus
+namespace Sparkle.Application.Users.Commands.ChangeStatus
 {
-    public record NotifyChangeStatusRequest : IRequest
+    public record ChangeStatusRequest : IRequest
     {
         public UserStatus Status { get; init; }
     }

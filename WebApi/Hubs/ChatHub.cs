@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.ChangeStatus;
 using Sparkle.Application.HubClients.Connections.Connect;
 using Sparkle.Application.HubClients.Connections.Disconect;
 using Sparkle.Application.Models;
@@ -42,12 +41,5 @@ public class ChatHub : Hub
         _logger.LogWarning($"User {UserId} disconnected");
         await _mediator.Send(new DisconnectRequest() { ConnectionId = Context.ConnectionId });
         await base.OnDisconnectedAsync(exception);
-    }
-
-    public async Task ChangeStatus(UserStatus status)
-    {
-        if (Context.User == null) throw new NoSuchUserException();
-        _userProvider.SetUser(Context.User);
-        await _mediator.Send(new NotifyChangeStatusRequest { Status = status });
     }
 }

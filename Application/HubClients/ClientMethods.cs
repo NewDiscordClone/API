@@ -13,7 +13,7 @@
         public const string ServerUpdated = "ServerUpdated";
         public const string ServerDeleted = "ServerDeleted";
         public const string FriendRequest = "FriendRequest";
-        public const string AcceptFriendRequest = "AcceptFriendRequest";
-        public const string StatusChanged = "StatusChanged";
+        public const string RelationshipsUpdated = "RelationshipsUpdated";
+        public const string UserUpdated = "UserUpdated";
     }
 }

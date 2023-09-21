@@ -5,6 +5,7 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Messages.MessageAdded;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
+using Sparkle.Application.HubClients.Users.RelationshipUpdated;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Commands.AcceptFriendRequest;
 using Sparkle.Application.Users.Commands.FriendRequest;
@@ -91,6 +92,8 @@ namespace Sparkle.WebApi.Controllers
                 MessageChatDto messageChat = await Mediator.Send(request);
                 await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = messageChat.ChatId });
                 await Mediator.Send(new NotifyMessageAddedRequest { MessageId = messageChat.MessageId });
+                await Mediator.Send(new NotifyRelationshipUpdatedRequest() {UserId = UserId});
+                await Mediator.Send(new NotifyRelationshipUpdatedRequest() {UserId = request.UserId});
                 return NoContent();
             }
             catch (NoPermissionsException)
@@ -132,7 +135,9 @@ namespace Sparkle.WebApi.Controllers
                 
                 if (newChat != null) 
                     await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = newChat });
-                
+                await Mediator.Send(new NotifyRelationshipUpdatedRequest() {UserId = UserId});
+                //await Mediator.Send(new NotifyRelationshipUpdatedRequest() {UserId = request.UserName});
+
                 return NoContent();
             }
             catch (NoPermissionsException)
@@ -154,6 +159,8 @@ namespace Sparkle.WebApi.Controllers
             try
             {
                 await Mediator.Send(request);
+                await Mediator.Send(new NotifyRelationshipUpdatedRequest() {UserId = UserId});
+                await Mediator.Send(new NotifyRelationshipUpdatedRequest() {UserId = request.UserId});
                 return NoContent();
             }
             catch (NoPermissionsException)

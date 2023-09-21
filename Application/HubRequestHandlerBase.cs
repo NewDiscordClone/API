@@ -14,7 +14,7 @@ namespace Sparkle.Application
 
         protected IEnumerable<string> GetConnections(Guid userId)
         {
-            return Context.UserConnections.FindAsync(userId).Result.Connections;
+            return Context.UserConnections.FindOrDefaultAsync(userId).Result?.Connections ?? new HashSet<string>();
         }
         protected IEnumerable<string> GetConnections(Chat chat)
         {

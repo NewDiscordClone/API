@@ -50,7 +50,7 @@ namespace Sparkle.Application.Models
         /// User's current status.
         /// </summary>
         [DefaultValue(UserStatus.Online)]
-        public UserStatus Status { get; set; } = UserStatus.Online;
+        public UserStatus Status { get; set; } = UserStatus.Offline;
 
         /// <summary>
         /// User's current text status message.
