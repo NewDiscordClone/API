@@ -34,8 +34,7 @@ namespace Sparkle.Application.Models.LookUps
             profile.CreateMap<User, UserLookUp>()
                 .ForMember(ul => ul.DisplayName,
                     opt =>
-                        opt.MapFrom(u =>
-                            string.IsNullOrWhiteSpace(u.DisplayName) ? u.UserName : u.DisplayName));
+                        opt.MapFrom(u => u.UserName));
         }
     }
 }

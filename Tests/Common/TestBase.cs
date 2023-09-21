@@ -15,6 +15,7 @@ namespace Sparkle.Tests.Common
         protected readonly IMapper Mapper;
         protected IAuthorizedUserProvider UserProvider => _userProvider.Object;
         protected IMediator Mediator => _mediator.Object;
+        protected Mock<IMediator> MediatorMock => _mediator;
         protected readonly CancellationToken CancellationToken = CancellationToken.None;
 
         public TestBase()

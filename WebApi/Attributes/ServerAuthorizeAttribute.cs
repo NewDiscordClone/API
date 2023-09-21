@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Sparkle.Application.Common.Interfaces;
 
 namespace Sparkle.WebApi.Attributes
 {
@@ -9,19 +8,23 @@ namespace Sparkle.WebApi.Attributes
     {
         public string? Policy { get; set; }
 
-        private string GetServerId(ActionExecutingContext context)
+        private static string GetServerId(ActionExecutingContext context)
         {
-            InvalidOperationException exception = new("Server id not found in request");
+            InvalidOperationException exception = new("Server id not found in route");
 
-            foreach (object? item in context.ActionArguments.Values)
+            if (!context.RouteData.Values.TryGetValue("serverId", out object? serverId))
             {
-                if (item is not null && item is IServerRequest request)
-                {
-                    return request.ServerId;
-                }
+                throw exception;
             }
 
-            throw exception;
+            if (serverId is string id)
+            {
+                return id;
+            }
+            else
+            {
+                throw exception;
+            }
         }
 
 

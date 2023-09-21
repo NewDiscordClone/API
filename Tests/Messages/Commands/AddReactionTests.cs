@@ -12,17 +12,17 @@ namespace Sparkle.Tests.Messages.Commands
             //Arrange
             CreateDatabase();
             string messageId = Ids.Message1;
-            const string emoji = "☻";
+            const string emoji = ":add-reaction-test:";
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            AddReactionRequest request = new()
+            AddReactionCommand request = new()
             {
                 Emoji = emoji,
                 MessageId = messageId
             };
 
-            AddReactionRequestHandler handler = new(Context, UserProvider, Mapper);
+            AddReactionCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             await handler.Handle(request, CancellationToken);

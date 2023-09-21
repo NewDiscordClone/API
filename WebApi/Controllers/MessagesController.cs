@@ -1,7 +1,6 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Messages.MessageAdded;
 using Sparkle.Application.HubClients.Messages.MessageRemoved;
@@ -19,153 +18,113 @@ using Sparkle.Application.Messages.Queries.GetMessages;
 using Sparkle.Application.Messages.Queries.GetPinnedMessages;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
-using Sparkle.WebApi.Attributes;
+using Sparkle.Contracts.Messages;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.WebApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
-    [ExceptionFilter]
-    [ApiController]
-    [Authorize]
+    [Route("api/chats/{chatId}/messages")]
     public class MessagesController : ApiControllerBase
     {
-        public MessagesController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator,
+        public MessagesController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator,
             userProvider)
         {
+            _mapper = mapper;
         }
 
+        private readonly IMapper _mapper;
+
         /// <summary>
-        /// Loads a page of Messages from the given chat to show them in client app. The size of a page defined as a constant (see <see cref="GetMessagesRequestHandler._pageSize"/>)
+        /// Returns a list of messages to show in the chat
         /// </summary>
+        /// <remarks>
+        /// The size of a page defined as a constant (see <see cref="GetMessagesQueryHandler"/>)
+        /// </remarks>
         /// <param name="chatId">string ObjectId representation of the chat to get pinned messages from</param>
-        /// <param name="messagesCount">The amount of messages that already loaded to skip them. Set 0 to load last messages
-        /// </param>
+        /// <param name="messagesCount">The amount of messages that already loaded to skip them. Set 0 to load last messages</param>
+        /// <param name="onlyPinned">If true, only pinned messages will be returned</param>
         /// <returns>A list of messages to show</returns>
         /// <response code="200">Ok. A list of messages to show</response>
         /// <response code="400">Bad Request. The requested chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must be a member of the chat</response>
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<List<MessageDto>>> GetMessages(string chatId, int messagesCount)
+        public async Task<ActionResult<List<MessageDto>>> GetMessages(string chatId, int messagesCount = 0, bool onlyPinned = false)
         {
-            try
-            {
-                List<MessageDto> messages = await Mediator.Send(new GetMessagesRequest()
-                { ChatId = chatId, MessagesCount = messagesCount });
-                return Ok(messages);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+            IRequest<List<MessageDto>> query;
 
-        /// <summary>
-        /// Loads all of the Messages that are pinned in the given chat
-        /// </summary>
-        /// <param name="chatId">
-        /// string ObjectId representation of the chat to get pinned messages from
-        /// </param>
-        /// <returns>A list of pinned messages in the chat</returns>
-        /// <response code="200">Ok. A list of pinned messages in the chat</response>
-        /// <response code="400">Bad Request. The requested chat is not found</response>
-        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
-        /// <response code="403">Forbidden. The client must be a member of the chat</response>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<List<Message>>> GetPinnedMessages(string chatId)
-        {
-            try
+            if (onlyPinned)
             {
-                List<Message> messages = await Mediator.Send(new GetPinnedMessagesRequest() { ChatId = chatId });
-                return Ok(messages);
+                query = new GetPinnedMessagesQuery() { ChatId = chatId };
             }
-            catch (EntityNotFoundException e)
+            else
             {
-                return BadRequest(e.Message);
+                query = new GetMessagesQuery() { ChatId = chatId, MessagesCount = messagesCount };
             }
+
+            List<MessageDto> messages = await Mediator.Send(query);
+
+            return Ok(messages);
         }
 
         /// <summary>
         /// Adds message to the given chat and notify other members about it
         /// </summary>
+        /// <param name="chatId">string ObjectId representation of the chat to send message to</param>
         /// <param name="request">
         /// ```
         /// text: string // Up to 2000 characters
-        /// chatId: string // represents ObjectId of the chat to send the message to
         /// attachments: Attachment[] // Attachments that user includes to the message
         /// ```
         /// </param>
         /// <returns>Ok if the operation is successful</returns>
-        /// <response code="204">No Content. Operation is successful</response>
+        /// <response code="201">Created. Message added</response>
         /// <response code="400">Bad Request. The requested chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> AddMessage([FromBody] AddMessageRequest request)
+        public async Task<ActionResult> AddMessage(string chatId, AddMessageRequest request)
         {
-            try
-            {
-                Message message = await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageAddedRequest { MessageId = message.Id });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            AddMessageCommand command = _mapper.Map<AddMessageCommand>((request, chatId));
+            MessageDto message = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyMessageAddedQuery { MessageId = message.Id });
+
+            //TODO: Create GetMessage request and send it to the client
+            return Created("", message);
         }
 
         /// <summary>
         /// Adds reaction to the message
         /// </summary>
-        /// <param name="request"> 
-        /// ```
-        /// messageId: string // represents ObjectId of the message to add reaction to
-        /// emoji: string // represents emoji name in colon brackets (:smile:)
-        /// ```
-        /// </param>
+        /// <param name="messageId">string ObjectId representation of the message to add reaction to</param>
+        /// <param name="reaction">Emoji code</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must be a member of the chat</response>
-        [HttpPost]
+        [HttpPatch("{messageId}/reactions/add")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> AddReaction([FromBody] AddReactionRequest request)
+        public async Task<ActionResult> AddReaction(string messageId, string reaction)
         {
-            try
-            {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            AddReactionCommand command = new() { Emoji = reaction, MessageId = messageId };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+
+            return NoContent();
         }
 
         /// <summary>
@@ -174,38 +133,26 @@ namespace Sparkle.WebApi.Controllers
         /// <remarks>
         /// This action can only be performed by the owner of the message
         /// </remarks>
-        /// <param name="request">
-        /// ```
-        /// messageId: string // represents ObjectId of the message to edit
-        /// newText: string // provided text to change the previous one
-        /// ```
-        /// </param>
+        /// <param name="messageId">string ObjectId representation of the message to edit</param>
+        /// <param name="newMessage">New message text</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must be the owner of the message</response>
-        [HttpPut]
+        [HttpPatch("{messageId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> EditMessage([FromBody] EditMessageRequest request)
+        public async Task<ActionResult> EditMessage(string messageId, [FromBody] string newMessage)
         {
-            try
-            {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            EditMessageCommand command = new() { MessageId = messageId, NewText = newMessage };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+
+            return NoContent();
         }
 
         /// <summary>
@@ -214,37 +161,24 @@ namespace Sparkle.WebApi.Controllers
         /// <remarks>
         /// This action can only be performed by a member of a private chat or a server member with an appropriate role
         /// </remarks>
-        /// <param name="request">
-        /// ```
-        /// messageId: string // represents ObjectId of the message to pin
-        /// ```
-        /// </param>
+        /// <param name="messageId">string ObjectId representation of the message to pin</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpPut]
+        [HttpPatch("{messageId}/pin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> PinMessage([FromBody] PinMessageRequest request)
+        public async Task<ActionResult> PinMessage(string messageId)
         {
-            try
-            {
-                await Mediator.Send(request);
-                //TODO: Реалізація відправки Message
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            PinMessageCommand command = new() { MessageId = messageId };
+            await Mediator.Send(command);
+
+            //TODO: Реалізація відправки Message
+            return NoContent();
         }
 
         /// <summary>
@@ -253,37 +187,24 @@ namespace Sparkle.WebApi.Controllers
         /// <remarks>
         /// This action can only be performed by a server member with an appropriate role
         /// </remarks>
-        /// <param name="request">
-        /// ```
-        /// messageId: string // represents ObjectId of the message to remove reactions from
-        /// ```
-        /// </param>
+        /// <param name="messageId">string ObjectId representation of the message to remove reactions from</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpDelete]
+        [HttpDelete("{messageId}/reactions/remove-all")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveAllReactions([FromBody] RemoveAllReactionsRequest request)
+        public async Task<ActionResult> RemoveAllReactions(string messageId)
         {
-            try
-            {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            RemoveAllReactionsCommand command = new() { MessageId = messageId };
+            await Mediator.Send(command);
+            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+
+            return NoContent();
         }
 
         /// <summary>
@@ -292,38 +213,26 @@ namespace Sparkle.WebApi.Controllers
         /// <remarks>
         /// This actions can only be performed by the owner of the message
         /// </remarks>
-        /// <param name="request">
-        /// ```
-        /// messageId: string // represents ObjectId of the message to remove the attachment from
-        /// attachmentIndex: int // the index of the attachment to remove
-        /// ```
-        /// </param>
+        /// <param name="messageId">string ObjectId representation of the message to remove the attachment from</param>
+        /// <param name="attachmentIndex">the index of the attachment to remove</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message or attachment is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must to be the owner of the message</response>
-        [HttpDelete]
+        [HttpDelete("{messageId}/attachments")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveAttachment([FromBody] RemoveAttachmentRequest request)
+        public async Task<ActionResult> RemoveAttachment(string messageId, [Required] int attachmentIndex)
         {
-            try
-            {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            RemoveAttachmentCommand command = new() { MessageId = messageId, AttachmentIndex = attachmentIndex };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+
+            return NoContent();
         }
 
         /// <summary>
@@ -332,37 +241,25 @@ namespace Sparkle.WebApi.Controllers
         /// <remarks>
         /// This action can only be performed by the owner of the message or a server member with an appropriate role
         /// </remarks>
-        /// <param name="request">
-        /// ```
-        /// messageId: string // represents ObjectId of the message to remove
-        /// ```
-        /// </param>
+        ///<param name="messageId">string ObjectId representation of the message to remove</param>  
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpDelete]
+        [HttpDelete("{messageId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveMessage([FromBody] RemoveMessageRequest request)
+        public async Task<ActionResult> RemoveMessage(string messageId)
         {
-            try
-            {
-                Chat chat = await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = request.MessageId, ChatId = chat.Id });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+
+            RemoveMessageCommand command = new() { MessageId = messageId };
+            Chat chat = await Mediator.Send(command);
+            await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = messageId, ChatId = chat.Id });
+
+            return NoContent();
         }
 
         /// <summary>
@@ -371,38 +268,26 @@ namespace Sparkle.WebApi.Controllers
         /// <remarks>
         /// this action can only be performed by the owner of the reaction
         /// </remarks>
-        /// <param name="request">
-        /// ```
-        /// messageId: string // represents ObjectId of the message to remove
-        /// reactionIndex: string // the index of the reaction to remove
-        /// ```
-        /// </param>
+        /// <param name="messageId">string ObjectId representation of the message to remove the reaction from</param>
+        /// <param name="reactionIndex">the index of the reaction to remove</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message or reaction is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must to be the owner of the reaction</response>
-        [HttpDelete]
+        [HttpDelete("{messageId}/reactions/remove")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveReaction([FromBody] RemoveReactionRequest request)
+        public async Task<ActionResult> RemoveReaction(string messageId, [Required] int reactionIndex)
         {
-            try
-            {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyMessageUpdatedRequest { MessageId = request.MessageId });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            RemoveReactionCommand command = new() { MessageId = messageId, ReactionIndex = reactionIndex };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+
+            return NoContent();
         }
 
         /// <summary>
@@ -411,36 +296,23 @@ namespace Sparkle.WebApi.Controllers
         /// <remarks>
         /// This action can only be performed by a member of a private chat or a server member with an appropriate role
         /// </remarks>
-        /// <param name="request">
-        /// ```
-        /// messageId: string // represents ObjectId of the message to remove
-        /// ```
-        /// </param>
+        /// <param name="messageId">string ObjectId representation of the message to unpin</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpPut]
+        [HttpPatch("{messageId}/unpin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> UnpinMessage([FromBody] UnpinMessageRequest request)
+        public async Task<ActionResult> UnpinMessage(string messageId)
         {
-            try
-            {
-                Message chat = await Mediator.Send(request);
-                //TODO: Реалізація відправки Message
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            UnpinMessageCommand command = new() { MessageId = messageId };
+            await Mediator.Send(command);
+
+            //TODO: Реалізація відправки Message
+            return NoContent();
         }
     }
 }

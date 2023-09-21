@@ -16,13 +16,13 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            RenameGroupChatRequest request = new()
+            RenameGroupChatCommand request = new()
             {
                 ChatId = chatId,
                 NewTitle = newTitle
             };
 
-            RenameGroupChatRequestHandler handler = new(Context, UserProvider);
+            RenameGroupChatCommandHandler handler = new(Context, UserProvider);
 
             //Act
 

@@ -1,13 +1,12 @@
-﻿using Sparkle.Application.Models;
+﻿using Sparkle.Application.Common.RegularExpressions;
+using Sparkle.Application.Models;
 using System.Text.RegularExpressions;
 
 namespace Sparkle.Application.Messages.Commands
 {
-    internal static class AttachmentsFromText
+    internal static partial class AttachmentsFromText
     {
-        private static readonly Regex _urlRegEx =
-            new(
-                @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)");
+        private static readonly Regex _urlRegEx = Regexes.UrlRegex();
         public static void GetAttachments(string input, Action<Attachment> onGet)
         {
             MatchCollection urlCollection = _urlRegEx.Matches(input);
@@ -21,5 +20,7 @@ namespace Sparkle.Application.Messages.Commands
                 });
             }
         }
+
+
     }
 }

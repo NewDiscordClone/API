@@ -17,17 +17,18 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(userId);
 
-            CreateGroupChatRequest request = new()
+            CreateGroupChatCommand request = new()
             {
                 UsersId = userIdlist,
                 Title = title,
             };
-            CreateGroupChatRequestHandler handler = new(Context, UserProvider, Mapper);
+            CreateGroupChatCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
 
             string id = await handler.Handle(request, CancellationToken);
             GroupChat result = await Context.GroupChats.FindAsync(id);
+            userIdlist.Add(userId);
 
             //Assert
             Assert.NotNull(result);

@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.GroupChats.Queries.GetPrivateChats;
+﻿using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
 using Sparkle.Application.Models.LookUps;
 using Sparkle.Tests.Common;
 
@@ -15,8 +15,8 @@ namespace Sparkle.Tests.GroupChats.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetPrivateChatsRequest request = new();
-            GetPrivateChatsRequestHandler handler = new(Context, UserProvider, Mapper);
+            PrivateChatsQuery request = new();
+            PrivateChatsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             List<PrivateChatLookUp> chats = await handler.Handle(request, CancellationToken);

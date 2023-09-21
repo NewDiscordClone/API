@@ -15,11 +15,11 @@ namespace Sparkle.Tests.Users.Queries
 
             SetAuthorizedUserId(userId);
 
-            GetUserDetailsRequest request = new()
+            GetUserDetailsQuery request = new()
             {
                 UserId = userId
             };
-            GetUserDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetUserDetailsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             GetUserDetailsDto result = await handler.Handle(request, CancellationToken);
@@ -43,12 +43,12 @@ namespace Sparkle.Tests.Users.Queries
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            GetUserDetailsRequest request = new()
+            GetUserDetailsQuery request = new()
             {
                 UserId = userId,
                 ServerId = serverId
             };
-            GetUserDetailsRequestHandler handler = new(Context, UserProvider, Mapper);
+            GetUserDetailsQueryHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
             GetUserDetailsDto result = await handler.Handle(request, CancellationToken);

@@ -16,13 +16,13 @@ namespace Sparkle.Tests.Channels.Commands
             long oldCount = await Context.Servers.CountAsync(s => true);
 
             SetAuthorizedUserId(Ids.UserCId);
-            RemoveChannelRequest request = new()
+            RemoveChannelCommand command = new()
             {
                 ChatId = channelId
             };
-            RemoveChannelRequestHandler handler = new(Context, UserProvider);
+            RemoveChannelCommandHandler handler = new(Context, UserProvider);
             //Act
-            await handler.Handle(request, CancellationToken);
+            await handler.Handle(command, CancellationToken);
 
             //Assert
             await Assert.ThrowsAsync<EntityNotFoundException>(
@@ -41,15 +41,15 @@ namespace Sparkle.Tests.Channels.Commands
             long oldCount = await Context.Servers.CountAsync(s => true);
 
             SetAuthorizedUserId(Ids.UserDId);
-            RemoveChannelRequest request = new()
+            RemoveChannelCommand command = new()
             {
                 ChatId = channelId
             };
-            RemoveChannelRequestHandler handler = new(Context, UserProvider);
+            RemoveChannelCommandHandler handler = new(Context, UserProvider);
             //Act
             //Assert
             await Assert.ThrowsAsync<NoPermissionsException>(
-                async () => await handler.Handle(request, CancellationToken));
+                async () => await handler.Handle(command, CancellationToken));
             Assert.NotNull(await Context.Channels.FindAsync(channelId));
             Assert.Single(await Context.Channels.FilterAsync(c => c.ServerId == serverId));
             Assert.Equal(oldCount, await Context.Channels.CountAsync(s => true));

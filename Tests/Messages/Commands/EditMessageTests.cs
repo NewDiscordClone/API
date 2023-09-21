@@ -18,12 +18,12 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            EditMessageRequest request = new()
+            EditMessageCommand request = new()
             {
                 MessageId = messageId,
                 NewText = newText,
             };
-            EditMessageRequestHandler handler = new(Context, UserProvider);
+            EditMessageCommandHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);
@@ -46,12 +46,12 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            EditMessageRequest request = new()
+            EditMessageCommand request = new()
             {
                 MessageId = messageId,
                 NewText = newText,
             };
-            EditMessageRequestHandler handler = new(Context, UserProvider);
+            EditMessageCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

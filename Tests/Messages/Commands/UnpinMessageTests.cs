@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Messages.Commands.UnpinMessage;
-using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Messages.Commands
@@ -15,14 +15,14 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            UnpinMessageRequest request = new()
+            UnpinMessageCommand request = new()
             {
                 MessageId = messageId,
             };
-            UnpinMessageRequestHandler handler = new(Context, UserProvider);
+            UnpinMessageCommandHandler handler = new(Context, UserProvider, Mapper);
 
             //Act
-            Message result = await handler.Handle(request, CancellationToken);
+            MessageDto result = await handler.Handle(request, CancellationToken);
 
             //Assert
             Assert.False(result.IsPinned);

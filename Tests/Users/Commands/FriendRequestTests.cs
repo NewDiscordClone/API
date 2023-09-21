@@ -14,16 +14,16 @@ namespace Sparkle.Tests.Users.Commands
             CreateDatabase();
             Guid userId = Ids.UserAId;
             
-            string otherName = "user_c"; 
+            // string otherName = "user_c"; 
             Guid otherId = Ids.UserCId; 
 
             SetAuthorizedUserId(userId);
 
-            FriendRequestRequest request = new()
+            CreateFriendRequestCommand request = new()
             {
-                UserName = otherName
+                UserId = otherId
             };
-            FriendRequestRequestHandler handler = new(Context, UserProvider);
+            CreateFriendRequestCommandHandler handler = new(Context, UserProvider);
 
             //Act
             string? chatId = await handler.Handle(request, CancellationToken);
@@ -53,15 +53,17 @@ namespace Sparkle.Tests.Users.Commands
             CreateDatabase();
             Guid userId = Ids.UserAId;
             
-            string otherName = "user_d"; 
+            // string otherName = "user_d"; 
+            Guid otherId = Ids.UserDId; 
+
 
             SetAuthorizedUserId(userId);
 
-            FriendRequestRequest request = new()
+            CreateFriendRequestCommand request = new()
             {
-                UserName = otherName
+                UserId = otherId
             };
-            FriendRequestRequestHandler handler = new(Context, UserProvider);
+            CreateFriendRequestCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

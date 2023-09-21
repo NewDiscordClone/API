@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.LeaveServer;
 using Sparkle.Application.Models;
+using Sparkle.Application.Servers.Commands.LeaveServer;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands
@@ -18,11 +18,11 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            LeaveServerRequest request = new()
+            LeaveServerCommand request = new()
             {
                 ServerId = serverId
             };
-            LeaveServerRequestHandler handler = new(Context, UserProvider);
+            LeaveServerCommandHandler handler = new(Context, UserProvider);
 
             //Act
             await handler.Handle(request, CancellationToken);
@@ -43,11 +43,11 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            LeaveServerRequest request = new()
+            LeaveServerCommand request = new()
             {
                 ServerId = serverId
             };
-            LeaveServerRequestHandler handler = new(Context, UserProvider);
+            LeaveServerCommandHandler handler = new(Context, UserProvider);
 
             //Act
             //Assert

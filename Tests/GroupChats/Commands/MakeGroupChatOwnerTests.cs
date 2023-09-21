@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner;
+using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.Models;
 using Sparkle.Tests.Common;
 
@@ -19,13 +19,13 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(oldOwner);
 
-            MakeGroupChatOwnerRequest request = new()
+            ChangeGroupChatOwnerCommand request = new()
             {
                 ChatId = chatId,
                 MemberId = newOwnerId
             };
 
-            MakeGroupChatOwnerRequestHandler handler =
+            ChangeGroupChatOwnerCommandHandler handler =
                 new(Context, UserProvider);
 
             //Act
@@ -50,13 +50,13 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(Ids.UserAId);
 
-            MakeGroupChatOwnerRequest request = new()
+            ChangeGroupChatOwnerCommand request = new()
             {
                 ChatId = chatId,
                 MemberId = newOwnerId
             };
 
-            MakeGroupChatOwnerRequestHandler handler =
+            ChangeGroupChatOwnerCommandHandler handler =
                 new(Context, UserProvider);
 
             //Act
@@ -76,13 +76,13 @@ namespace Sparkle.Tests.GroupChats.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            MakeGroupChatOwnerRequest request = new()
+            ChangeGroupChatOwnerCommand request = new()
             {
                 ChatId = chatId,
                 MemberId = newOwnerId
             };
 
-            MakeGroupChatOwnerRequestHandler handler =
+            ChangeGroupChatOwnerCommandHandler handler =
                 new(Context, UserProvider);
 
             //Act

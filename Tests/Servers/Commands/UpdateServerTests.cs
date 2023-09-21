@@ -1,6 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Servers.Commands.UpdateServer;
 using Sparkle.Application.Models;
+using Sparkle.Application.Servers.Commands.UpdateServer;
 using Sparkle.Tests.Common;
 
 namespace Sparkle.Tests.Servers.Commands
@@ -18,7 +18,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerRequest request = new()
+            UpdateServerCommand request = new()
             {
                 ServerId = serverId,
                 Image = null,
@@ -46,7 +46,7 @@ namespace Sparkle.Tests.Servers.Commands
 
             SetAuthorizedUserId(userId);
 
-            UpdateServerRequest request = new()
+            UpdateServerCommand request = new()
             {
                 ServerId = serverId,
                 Image = null,

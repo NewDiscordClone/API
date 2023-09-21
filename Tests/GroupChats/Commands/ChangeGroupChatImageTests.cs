@@ -15,12 +15,12 @@ namespace Sparkle.Tests.GroupChats.Commands
             const string newImage = "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AA12gqVZ.img?w=800&h=415&q=60&m=2&f=jpg";
             SetAuthorizedUserId(Ids.UserAId);
 
-            ChangeGroupChatImageRequest request = new()
+            ChangeGroupChatImageCommand request = new()
             {
                 ChatId = chatId,
                 NewImage = newImage
             };
-            ChangeGroupChatImageRequestHandler handler = new(Context, UserProvider);
+            ChangeGroupChatImageCommandHandler handler = new(Context, UserProvider);
 
             //Act
 

@@ -6,10 +6,10 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
 {
-    public class NotifyPrivateChatSavedRequestHandler : HubRequestHandlerBase,
-        IRequestHandler<NotifyPrivateChatSavedRequest>
+    public class NotifyPrivateChatSavedQueryHandler : HubRequestHandlerBase,
+        IRequestHandler<NotifyPrivateChatSavedQuery>
     {
-        public NotifyPrivateChatSavedRequestHandler(
+        public NotifyPrivateChatSavedQueryHandler(
             IHubContextProvider hubContextProvider,
             IAppDbContext context,
             IAuthorizedUserProvider userProvider,
@@ -18,7 +18,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
         {
         }
 
-        public async Task Handle(NotifyPrivateChatSavedRequest request, CancellationToken cancellationToken)
+        public async Task Handle(NotifyPrivateChatSavedQuery request, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
             Chat chat = await Context.PersonalChats.FindAsync(request.ChatId);

@@ -16,13 +16,13 @@ namespace Sparkle.Tests.Messages.Commands
 
             SetAuthorizedUserId(Ids.UserBId);
 
-            RemoveAttachmentRequest request = new()
+            RemoveAttachmentCommand request = new()
             {
                 MessageId = messageId,
                 AttachmentIndex = attachmentIndex
             };
 
-            RemoveAttachmentRequestHandler handler = new(Context, UserProvider);
+            RemoveAttachmentCommandHandler handler = new(Context, UserProvider);
 
             //Act
 

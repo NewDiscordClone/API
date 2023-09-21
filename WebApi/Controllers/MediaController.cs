@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Medias.Commands.UploadMedia;
 using Sparkle.Application.Medias.Queries.GetMedia;
@@ -9,8 +8,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/media")]
     public class MediaController : ApiControllerBase
     {
 
@@ -43,17 +41,12 @@ namespace Sparkle.WebApi.Controllers
         [Route("{id}.{ext}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Index([FromRoute] string id, [FromQuery] bool details = false)
+        [AllowAnonymous]
+        public async Task<ActionResult> Get(string id, bool details = false)
         {
-            try
-            {
-                Media media = await Mediator.Send(new GetMediaRequest() { Id = id });//, Extension = ext 
-                return details ? Ok(media) : File(media.Data, media.ContentType);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            Media media = await Mediator.Send(new GetMediaQuery() { Id = id });
+
+            return details ? Ok(media) : File(media.Data, media.ContentType);
         }
 
 
@@ -74,14 +67,14 @@ namespace Sparkle.WebApi.Controllers
         /// <returns>A list of file paths </returns>
         /// <response code="200">Ok. Returns a list of file paths</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
-        [Authorize]
         [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> Index(List<IFormFile> file)
+        public async Task<ActionResult> Upload(List<IFormFile> file)
         {
             if (file == null || file.Count == 0)
                 return BadRequest("No file uploaded.");
+            
             List<string> paths = new();
 
             foreach (var formFile in file)
@@ -92,7 +85,7 @@ namespace Sparkle.WebApi.Controllers
                 if (formFile.Length >= _maxFileSizeMb * 1024 * 1024)
                     return BadRequest($"File '{formFile.FileName}' is too big, please upload file less than {_maxFileSizeMb} MB");
 
-                Media media = await Mediator.Send(new UploadMediaRequest { File = formFile});
+                Media media = await Mediator.Send(new UploadMediaCommand() { File = formFile});
 
                 paths.Add($"{Request.Scheme}://{Request.Host}/api/Media/" + media.Id + Path.GetExtension(media.FileName));
             }

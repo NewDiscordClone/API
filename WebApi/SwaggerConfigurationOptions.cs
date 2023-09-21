@@ -17,6 +17,10 @@ namespace Sparkle.WebApi
             string appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlName + ".xml");
             options.IncludeXmlComments(appXmlPath);
 
+            string contractsXmlName = "Contracts";
+            string contractsXmlPath = Path.Combine(AppContext.BaseDirectory, contractsXmlName + ".xml");
+            options.IncludeXmlComments(contractsXmlPath);
+
             options.SwaggerDoc("sparkle", new OpenApiInfo
             {
                 Title = "Spark API",

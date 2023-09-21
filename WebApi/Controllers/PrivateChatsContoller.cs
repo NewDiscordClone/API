@@ -1,31 +1,29 @@
+using MapsterMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
 using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
+using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
-using Sparkle.Application.GroupChats.Commands.MakeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
-using Sparkle.Application.GroupChats.Queries.GetGroupChatDetails;
-using Sparkle.Application.GroupChats.Queries.GetPrivateChats;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatRemoved;
+using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
+using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
+using Sparkle.Contracts.PrivateChats;
 
 namespace Sparkle.WebApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
-    [Authorize]
+    [Route("api/private-chats")]
     public class PrivateChatsController : ApiControllerBase
     {
-        public PrivateChatsController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator,
-            userProvider)
+        public PrivateChatsController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper)
+            : base(mediator, userProvider, mapper)
         {
         }
 
@@ -40,7 +38,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
-            GetPrivateChatsRequest get = new();
+            PrivateChatsQuery get = new();
             List<PrivateChatLookUp> list = await Mediator.Send(get);
             return Ok(list);
         }
@@ -54,33 +52,23 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpGet]
+        [HttpGet("{chatId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<GroupChat>> GetGroupChatDetails(string chatId)
         {
-            try
-            {
-                GroupChat chat = await Mediator
-                    .Send(new GetGroupChatDetailsRequest() { ChatId = chatId });
-                return Ok(chat);
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            GroupChat chat = await Mediator
+                .Send(new GroupChatDetailsQuery() { ChatId = chatId });
+
+            return Ok(chat);
         }
 
         /// <summary>
         /// Creates new group chat
         /// </summary>
-        /// <param name="request">
+        /// <param name="command">
         /// ```
         /// title: string // up to 100 characters
         /// image?: string // URL to the image media file
@@ -93,205 +81,166 @@ namespace Sparkle.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<string>> CreateGroupChat(CreateGroupChatRequest request)
+        public async Task<ActionResult<string>> CreateGroupChat(CreateGroupChatCommand command)
         {
-            string chatId = await Mediator.Send(request);
-            await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = chatId });
-            return Created($"{Request.Scheme}://{Request.Host}/api/GroupChat/GetDetails?chatId=" + chatId, chatId);
+            string chatId = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+
+            return CreatedAtAction(nameof(GetGroupChatDetails), chatId, chatId);
         }
 
         /// <summary>
         /// Adds the given user to the group chat as a new member
         /// </summary>
-        /// <param name="request">
-        /// ```
-        /// chatId: string // represents ObjectId of the chat to add new member to
-        /// newMemberId: int // Id of the user to add
-        /// ```
-        /// </param>
+        /// <param name="chatId">Chat Id to add new member to</param>
+        /// <param name="userId">Id of the user to add</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested group chat or member is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-
-        [HttpPut]
+        [HttpPatch("{chatId}/add-member")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> AddMemberToGroupChat(AddMemberToGroupChatRequest request)
+        public async Task<ActionResult> AddMemberToGroupChat(string chatId, Guid userId)
         {
-            try
+            AddMemberToGroupChatCommand command = new()
             {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
-                return Ok();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+                ChatId = chatId,
+                NewMemberId = userId
+            };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+
+            return NoContent();
         }
 
         /// <summary>
         /// Changes image of the given group chat
         /// </summary>
-        /// <param name="request">
-        /// ```
-        /// chatId: string // represents ObjectId of the chat to change image
-        /// newImage: string // URL to the image media file
-        /// ```
-        /// </param>
+        /// <param name="chatId">Chat Id to change image for</param>
+        /// <param name="imageUrl">URL to the new image</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpPut]
+        [HttpPatch("{chatId}/image")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> ChangeGroupChatImage(ChangeGroupChatImageRequest request)
+        public async Task<ActionResult> ChangeGroupChatImage(string chatId, [FromBody] string imageUrl)
         {
-            try
+            ChangeGroupChatImageCommand command = new()
             {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
-                return NoContent();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+                ChatId = chatId,
+                NewImage = imageUrl
+            };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+
+            return NoContent();
         }
 
         /// <summary>
         /// Changes the title of the given group chat
         /// </summary>
-        /// <param name="request">
-        /// ```
-        /// chatId: string // represents ObjectId of the chat to rename
-        /// newTitle: string // up to 100 characters
-        /// ```
-        /// </param>
+        /// <param name="chatId">Chat Id to change title for</param>
+        /// <param name="name">New title of the group chat</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpPut]
+        [HttpPatch("{chatId}/name")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RenameGroupChat(RenameGroupChatRequest request)
+        public async Task<ActionResult> RenameGroupChat(string chatId, string name)
         {
-            try
+            RenameGroupChatCommand command = new()
             {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
-                return NoContent();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+                ChatId = chatId,
+                NewTitle = name
+            };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+
+            return NoContent();
         }
+
         /// <summary>
         /// Remove the currently authorized user from the group chat 
         /// </summary>
-        /// <param name="request">
-        /// ```
-        /// chatId: string // represents ObjectId of the chat to leave from
-        /// silent: boolean // by default false; if true, the other chat members will not be notified 
-        /// ```
-        /// </param>
+        /// <param name="chatId">Chat Id to leave from</param>
+        /// <param name="silent">By default false; if true, the other chat members will not be notified</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested group chat is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client must be a member of the chat</response>
-        [HttpPut]
+        [HttpDelete("{chatId}/leave")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> LeaveFromGroupChat(LeaveFromGroupChatRequest request)
+        public async Task<ActionResult> LeaveFromGroupChat(string chatId, bool silent = false)
         {
-            try
+            LeaveFromGroupChatCommand command = new()
             {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
-                await Mediator.Send(new NotifyPrivateChatRemovedRequest { UserId = UserId, ChatId = request.ChatId });
-                return NoContent();
-            }
-            catch (NoSuchUserException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+                ChatId = chatId,
+                Silent = silent
+            };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+
+            return NoContent();
         }
 
         /// <summary>
         /// Transfer owner rights of the group chat to another member of the chat
         /// </summary>
-        /// <param name="request">
-        /// ```
-        /// chatId: string // represents ObjectId of the chat to transfer owner of
-        /// memberId: int // id of the user to transfer rights to
-        /// ```
-        /// </param>
+        /// <param name="chatId">Chat Id to change owner for</param>
+        /// <param name="newOwnerId">Id of the new owner</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested group chat or user is not found</response>
-        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this command</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpPut]
+        [HttpPatch("{chatId}/change-owner")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> MakeGroupChatOwner(MakeGroupChatOwnerRequest request)
+        public async Task<ActionResult> ChangeGroupChatOwner(string chatId, Guid newOwnerId)
         {
-            try
+            ChangeGroupChatOwnerCommand command = new()
             {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
-                return NoContent();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+                ChatId = chatId,
+                MemberId = newOwnerId
+            };
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+
+            return NoContent();
         }
 
         /// <summary>
         /// Removes the given user from the chat members list
         /// </summary>
+        /// <param name="chatId">Chat Id to remove member from</param>
         /// <param name="request">
         /// ```
-        /// chatId: string // represents ObjectId of the chat to remove new member from
         /// memberId: int // Id of the user to remove
         /// silent: boolean // by default false; if true, the other chat members will not be notified
         /// ```
@@ -301,32 +250,19 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="400">Bad Request. The requested group chat or user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
-        [HttpPut]
+        [HttpDelete("{chatId}/kick")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveGroupChatMember(RemoveGroupChatMemberRequest request)
+        public async Task<ActionResult> RemoveGroupChatMember(string chatId, KickUserFromGroupChatRequest request)
         {
-            try
-            {
-                await Mediator.Send(request);
-                await Mediator.Send(new NotifyPrivateChatSavedRequest { ChatId = request.ChatId });
-                await Mediator.Send(new NotifyPrivateChatRemovedRequest { UserId = request.MemberId, ChatId = request.ChatId });
-                return NoContent();
-            }
-            catch (NoPermissionsException e)
-            {
-                return Forbid(e.Message);
-            }
-            catch (NoSuchUserException ex)
-            {
-                return BadRequest(ex);
-            }
-            catch (EntityNotFoundException e)
-            {
-                return BadRequest(e.Message);
-            }
+            RemoveGroupChatMemberCommand command = Mapper.Map<RemoveGroupChatMemberCommand>((chatId, request));
+            await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+
+            return NoContent();
         }
     }
 }
