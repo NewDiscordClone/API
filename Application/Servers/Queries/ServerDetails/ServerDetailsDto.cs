@@ -43,7 +43,7 @@ namespace Sparkle.Application.Servers.Queries.ServerDetails
         /// <summary>
         /// List of roles on this server.
         /// </summary>
-        public List<RoleDto> Roles { get; init; }
+        public List<Guid> Roles { get; init; }
 
         public void Mapping(Profile profile)
         {

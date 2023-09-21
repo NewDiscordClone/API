@@ -152,6 +152,7 @@ namespace Sparkle.DataAccess
         {
             foreach (IdentityRoleClaim<Guid> claim in claims)
             {
+                claim.RoleId = role.Id;
                 await RoleClaims.AddAsync(claim);
             }
         }

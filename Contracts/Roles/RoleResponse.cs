@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Sparkle.Contracts.Roles
+﻿namespace Sparkle.Contracts.Roles
 {
     /// <summary>
     /// Role details
@@ -23,11 +21,6 @@ namespace Sparkle.Contracts.Roles
         public string Color { get; set; }
 
         /// <summary>
-        /// Id of the server where the role is located
-        /// </summary>
-        public string ServerId { get; set; }
-
-        /// <summary>
         /// Priority that indicates how high the role is in the hierarchy
         /// </summary>
         public int Priority { get; set; }
@@ -35,6 +28,6 @@ namespace Sparkle.Contracts.Roles
         /// <summary>
         /// Claims of the role
         /// </summary>
-        public IEnumerable<IdentityRoleClaim<Guid>> Claims { get; set; }
+        public IEnumerable<ClaimRequest> Claims { get; set; }
     }
 }

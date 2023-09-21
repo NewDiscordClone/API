@@ -15,6 +15,9 @@ namespace Sparkle.Application.Roles.Queries.RoleDetails
             Context.SetToken(cancellationToken);
 
             Role role = await Context.SqlRoles.FindAsync(query.RoleId);
+
+            role.Claims ??= await Context.GetRoleClaimAsync(role);
+
             return role;
         }
     }

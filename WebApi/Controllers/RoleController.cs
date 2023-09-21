@@ -148,9 +148,13 @@ namespace Sparkle.WebApi.Controllers
         /// <param name="claims">New set of claims</param>
         /// <returns></returns>
         [HttpPatch("{roleId}/claims")]
-        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, IEnumerable<IdentityRoleClaim<Guid>> claims)
+        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, List<ClaimRequest> claims)
         {
-            await Mediator.Send(new UpdateRoleClaimsCommand { RoleId = roleId, Claims = claims });
+            List<IdentityRoleClaim<Guid>> identityClaims = claims
+                .ConvertAll(claimRequest => Mapper.Map<IdentityRoleClaim<Guid>>((roleId, claimRequest)));
+
+            await Mediator.Send(new UpdateRoleClaimsCommand { RoleId = roleId, Claims = identityClaims });
+
             return NoContent();
         }
     }

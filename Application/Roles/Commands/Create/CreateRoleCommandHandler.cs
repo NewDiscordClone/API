@@ -25,6 +25,7 @@ namespace Sparkle.Application.Roles.Commands.Create
 
             server.Roles.Add(role.Id);
 
+            await Context.SqlRoles.AddAsync(role);
             await Context.Servers.UpdateAsync(server);
             await Context.SaveChangesAsync();
             return role;
