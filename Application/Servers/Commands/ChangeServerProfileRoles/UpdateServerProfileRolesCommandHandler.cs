@@ -16,9 +16,6 @@ namespace Sparkle.Application.Servers.Commands.ChangeServerProfileRoles
             Context.SetToken(cancellationToken);
             Server server = await Context.Servers.FindAsync(command.ServerId);
 
-            if (server.Owner != UserId) //TODO: Замінити на перевірку claims
-                throw new NoPermissionsException("You don't have an appropriate right to do this");
-
             ServerProfile serverProfile = server.ServerProfiles.Find(sp => sp.UserId == command.UserId)
                 ?? throw new NoPermissionsException("The user are not a member of the server");
 
