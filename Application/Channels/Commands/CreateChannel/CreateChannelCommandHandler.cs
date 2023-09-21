@@ -13,12 +13,11 @@ namespace Sparkle.Application.Channels.Commands.CreateChannel
 
             //TODO: Перевірити що у юзера є відповідні права
             Server server = await Context.Servers.FindAsync(command.ServerId);
-            List<Guid> users = new();
-            server.ServerProfiles.ForEach(profile => users.Add(profile.UserId));
+
             Channel channel = new()
             {
                 Title = command.Title,
-                Users = users,
+                ServerProfiles = server.ServerProfiles,
                 ServerId = server.Id
             };
 

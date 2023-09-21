@@ -18,7 +18,7 @@ namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
 
             if (chat.OwnerId != UserId)
                 throw new NoPermissionsException("User is not an owner of the chat");
-            if (!chat.Users.Any(u => u == command.MemberId))
+            if (!chat.Profiles.Any(p => p.UserId == command.MemberId))
                 throw new NoSuchUserException("User in not a member of the chat");
 
             chat.OwnerId = command.MemberId;

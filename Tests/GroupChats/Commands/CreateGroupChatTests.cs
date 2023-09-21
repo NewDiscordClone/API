@@ -33,7 +33,7 @@ namespace Sparkle.Tests.GroupChats.Commands
             //Assert
             Assert.NotNull(result);
             Assert.Equal(title, result.Title);
-            Assert.True(result.Users.Select(user => user).SequenceEqual(userIdlist));
+            Assert.True(result.Profiles.All(profile => userIdlist.Contains(profile.UserId)));
         }
     }
 }

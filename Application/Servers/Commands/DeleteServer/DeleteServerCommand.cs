@@ -1,11 +1,10 @@
 using MediatR;
-using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Servers.Commands.DeleteServer
 {
-    public record DeleteServerCommand : IRequest<Server>, IServerRequest
+    public record DeleteServerCommand : IRequest<Server>
     {
         /// <summary>
         /// Id of the server to delete

@@ -15,7 +15,7 @@ namespace Sparkle.Application.Channels.Commands.RemoveChannel
             Channel chat = await Context.Channels.FindAsync(command.ChatId);
 
             //TODO: Перевірити що у юзера є відповідні права
-            if (!chat.Users.Any(u => u == UserId))
+            if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoPermissionsException("User is not a member of the chat");
 
             await Context.Chats.DeleteAsync(chat);

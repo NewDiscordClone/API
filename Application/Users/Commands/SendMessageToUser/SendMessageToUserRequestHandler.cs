@@ -48,10 +48,10 @@ namespace Sparkle.Application.Users.Commands.SendMessageToUser
 
             Chat chat = await Context.PersonalChats.AddAsync(new PersonalChat
             {
-                Users = new List<Guid>
+                Profiles = new List<UserProfile>
                 {
-                    UserId,
-                    request.UserId,
+                    new() { UserId = UserId },
+                    new() { UserId = request.UserId }
                 }
             });
             MessageDto message = await new AddMessageCommandHandler(Context, UserProvider, Mapper).Handle(new AddMessageCommand

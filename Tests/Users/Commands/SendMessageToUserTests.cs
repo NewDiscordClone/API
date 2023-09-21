@@ -42,9 +42,9 @@ namespace Sparkle.Tests.Users.Commands
             Assert.Equal(RelationshipType.Acquaintance, otherToMe.RelationshipType);
 
             Chat chat = await Context.Chats.FindAsync(messageChatDto.ChatId);
-            Assert.Equal(2, chat.Users.Count);
-            Assert.Contains(userId, chat.Users);
-            Assert.Contains(otherId, chat.Users);
+            Assert.Equal(2, chat.Profiles.Count);
+            Assert.Contains(userId, chat.Profiles.Select(p => p.UserId));
+            Assert.Contains(otherId, chat.Profiles.Select(p => p.UserId));
 
             Message message = await Context.Messages.FindAsync(messageChatDto.MessageId);
             Assert.Equal(chat.Id, message.ChatId);

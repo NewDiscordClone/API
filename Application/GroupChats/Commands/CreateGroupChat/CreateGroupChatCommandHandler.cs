@@ -19,7 +19,8 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
             {
                 Title = command.Title,
                 Image = command.Image,
-                Users = users,
+                //TODO Добавить роли новым пользователям
+                Profiles = users.ConvertAll(id => new UserProfile() { UserId = UserId }),
                 OwnerId = UserId
             };
 
