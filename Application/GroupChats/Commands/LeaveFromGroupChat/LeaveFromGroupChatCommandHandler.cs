@@ -16,8 +16,16 @@ namespace Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat
             if (pchat is not GroupChat chat)
                 throw new Exception("This is not group chat");
 
+
+
             if (!chat.Profiles.Any(p => p.UserId == UserId))
                 throw new NoSuchUserException("User is not a member of the chat");
+
+            if (chat.Profiles.Count <= 1)
+            {
+                await Context.GroupChats.DeleteAsync(chat);
+                return;
+            }
 
             UserProfile? profile = chat.Profiles.Find(p => p.UserId == UserId)
                 ?? throw new NoSuchUserException();
