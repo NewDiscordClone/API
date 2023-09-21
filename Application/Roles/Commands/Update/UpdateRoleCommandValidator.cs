@@ -20,6 +20,7 @@ namespace Sparkle.Application.Roles.Commands.Update
             RuleFor(c => c.Priority).NotNull().GreaterThanOrEqualTo(0);
 
             RuleFor(c => c.Claims).NotNull();
+            RuleForEach(c => c.Claims).SetValidator(new ClaimValidator());
         }
     }
 }

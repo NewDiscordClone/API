@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sparkle.Application.Roles.Common.Validation;
 
 namespace Sparkle.Application.Roles.Commands.UpdateClaims
 {
@@ -9,6 +10,7 @@ namespace Sparkle.Application.Roles.Commands.UpdateClaims
             RuleFor(c => c.RoleId).NotNull();
 
             RuleFor(c => c.Claims).NotNull();
+            RuleForEach(c => c.Claims).SetValidator(new ClaimValidator());
         }
     }
 }
