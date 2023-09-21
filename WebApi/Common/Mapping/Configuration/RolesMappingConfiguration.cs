@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Models;
 using Sparkle.Application.Roles.Commands.Create;
 using Sparkle.Application.Roles.Commands.Update;
@@ -10,6 +11,10 @@ namespace Sparkle.WebApi.Common.Mapping.Configuration
     {
         public void Register(TypeAdapterConfig config)
         {
+            config.NewConfig<ClaimRequest, IdentityRoleClaim<Guid>>()
+                .Map(dest => dest.ClaimType, src => src.Type)
+                .Map(dest => dest.ClaimValue, src => src.Value.ToString());
+
             config.NewConfig<(string ServerId, CreateRoleRequest Request), CreateRoleCommand>()
                 .Map(dest => dest.ServerId, src => src.ServerId)
                 .Map(dest => dest, src => src.Request);

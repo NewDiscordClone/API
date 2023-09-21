@@ -1,5 +1,6 @@
 ﻿using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
@@ -13,7 +14,6 @@ using Sparkle.Application.Roles.Commands.UpdateClaims;
 using Sparkle.Application.Roles.Queries.RoleDetails;
 using Sparkle.Application.Roles.Queries.ServerRolesList;
 using Sparkle.Contracts.Roles;
-using System.Security.Claims;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -68,7 +68,7 @@ namespace Sparkle.WebApi.Controllers
             Role role = await Mediator.Send(command);
 
             RoleResponse response = Mapper.Map<RoleResponse>(role);
-            return CreatedAtAction(nameof(GetRole), new { roleId = role.Id }, response);
+            return CreatedAtAction(nameof(GetRole), new { serverId, roleId = role.Id }, response);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Sparkle.WebApi.Controllers
         /// <param name="claims">New set of claims</param>
         /// <returns></returns>
         [HttpPatch("{roleId}/claims")]
-        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, IEnumerable<Claim> claims)
+        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, IEnumerable<IdentityRoleClaim<Guid>> claims)
         {
             await Mediator.Send(new UpdateRoleClaimsCommand { RoleId = roleId, Claims = claims });
             return NoContent();

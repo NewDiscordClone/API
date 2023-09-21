@@ -1,6 +1,6 @@
-﻿using Sparkle.Application.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using System.Security.Claims;
 
 namespace Sparkle.Application.Common.Factories
 {
@@ -30,8 +30,14 @@ namespace Sparkle.Application.Common.Factories
                 Color = "#FFF000",
                 ServerId = serverId
             };
+
             _context.SqlRoles.AddMany(new[] { ownerRole, memberRole });
-            _context.AddClaimToRoleAsync(memberRole, new Claim(ServerClaims.ChangeServerName, "true"));
+            _context.AddClaimToRoleAsync(memberRole, new IdentityRoleClaim<Guid>()
+            {
+                ClaimType = ServerClaims.ChangeServerName,
+                ClaimValue = true.ToString(),
+                RoleId = memberRole.Id
+            });
 
             return new() { ownerRole, memberRole };
         }

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace Sparkle.Contracts.Roles
+﻿namespace Sparkle.Contracts.Roles
 {
     public record UpdateRoleRequest
     {
@@ -19,6 +17,8 @@ namespace Sparkle.Contracts.Roles
         /// <summary>
         /// Claims of the role
         /// </summary>
-        public IEnumerable<Claim> Claims { get; init; }
+        public IEnumerable<ClaimRequest> Claims { get; init; }
     }
+
+    public record ClaimRequest(string Type, bool Value);
 }

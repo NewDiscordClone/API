@@ -18,7 +18,10 @@ namespace Sparkle.Application.Roles.Commands.Create
             Server server = await Context.Servers.FindAsync(command.ServerId);
 
             Role role = Mapper.Map<Role>(command);
-            await Context.AddClaimsToRoleAsync(role, command.Claims);
+            foreach (Microsoft.AspNetCore.Identity.IdentityRoleClaim<Guid> claims in role.Claims)
+            {
+                claims.RoleId = role.Id;
+            }            //  await Context.AddClaimsToRoleAsync(role, command.Claims);
 
             server.Roles.Add(role.Id);
 

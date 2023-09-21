@@ -1,4 +1,5 @@
-﻿using Sparkle.Application.Common.Exceptions;
+﻿using Microsoft.AspNetCore.Identity;
+using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using System.Security.Claims;
@@ -35,8 +36,9 @@ namespace Sparkle.WebApi.Providers
             List<string> matchingUserClaims = new();
             foreach (Role role in profile.Roles.OrderByDescending(role => role.Priority))
             {
-                foreach (Claim claim in await _context.GetRoleClaimAsync(role))
+                foreach (IdentityRoleClaim<Guid> identityClaim in await _context.GetRoleClaimAsync(role))
                 {
+                    Claim claim = identityClaim.ToClaim();
                     if (claimTypes.Any(claimType => string.Equals(claim.Type, claimType)))
                     {
                         if (!bool.Parse(claim.Value) && !matchingUserClaims.Contains(claim.Type))

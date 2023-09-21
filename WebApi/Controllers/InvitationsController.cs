@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Invitations.Commands.CreateInvitation;
 using Sparkle.Application.Invitations.Queries.InvitationDetails;
+using Sparkle.Application.Roles.Queries.GetClaims;
 using Sparkle.Contracts.Invitations;
 
 namespace Sparkle.WebApi.Controllers
@@ -61,6 +62,13 @@ namespace Sparkle.WebApi.Controllers
             string id = await Mediator.Send(command);
 
             return CreatedAtAction(nameof(GetInvitation), new { id }, id);
+        }
+
+        [HttpGet("claims")]
+        public async Task<ActionResult> GetClaims()
+        {
+            IEnumerable<string> claims = await Mediator.Send(new GetClaimsQuery());
+            return Ok(claims);
         }
     }
 }

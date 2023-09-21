@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using System.Security.Claims;
 
 namespace Sparkle.Application.Roles.Commands.Create
 {
@@ -12,7 +12,7 @@ namespace Sparkle.Application.Roles.Commands.Create
         public string Color { get; init; }
         public string ServerId { get; init; }
         public int Priority { get; init; }
-        public IEnumerable<Claim> Claims { get; init; }
+        public IEnumerable<IdentityRoleClaim<Guid>> Claims { get; init; }
 
         public void Mapping(Profile profile)
         {
