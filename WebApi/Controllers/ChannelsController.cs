@@ -24,7 +24,6 @@ namespace Sparkle.WebApi.Controllers
         /// </summary>
         ///<param name="name">Name of the channel to be created</param>
         ///<param name="serverId">Id of the server to attach the channel to</param>
-        /// </param>
         /// <returns>
         /// String that represents ObjectId of the created Channel instance
         /// </returns>

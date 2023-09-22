@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
@@ -6,9 +7,16 @@ namespace Sparkle.Application.HubClients.Connections.Disconect
 {
     public class DisconnectRequestHandler : HubRequestHandlerBase, IRequestHandler<DisconnectRequest>
     {
-        public DisconnectRequestHandler(IHubContextProvider hubContextProvider,
-            IAuthorizedUserProvider userProvider) : base(hubContextProvider, userProvider)
+        private readonly IHubContextProvider _hubContextProvider;
+
+        public DisconnectRequestHandler(
+            IHubContextProvider hubContextProvider,
+            IAppDbContext context,
+            IAuthorizedUserProvider userProvider,
+            IMapper mapper) : 
+            base(hubContextProvider, context, userProvider,mapper)
         {
+            _hubContextProvider = hubContextProvider;
         }
 
         public async Task Handle(DisconnectRequest request, CancellationToken cancellationToken)
@@ -22,7 +30,12 @@ namespace Sparkle.Application.HubClients.Connections.Disconect
             if (userConnections.Connections.Count == 0)
             {
                 await Context.UserConnections.DeleteAsync(userConnections);
+                User user = await Context.SqlUsers.FindAsync(UserId);
+                user.Status = UserStatus.Offline;
+                await Context.SqlUsers.UpdateAsync(user);
             }
+            else
+                await Context.UserConnections.UpdateAsync(userConnections);
         }
     }
 }

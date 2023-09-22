@@ -38,7 +38,7 @@ namespace Sparkle.DataAccess
         private CancellationToken _token = default;
 
         public ISimpleDbSet<UserConnections> UserConnections =>
-            new SimpleMongoDbSet<UserConnections, int>(MongoDb.GetCollection<UserConnections>("userConnections"), _token);
+            new SimpleMongoDbSet<UserConnections, Guid>(MongoDb.GetCollection<UserConnections>("userConnections"), _token);
         public ISimpleDbSet<Message> Messages =>
             new SimpleMongoDbSet<Message>(MongoDb.GetCollection<Message>("messages"), _token);
 

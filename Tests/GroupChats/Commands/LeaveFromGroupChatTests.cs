@@ -37,6 +37,32 @@ namespace Sparkle.Tests.GroupChats.Commands
         }
 
         [Fact]
+        public async Task Success_LastUser()
+        {
+            //Arrange
+            CreateDatabase();
+            string chatId = Ids.GroupChat4;
+            Guid userId = Ids.UserAId;
+
+            SetAuthorizedUserId(userId);
+
+            LeaveFromGroupChatCommand request = new()
+            {
+                ChatId = chatId,
+            };
+
+            LeaveFromGroupChatCommandHandler handler = new(Context, UserProvider);
+
+            //Act
+
+            await handler.Handle(request, CancellationToken);
+
+            //Assert
+            await Assert.ThrowsAsync<EntityNotFoundException>(
+                async () => await Context.PersonalChats.FindAsync(chatId));
+        }
+
+        [Fact]
         public async Task Fail_NoSuchUser()
         {
             //Arrange

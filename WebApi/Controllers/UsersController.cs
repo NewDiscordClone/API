@@ -1,9 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated;
+using Sparkle.Application.HubClients.Messages.MessageAdded;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
+using Sparkle.Application.HubClients.Users.RelationshipUpdated;
 using Sparkle.Application.Users.Commands.AcceptFriendRequest;
 using Sparkle.Application.Users.Commands.FriendRequest;
+using Sparkle.Application.Users.Commands.SendMessageToUser;
 using Sparkle.Application.Users.Queries.GetRelationships;
 using Sparkle.Application.Users.Queries.GetUserDetails;
 
@@ -20,6 +24,7 @@ namespace Sparkle.WebApi.Controllers
         /// Gets detailed information about the provided user, including it's ServerProfile if ServerId is provided
         /// </summary>
         /// <param name="userId">Id of requested user. If null will return current user</param>
+        /// <param name="userName">UserName of requested user.</param>
         /// <param name="serverId">string ObjectId represents of server. Can be provided if ServerProfile is required. Null by default</param>
         /// <returns>UserDetails object</returns>
         /// <response code="200">Ok. User details object in JSON</response>
@@ -29,16 +34,48 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<GetUserDetailsDto>> GetUser(Guid? userId = null, string? serverId = null)
+        public async Task<ActionResult<GetUserDetailsDto>> GetUser(Guid? userId = null, string? userName = null, string? serverId = null)
         {
-            GetUserDetailsQuery query = new()
+            GetUserDetailsDto user;
+            if (userName == null)
             {
-                UserId = userId ?? UserId,
-                ServerId = serverId
-            };
-            GetUserDetailsDto user = await Mediator.Send(query);
-
+                GetUserDetailsQuery query = new()
+                {
+                    UserId = userId ?? UserId,
+                    ServerId = serverId
+                };
+                user = await Mediator.Send(query);
+            }
+            else
+            {
+                GetUserByUserNameQuery query = new()
+                {
+                    UserName = userName,
+                    ServerId = serverId
+                };
+                user = await Mediator.Send(query);
+            }
             return Ok(user);
+        }
+
+
+        /// <param name="request">
+        ///
+        /// </param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult> SendMessageToUser(SendMessageToUserRequest request)
+        {
+            MessageChatDto messageChat = await Mediator.Send(request);
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = messageChat.ChatId });
+            await Mediator.Send(new NotifyMessageAddedQuery() { MessageId = messageChat.MessageId });
+            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
+            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
+            return NoContent();
         }
 
         /// <summary>
@@ -76,7 +113,9 @@ namespace Sparkle.WebApi.Controllers
             string? newChat = await Mediator.Send(request);
 
             if (newChat != null)
-                await Mediator.Send(new NotifyPrivateChatCreatedQuery { ChatId = newChat });
+                await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = newChat });
+            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
+            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = userId });
 
             return NoContent();
         }
@@ -98,6 +137,8 @@ namespace Sparkle.WebApi.Controllers
         {
             AcceptFriendRequestCommand command = new() { UserId = userId };
             await Mediator.Send(command);
+            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
+            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = userId });
 
             return NoContent();
         }

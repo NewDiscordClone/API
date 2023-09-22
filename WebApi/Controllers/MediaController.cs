@@ -37,8 +37,7 @@ namespace Sparkle.WebApi.Controllers
         /// <para>If the details param is set to true, returns json with the detailed information about the media</para>
         /// </response>
         /// <response code="400">Bad Request. The requested media is not found</response>
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}.{ext}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [AllowAnonymous]
@@ -52,28 +51,44 @@ namespace Sparkle.WebApi.Controllers
 
         private const int _maxFileSizeMb = 5;
         /// <summary>
-        /// Uploads the media file to the database
+        /// Uploads media files to the database
         /// </summary>
         /// <param name="file">
-        /// Length
-        /// Filename
-        /// ContentType
-        /// BinaryData
+        /// ```
+        /// [
+        ///     Length
+        ///     Filename
+        ///     ContentType
+        ///     BinaryData
+        /// ]
+        /// ```
         /// </param>
-        /// <returns>Ok if the operation is successful</returns>
-        /// <response code="201">Created. Operation is successful</response>
+        /// <returns>A list of file paths </returns>
+        /// <response code="200">Ok. Returns a list of file paths</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> Upload(IFormFile file)
+        public async Task<ActionResult> Upload(List<IFormFile> file)
         {
-            if (file == null || file.Length == 0)
+            if (file == null || file.Count == 0)
                 return BadRequest("No file uploaded.");
-            if (file.Length >= _maxFileSizeMb * 1024 * 1024)
-                return BadRequest($"File is too big, please upload files less than {_maxFileSizeMb} MB");
-            Media media = await Mediator.Send(new UploadMediaCommand { File = file });
-            return Created($"{Request.Scheme}://{Request.Host}/api/Media/" + media.Id, "Operation is successful");
+            
+            List<string> paths = new();
+
+            foreach (var formFile in file)
+            {
+                if (formFile.Length == 0)
+                    continue; // Skip empty file
+
+                if (formFile.Length >= _maxFileSizeMb * 1024 * 1024)
+                    return BadRequest($"File '{formFile.FileName}' is too big, please upload file less than {_maxFileSizeMb} MB");
+
+                Media media = await Mediator.Send(new UploadMediaCommand() { File = formFile});
+
+                paths.Add($"{Request.Scheme}://{Request.Host}/api/Media/" + media.Id + Path.GetExtension(media.FileName));
+            }
+            return Ok(paths);
         }
     }
 }

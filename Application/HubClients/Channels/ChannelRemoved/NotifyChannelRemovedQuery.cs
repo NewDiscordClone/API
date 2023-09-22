@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.Channels.ChannelRemoved
 {
