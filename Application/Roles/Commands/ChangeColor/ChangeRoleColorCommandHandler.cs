@@ -17,7 +17,7 @@ namespace Sparkle.Application.Roles.Commands.ChangeColor
             Role role = await Context.SqlRoles.FindAsync(command.RoleId);
             role.Color = command.Color;
 
-            await Context.SaveChangesAsync();
+            await Context.SqlRoles.UpdateAsync(role);
             return role;
         }
     }

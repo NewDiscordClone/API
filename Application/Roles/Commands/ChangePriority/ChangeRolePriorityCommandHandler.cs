@@ -17,7 +17,7 @@ namespace Sparkle.Application.Roles.Commands.ChangePriority
             Role role = await Context.SqlRoles.FindAsync(command.RoleId);
             role.Priority = command.Priority;
 
-            await Context.SaveChangesAsync();
+            await Context.SqlRoles.UpdateAsync(role);
             return role;
         }
     }

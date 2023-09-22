@@ -20,7 +20,6 @@ namespace Sparkle.Application.Roles.Commands.UpdateClaims
             await Context.AddClaimsToRoleAsync(role, command.Claims);
             await Context.SqlRoles.UpdateAsync(role);
 
-            await Context.SaveChangesAsync();
             return role;
         }
     }

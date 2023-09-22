@@ -17,7 +17,7 @@ namespace Sparkle.Application.Roles.Commands.ChangeName
             Role role = await Context.SqlRoles.FindAsync(command.RoleId);
             role.Name = command.Name;
 
-            await Context.SaveChangesAsync();
+            await Context.SqlRoles.UpdateAsync(role);
             return role;
         }
     }

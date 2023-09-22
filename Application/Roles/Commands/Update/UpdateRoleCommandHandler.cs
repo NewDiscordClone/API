@@ -22,7 +22,7 @@ namespace Sparkle.Application.Roles.Commands.Update
             role.Priority = command.Priority;
 
             await Context.AddClaimsToRoleAsync(role, command.Claims);
-            await Context.SaveChangesAsync();
+            await Context.SqlRoles.UpdateAsync(role);
 
             return role;
         }

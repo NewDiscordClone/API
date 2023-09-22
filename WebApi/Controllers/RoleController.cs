@@ -121,7 +121,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
         /// <summary>
-        /// Update role's name.
+        /// Update role's color.
         /// </summary>
         /// <param name="roleId">ID of the role to update.</param>
         /// <param name="color">New role's color.</param>
@@ -137,7 +137,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
         /// <summary>
-        /// Update role's name.
+        /// Update role's priority.
         /// </summary>
         /// <param name="roleId">ID of the role to update.</param>
         /// <param name="priority">New role's priority.</param>
