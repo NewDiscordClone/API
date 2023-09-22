@@ -28,7 +28,6 @@ namespace Sparkle.Application.Roles.Commands.Delete
 
             profilesWithRole.ForEach(serverProfile => serverProfile.Roles.Remove(role));
 
-            await Context.SaveChangesAsync();
         }
     }
 }
