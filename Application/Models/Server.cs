@@ -39,14 +39,9 @@ public class Server : IUserProfileProvider
     /// </summary>
     public Guid Owner { get; set; }
 
-    /// <summary>
-    /// List of users profiles on server
-    /// </summary>
-    public List<ServerProfile> ServerProfiles { get; set; } = new();
-
     public List<Guid> Roles { get; set; } = new();
 
     public List<Guid> BannedUsers { get; set; } = new();
 
-    public List<UserProfile> Profiles => ServerProfiles.ConvertAll(profile => profile as UserProfile);
+    public List<Guid> Profiles { get; set; } = new();
 }
