@@ -1,9 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Connections.Connect;
 using Sparkle.Application.HubClients.Connections.Disconect;
+using Sparkle.Application.HubClients.Users.UserUpdated;
+using Sparkle.Application.Models;
 
 namespace Sparkle.WebApi.Hubs;
 
@@ -19,18 +22,28 @@ public class ChatHub : Hub
         _mediator = mediator;
         _logger = logger;
         _userProvider = userProvider;
+        
     }
     private Guid UserId => _userProvider.GetUserId();
     public override async Task OnConnectedAsync()
     {
+        if (Context.User == null) throw new NoSuchUserException();
+        _userProvider.SetUser(Context.User);
+        
+        _logger.LogWarning($"User {UserId} connected");
         await _mediator.Send(new ConnectRequest() { ConnectionId = Context.ConnectionId });
-        _logger.LogInformation($"User {UserId} connected");
+        await _mediator.Send(new NotifyUserUpdatedRequest());
         await base.OnConnectedAsync();
+        
     }
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
+        if (Context.User == null) throw new NoSuchUserException();
+        _userProvider.SetUser(Context.User);
+        
+        _logger.LogWarning($"User {UserId} disconnected");
         await _mediator.Send(new DisconnectRequest() { ConnectionId = Context.ConnectionId });
-        _logger.LogInformation($"User {UserId} disconnected");
+        await _mediator.Send(new NotifyUserUpdatedRequest());
         await base.OnDisconnectedAsync(exception);
     }
 }

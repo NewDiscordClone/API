@@ -72,7 +72,10 @@ services.AddTransient<IConfigureOptions<SwaggerGenOptions>,
      SwaggerConfigurationOptions>();
 services.AddSwaggerGen();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+});
 
 WebApplication app = builder.Build();
 

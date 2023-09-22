@@ -1,4 +1,4 @@
-﻿using MapsterMapper;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
@@ -9,10 +9,10 @@ using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
 using Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatRemoved;
 using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
 using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
-using Sparkle.Application.HubClients.PrivateChats.PrivateChatCreated;
-using Sparkle.Application.HubClients.PrivateChats.PrivateChatUpdated;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 using Sparkle.Contracts.PrivateChats;
@@ -85,7 +85,7 @@ namespace Sparkle.WebApi.Controllers
         {
             string chatId = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatCreatedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
             return CreatedAtAction(nameof(GetGroupChatDetails), chatId, chatId);
         }
@@ -114,7 +114,7 @@ namespace Sparkle.WebApi.Controllers
             };
             await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatUpdatedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
             return NoContent();
         }
@@ -143,7 +143,7 @@ namespace Sparkle.WebApi.Controllers
             };
             await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatUpdatedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
             return NoContent();
         }
@@ -172,7 +172,7 @@ namespace Sparkle.WebApi.Controllers
             };
             await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatUpdatedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
             return NoContent();
         }
@@ -201,7 +201,7 @@ namespace Sparkle.WebApi.Controllers
             };
             await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatUpdatedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
             return NoContent();
         }
@@ -230,7 +230,7 @@ namespace Sparkle.WebApi.Controllers
             };
             await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatUpdatedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
             return NoContent();
         }
@@ -260,7 +260,7 @@ namespace Sparkle.WebApi.Controllers
             RemoveGroupChatMemberCommand command = Mapper.Map<RemoveGroupChatMemberCommand>((chatId, request));
             await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatUpdatedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
             return NoContent();
         }

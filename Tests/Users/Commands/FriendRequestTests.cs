@@ -13,7 +13,9 @@ namespace Sparkle.Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            Guid otherId = Ids.UserCId;
+            
+            // string otherName = "user_c"; 
+            Guid otherId = Ids.UserCId; 
 
             SetAuthorizedUserId(userId);
 
@@ -51,7 +53,10 @@ namespace Sparkle.Tests.Users.Commands
             //Arrange
             CreateDatabase();
             Guid userId = Ids.UserAId;
-            Guid otherId = Ids.UserDId;
+            
+            // string otherName = "user_d"; 
+            Guid otherId = Ids.UserDId; 
+
 
             SetAuthorizedUserId(userId);
 

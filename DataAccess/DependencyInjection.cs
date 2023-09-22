@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Sparkle.Application.Common.Interfaces;
 
 namespace Sparkle.DataAccess
@@ -11,8 +12,11 @@ namespace Sparkle.DataAccess
             IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options
-                => options.UseSqlServer(configuration
-                .GetConnectionString("SqlServer") ?? throw new Exception("Connection does`nt exist")));
+                =>
+            {
+                options.UseSqlServer(configuration
+                    .GetConnectionString("SqlServer") ?? throw new Exception("Connection doesn't exist"));
+            });
 
             services.AddScoped<IAppDbContext, AppDbContext>();
 

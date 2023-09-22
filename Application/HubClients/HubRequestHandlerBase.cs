@@ -12,9 +12,9 @@ namespace Sparkle.Application.HubClients
 
         private CancellationToken _token;
 
-        protected IEnumerable<string> GetConnections(User user)
+        protected IEnumerable<string> GetConnections(Guid userId)
         {
-            return Context.UserConnections.FindAsync(user.Id).Result.Connections;
+            return Context.UserConnections.FindOrDefaultAsync(userId).Result?.Connections ?? new HashSet<string>();
         }
         protected IEnumerable<string> GetConnections(Chat chat)
         {
@@ -43,12 +43,6 @@ namespace Sparkle.Application.HubClients
         }
 
         protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context) : base(context)
-        {
-            _hubContextProvider = hubContextProvider;
-        }
-
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAuthorizedUserProvider userProvider) :
-            base(userProvider)
         {
             _hubContextProvider = hubContextProvider;
         }

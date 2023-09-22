@@ -8,7 +8,6 @@ namespace Sparkle.Application
         private readonly IAppDbContext _context;
         private readonly IAuthorizedUserProvider _userProvider;
         private readonly IMapper? _mapper;
-
         protected IAppDbContext Context => _context ?? throw new Exception("There is no constructor with IAppDbContext");
         protected Guid UserId => UserProvider.GetUserId();
 
@@ -17,10 +16,6 @@ namespace Sparkle.Application
         public RequestHandlerBase(IAppDbContext context)
         {
             _context = context;
-        }
-        public RequestHandlerBase(IAuthorizedUserProvider userProvider)
-        {
-            _userProvider = userProvider;
         }
         public RequestHandlerBase(IAppDbContext context, IMapper mapper)
         {

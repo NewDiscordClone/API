@@ -8,8 +8,8 @@ using System.Reflection;
 namespace Sparkle.Tests.Common
 {
     public class SimpleDerivedFakeDbSet<T, TD> : ISimpleDbSet<TD>
-        where TD : class,
-        T where T : class
+        where TD : class, T
+        where T : class
     {
         public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
 
@@ -26,10 +26,12 @@ namespace Sparkle.Tests.Common
             ObjectId objectId = ConvertToId(id);
             return Entitites[FindIndex(objectId)];
         }
+
         public async Task<List<TD>> FilterAsync(Expression<Func<TD, bool>> expression)
         {
             return Entitites.FindAll(new Predicate<TD>(expression.Compile()) ??
-                throw new ArgumentException("Expression<Func<TEntity, bool>> is can't be cast to Predicate<TEntity>"));
+                                     throw new ArgumentException(
+                                         "Expression<Func<TEntity, bool>> is can't be cast to Predicate<TEntity>"));
         }
 
         public void AddMany(IEnumerable<TD> entities)
