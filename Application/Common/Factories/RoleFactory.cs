@@ -6,18 +6,68 @@ namespace Sparkle.Application.Common.Factories
 {
     public class RoleFactory : IRoleFactory
     {
-        private readonly IAppDbContext _context;
+        // это не финальные наборы клеймом, а наборы клеймом для тестов
 
-        public RoleFactory(IAppDbContext context)
+        //TODO: Add more claims
+        private readonly string[] _serverMemberDefaultClaims
+            = { ServerClaims.ChangeServerName };
+
+        //TODO: Add more claims
+        private readonly string[] _serverOwnerDefaultClaims =
         {
-            _context = context;
+            ServerClaims.ChangeServerName,
+            ServerClaims.ManageServer,
+            ServerClaims.ManageRoles,
+            ServerClaims.ManageChannels
+        };
+        //TODO: Add more claims
+
+        private readonly string[] _personalChatMemberClaims =
+        {
+            ServerClaims.ManageRoles,
+            ServerClaims.ManageServer,
+            ServerClaims.ManageMessages,
+            ServerClaims.ManageChannels
+        };
+
+        private readonly string[] _groupChatMemberClaims =
+        {
+            ServerClaims.ManageRoles,
+            ServerClaims.ManageServer,
+            ServerClaims.ManageMessages,
+            ServerClaims.ManageChannels
+        };
+
+        private readonly string[] _groupChatOwnerClaims =
+        {
+            ServerClaims.ManageMessages,
+        };
+
+        private static List<ServerClaim> CreateClaimsForRole(Role role, params string[] claims)
+        {
+            if (!claims.All(claim => ServerClaims.GetClaims().Contains(claim)))
+                throw new ArgumentException("Invalid claim(s) provided");
+
+            List<ServerClaim> serverClaims = new();
+
+            foreach (string claim in claims)
+            {
+                ServerClaim serverClaim = new()
+                {
+                    ClaimType = claim,
+                    RoleId = role.Id
+                };
+                serverClaims.Add(serverClaim);
+            }
+
+            return serverClaims;
         }
 
         public List<Role> GetDefaultServerRoles(string serverId)
         {
             Role ownerRole = new()
             {
-                Name = "Owner",
+                Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
                 Color = "#FFF000",
                 IsAdmin = true,
                 ServerId = serverId
@@ -26,18 +76,58 @@ namespace Sparkle.Application.Common.Factories
 
             Role memberRole = new()
             {
-                Name = "Member",
+                Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
                 Color = "#FFF000",
                 ServerId = serverId
             };
 
-            _context.SqlRoles.AddMany(new[] { ownerRole, memberRole });
-            _context.AddClaimToRoleAsync(memberRole, new IdentityRoleClaim<Guid>()
+            memberRole.Claims = CreateClaimsForRole(memberRole, _serverMemberDefaultClaims)
+                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+
+            ownerRole.Claims = CreateClaimsForRole(memberRole, _serverOwnerDefaultClaims)
+                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+
+            return new() { ownerRole, memberRole };
+        }
+
+        public Role GetRoleForPersonalChat(string chatId)
+        {
+            Role role = new()
             {
-                ClaimType = ServerClaims.ChangeServerName,
-                ClaimValue = true.ToString(),
-                RoleId = memberRole.Id
-            });
+                Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
+                Color = "#FFF000",
+                ChatId = chatId
+            };
+
+            role.Claims = CreateClaimsForRole(role, _personalChatMemberClaims)
+                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+
+            return role;
+        }
+
+        public List<Role> GetGroupChatRoles(string chatId)
+        {
+            Role ownerRole = new()
+            {
+                Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
+                Color = "#FFF000",
+                IsAdmin = true,
+                ChatId = chatId
+            };
+
+
+            Role memberRole = new()
+            {
+                Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
+                Color = "#FFF000",
+                ChatId = chatId
+            };
+
+            memberRole.Claims = CreateClaimsForRole(memberRole, _groupChatMemberClaims)
+                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+
+            ownerRole.Claims = CreateClaimsForRole(memberRole, _groupChatOwnerClaims)
+                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
 
             return new() { ownerRole, memberRole };
         }

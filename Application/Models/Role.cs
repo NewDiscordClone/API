@@ -16,11 +16,18 @@ public class Role : IdentityRole<Guid>
     public string Color { get; set; }
 
     /// <summary>
-    /// Server Id as an string representation of an ObjectId type
+    /// Server Id as an string representation of an ObjectId type if role is server role
     /// </summary>
     [BsonRepresentation(BsonType.ObjectId)]
     [DefaultValue("5f95a3c3d0ddad0017ea9291")]
-    public string ServerId { get; set; }
+    public string? ServerId { get; set; }
+
+    /// <summary>
+    /// String representation of an ObjectId type if role is personal or group chat role
+    /// </summary>
+    [BsonRepresentation(BsonType.ObjectId)]
+    [DefaultValue("5f95a3c3d0ddad0017ea9291")]
+    public string? ChatId { get; set; }
 
     /// <summary>
     /// Admin flag. True if role gives admin permissions 
