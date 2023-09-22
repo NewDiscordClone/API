@@ -22,5 +22,5 @@ public abstract class Chat : IUserProfileProvider
     /// <summary>
     /// Members of the chat
     /// </summary>
-    public virtual List<UserProfile> Profiles { get; set; } = new();
+    public virtual List<Guid> Profiles { get; set; } = new();
 }
