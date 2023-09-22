@@ -40,11 +40,6 @@ namespace Sparkle.Application.Servers.Queries.ServerDetails
         [NotMapped]
         public List<Channel> Channels { get; set; }
 
-        /// <summary>
-        /// List of roles on this server.
-        /// </summary>
-        public List<Guid> Roles { get; init; }
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Server, ServerDetailsDto>();
