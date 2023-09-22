@@ -1,8 +1,8 @@
-name: Move Trello Card When Pull Pequest Created
+name: Move Trello Card When Pull Pequest Merged
 
 on:
   pull_request:
-    types: [closed]
+    types: [merged]
 
 jobs:
   link_with_trello:
