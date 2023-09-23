@@ -1,5 +1,5 @@
+using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Models;
-using System.Security.Claims;
 
 namespace Sparkle.Application.Common.Interfaces;
 
@@ -28,9 +28,12 @@ public interface IAppDbContext
     Task CheckRemoveMedia(string id);
     Task<List<Message>> GetMessagesAsync(string chatId, int skip, int take);
     Task<List<Message>> GetPinnedMessagesAsync(string chatId);
-    Task<List<Claim>> GetRoleClaimAsync(Role role);
-    Task AddClaimToRoleAsync(Role role, Claim claim);
-    Task AddClaimsToRoleAsync(Role role, IEnumerable<Claim> claims);
+    Task<List<IdentityRoleClaim<Guid>>> GetRoleClaimAsync(Role role);
+    Task AddClaimToRoleAsync(Role role, IdentityRoleClaim<Guid> claim);
+    Task AddClaimsToRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims);
+    Task RemoveClaimsFromRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims);
+    Task RemoveClaimsFromRoleAsync(Role role);
+    Task RemoveClaimFromRoleAsync(Role role, IdentityRoleClaim<Guid> claim);
 
 
 }

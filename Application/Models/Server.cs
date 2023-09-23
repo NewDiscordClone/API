@@ -44,6 +44,8 @@ public class Server : IUserProfileProvider
     /// </summary>
     public List<ServerProfile> ServerProfiles { get; set; } = new();
 
+    public List<Guid> Roles { get; set; } = new();
+
     public List<Guid> BannedUsers { get; set; } = new();
 
     public List<UserProfile> Profiles => ServerProfiles.ConvertAll(profile => profile as UserProfile);
