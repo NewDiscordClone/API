@@ -7,9 +7,7 @@ using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
 using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
-using Sparkle.Application.GroupChats.Commands.RemoveGroupChatMember;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
-using Sparkle.Application.HubClients.PrivateChats.PrivateChatRemoved;
 using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
 using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
@@ -38,8 +36,8 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
-            PrivateChatsQuery get = new();
-            List<PrivateChatLookUp> list = await Mediator.Send(get);
+            PrivateChatsQuery query = new();
+            List<PrivateChatLookUp> list = await Mediator.Send(query);
             return Ok(list);
         }
 
@@ -181,7 +179,12 @@ namespace Sparkle.WebApi.Controllers
         /// Remove the currently authorized user from the group chat 
         /// </summary>
         /// <param name="chatId">Chat Id to leave from</param>
-        /// <param name="silent">By default false; if true, the other chat members will not be notified</param>
+        /// <param name="request">
+        /// ```
+        /// profileId: int // Id of the user profile to remove
+        /// silent: boolean // by default false; if true, the other chat members will not be notified
+        /// ```
+        /// </param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested group chat is not found</response>
@@ -192,13 +195,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> LeaveFromGroupChat(string chatId, bool silent = false)
+        public async Task<ActionResult> LeaveFromGroupChat(string chatId, KickUserFromGroupChatRequest request)
         {
-            LeaveFromGroupChatCommand command = new()
-            {
-                ChatId = chatId,
-                Silent = silent
-            };
+            LeaveFromGroupChatCommand command = Mapper.Map<LeaveFromGroupChatCommand>((chatId, request));
             await Mediator.Send(command);
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
@@ -226,7 +225,7 @@ namespace Sparkle.WebApi.Controllers
             ChangeGroupChatOwnerCommand command = new()
             {
                 ChatId = chatId,
-                MemberId = newOwnerId
+                ProfileId = newOwnerId
             };
             await Mediator.Send(command);
 
@@ -241,7 +240,7 @@ namespace Sparkle.WebApi.Controllers
         /// <param name="chatId">Chat Id to remove member from</param>
         /// <param name="request">
         /// ```
-        /// memberId: int // Id of the user to remove
+        /// profileId: int // Id of the user profile to remove
         /// silent: boolean // by default false; if true, the other chat members will not be notified
         /// ```
         /// </param>
@@ -257,7 +256,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveGroupChatMember(string chatId, KickUserFromGroupChatRequest request)
         {
-            RemoveGroupChatMemberCommand command = Mapper.Map<RemoveGroupChatMemberCommand>((chatId, request));
+            LeaveFromGroupChatCommand command = Mapper.Map<LeaveFromGroupChatCommand>((chatId, request));
             await Mediator.Send(command);
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });

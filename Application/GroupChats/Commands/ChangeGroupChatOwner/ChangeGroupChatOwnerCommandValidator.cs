@@ -8,7 +8,7 @@ namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
         public ChangeGroupChatOwnerCommandValidator()
         {
             RuleFor(c => c.ChatId).NotNull().IsObjectId();
-            RuleFor(c => c.MemberId).NotNull();
+            RuleFor(c => c.ProfileId).NotNull();
         }
     }
 }

@@ -1,7 +1,8 @@
 using AutoMapper;
 using MediatR;
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
@@ -10,54 +11,64 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
     public class PrivateChatsQueryHandler : RequestHandlerBase,
         IRequestHandler<PrivateChatsQuery, List<PrivateChatLookUp>>
     {
-        public PrivateChatsQueryHandler(IAppDbContext appDbContext, IAuthorizedUserProvider userProvider,
-            IMapper mapper)
+
+        private readonly IUserProfileRepository _userRepository;
+
+        public PrivateChatsQueryHandler(
+            IAppDbContext appDbContext,
+            IAuthorizedUserProvider userProvider,
+            IMapper mapper,
+            IUserProfileRepository userRepository)
             : base(appDbContext, userProvider, mapper)
         {
+            _userRepository = userRepository;
         }
 
-        public async Task<List<PrivateChatLookUp>> Handle(PrivateChatsQuery query,
-            CancellationToken cancellationToken)
+        public async Task<List<PrivateChatLookUp>> Handle(PrivateChatsQuery query, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            List<PrivateChatLookUp> chats = new();
+            List<PrivateChatLookUp> chatDtos = new();
 
-            foreach (PersonalChat personalChat in await Context.PersonalChats.FilterAsync(c => c.Profiles.Any(p => p.UserId == UserId)))
+            List<PersonalChat> chats = await Context.PersonalChats
+                .FilterAsync(chat => _userRepository.ChatContainsUser(chat.Id, UserId));
+
+            foreach (PersonalChat chat in chats)
             {
-                if (personalChat is GroupChat gchat)
+                if (chat is GroupChat groupChat)
                 {
-                    PrivateChatLookUp lookUp = Mapper.Map<PrivateChatLookUp>(gchat);
-                    if (string.IsNullOrWhiteSpace(gchat.Title))
+                    PrivateChatLookUp lookUp = Mapper.Map<PrivateChatLookUp>(groupChat);
+
+                    List<Guid> userIds = await Context.UserProfiles
+                        .Where(profile => profile.ChatId == groupChat.Id)
+                        .Select(profile => profile.UserId)
+                        .ToListAsync(cancellationToken);
+
+                    if (string.IsNullOrWhiteSpace(groupChat.Title))
                     {
-                        lookUp.Title = string.Join
-                        (", ",
-                            (await Context.SqlUsers
-                                .FilterAsync(u => u.Id != UserId))
-                            .Where(u => gchat.Profiles.Any(p => p.UserId == u.Id))
+                        List<string?> userDisplayNames = await Context.Users
+                            .Where(user => user.Id != UserId && userIds.Contains(user.Id))
                             .Select(u => u.DisplayName ?? u.UserName)
-                            .AsEnumerable()
-                        );
+                            .ToListAsync(cancellationToken);
+
+                        lookUp.Title = string.Join(", ", userDisplayNames);
                     }
 
-                    chats.Add(lookUp);
+                    chatDtos.Add(lookUp);
                 }
                 else
                 {
-                    if (!personalChat.Profiles.Any(u => u.UserId != UserId))
-                        throw new AggregateException("There is no other user");
-                    Guid userid = personalChat.Profiles.Select(p => p.UserId).First(id => id != UserId);
-                    chats.Add(
-                        new PrivateChatLookUp(
-                            personalChat,
-                            Mapper.Map<UserLookUp>(
-                                await Context.SqlUsers.FindAsync(userid)
-                            )
-                        )
-                    );
+                    Guid otherUserId = await Context.UserProfiles
+                        .Where(profile => profile.ChatId == chat.Id && profile.UserId != UserId)
+                        .Select(profile => profile.UserId)
+                        .SingleAsync(cancellationToken);
+
+                    User? otherUser = await Context.Users.FindAsync(new object[] { otherUserId }, cancellationToken: cancellationToken);
+                    chatDtos.Add(new PrivateChatLookUp(chat, Mapper.Map<UserLookUp>(otherUser)));
                 }
             }
 
-            return chats;
+            return chatDtos;
         }
+
     }
 }

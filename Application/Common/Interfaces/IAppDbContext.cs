@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Common.Interfaces;
@@ -15,13 +16,12 @@ public interface IAppDbContext
     ISimpleDbSet<Server, string> Servers { get; }
     ISimpleDbSet<Invitation, string> Invitations { get; }
     ISimpleDbSet<RelationshipList, Guid> RelationshipLists { get; }
-    ISimpleDbSet<UserProfile, Guid> UserProfiles { get; }
-
     ISimpleDbSet<Role, Guid> SqlRoles { get; }
 
     ISimpleDbSet<User, Guid> SqlUsers { get; }
     // DbSet<Role> Roles { get; set; }
-    // DbSet<User> Users { get; set; }
+    DbSet<User> Users { get; set; }
+    DbSet<UserProfile> UserProfiles { get; set; }
     Task SaveChangesAsync();
 
     void SetToken(CancellationToken cancellationToken);

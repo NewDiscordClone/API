@@ -34,5 +34,10 @@ namespace Sparkle.Application
             _userProvider = userProvider;
             _mapper = mapper;
         }
+
+        protected RequestHandlerBase(IAuthorizedUserProvider userProvider)
+        {
+            _userProvider = userProvider;
+        }
     }
 }
