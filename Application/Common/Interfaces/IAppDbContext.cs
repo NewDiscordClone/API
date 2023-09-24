@@ -19,7 +19,7 @@ public interface IAppDbContext
     ISimpleDbSet<Role, Guid> SqlRoles { get; }
 
     ISimpleDbSet<User, Guid> SqlUsers { get; }
-    // DbSet<Role> Roles { get; set; }
+    DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
     DbSet<UserProfile> UserProfiles { get; set; }
     Task SaveChangesAsync();
