@@ -7,7 +7,7 @@ namespace Sparkle.Application.Servers.Commands.BanUser
     {
         public BanUserCommandValidator()
         {
-            RuleFor(x => x.UserId).NotNull();
+            RuleFor(x => x.ProfileId).NotNull();
             RuleFor(x => x.ServerId).IsObjectId();
         }
     }

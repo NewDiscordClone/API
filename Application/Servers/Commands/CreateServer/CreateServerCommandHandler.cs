@@ -11,21 +11,26 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
         {
             Context.SetToken(cancellationToken);
 
+            //TODO: Добавить роли
             Server server = new()
             {
                 Title = command.Title,
                 Image = command.Image,
                 Owner = UserId,
-                ServerProfiles = new List<ServerProfile>()
-                {
-                    new ServerProfile()
-                    {
-                        UserId = UserId
-                    }
-                }
             };
 
-            server = await Context.Servers.AddAsync(server);
+            //TODO: Добавить роли
+            ServerProfile owner = new()
+            {
+                UserId = UserId,
+                ServerId = server.Id
+            };
+
+            server.Owner = owner.Id;
+            server.Profiles.Add(owner.Id);
+
+            await Context.UserProfiles.AddAsync(owner, cancellationToken);
+            await Context.Servers.AddAsync(server);
             return server.Id;
         }
 

@@ -1,14 +1,16 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Commands.BanUser
 {
     public class BanUserCommandHandler : RequestHandlerBase, IRequestHandler<BanUserCommand>
     {
-        public BanUserCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        private readonly IServerProfileRepository _serverProfileRepository;
+        public BanUserCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IServerProfileRepository serverProfileRepository) : base(context, userProvider)
         {
+            _serverProfileRepository = serverProfileRepository;
         }
 
         public async Task Handle(BanUserCommand command, CancellationToken cancellationToken)
@@ -16,13 +18,14 @@ namespace Sparkle.Application.Servers.Commands.BanUser
             Context.SetToken(cancellationToken);
             Server server = await Context.Servers.FindAsync(command.ServerId);
 
-            if (server.Owner != UserId) //TODO: Замінити на логіку перевірки claim
-                throw new NoPermissionsException("You don't have the appropriate rights");
+            if (server.Profiles.Contains(command.ProfileId))
+            {
+                ServerProfile profileToRemove = await _serverProfileRepository.FindAsync(command.ProfileId);
+                await _serverProfileRepository.DeleteAsync(profileToRemove);
+                server.Profiles.Remove(profileToRemove.Id);
+            }
 
-            ServerProfile? userToRemove = server.ServerProfiles.Find(sp => sp.UserId == command.UserId);
-            if (userToRemove != null)
-                server.ServerProfiles.Remove(userToRemove);
-            server.BannedUsers.Add(command.UserId);
+            server.BannedUsers.Add(command.ProfileId);
 
             await Context.Servers.UpdateAsync(server);
         }
