@@ -18,6 +18,8 @@ public class ServerProfile : UserProfile
     /// </summary>
     public override List<Role> Roles { get => base.Roles; set => base.Roles = value; }
 
+    public new string? ChatId { get; set; } = null;
+
     /// <summary>
     /// Id of server where profile is
     /// </summary>

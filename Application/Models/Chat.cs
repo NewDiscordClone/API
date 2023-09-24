@@ -23,4 +23,9 @@ public abstract class Chat : IUserProfileProvider
     /// Members of the chat
     /// </summary>
     public virtual List<Guid> Profiles { get; set; } = new();
+
+    public Chat()
+    {
+        Id = ObjectId.GenerateNewId().ToString();
+    }
 }
