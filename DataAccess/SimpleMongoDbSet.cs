@@ -41,11 +41,15 @@ namespace Sparkle.DataAccess
         {
             PropertyInfo idProp = GetIdProperty();
 
-            ObjectId objectId = ObjectId.GenerateNewId();
-            idProp.SetValue(entity, objectId.ToString());
+            ObjectId? objectId = idProp.GetValue(entity) as ObjectId?;
+            if (objectId == null)
+            {
+                objectId = ObjectId.GenerateNewId();
+                idProp.SetValue(entity, objectId.ToString());
+            }
 
             await _collection.InsertOneAsync(entity, null, CancellationToken);
-            return await FindByIdAsync(objectId);
+            return await FindByIdAsync(objectId.Value);
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
