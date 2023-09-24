@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
@@ -12,11 +11,6 @@ namespace Sparkle.Application.Channels.Commands.RenameChannel
             Context.SetToken(cancellationToken);
 
             Channel chat = await Context.Channels.FindAsync(command.ChatId);
-
-            //TODO: Перевірити що у юзера є відповідні права
-            if (!chat.Profiles.Any(p => p.UserId == UserId))
-                throw new NoPermissionsException("User is not a member of the chat");
-
             chat.Title = command.NewTitle;
 
             await Context.Channels.UpdateAsync(chat);

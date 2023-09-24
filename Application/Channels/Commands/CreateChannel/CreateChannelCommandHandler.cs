@@ -11,17 +11,17 @@ namespace Sparkle.Application.Channels.Commands.CreateChannel
         {
             Context.SetToken(cancellationToken);
 
-            //TODO: Перевірити що у юзера є відповідні права
             Server server = await Context.Servers.FindAsync(command.ServerId);
 
             Channel channel = new()
             {
                 Title = command.Title,
-                ServerProfiles = server.ServerProfiles,
+                Profiles = server.Profiles,
                 ServerId = server.Id
             };
 
-            return (await Context.Channels.AddAsync(channel)).Id;
+            await Context.Channels.AddAsync(channel);
+            return channel.Id;
         }
 
         public CreateChannelCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
