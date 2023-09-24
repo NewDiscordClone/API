@@ -21,6 +21,7 @@ namespace Sparkle.Application.Common.Interfaces
         }
 
         Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression);
+        Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression);
 
         void AddMany(IEnumerable<TEntity> entities);
         Task<TEntity> AddAsync(TEntity entity);

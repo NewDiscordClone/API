@@ -32,7 +32,7 @@ namespace Sparkle.Application.Servers.Queries.ServerDetails
         /// <summary>
         /// List of user profiles on this server.
         /// </summary>
-        public List<ServerProfileLookupDto> ServerProfiles { get; init; } = new();
+        public List<Guid> ServerProfiles { get; init; } = new();
 
         /// <summary>
         /// List of channels on this server. (Not mapped to the database.)
@@ -42,7 +42,8 @@ namespace Sparkle.Application.Servers.Queries.ServerDetails
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Server, ServerDetailsDto>();
+            profile.CreateMap<Server, ServerDetailsDto>()
+                .ForMember(p => p.ServerProfiles, opt => opt.MapFrom(s => s.Profiles));
         }
     }
 }

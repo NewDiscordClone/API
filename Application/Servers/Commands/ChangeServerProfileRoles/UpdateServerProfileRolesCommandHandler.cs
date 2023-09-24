@@ -1,31 +1,33 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Commands.ChangeServerProfileRoles
 {
-    public class UpdateServerProfileRolesCommandHandler : RequestHandlerBase, IRequestHandler<UpdateServerProfileRolesCommand>
+    public class UpdateServerProfileRolesCommandHandler : IRequestHandler<UpdateServerProfileRolesCommand>
     {
-        public UpdateServerProfileRolesCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
+        private readonly IServerProfileRepository _serverProfileRepository;
+        private readonly IAppDbContext _context;
+        public UpdateServerProfileRolesCommandHandler(IServerProfileRepository serverProfileRepository)
         {
+            _serverProfileRepository = serverProfileRepository;
         }
 
         public async Task Handle(UpdateServerProfileRolesCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-            Server server = await Context.Servers.FindAsync(command.ServerId);
+            ServerProfile profile = await _serverProfileRepository.FindAsync(command.ProfileId);
 
-            ServerProfile serverProfile = server.ServerProfiles.Find(sp => sp.UserId == command.UserId)
-                ?? throw new NoPermissionsException("The user are not a member of the server");
+            profile.Roles.Clear();
 
-            serverProfile.Roles = new List<Role>();
-            foreach (Guid roleId in command.Roles)
-            {
-                serverProfile.Roles.Add(await Context.SqlRoles.FindAsync(roleId));
-            }
+            Role[] roles = await _context.Roles
+                .Where(role => command.Roles.Contains(role.Id))
+                .ToArrayAsync(cancellationToken);
 
-            await Context.Servers.UpdateAsync(server);
+            profile.Roles.AddRange(roles);
+
+            await _serverProfileRepository.UpdateAsync(profile);
         }
     }
 }

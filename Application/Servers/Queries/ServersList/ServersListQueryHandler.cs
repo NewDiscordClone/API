@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Queries.ServersList
 {
@@ -12,16 +14,18 @@ namespace Sparkle.Application.Servers.Queries.ServersList
         {
             Context.SetToken(cancellationToken);
 
-            List<ServerLookUpDto> servers = new();
-            (await Context.Servers.FilterAsync(s => s.ServerProfiles.Any(sp => sp.UserId == UserId)))
-                .ForEach(s => servers.Add(
-                    new ServerLookUpDto
-                    {
-                        Id = s.Id,
-                        Image = s.Image,
-                        Title = s.Title
-                    }));
-            return servers;
+            List<string> serverIds = await Context.Users
+                .Select(user => user.UserProfiles)
+                .OfType<ServerProfile>()
+                .Select(profile => profile.ServerId)
+                .ToListAsync(cancellationToken);
+
+            List<Server> servers = await Context.Servers
+                .FilterAsync(server => serverIds.Contains(server.Id));
+
+            List<ServerLookUpDto> dtos = servers.ConvertAll(Mapper.Map<ServerLookUpDto>);
+
+            return dtos;
         }
 
         public ServersListQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) :
