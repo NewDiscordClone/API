@@ -5,7 +5,6 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Servers.Commands.BanUser;
 using Sparkle.Application.Servers.Commands.ChangeServerProfileDisplayName;
 using Sparkle.Application.Servers.Commands.ChangeServerProfileRoles;
-using Sparkle.Application.Servers.Commands.KickUser;
 using Sparkle.Application.Servers.Commands.UnbanUser;
 using Sparkle.Contracts.Servers;
 
@@ -35,10 +34,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> KickUser(string serverId, Guid profileId)
         {
-            KickUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
-            await Mediator.Send(command);
+            //KickUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
+            //  await Mediator.Send(command);
 
-            return NoContent();
+            return Problem(statusCode: StatusCodes.Status501NotImplemented);
         }
 
         /// <summary>
@@ -111,8 +110,7 @@ namespace Sparkle.WebApi.Controllers
         {
             ChangeServerProfileDisplayNameCommand command = new()
             {
-                ServerId = serverId,
-                UserId = profileId,
+                ProfileId = profileId,
                 NewDisplayName = newName
             };
             await Mediator.Send(command);
@@ -123,7 +121,6 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Changes the set of roles of the give user
         /// </summary>
-        /// <param name="serverId">Id of the server to change the roles</param>
         /// <param name="profileId">Id of the user to change the roles</param>
         /// <param name="request">New set of roles</param>
         /// <returns>No Content if the operation is successful</returns>
@@ -136,9 +133,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> ChangeServerProfileRoles(string serverId, Guid profileId, UpdateServerProfileRolesRequest request)
+        public async Task<ActionResult> ChangeServerProfileRoles(Guid profileId, UpdateServerProfileRolesRequest request)
         {
-            UpdateServerProfileRolesCommand command = Mapper.Map<UpdateServerProfileRolesCommand>((serverId, profileId, request));
+            UpdateServerProfileRolesCommand command = Mapper
+                .Map<UpdateServerProfileRolesCommand>((profileId, request));
             await Mediator.Send(command);
 
             return NoContent();

@@ -2,7 +2,7 @@
 using MediatR;
 using Sparkle.Application.Users.Queries.GetUserDetails;
 
-namespace Sparkle.Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries.GetUserByUserName
 {
     public record GetUserByUserNameQuery : IRequest<GetUserDetailsDto>
     {

@@ -10,6 +10,21 @@ namespace Sparkle.DataAccess.Repositories
         {
         }
 
+        public UserProfile? FindUserProfileOnServer(string id, Guid guid, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UserProfile?> FindUserProfileOnServerAsync(string id, Guid guid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsUserServerMember(string serverId, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task RemoveRoleFromServerProfilesAsync(Role role, string serverId, CancellationToken cancellationToken = default)
         {
             await DbSet.Where(profile => profile.ServerId == serverId && profile.Roles.Contains(role))

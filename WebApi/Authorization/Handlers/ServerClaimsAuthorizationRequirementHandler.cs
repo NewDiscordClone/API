@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using Sparkle.WebApi.Authorization.Requirements;
 
@@ -9,17 +10,19 @@ namespace Sparkle.WebApi.Authorization.Handlers
         AuthorizationHandler<RoleClaimsAuthorizationRequirement>
     {
         private readonly IAuthorizedUserProvider _userProvider;
-        private readonly IAppDbContext _context;
+        private readonly IUserProfileRepository _repository;
 
-        public ServerClaimsAuthorizationRequirementHandler(IAuthorizedUserProvider userProvider)
+        public ServerClaimsAuthorizationRequirementHandler(IAuthorizedUserProvider userProvider, IUserProfileRepository repository)
         {
             _userProvider = userProvider;
+            _repository = repository;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
             RoleClaimsAuthorizationRequirement requirement)
         {
-            UserProfile? profile = await _context.UserProfiles.FindOrDefaultAsync(requirement.UserProfileId);
+            UserProfile? profile = await _repository
+                .FindOrDefaultAsync(Guid.Parse(requirement.UserProfileId));
 
             if (profile is null)
                 return;

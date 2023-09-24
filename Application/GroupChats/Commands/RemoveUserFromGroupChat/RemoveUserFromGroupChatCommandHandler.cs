@@ -4,14 +4,14 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat
+namespace Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat
 {
-    public class LeaveFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<LeaveFromGroupChatCommand>
+    public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand>
     {
 
         private readonly IUserProfileRepository _userProfileRepository;
 
-        public async Task Handle(LeaveFromGroupChatCommand command, CancellationToken cancellationToken)
+        public async Task Handle(RemoveUserFromGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -38,7 +38,7 @@ namespace Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat
             await Context.GroupChats.UpdateAsync(chat);
         }
 
-        public LeaveFromGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IUserProfileRepository userProfileRepository) : base(
+        public RemoveUserFromGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IUserProfileRepository userProfileRepository) : base(
             context, userProvider)
         {
             _userProfileRepository = userProfileRepository;

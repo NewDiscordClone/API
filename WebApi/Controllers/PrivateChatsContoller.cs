@@ -6,7 +6,7 @@ using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
 using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
 using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
-using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
+using Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
 using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
 using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
@@ -195,9 +195,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> LeaveFromGroupChat(string chatId, KickUserFromGroupChatRequest request)
+        public async Task<ActionResult> LeaveFromGroupChat(string chatId, RemoveUserFromGroupChatRequest request)
         {
-            LeaveFromGroupChatCommand command = Mapper.Map<LeaveFromGroupChatCommand>((chatId, request));
+            RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((chatId, request));
             await Mediator.Send(command);
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
@@ -254,9 +254,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveGroupChatMember(string chatId, KickUserFromGroupChatRequest request)
+        public async Task<ActionResult> RemoveGroupChatMember(string chatId, RemoveUserFromGroupChatRequest request)
         {
-            LeaveFromGroupChatCommand command = Mapper.Map<LeaveFromGroupChatCommand>((chatId, request));
+            RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((chatId, request));
             await Mediator.Send(command);
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });

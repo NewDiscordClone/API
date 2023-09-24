@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Users.RelationshipUpdated;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 using Sparkle.Application.Users.Queries.GetRelationships;
 
-namespace Sparkle.Application.HubClients.Users.AcceptFriendRequest
+namespace Sparkle.Application.HubClients.Users.RelationshipUpdated
 {
     public class NotifyRelationshipUpdatedRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyRelationshipUpdatedRequest>
     {

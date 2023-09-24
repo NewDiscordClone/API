@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Constants;
 
-namespace Sparkle.Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries.GetUserByUserName
 {
     public class GetUserByUserNameQueryValidator : AbstractValidator<GetUserByUserNameQuery>
     {

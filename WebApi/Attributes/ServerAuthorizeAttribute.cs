@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.WebApi.Attributes
@@ -66,29 +67,27 @@ namespace Sparkle.WebApi.Attributes
             }
         }
 
-        private static async Task<UserProfile?> GetProfileFromServer(string id, ActionExecutingContext context)
+        private static async Task<UserProfile?> GetProfileFromServer(string serverId, ActionExecutingContext context)
         {
-            IAppDbContext dbContext = context.HttpContext.RequestServices.GetService<IAppDbContext>()
-                ?? throw new InvalidOperationException();
-
             IAuthorizedUserProvider userProvider = context.HttpContext.RequestServices.GetService<IAuthorizedUserProvider>()
                 ?? throw new InvalidOperationException();
 
-            Server? server = await dbContext.Servers.FindOrDefaultAsync(id);
-            UserProfile? profile = server?.Profiles.Single(serverProfile => serverProfile.UserId == userProvider.GetUserId());
+            IServerProfileRepository repository = context.HttpContext.RequestServices.GetService<IServerProfileRepository>()
+                ?? throw new InvalidOperationException();
+
+            UserProfile? profile = await repository.FindUserProfileOnServerAsync(serverId, userProvider.GetUserId());
             return profile;
         }
 
-        private static async Task<UserProfile?> GetProfileFromChat(string id, ActionExecutingContext context)
+        private static async Task<UserProfile?> GetProfileFromChat(string chatId, ActionExecutingContext context)
         {
-            IAppDbContext dbContext = context.HttpContext.RequestServices.GetService<IAppDbContext>()
-                ?? throw new InvalidOperationException();
-
             IAuthorizedUserProvider userProvider = context.HttpContext.RequestServices.GetService<IAuthorizedUserProvider>()
                 ?? throw new InvalidOperationException();
 
-            Chat? chat = await dbContext.Chats.FindOrDefaultAsync(id);
-            UserProfile? profile = chat?.Profiles.SingleOrDefault(chatProfile => chatProfile.UserId == userProvider.GetUserId());
+            IUserProfileRepository repository = context.HttpContext.RequestServices.GetService<IUserProfileRepository>()
+                ?? throw new InvalidOperationException();
+
+            UserProfile? profile = await repository.FindByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
             return profile;
         }
     }
