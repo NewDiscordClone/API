@@ -22,7 +22,7 @@ namespace Sparkle.Application.Users.Queries.GetUserDetails
                             .FilterAsync(u => u.UserName == query.UserName))
                         .FirstOrDefault() 
                         ??
-                        throw new EntityNotFoundException($"There is no User with {query.UserName} user name");
+                        throw new EntityNotFoundException($"There is no User with {query.UserName} user name", query.UserName);
             GetUserDetailsDto userDto = Mapper.Map<GetUserDetailsDto>(user);
 
             if (query.ServerId is not null)
