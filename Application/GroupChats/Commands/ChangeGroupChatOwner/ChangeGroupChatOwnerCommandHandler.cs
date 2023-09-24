@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using MongoDB.Driver;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
@@ -16,12 +14,9 @@ namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
             if (pchat is not GroupChat chat)
                 throw new Exception("This is not group chat");
 
-            if (chat.OwnerId != UserId)
-                throw new NoPermissionsException("User is not an owner of the chat");
-            if (!chat.Profiles.Any(p => p.UserId == command.MemberId))
-                throw new NoSuchUserException("User in not a member of the chat");
+            //TODO Удалить клейм из старого владельца и добавить в нового
 
-            chat.OwnerId = command.MemberId;
+            chat.OwnerId = command.ProfileId;
             await Context.GroupChats.UpdateAsync(chat);
         }
 

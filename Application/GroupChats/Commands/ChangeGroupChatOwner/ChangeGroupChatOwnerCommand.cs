@@ -14,6 +14,6 @@ namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
         /// <summary>
         /// The unique identifier of the member to be made the owner.
         /// </summary>
-        public Guid MemberId { get; init; }
+        public Guid ProfileId { get; init; }
     }
 }

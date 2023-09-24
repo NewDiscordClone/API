@@ -135,7 +135,7 @@ namespace Sparkle.DataAccess
         }
     }
 
-    public class SimpleMongoDbSet<TEntity, TKey> : ISimpleDbSet<TEntity> where TEntity : class where TKey : notnull
+    public class SimpleMongoDbSet<TEntity, TKey> : ISimpleDbSet<TEntity, TKey> where TEntity : class where TKey : notnull
     {
         public CancellationToken CancellationToken { get; set; } = default;
 
@@ -240,6 +240,21 @@ namespace Sparkle.DataAccess
             if (result == null)
                 throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
             return result;
+        }
+
+        public Task<TEntity> FindAsync(TKey id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteAsync(TKey id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddManyAsync(IEnumerable<TEntity> profiles)
+        {
+            throw new NotImplementedException();
         }
     }
 }
