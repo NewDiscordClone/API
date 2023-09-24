@@ -5,21 +5,21 @@ namespace Sparkle.Application.Common.Interfaces;
 
 public interface IAppDbContext
 {
-    ISimpleDbSet<UserConnections> UserConnections { get; }
-    ISimpleDbSet<Message> Messages { get; }
-    ISimpleDbSet<Chat> Chats { get; }
-    ISimpleDbSet<PersonalChat> PersonalChats { get; }
-    ISimpleDbSet<GroupChat> GroupChats { get; }
-    ISimpleDbSet<Channel> Channels { get; }
-    ISimpleDbSet<Models.Media> Media { get; }
-    ISimpleDbSet<Server> Servers { get; }
-    ISimpleDbSet<Invitation> Invitations { get; }
-    ISimpleDbSet<RelationshipList> RelationshipLists { get; }
-    ISimpleDbSet<UserProfile> UserProfiles { get; }
+    ISimpleDbSet<UserConnections, Guid> UserConnections { get; }
+    ISimpleDbSet<Message, string> Messages { get; }
+    ISimpleDbSet<Chat, string> Chats { get; }
+    ISimpleDbSet<PersonalChat, string> PersonalChats { get; }
+    ISimpleDbSet<GroupChat, string> GroupChats { get; }
+    ISimpleDbSet<Channel, string> Channels { get; }
+    ISimpleDbSet<Media, string> Media { get; }
+    ISimpleDbSet<Server, string> Servers { get; }
+    ISimpleDbSet<Invitation, string> Invitations { get; }
+    ISimpleDbSet<RelationshipList, Guid> RelationshipLists { get; }
+    ISimpleDbSet<UserProfile, Guid> UserProfiles { get; }
 
-    ISimpleDbSet<Role> SqlRoles { get; }
+    ISimpleDbSet<Role, Guid> SqlRoles { get; }
 
-    ISimpleDbSet<User> SqlUsers { get; }
+    ISimpleDbSet<User, Guid> SqlUsers { get; }
     // DbSet<Role> Roles { get; set; }
     // DbSet<User> Users { get; set; }
     Task SaveChangesAsync();

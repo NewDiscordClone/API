@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Sparkle.DataAccess
 {
-    public class SimpleMongoDbSet<TEntity> : ISimpleDbSet<TEntity> where TEntity : class
+    public class SimpleMongoDbSet<TEntity> : ISimpleDbSet<TEntity, object> where TEntity : class
     {
         public CancellationToken CancellationToken { get; set; } = default;
 
@@ -37,15 +37,24 @@ namespace Sparkle.DataAccess
             _collection.InsertMany(entities, null, CancellationToken);
         }
 
+        public async Task AddManyAsync(IEnumerable<TEntity> entities)
+        {
+            await _collection.InsertManyAsync(entities, cancellationToken: CancellationToken);
+        }
+
         public async Task<TEntity> AddAsync(TEntity entity)
         {
             PropertyInfo idProp = GetIdProperty();
 
-            ObjectId objectId = ObjectId.GenerateNewId();
-            idProp.SetValue(entity, objectId.ToString());
+            ObjectId? objectId = idProp.GetValue(entity) as ObjectId?;
+            if (objectId == null)
+            {
+                objectId = ObjectId.GenerateNewId();
+                idProp.SetValue(entity, objectId.ToString());
+            }
 
             await _collection.InsertOneAsync(entity, null, CancellationToken);
-            return await FindByIdAsync(objectId);
+            return await FindByIdAsync(objectId.Value);
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
@@ -210,7 +219,8 @@ namespace Sparkle.DataAccess
 
         private static TKey ConvertToId(object? id)
         {
-            if (id is not TKey key) throw new ArgumentException($"Id is not a {typeof(TKey).Name} instance");
+            if (id is not TKey key)
+                throw new ArgumentException($"Id is not a {typeof(TKey).Name} instance");
 
             return key;
         }
