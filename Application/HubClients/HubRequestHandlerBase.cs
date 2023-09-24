@@ -18,16 +18,27 @@ namespace Sparkle.Application.HubClients
         }
         protected IEnumerable<string> GetConnections(Chat chat)
         {
-            return chat.Profiles
-                .Where(profile => Context.UserConnections.FindOrDefaultAsync(profile.UserId)?.Result != null)
-                .SelectMany(profile => Context.UserConnections.FindAsync(profile.UserId).Result.Connections);
+            Guid[] userIds = Context.UserProfiles
+                .Where(profile => profile.ChatId == chat.Id)
+                .Select(profile => profile.UserId)
+                .ToArray();
+
+            return userIds
+                .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
+                .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
         }
 
         protected IEnumerable<string> GetConnections(Server server)
         {
-            return server.ServerProfiles
-                .Where(sp => Context.UserConnections.FindOrDefaultAsync(sp.UserId)?.Result != null)
-                .SelectMany(sp => Context.UserConnections.FindAsync(sp.UserId).Result.Connections);
+            Guid[] userIds = Context.UserProfiles
+                .OfType<ServerProfile>()
+              .Where(profile => profile.ServerId == server.Id)
+              .Select(profile => profile.UserId)
+              .ToArray();
+
+            return userIds
+               .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
+               .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
         }
 
         protected void SetToken(CancellationToken cancellationToken)

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -16,8 +15,6 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             Chat chat = await Context.Chats.FindAsync(request.ChatId);
             User user = await Context.SqlUsers.FindAsync(UserId);
 
-            if (!chat.Profiles.Any(p => p.UserId == UserId))
-                throw new NoPermissionsException("You are not a member of the Chat");
             List<Attachment> attachments = new();
 
             AttachmentsFromText.GetAttachments(request.Text, a => attachments.Add(a));

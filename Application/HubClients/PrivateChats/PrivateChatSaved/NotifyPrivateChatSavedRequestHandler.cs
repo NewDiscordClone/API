@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -22,22 +23,26 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
         {
             SetToken(cancellationToken);
             Chat chat = await Context.PersonalChats.FindAsync(request.ChatId);
-            foreach (var profile in chat.Profiles)
+            foreach (Guid profile in chat.Profiles)
             {
-                await SendToUser(chat, profile.UserId);
+                Guid userId = Context.UserProfiles.Find(profile)!.UserId;
+                await SendToUser(chat, userId);
             }
         }
 
         private async Task SendToUser(Chat chat, Guid userId)
         {
             PrivateChatLookUp lookUp;
-            switch(chat)
+            switch (chat)
             {
                 case GroupChat gChat:
                     lookUp = Mapper.Map<PrivateChatLookUp>(gChat);
-                    break; 
+                    break;
                 case PersonalChat pChat:
-                    User other = await Context.SqlUsers.FindAsync(chat.Profiles.First(p => p.UserId != userId).UserId);
+                    User other = await Context.Users
+                        .SingleAsync(user => user.UserProfiles
+                        .Any(profile => profile.ChatId == chat.Id && user.Id != UserId));
+
                     lookUp = new PrivateChatLookUp(pChat, Mapper.Map<UserLookUp>(other));
                     break;
                 default:

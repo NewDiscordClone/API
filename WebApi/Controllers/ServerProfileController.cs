@@ -35,7 +35,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> KickUser(string serverId, Guid profileId)
         {
-            KickUserCommand command = new() { ServerId = serverId, UserId = profileId };
+            KickUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
             await Mediator.Send(command);
 
             return NoContent();
@@ -59,7 +59,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> BanUser(string serverId, Guid profileId)
         {
-            BanUserCommand command = new() { ServerId = serverId, UserId = profileId };
+            BanUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
             await Mediator.Send(command);
 
             return NoContent();
