@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -14,12 +13,6 @@ namespace Sparkle.Application.Messages.Commands.UnpinMessage
             Context.SetToken(cancellationToken);
 
             Message message = await Context.Messages.FindAsync(request.MessageId);
-            Chat chat = await Context.Chats.FindAsync(message.ChatId);
-
-            if (!chat.Profiles.Any(p => p.UserId == UserId))
-                throw new NoPermissionsException("You are not a member of the Chat");
-
-            //TODO: Перевірка на відповідну роль на сервері
 
             message.IsPinned = false;
 

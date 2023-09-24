@@ -18,9 +18,10 @@ namespace Sparkle.Application.Users.Commands.FriendRequest
 
             RelationshipList userRelationship = await FindOrCreateRelationshipsAsync(UserId);
             User? user = await Context.SqlUsers.FindAsync(request.UserId);
-            if (user == null) throw new EntityNotFoundException("The provided user isn't exist");
+            if (user == null)
+                throw new EntityNotFoundException("The provided user isn't exist");
             RelationshipList otherRelationship = await FindOrCreateRelationshipsAsync(user.Id);
-            
+
             Relationship? otherToUser = otherRelationship.Relationships.Find(r => r.UserId == UserId);
             Relationship? userToOther = userRelationship.Relationships.Find(r => r.UserId == user.Id);
             //TODO: Додати реалізацію перевірки налаштуваннь користувача з дозволів відправляти запити дружби
@@ -37,20 +38,24 @@ namespace Sparkle.Application.Users.Commands.FriendRequest
                     });
                     await Context.RelationshipLists.UpdateAsync(otherRelationship);
                     //TODO Добавить роли новым пользователям
-                    chat = await Context.PersonalChats.AddAsync(new PersonalChat
+
+                    chat = new PersonalChat();
+
+                    List<UserProfile> userProfiles = new()
                     {
-                        Profiles = new List<UserProfile>
+                        new()
                         {
-                            new()
-                            {
-                                UserId = UserId
-                            },
-                            new()
-                            {
-                                UserId = request.UserId
-                            }
+                            UserId = UserId
+                        },
+                        new()
+                        {
+                            UserId = request.UserId,
+                            ChatId = chat.Id
                         }
-                    });
+                    };
+
+                    chat.Profiles = userProfiles.ConvertAll(p => p.Id);
+                    await Context.PersonalChats.AddAsync((PersonalChat)chat);
                     break;
                 default:
                     otherToUser.RelationshipType = RelationshipType.Pending;

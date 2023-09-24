@@ -1,13 +1,16 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Roles.Commands.Delete
 {
     public class DeleteRoleCommandHandler : RequestHandlerBase, IRequestHandler<DeleteRoleCommand>
     {
-        public DeleteRoleCommandHandler(IAppDbContext context) : base(context)
+        private readonly IServerProfileRepository _serverProfileRepository;
+        public DeleteRoleCommandHandler(IAppDbContext context, IServerProfileRepository serverProfileRepository) : base(context)
         {
+            _serverProfileRepository = serverProfileRepository;
         }
 
         public async Task Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
@@ -16,18 +19,17 @@ namespace Sparkle.Application.Roles.Commands.Delete
 
             Role role = await Context.SqlRoles.FindAsync(command.RoleId);
 
-            await Context.SqlRoles.DeleteAsync(command.RoleId);
+            if (role.ServerId is null)
+                throw new InvalidOperationException("Role is not associated with a server");
 
             Server server = await Context.Servers.FindAsync(role.ServerId);
 
             server.Roles.Remove(role.Id);
+            await _serverProfileRepository.RemoveRoleFromServerProfilesAsync(role, server.Id, cancellationToken);
+            Context.Roles.Remove(role);
 
-            List<ServerProfile> profilesWithRole = server.ServerProfiles
-                .Where(serverProfile => serverProfile.Roles.Contains(role))
-                .ToList();
-
-            profilesWithRole.ForEach(serverProfile => serverProfile.Roles.Remove(role));
-
+            await Context.SaveChangesAsync();
+            await Context.Servers.UpdateAsync(server);
         }
     }
 }
