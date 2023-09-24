@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using MongoDB.Driver;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
@@ -12,13 +10,10 @@ namespace Sparkle.Application.Channels.Commands.RemoveChannel
         {
             Context.SetToken(cancellationToken);
 
-            Channel chat = await Context.Channels.FindAsync(command.ChatId);
+            Channel channel = await Context.Channels.FindAsync(command.ChatId);
 
-            //TODO: Перевірити що у юзера є відповідні права
-            if (!chat.Profiles.Any(p => p.UserId == UserId))
-                throw new NoPermissionsException("User is not a member of the chat");
-
-            await Context.Chats.DeleteAsync(chat);
+            await Context.Chats.DeleteAsync(channel);
+            await Context.Messages.DeleteManyAsync(message => message.ChatId == channel.Id);
         }
 
         public RemoveChannelCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
