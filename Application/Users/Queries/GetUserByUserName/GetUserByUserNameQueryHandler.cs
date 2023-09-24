@@ -4,8 +4,9 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
+using Sparkle.Application.Users.Queries.GetUserDetails;
 
-namespace Sparkle.Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries.GetUserByUserName
 {
     public class GetUserByUserNameQueryHandler : RequestHandlerBase,
         IRequestHandler<GetUserByUserNameQuery, GetUserDetailsDto>

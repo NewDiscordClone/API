@@ -133,5 +133,10 @@ namespace Sparkle.DataAccess
                 throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
             return result;
         }
+
+        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

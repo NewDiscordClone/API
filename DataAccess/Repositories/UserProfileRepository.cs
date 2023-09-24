@@ -10,6 +10,16 @@ namespace Sparkle.DataAccess.Repositories
         {
         }
 
+        public bool ChatContainsUser(string chatId, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ChatContainsUserAsync(string chatId, Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<UserProfile> FindByChatIdAndUserIdAsync(string chatId, Guid userId)
         {
             return await DbSet.SingleAsync(profile => profile.ChatId == chatId && profile.UserId == userId);

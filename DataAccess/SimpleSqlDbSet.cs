@@ -93,5 +93,10 @@ namespace Sparkle.DataAccess
             return await _dbSet.FindAsync(new[] { id }, CancellationToken) ??
                    throw new EntityNotFoundException($"Entity {typeof(TEntity).Name} ({id}) not found", id.ToString());
         }
+
+        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

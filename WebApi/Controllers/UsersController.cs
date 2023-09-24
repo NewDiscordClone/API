@@ -9,6 +9,7 @@ using Sparkle.Application.Users.Commands.AcceptFriendRequest;
 using Sparkle.Application.Users.Commands.FriendRequest;
 using Sparkle.Application.Users.Commands.SendMessageToUser;
 using Sparkle.Application.Users.Queries.GetRelationships;
+using Sparkle.Application.Users.Queries.GetUserByUserName;
 using Sparkle.Application.Users.Queries.GetUserDetails;
 
 namespace Sparkle.WebApi.Controllers

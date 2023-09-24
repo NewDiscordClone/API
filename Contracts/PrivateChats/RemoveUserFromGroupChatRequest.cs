@@ -1,6 +1,6 @@
 ﻿namespace Sparkle.Contracts.PrivateChats
 {
-    public record KickUserFromGroupChatRequest
+    public record RemoveUserFromGroupChatRequest
     {
         /// <summary>
         /// The unique identifier of the member to be removed from the group chat.
