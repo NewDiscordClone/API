@@ -37,40 +37,38 @@ namespace Sparkle.DataAccess
 
         private CancellationToken _token = default;
 
-        public ISimpleDbSet<UserConnections> UserConnections =>
+        public ISimpleDbSet<UserConnections, Guid> UserConnections =>
             new SimpleMongoDbSet<UserConnections, Guid>(MongoDb.GetCollection<UserConnections>("userConnections"), _token);
-        public ISimpleDbSet<Message> Messages =>
-            new SimpleMongoDbSet<Message>(MongoDb.GetCollection<Message>("messages"), _token);
+        public ISimpleDbSet<Message, string> Messages =>
+            new SimpleMongoDbSet<Message, string>(MongoDb.GetCollection<Message>("messages"), _token);
 
-        public ISimpleDbSet<Chat> Chats =>
-            new SimpleMongoDbSet<Chat>(MongoDb.GetCollection<Chat>("chats"), _token);
+        public ISimpleDbSet<Chat, string> Chats =>
+            new SimpleMongoDbSet<Chat, string>(MongoDb.GetCollection<Chat>("chats"), _token);
 
-        public ISimpleDbSet<PersonalChat> PersonalChats =>
-            new SimpleMongoDbSet<PersonalChat>(MongoDb.GetCollection<Chat>("chats").OfType<PersonalChat>(), _token);
-        public ISimpleDbSet<GroupChat> GroupChats =>
-            new SimpleMongoDbSet<GroupChat>(MongoDb.GetCollection<Chat>("chats").OfType<GroupChat>(), _token);
+        public ISimpleDbSet<PersonalChat, string> PersonalChats =>
+            new SimpleMongoDbSet<PersonalChat, string>(MongoDb.GetCollection<Chat>("chats").OfType<PersonalChat>(), _token);
+        public ISimpleDbSet<GroupChat, string> GroupChats =>
+            new SimpleMongoDbSet<GroupChat, string>(MongoDb.GetCollection<Chat>("chats").OfType<GroupChat>(), _token);
 
-        public ISimpleDbSet<Channel> Channels =>
-            new SimpleMongoDbSet<Channel>(MongoDb.GetCollection<Chat>("chats").OfType<Channel>(), _token);
+        public ISimpleDbSet<Channel, string> Channels =>
+            new SimpleMongoDbSet<Channel, string>(MongoDb.GetCollection<Chat>("chats").OfType<Channel>(), _token);
 
-        public ISimpleDbSet<Media> Media =>
-            new SimpleMongoDbSet<Media>(MongoDb.GetCollection<Media>("media"), _token);
+        public ISimpleDbSet<Media, string> Media =>
+            new SimpleMongoDbSet<Media, string>(MongoDb.GetCollection<Media>("media"), _token);
 
-        public ISimpleDbSet<Server> Servers =>
-            new SimpleMongoDbSet<Server>(MongoDb.GetCollection<Server>("servers"), _token);
+        public ISimpleDbSet<Server, string> Servers =>
+            new SimpleMongoDbSet<Server, string>(MongoDb.GetCollection<Server>("servers"), _token);
 
-        public ISimpleDbSet<Invitation> Invitations =>
-            new SimpleMongoDbSet<Invitation>(MongoDb.GetCollection<Invitation>("invitations"), _token);
-        public ISimpleDbSet<RelationshipList> RelationshipLists =>
+        public ISimpleDbSet<Invitation, string> Invitations =>
+            new SimpleMongoDbSet<Invitation, string>(MongoDb.GetCollection<Invitation>("invitations"), _token);
+        public ISimpleDbSet<RelationshipList, Guid> RelationshipLists =>
             new SimpleMongoDbSet<RelationshipList, Guid>(MongoDb.GetCollection<RelationshipList>("relationships"),
                 _token);
 
-        public ISimpleDbSet<Role> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
-        public ISimpleDbSet<User> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
+        public ISimpleDbSet<Role, Guid> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
+        public ISimpleDbSet<User, Guid> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
+        public DbSet<UserProfile> UserProfiles { get; set; }
         public IMongoDatabase MongoDb { get; }
-        public ISimpleDbSet<UserProfile> UserProfiles => new SimpleSqlDbSet<UserProfile>(UserProfilesDbSet, this, _token);
-
-        protected DbSet<UserProfile> UserProfilesDbSet { get; set; }
         public void SetToken(CancellationToken cancellationToken)
         {
             _token = cancellationToken;
@@ -90,7 +88,7 @@ namespace Sparkle.DataAccess
             if (count > 0)
                 return;
 
-            await Media.DeleteAsync(objectId);
+            await Media.DeleteAsync(id);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
