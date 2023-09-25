@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.DataAccess.Repositories;
 
 namespace Sparkle.DataAccess
 {
@@ -19,6 +20,16 @@ namespace Sparkle.DataAccess
             });
 
             services.AddScoped<IAppDbContext, AppDbContext>();
+
+            services.AddRepositories();
+
+            return services;
+        }
+
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+            services.AddScoped<IServerProfileRepository, ServerProfileRepository>();
 
             return services;
         }
