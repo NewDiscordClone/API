@@ -1,8 +1,8 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Models;
-using Sparkle.Application.Roles.Commands.Create;
-using Sparkle.Application.Roles.Commands.Update;
+using Sparkle.Application.Servers.Roles.Commands.Create;
+using Sparkle.Application.Servers.Roles.Commands.Update;
 using Sparkle.Contracts.Roles;
 
 namespace Sparkle.WebApi.Common.Mapping.Configuration
