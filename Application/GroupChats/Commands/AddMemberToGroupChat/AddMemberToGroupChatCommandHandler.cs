@@ -9,6 +9,7 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
     public class AddMemberToGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<AddMemberToGroupChatCommand>
     {
         private readonly IUserProfileRepository _repository;
+        private readonly IRoleFactory _roleFactory;
         public async Task Handle(AddMemberToGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
@@ -18,11 +19,11 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
             if (await _repository.ChatContainsUserAsync(chat.Id, command.NewMemberId))
                 throw new NoPermissionsException("User is already a member of the chat");
 
-            //TODO Добавить роли новому пользователю
             UserProfile profile = new()
             {
                 ChatId = chat.Id,
-                UserId = command.NewMemberId
+                UserId = command.NewMemberId,
+                Roles = { _roleFactory.GetGroupChatMemberRole(chat.Id) }
             };
 
             chat.Profiles.Add(profile.Id);
@@ -30,9 +31,11 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
             await Context.GroupChats.UpdateAsync(chat);
         }
 
-        public AddMemberToGroupChatCommandHandler(IAuthorizedUserProvider userProvider, IUserProfileRepository repository) : base(userProvider)
+        public AddMemberToGroupChatCommandHandler(IAppDbContext context, IUserProfileRepository repository, IRoleFactory roleFactory)
+            : base(context)
         {
             _repository = repository;
+            _roleFactory = roleFactory;
         }
     }
 }

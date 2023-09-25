@@ -10,7 +10,7 @@ public class Role : IdentityRole<Guid>
     public override Guid Id { get; set; }
 
     [DefaultValue("Admin")]
-    public override string Name { get; set; }
+    public new string Name { get; set; }
 
     [DefaultValue("#FF0000")]
     public string Color { get; set; }

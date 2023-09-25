@@ -12,8 +12,6 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
         {
             Context.SetToken(cancellationToken);
 
-
-            //TODO: Добавить роли
             Server server = new()
             {
                 Title = command.Title,

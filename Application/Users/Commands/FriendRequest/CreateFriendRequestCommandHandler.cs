@@ -7,9 +7,11 @@ namespace Sparkle.Application.Users.Commands.FriendRequest
 {
     public class CreateFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<CreateFriendRequestCommand, string?>
     {
-        public CreateFriendRequestCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
+        private readonly IRoleFactory _roleFactory;
+        public CreateFriendRequestCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IRoleFactory roleFactory) : base(context,
             userProvider)
         {
+            _roleFactory = roleFactory;
         }
 
         public async Task<string?> Handle(CreateFriendRequestCommand request, CancellationToken cancellationToken)
@@ -45,16 +47,20 @@ namespace Sparkle.Application.Users.Commands.FriendRequest
                     {
                         new()
                         {
-                            UserId = UserId
+                            UserId = UserId,
+                            ChatId = chat.Id,
+                            Roles = { _roleFactory.GetRoleForPersonalChat(chat.Id) }
                         },
                         new()
                         {
                             UserId = request.UserId,
-                            ChatId = chat.Id
+                            ChatId = chat.Id,
+                            Roles = { _roleFactory.GetRoleForPersonalChat(chat.Id) }
                         }
                     };
 
                     chat.Profiles = userProfiles.ConvertAll(p => p.Id);
+                    await Context.UserProfiles.AddRangeAsync(userProfiles, cancellationToken);
                     await Context.PersonalChats.AddAsync((PersonalChat)chat);
                     break;
                 default:

@@ -9,6 +9,7 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
     public class CreateGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatCommand, string>
     {
         private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IRoleFactory _roleFactory;
         public async Task<string> Handle(CreateGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
@@ -19,17 +20,18 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
                 Image = command.Image,
             };
 
-            //TODO Добавить роли новым пользователям
             List<UserProfile> profiles = command.UsersId.ConvertAll(id => new UserProfile()
             {
                 UserId = id,
-                ChatId = chat.Id
+                ChatId = chat.Id,
+                Roles = { _roleFactory.GetGroupChatMemberRole(chat.Id) }
             });
 
             UserProfile ownerProfile = new()
             {
                 UserId = UserId,
-                ChatId = chat.Id
+                ChatId = chat.Id,
+                Roles = { _roleFactory.GetGroupChatOwnerRole(chat.Id) }
             };
 
             profiles.Add(ownerProfile);
