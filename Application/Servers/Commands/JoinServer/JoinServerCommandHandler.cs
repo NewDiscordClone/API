@@ -11,9 +11,11 @@ namespace Sparkle.Application.Servers.Commands.JoinServer
     public class JoinServerCommandHandler : RequestHandlerBase, IRequestHandler<JoinServerCommand, ServerDetailsDto>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
-        public JoinServerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IServerProfileRepository serverProfileRepository) : base(context, userProvider, mapper)
+        private readonly IRoleRepository _roleRepository;
+        public JoinServerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IServerProfileRepository serverProfileRepository, IRoleRepository roleRepository) : base(context, userProvider, mapper)
         {
             _serverProfileRepository = serverProfileRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task<ServerDetailsDto> Handle(JoinServerCommand command, CancellationToken cancellationToken)
@@ -38,12 +40,13 @@ namespace Sparkle.Application.Servers.Commands.JoinServer
 
             User user = await Context.SqlUsers.FindAsync(UserId);
 
-            //TODO Добавить роли новому пользователю
+            Role memberRole = await _roleRepository.GetServerMemberRoleAsync(server.Id);
             ServerProfile profile = new()
             {
                 UserId = UserId,
                 DisplayName = user.DisplayName,
                 ServerId = server.Id,
+                Roles = { memberRole }
             };
 
             server.Profiles.Add(profile.Id);

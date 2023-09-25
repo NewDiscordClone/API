@@ -70,7 +70,8 @@ namespace Sparkle.Application.Common.Factories
                 Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
                 Color = "#FFF000",
                 IsAdmin = true,
-                ServerId = serverId
+                ServerId = serverId,
+                Priority = 100
             };
 
 
@@ -78,7 +79,8 @@ namespace Sparkle.Application.Common.Factories
             {
                 Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
                 Color = "#FFF000",
-                ServerId = serverId
+                ServerId = serverId,
+                Priority = 0
             };
 
             memberRole.Claims = CreateClaimsForRole(memberRole, _serverMemberDefaultClaims)
@@ -96,7 +98,8 @@ namespace Sparkle.Application.Common.Factories
             {
                 Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
                 Color = "#FFF000",
-                ChatId = chatId
+                ChatId = chatId,
+                Priority = 0
             };
 
             role.Claims = CreateClaimsForRole(role, _personalChatMemberClaims)
@@ -112,7 +115,8 @@ namespace Sparkle.Application.Common.Factories
                 Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
                 Color = "#FFF000",
                 IsAdmin = true,
-                ChatId = chatId
+                ChatId = chatId,
+                Priority = 1
             };
 
 
@@ -120,7 +124,8 @@ namespace Sparkle.Application.Common.Factories
             {
                 Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
                 Color = "#FFF000",
-                ChatId = chatId
+                ChatId = chatId,
+                Priority = 0
             };
 
             memberRole.Claims = CreateClaimsForRole(memberRole, _groupChatMemberClaims)

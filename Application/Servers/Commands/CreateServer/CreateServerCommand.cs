@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Servers.Commands.CreateServer
 {
-    public record CreateServerCommand : IRequest<string>
+    public record CreateServerCommand : IRequest<Server>
     {
         /// <summary>
         /// New Server's name
