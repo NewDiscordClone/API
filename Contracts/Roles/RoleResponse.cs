@@ -28,6 +28,6 @@
         /// <summary>
         /// Claims of the role
         /// </summary>
-        public IEnumerable<ClaimRequest> Claims { get; set; }
+        public IEnumerable<ClaimRequest>? Claims { get; set; }
     }
 }

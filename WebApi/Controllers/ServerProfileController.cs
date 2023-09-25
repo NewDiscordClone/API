@@ -2,10 +2,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Models;
 using Sparkle.Application.Servers.ServerProfiles.Commands.BanUser;
 using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName;
 using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles;
 using Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser;
+using Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles;
+using Sparkle.Application.Servers.ServerProfiles.Queries.ServerProfileDetails;
 using Sparkle.Contracts.Servers;
 
 namespace Sparkle.WebApi.Controllers
@@ -15,6 +18,24 @@ namespace Sparkle.WebApi.Controllers
     {
         public ServerProfileController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator, userProvider, mapper)
         {
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetServerProfiles(string serverId)
+        {
+            ServerProfilesQuery query = new() { ServerId = serverId };
+            List<ServerProfile> profiles = await Mediator.Send(query);
+
+            return Ok(profiles.ConvertAll(Mapper.Map<ServerProfileLookupResponse>));
+        }
+
+        [HttpGet("profileId")]
+        public async Task<ActionResult> GetServerProfile(Guid profileId)
+        {
+            ServerProfileDetailsQuery query = new() { ProfileId = profileId };
+            ServerProfile profile = await Mediator.Send(query);
+
+            return Ok(Mapper.Map<ServerProfileResponse>(profile));
         }
 
         /// <summary>
