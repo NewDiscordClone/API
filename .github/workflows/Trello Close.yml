@@ -2,7 +2,7 @@ name: Move Trello Card When Pull Pequest Merged
 
 on:
   pull_request:
-    types: [merged]
+    types: [closed]
 
 jobs:
   link_with_trello:
