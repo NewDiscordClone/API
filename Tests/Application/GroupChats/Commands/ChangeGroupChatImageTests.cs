@@ -20,7 +20,7 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
                 ChatId = chatId,
                 NewImage = newImage
             };
-            ChangeGroupChatImageCommandHandler handler = new(Context, UserProvider);
+            ChangeGroupChatImageCommandHandler handler = new(Context);
 
             //Act
 

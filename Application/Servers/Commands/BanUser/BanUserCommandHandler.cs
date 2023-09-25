@@ -18,15 +18,15 @@ namespace Sparkle.Application.Servers.Commands.BanUser
             Context.SetToken(cancellationToken);
             Server server = await Context.Servers.FindAsync(command.ServerId);
 
-            if (server.Profiles.Contains(command.ProfileId))
-            {
-                ServerProfile profileToRemove = await _serverProfileRepository.FindAsync(command.ProfileId);
-                await _serverProfileRepository.DeleteAsync(profileToRemove);
-                server.Profiles.Remove(profileToRemove.Id);
-            }
+            if (!server.Profiles.Contains(command.ProfileId))
+                return;
 
-            server.BannedUsers.Add(command.ProfileId);
 
+            ServerProfile profileToRemove = await _serverProfileRepository.FindAsync(command.ProfileId);
+            await _serverProfileRepository.DeleteAsync(profileToRemove);
+
+            server.Profiles.Remove(profileToRemove.Id);
+            server.BannedUsers.Add(profileToRemove.UserId);
             await Context.Servers.UpdateAsync(server);
         }
     }

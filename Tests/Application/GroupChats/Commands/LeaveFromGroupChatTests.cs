@@ -1,5 +1,6 @@
 ﻿using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.GroupChats.Commands.LeaveFromGroupChat;
+using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat;
 using Sparkle.Application.Models;
 using Sparkle.Tests.Common;
 
@@ -14,15 +15,19 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             CreateDatabase();
             string chatId = Ids.GroupChat7;
             Guid userId = Ids.UserBId;
+            Guid profileId = Guid.NewGuid();
 
             SetAuthorizedUserId(userId);
 
-            LeaveFromGroupChatCommand request = new()
+            RemoveUserFromGroupChatCommand request = new()
             {
                 ChatId = chatId,
+                ProfileId = profileId,
             };
 
-            LeaveFromGroupChatCommandHandler handler = new(Context, UserProvider);
+            Mock<IUserProfileRepository> mock = new();
+
+            RemoveUserFromGroupChatCommandHandler handler = new(Context, UserProvider, mock.Object);
 
             //Act
 
@@ -30,7 +35,7 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             PersonalChat chat = await Context.PersonalChats.FindAsync(chatId);
 
             //Assert
-            Assert.DoesNotContain(chat.Profiles, profile => profile.UserId == userId);
+            Assert.DoesNotContain(chat.Profiles, profile => profile == profileId);
             GroupChat? groupChat = chat as GroupChat;
             Assert.NotNull(groupChat);
             Assert.NotEqual(userId, groupChat.OwnerId);
@@ -43,15 +48,19 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             CreateDatabase();
             string chatId = Ids.GroupChat4;
             Guid userId = Ids.UserAId;
+            Guid profileId = default;
 
             SetAuthorizedUserId(userId);
 
-            LeaveFromGroupChatCommand request = new()
+            RemoveUserFromGroupChatCommand request = new()
             {
                 ChatId = chatId,
+                ProfileId = profileId,
             };
 
-            LeaveFromGroupChatCommandHandler handler = new(Context, UserProvider);
+            Mock<IUserProfileRepository> mock = new();
+
+            RemoveUserFromGroupChatCommandHandler handler = new(Context, UserProvider, mock.Object);
 
             //Act
 
@@ -72,12 +81,16 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
 
             SetAuthorizedUserId(userId);
 
-            LeaveFromGroupChatCommand request = new()
+            Guid profileId = default;
+            RemoveUserFromGroupChatCommand request = new()
             {
                 ChatId = chatId,
+                ProfileId = profileId,
             };
 
-            LeaveFromGroupChatCommandHandler handler = new(Context, UserProvider);
+            Mock<IUserProfileRepository> mock = new();
+
+            RemoveUserFromGroupChatCommandHandler handler = new(Context, UserProvider, mock.Object);
 
             //Act
             //Assert

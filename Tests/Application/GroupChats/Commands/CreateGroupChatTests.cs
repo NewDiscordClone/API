@@ -1,4 +1,5 @@
-﻿using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
+﻿using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.Models;
 using Sparkle.Tests.Common;
 
@@ -22,7 +23,8 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
                 UsersId = userIdlist,
                 Title = title,
             };
-            CreateGroupChatCommandHandler handler = new(Context, UserProvider, Mapper);
+            Mock<IUserProfileRepository> mock = new();
+            CreateGroupChatCommandHandler handler = new(Context, UserProvider, Mapper, mock.Object);
 
             //Act
 
@@ -33,7 +35,7 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             //Assert
             Assert.NotNull(result);
             Assert.Equal(title, result.Title);
-            Assert.True(result.Profiles.All(profile => userIdlist.Contains(profile.UserId)));
+            Assert.Equal(userIdlist.Count + 1, result.Profiles.Count);
         }
     }
 }

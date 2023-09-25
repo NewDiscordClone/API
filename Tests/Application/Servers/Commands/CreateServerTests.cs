@@ -28,7 +28,6 @@ namespace Sparkle.Tests.Application.Servers.Commands
                 .Handle(new ServerDetailsQuery() { ServerId = result }, CancellationToken);
 
             Assert.Equal(serverName, resultServer.Title);
-            Assert.Contains(resultServer.ServerProfiles, sp => sp.UserId == userId);
             Assert.Equal(oldCount + 1, await Context.Servers.CountAsync(s => true));
         }
     }

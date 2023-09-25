@@ -22,7 +22,7 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             ChangeGroupChatOwnerCommand request = new()
             {
                 ChatId = chatId,
-                MemberId = newOwnerId
+                ProfileId = newOwnerId
             };
 
             ChangeGroupChatOwnerCommandHandler handler =
@@ -34,9 +34,8 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             GroupChat chat = await Context.GroupChats.FindAsync(chatId);
 
             //Assert
-            GroupChat groupChat = chat as GroupChat;
-            Assert.NotNull(groupChat);
-            Assert.Equal(newOwnerId, groupChat.OwnerId);
+            Assert.NotNull(chat);
+            Assert.Equal(newOwnerId, chat.OwnerId);
         }
 
         [Fact]
@@ -53,7 +52,7 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             ChangeGroupChatOwnerCommand request = new()
             {
                 ChatId = chatId,
-                MemberId = newOwnerId
+                ProfileId = newOwnerId
             };
 
             ChangeGroupChatOwnerCommandHandler handler =
@@ -79,7 +78,7 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
             ChangeGroupChatOwnerCommand request = new()
             {
                 ChatId = chatId,
-                MemberId = newOwnerId
+                ProfileId = newOwnerId
             };
 
             ChangeGroupChatOwnerCommandHandler handler =

@@ -31,10 +31,7 @@ namespace Sparkle.Tests.Application.Channels.Commands
             //Assert
             Assert.Equal(serverId, channel.ServerId);
             Assert.Equal(title, channel.Title);
-            Assert.All(channel.Profiles,
-                profile => Assert.Contains(server.ServerProfiles, sp => sp.Id == profile.Id));
-
-
+            Assert.Equal(server.Profiles, channel.Profiles);
         }
     }
 }
