@@ -13,7 +13,6 @@ namespace Sparkle.WebApi.Attributes
         {
 
             Exception exception = context.Exception;
-            Type type = exception.GetType();
             if (exception is ValidationException validationException)
             {
                 context.Result = ValidationError(context, validationException);
@@ -26,6 +25,7 @@ namespace Sparkle.WebApi.Attributes
             (int code, string message) = exception switch
             {
                 InvalidOperationException or ArgumentException => (StatusCodes.Status400BadRequest, exception.Message),
+                NotImplementedException => (StatusCodes.Status501NotImplemented, exception.Message),
                 EntityNotFoundException => (StatusCodes.Status404NotFound, exception.Message),
                 NoPermissionsException => (StatusCodes.Status403Forbidden, exception.Message),
                 _ => (StatusCodes.Status500InternalServerError, exception.Message)
