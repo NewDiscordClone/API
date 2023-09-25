@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Sparkle.Application.Roles.Common.Validation;
+using Sparkle.Application.Servers.Roles.Common.Validation;
 
 namespace Sparkle.Application.Servers.Roles.Commands.UpdateClaims
 {

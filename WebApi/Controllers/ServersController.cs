@@ -1,7 +1,6 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Servers.ServerDeleted;
 using Sparkle.Application.HubClients.Servers.ServerUpdated;
@@ -9,12 +8,11 @@ using Sparkle.Application.Models;
 using Sparkle.Application.Servers.Commands.CreateServer;
 using Sparkle.Application.Servers.Commands.DeleteServer;
 using Sparkle.Application.Servers.Commands.JoinServer;
-using Sparkle.Application.Servers.Commands.LeaveServer;
 using Sparkle.Application.Servers.Commands.UpdateServer;
 using Sparkle.Application.Servers.Queries.ServerDetails;
 using Sparkle.Application.Servers.Queries.ServersList;
+using Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer;
 using Sparkle.Contracts.Servers;
-using Sparkle.WebApi.Attributes;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -122,9 +120,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<string>> CreateServer(CreateServerCommand command)
         {
-            string id = await Mediator.Send(command);
+            Server server = await Mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetServerDetails), new { serverId = id }, id);
+            return CreatedAtAction(nameof(GetServerDetails), new { serverId = server.Id }, server);
         }
 
         /// <summary>

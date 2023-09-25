@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
@@ -12,9 +11,6 @@ namespace Sparkle.Application.Servers.Commands.UpdateServer
             Context.SetToken(cancellationToken);
 
             Server server = await Context.Servers.FindAsync(command.ServerId);
-
-            if (UserId != server.Owner)
-                throw new NoPermissionsException("You are not the owner of the server");
 
             if (command.Image != null && server.Image != null)
                 await Context.CheckRemoveMedia(server.Image[(server.Image.LastIndexOf('/') - 1)..]);

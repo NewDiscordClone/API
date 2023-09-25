@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
@@ -15,9 +14,6 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser
         {
             Context.SetToken(cancellationToken);
             Server server = await Context.Servers.FindAsync(request.ServerId);
-
-            if (server.Owner != UserId) //TODO: Замінити на логіку перевірки claim
-                throw new NoPermissionsException("You don't have the appropriate rights");
 
             server.BannedUsers.Remove(request.UserId);
 

@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.Application.Roles.Commands.ChangeColor;
-using Sparkle.Application.Roles.Commands.ChangeName;
-using Sparkle.Application.Roles.Commands.ChangePriority;
-using Sparkle.Application.Roles.Commands.Delete;
-using Sparkle.Application.Roles.Commands.UpdateClaims;
-using Sparkle.Application.Roles.Queries.RoleDetails;
-using Sparkle.Application.Roles.Queries.ServerRolesList;
+using Sparkle.Application.Servers.Roles.Commands.ChangeColor;
+using Sparkle.Application.Servers.Roles.Commands.ChangeName;
+using Sparkle.Application.Servers.Roles.Commands.ChangePriority;
 using Sparkle.Application.Servers.Roles.Commands.Create;
+using Sparkle.Application.Servers.Roles.Commands.Delete;
 using Sparkle.Application.Servers.Roles.Commands.Update;
+using Sparkle.Application.Servers.Roles.Commands.UpdateClaims;
+using Sparkle.Application.Servers.Roles.Queries.RoleDetails;
+using Sparkle.Application.Servers.Roles.Queries.ServerRolesList;
 using Sparkle.Contracts.Roles;
 
 namespace Sparkle.WebApi.Controllers

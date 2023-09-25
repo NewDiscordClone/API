@@ -110,16 +110,14 @@ namespace Sparkle.Application.Common.Factories
 
         public List<Role> GetGroupChatRoles(string chatId)
         {
-            Role ownerRole = new()
-            {
-                Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
-                Color = "#FFF000",
-                IsAdmin = true,
-                ChatId = chatId,
-                Priority = 1
-            };
+            Role ownerRole = GetGroupChatOwnerRole(chatId);
+            Role memberRole = GetGroupChatMemberRole(chatId);
 
+            return new() { ownerRole, memberRole };
+        }
 
+        public Role GetGroupChatMemberRole(string chatId)
+        {
             Role memberRole = new()
             {
                 Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
@@ -131,10 +129,24 @@ namespace Sparkle.Application.Common.Factories
             memberRole.Claims = CreateClaimsForRole(memberRole, _groupChatMemberClaims)
                 .ConvertAll(c => c as IdentityRoleClaim<Guid>);
 
-            ownerRole.Claims = CreateClaimsForRole(memberRole, _groupChatOwnerClaims)
+            return memberRole;
+        }
+
+        public Role GetGroupChatOwnerRole(string chatId)
+        {
+            Role ownerRole = new()
+            {
+                Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
+                Color = "#FFF000",
+                IsAdmin = true,
+                ChatId = chatId,
+                Priority = 1
+            };
+
+            ownerRole.Claims = CreateClaimsForRole(ownerRole, _groupChatOwnerClaims)
                 .ConvertAll(c => c as IdentityRoleClaim<Guid>);
 
-            return new() { ownerRole, memberRole };
+            return ownerRole;
         }
     }
 }
