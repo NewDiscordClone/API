@@ -14,14 +14,14 @@ namespace Sparkle.Tests.Application.Servers.Commands
             CreateDatabase();
             string serverId = Ids.Server3;
             Guid userId = Ids.UserAId;
-            int oldCount = (await Context.Servers.FindAsync(serverId)).ServerProfiles.Count;
+            int oldCount = (await Context.Servers.FindAsync(serverId)).Profiles.Count;
 
             SetAuthorizedUserId(Ids.UserCId);
 
             BanUserCommand request = new()
             {
                 ServerId = serverId,
-                UserId = userId
+                ProfileId = userId
             };
             BanUserCommandHandler handler = new(Context, UserProvider);
 

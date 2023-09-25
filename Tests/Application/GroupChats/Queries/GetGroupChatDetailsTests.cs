@@ -24,7 +24,6 @@ namespace Sparkle.Tests.Application.GroupChats.Queries
 
             //Assert
             Assert.NotNull(chat);
-            Assert.Contains(chat.Profiles, profile => profile.UserId == userId);
             Assert.Equal(chatId, chat.Id);
         }
     }

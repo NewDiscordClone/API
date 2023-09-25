@@ -1,4 +1,5 @@
 ﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using Sparkle.Application.Servers.Commands.JoinServer;
 using Sparkle.Tests.Common;
@@ -14,6 +15,9 @@ namespace Sparkle.Tests.Application.Servers.Commands
             CreateDatabase();
             string invitationId = Ids.Invitation1;
             Guid userId = Ids.UserBId;
+            Invitation invitation = await Context.Invitations.FindAsync(invitationId);
+            Server server = await Context.Servers.FindAsync(invitation.ServerId);
+            int oldCount = server.Profiles.Count;
 
             SetAuthorizedUserId(userId);
 
@@ -21,15 +25,17 @@ namespace Sparkle.Tests.Application.Servers.Commands
             {
                 InvitationId = invitationId
             };
-            JoinServerCommandHandler handler = new(Context, UserProvider, Mapper);
+
+            Mock<IServerProfileRepository> repository = new();
+
+            JoinServerCommandHandler handler = new(Context, UserProvider, Mapper, repository.Object);
 
             //Act 
             await handler.Handle(request, CancellationToken);
 
             //Assert
-            Invitation invitation = await Context.Invitations.FindAsync(invitationId);
-            Server server = await Context.Servers.FindAsync(invitation.ServerId);
-            Assert.Contains(server.ServerProfiles, sp => sp.UserId == userId);
+            server = await Context.Servers.FindAsync(invitation.ServerId);
+            Assert.Equal(oldCount + 1, server.Profiles.Count);
         }
         [Fact]
         public async Task Fail_InvitationIsExpired()

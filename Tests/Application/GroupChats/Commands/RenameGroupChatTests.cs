@@ -22,7 +22,7 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
                 NewTitle = newTitle
             };
 
-            RenameGroupChatCommandHandler handler = new(Context, UserProvider);
+            RenameGroupChatCommandHandler handler = new(Context);
 
             //Act
 

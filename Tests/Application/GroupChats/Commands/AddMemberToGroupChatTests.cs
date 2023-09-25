@@ -1,4 +1,5 @@
 ﻿using Sparkle.Application.Common.Exceptions;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
 using Sparkle.Application.Models;
 using Sparkle.Tests.Common;
@@ -25,7 +26,8 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
                 NewMemberId = newMemberId
             };
 
-            AddMemberToGroupChatCommandHandler handler = new(Context, UserProvider, Mapper);
+            Mock<IUserProfileRepository> mock = new();
+            AddMemberToGroupChatCommandHandler handler = new(UserProvider, mock.Object);
 
             //Act
 
@@ -34,7 +36,9 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
 
             //Assert
             Assert.Equal(oldUsersCount + 1, chat.Profiles.Count);
-            Assert.Contains(chat.Profiles, profile => profile.UserId == newMemberId);
+            Assert.Single(chat.Profiles,
+                Context.UserProfiles.Where(profile => profile.UserId == newMemberId
+                && profile.ChatId == chatId));
         }
         [Fact]
         public async Task UserAlreadyExists_Fail()
@@ -52,8 +56,8 @@ namespace Sparkle.Tests.Application.GroupChats.Commands
                 NewMemberId = newMemberId
             };
 
-            AddMemberToGroupChatCommandHandler handler =
-                new(Context, UserProvider, Mapper);
+            Mock<IUserProfileRepository> mock = new();
+            AddMemberToGroupChatCommandHandler handler = new(UserProvider, mock.Object);
 
             //Act
             //Assert
