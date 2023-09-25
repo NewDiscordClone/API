@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Servers.Commands.UnbanUser
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser
 {
     public record UnbanUserCommand : IRequest
     {

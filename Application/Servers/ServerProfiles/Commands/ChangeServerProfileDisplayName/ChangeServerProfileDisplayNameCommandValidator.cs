@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.Servers.Commands.ChangeServerProfileDisplayName
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName
 {
     public class ChangeServerProfileDisplayNameCommandValidator : AbstractValidator<ChangeServerProfileDisplayNameCommand>
     {

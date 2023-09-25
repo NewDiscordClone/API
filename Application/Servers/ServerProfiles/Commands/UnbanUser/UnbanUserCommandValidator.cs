@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.Servers.Commands.UnbanUser
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser
 {
     public class UnbanUserCommandValidator : AbstractValidator<UnbanUserCommand>
     {

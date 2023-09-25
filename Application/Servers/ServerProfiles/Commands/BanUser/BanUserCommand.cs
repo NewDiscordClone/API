@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Sparkle.Application.Servers.Commands.BanUser
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.BanUser
 {
     public record BanUserCommand : IRequest
     {

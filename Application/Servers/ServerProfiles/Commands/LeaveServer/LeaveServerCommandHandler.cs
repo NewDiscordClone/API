@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Servers.Commands.LeaveServer
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer
 {
     public class LeaveServerCommandHandler : RequestHandlerBase, IRequestHandler<LeaveServerCommand>
     {

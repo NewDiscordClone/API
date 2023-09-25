@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.Servers.Commands.BanUser
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.BanUser
 {
     public class BanUserCommandValidator : AbstractValidator<BanUserCommand>
     {

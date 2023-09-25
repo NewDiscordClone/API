@@ -27,8 +27,4 @@
     <EditorConfigFiles Remove="C:\Users\dnesh\source\repos\SparkChats\API\.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="C:\Users\dnesh\source\repos\SparkChats\API\.editorconfig" />
-  </ItemGroup>
-
 </Project>

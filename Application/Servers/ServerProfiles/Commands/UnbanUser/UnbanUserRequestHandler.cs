@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Servers.Commands.UnbanUser
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser
 {
     public class UnbanUserRequestHandler : RequestHandlerBase, IRequestHandler<UnbanUserCommand>
     {

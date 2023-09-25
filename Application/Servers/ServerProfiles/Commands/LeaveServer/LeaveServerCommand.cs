@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.ComponentModel;
 
-namespace Sparkle.Application.Servers.Commands.LeaveServer
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer
 {
     public record LeaveServerCommand : IRequest
     {

@@ -2,10 +2,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Servers.Commands.BanUser;
-using Sparkle.Application.Servers.Commands.ChangeServerProfileDisplayName;
-using Sparkle.Application.Servers.Commands.ChangeServerProfileRoles;
-using Sparkle.Application.Servers.Commands.UnbanUser;
+using Sparkle.Application.Servers.ServerProfiles.Commands.BanUser;
+using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName;
+using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles;
+using Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser;
 using Sparkle.Contracts.Servers;
 
 namespace Sparkle.WebApi.Controllers

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Sparkle.Application.Servers.Commands.ChangeServerProfileDisplayName
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName
 {
     public record ChangeServerProfileDisplayNameCommand : IRequest
     {

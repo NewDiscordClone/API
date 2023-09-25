@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Servers.Commands.ChangeServerProfileRoles
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles
 {
     public class UpdateServerProfileRolesCommandHandler : IRequestHandler<UpdateServerProfileRolesCommand>
     {

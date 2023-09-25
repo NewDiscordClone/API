@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Servers.Commands.ChangeServerProfileDisplayName
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName
 {
     public class ChangeServerProfileDisplayNameCommandHandler : IRequestHandler<ChangeServerProfileDisplayNameCommand>
     {

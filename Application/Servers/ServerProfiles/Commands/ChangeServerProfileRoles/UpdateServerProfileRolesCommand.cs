@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Sparkle.Application.Servers.Commands.ChangeServerProfileRoles
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles
 {
     public record UpdateServerProfileRolesCommand : IRequest
     {

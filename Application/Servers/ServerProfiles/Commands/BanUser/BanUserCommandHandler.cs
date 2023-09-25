@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Servers.Commands.BanUser
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.BanUser
 {
     public class BanUserCommandHandler : RequestHandlerBase, IRequestHandler<BanUserCommand>
     {

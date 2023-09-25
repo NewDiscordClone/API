@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Sparkle.Application.Servers.Commands.ChangeServerProfileRoles
+namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles
 {
     public class UpdateServerProfileRolesCommandValidator : AbstractValidator<UpdateServerProfileRolesCommand>
     {
