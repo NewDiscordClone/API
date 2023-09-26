@@ -18,7 +18,11 @@ namespace Sparkle.DataAccess.Configurations
                 .ValueGeneratedNever();
 
             builder.HasMany(p => p.Roles)
-                .WithMany();
+                .WithMany()
+                .UsingEntity<RoleUserProfile>()
+                .HasKey(t => new { t.RolesId, t.UserProfileId });
+
+
         }
     }
 }
