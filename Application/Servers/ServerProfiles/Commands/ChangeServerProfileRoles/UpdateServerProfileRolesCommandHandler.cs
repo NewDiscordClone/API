@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
@@ -9,7 +7,6 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
     public class UpdateServerProfileRolesCommandHandler : IRequestHandler<UpdateServerProfileRolesCommand>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
-        private readonly IAppDbContext _context;
         public UpdateServerProfileRolesCommandHandler(IServerProfileRepository serverProfileRepository)
         {
             _serverProfileRepository = serverProfileRepository;
@@ -17,17 +14,19 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
 
         public async Task Handle(UpdateServerProfileRolesCommand command, CancellationToken cancellationToken)
         {
-            ServerProfile profile = await _serverProfileRepository.FindAsync(command.ProfileId);
+            ServerProfile profile = await _serverProfileRepository.FindAsync(command.ProfileId, cancellationToken);
 
-            profile.Roles.Clear();
+            List<Guid> currentRoles = await _serverProfileRepository.GetRolesIdsAsync(profile.Id, cancellationToken);
+            List<Guid> newRoles = command.Roles;
 
-            Role[] roles = await _context.Roles
-                .Where(role => command.Roles.Contains(role.Id))
-                .ToArrayAsync(cancellationToken);
+            List<Guid> rolesToAdd = newRoles.Except(currentRoles).ToList();
+            List<Guid> rolesToRemove = currentRoles.Except(newRoles).ToList();
 
-            profile.Roles.AddRange(roles);
+            if (rolesToRemove.Count > 0)
+                await _serverProfileRepository.RemoveRolesAsync(profile.Id, rolesToRemove.ToArray());
 
-            await _serverProfileRepository.UpdateAsync(profile);
+            if (rolesToAdd.Count > 0)
+                await _serverProfileRepository.AddRolesAsync(profile.Id, rolesToAdd.ToArray());
         }
     }
 }

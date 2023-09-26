@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
@@ -22,16 +21,11 @@ namespace Sparkle.Application.Servers.Roles.Commands.Create
             Server server = await Context.Servers.FindAsync(command.ServerId, cancellationToken);
 
             Role role = Mapper.Map<Role>(command);
-            foreach (IdentityRoleClaim<Guid> claims in command.Claims)
-            {
-                claims.RoleId = role.Id;
-            }
 
+            await _roleRepository.AddAsync(role, cancellationToken);
             await _roleRepository.AddClaimsToRoleAsync(role, command.Claims, cancellationToken);
 
             server.Roles.Add(role.Id);
-
-            await _roleRepository.AddAsync(role, cancellationToken);
             await Context.Servers.UpdateAsync(server, cancellationToken);
             return role;
         }
