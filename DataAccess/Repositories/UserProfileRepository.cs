@@ -6,7 +6,7 @@ namespace Sparkle.DataAccess.Repositories
 {
     public class UserProfileRepository : SimpleSqlDbSet<UserProfile>, IUserProfileRepository
     {
-        public UserProfileRepository(AppDbContext context) : base(context, default)
+        public UserProfileRepository(AppDbContext context) : base(context)
         {
         }
 

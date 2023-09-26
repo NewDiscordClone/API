@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Sparkle.Application.Common.Interfaces;
+﻿using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Common.Factories
@@ -7,6 +7,13 @@ namespace Sparkle.Application.Common.Factories
     public class RoleFactory : IRoleFactory
     {
         // это не финальные наборы клеймом, а наборы клеймом для тестов
+
+        private readonly IRoleRepository _roleRepository;
+
+        public RoleFactory(IRoleRepository roleRepository)
+        {
+            _roleRepository = roleRepository;
+        }
 
         //TODO: Add more claims
         private readonly string[] _serverMemberDefaultClaims
@@ -43,7 +50,7 @@ namespace Sparkle.Application.Common.Factories
             ServerClaims.ManageMessages,
         };
 
-        private static List<ServerClaim> CreateClaimsForRole(Role role, params string[] claims)
+        private async Task<List<ServerClaim>> CreateClaimsForRoleAsync(Role role, params string[] claims)
         {
             if (!claims.All(claim => ServerClaims.GetClaims().Contains(claim)))
                 throw new ArgumentException("Invalid claim(s) provided");
@@ -60,10 +67,12 @@ namespace Sparkle.Application.Common.Factories
                 serverClaims.Add(serverClaim);
             }
 
+            await _roleRepository.AddClaimsToRoleAsync(role, serverClaims);
+
             return serverClaims;
         }
 
-        public List<Role> GetDefaultServerRoles(string serverId)
+        public async Task<List<Role>> GetDefaultServerRolesAsync(string serverId)
         {
             Role ownerRole = new()
             {
@@ -83,11 +92,11 @@ namespace Sparkle.Application.Common.Factories
                 Priority = 0
             };
 
-            memberRole.Claims = CreateClaimsForRole(memberRole, _serverMemberDefaultClaims)
-                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+            await _roleRepository.AddAsync(ownerRole);
+            await _roleRepository.AddAsync(memberRole);
 
-            ownerRole.Claims = CreateClaimsForRole(memberRole, _serverOwnerDefaultClaims)
-                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+            await CreateClaimsForRoleAsync(memberRole, _serverMemberDefaultClaims);
+            await CreateClaimsForRoleAsync(ownerRole, _serverOwnerDefaultClaims);
 
             return new() { ownerRole, memberRole };
         }
@@ -102,8 +111,9 @@ namespace Sparkle.Application.Common.Factories
                 Priority = 0
             };
 
-            role.Claims = CreateClaimsForRole(role, _personalChatMemberClaims)
-                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+            //   CreateClaimsForRole(role, _personalChatMemberClaims);
+
+            //  _roleRepository.AddClaimsToRoleAsync(role, roleClaims);
 
             return role;
         }
@@ -126,8 +136,10 @@ namespace Sparkle.Application.Common.Factories
                 Priority = 0
             };
 
-            memberRole.Claims = CreateClaimsForRole(memberRole, _groupChatMemberClaims)
-                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+            //     List<IdentityRoleClaim<Guid>> memberRoleClaims = CreateClaimsForRole(memberRole, _groupChatMemberClaims)
+            //        .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+
+            //     _roleRepository.AddClaimsToRoleAsync(memberRole, memberRoleClaims);
 
             return memberRole;
         }
@@ -143,8 +155,10 @@ namespace Sparkle.Application.Common.Factories
                 Priority = 1
             };
 
-            ownerRole.Claims = CreateClaimsForRole(ownerRole, _groupChatOwnerClaims)
-                .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+            //     List<IdentityRoleClaim<Guid>> ownerRoleClaims = CreateClaimsForRole(ownerRole, _groupChatOwnerClaims)
+            //         .ConvertAll(c => c as IdentityRoleClaim<Guid>);
+
+            //    _roleRepository.AddClaimsToRoleAsync(ownerRole, ownerRoleClaims);
 
             return ownerRole;
         }

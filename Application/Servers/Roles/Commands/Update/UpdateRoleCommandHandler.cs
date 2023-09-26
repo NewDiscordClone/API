@@ -1,28 +1,29 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Commands.Update
 {
-    public class UpdateRoleCommandHandler : RequestHandlerBase, IRequestHandler<UpdateRoleCommand, Role>
+    public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Role>
     {
-        public UpdateRoleCommandHandler(IAppDbContext context) : base(context)
+        private readonly IRoleRepository _roleRepository;
+        public UpdateRoleCommandHandler(IRoleRepository roleRepository)
         {
+            _roleRepository = roleRepository;
         }
 
         public async Task<Role> Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-            Role role = await Context.SqlRoles.FindAsync(command.Id);
+            Role role = await _roleRepository.FindAsync(command.Id, cancellationToken);
 
-            await Context.RemoveClaimsFromRoleAsync(role);
+            await _roleRepository.RemoveClaimsFromRoleAsync(role, cancellationToken);
 
+            await _roleRepository.AddClaimsToRoleAsync(role, command.Claims, cancellationToken);
             role.Name = command.Name;
             role.Color = command.Color;
             role.Priority = command.Priority;
 
-            await Context.AddClaimsToRoleAsync(role, command.Claims);
-            await Context.SqlRoles.UpdateAsync(role);
+            await _roleRepository.UpdateAsync(role, cancellationToken);
 
             return role;
         }

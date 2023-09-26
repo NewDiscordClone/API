@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sparkle.DataAccess;
 
@@ -11,9 +12,11 @@ using Sparkle.DataAccess;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230925131846_FixKey")]
+    partial class FixKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,21 +128,6 @@ namespace DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RoleUserProfile", b =>
-                {
-                    b.Property<Guid>("RolesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserProfileId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("RolesId", "UserProfileId");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("RoleUserProfile");
-                });
-
             modelBuilder.Entity("Sparkle.Application.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -174,12 +162,17 @@ namespace DataAccess.Migrations
                     b.Property<string>("ServerId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserProfileId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.HasIndex("UserProfileId");
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -356,19 +349,11 @@ namespace DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleUserProfile", b =>
+            modelBuilder.Entity("Sparkle.Application.Models.Role", b =>
                 {
-                    b.HasOne("Sparkle.Application.Models.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Sparkle.Application.Models.UserProfile", null)
-                        .WithMany()
-                        .HasForeignKey("UserProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Roles")
+                        .HasForeignKey("UserProfileId");
                 });
 
             modelBuilder.Entity("Sparkle.Application.Models.UserProfile", b =>
@@ -383,6 +368,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Sparkle.Application.Models.User", b =>
                 {
                     b.Navigation("UserProfiles");
+                });
+
+            modelBuilder.Entity("Sparkle.Application.Models.UserProfile", b =>
+                {
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

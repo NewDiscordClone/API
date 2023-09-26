@@ -20,7 +20,6 @@ namespace Sparkle.Application.Servers.ServerProfiles.Queries.ServerProfileDetail
             ServerProfile? profile = await _context.UserProfiles
                 .OfType<ServerProfile>()
                 .Include(p => p.Roles)
-                .ThenInclude(r => r.Claims)
                 .SingleOrDefaultAsync(p => p.Id == request.ProfileId, cancellationToken);
 
             return profile ?? throw new EntityNotFoundException(request.ProfileId);

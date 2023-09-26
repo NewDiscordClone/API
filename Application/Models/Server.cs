@@ -38,4 +38,9 @@ public class Server : IUserProfileProvider
     public List<Guid> BannedUsers { get; set; } = new();
 
     public List<Guid> Profiles { get; set; } = new();
+
+    public Server()
+    {
+        Id = ObjectId.GenerateNewId().ToString();
+    }
 }

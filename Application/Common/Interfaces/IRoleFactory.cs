@@ -4,7 +4,7 @@ namespace Sparkle.Application.Common.Interfaces
 {
     public interface IRoleFactory
     {
-        List<Role> GetDefaultServerRoles(string serverId);
+        Task<List<Role>> GetDefaultServerRolesAsync(string serverId);
         List<Role> GetGroupChatRoles(string chatId);
         Role GetGroupChatMemberRole(string chatId);
         Role GetGroupChatOwnerRole(string chatId);

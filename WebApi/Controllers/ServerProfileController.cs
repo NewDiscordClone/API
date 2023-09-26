@@ -29,7 +29,7 @@ namespace Sparkle.WebApi.Controllers
             return Ok(profiles.ConvertAll(Mapper.Map<ServerProfileLookupResponse>));
         }
 
-        [HttpGet("profileId")]
+        [HttpGet("{profileId}")]
         public async Task<ActionResult> GetServerProfile(Guid profileId)
         {
             ServerProfileDetailsQuery query = new() { ProfileId = profileId };
