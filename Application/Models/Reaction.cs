@@ -18,5 +18,18 @@ public class Reaction
     /// <summary>
     /// Reaction author ID
     /// </summary>
-    public Guid User { get; set; }
+    public Guid AuthorProfile { get; set; }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Reaction reaction)
+            return false;
+
+        return Emoji == reaction.Emoji && AuthorProfile == reaction.AuthorProfile;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Emoji, AuthorProfile);
+    }
 }

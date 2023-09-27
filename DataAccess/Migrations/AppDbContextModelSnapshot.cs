@@ -269,7 +269,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserProfileId");
 
-                    b.ToTable("RoleUserProfile");
+                    b.ToTable("RoleUserProfile", (string)null);
                 });
 
             modelBuilder.Entity("Sparkle.Application.Models.User", b =>

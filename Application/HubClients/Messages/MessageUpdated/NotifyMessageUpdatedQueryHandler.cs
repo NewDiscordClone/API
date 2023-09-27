@@ -11,17 +11,20 @@ namespace Sparkle.Application.HubClients.Messages.MessageUpdated
         public async Task Handle(NotifyMessageUpdatedQuery query, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
-            Message message = await Context.Messages.FindAsync(query.MessageId);
+            Message message = await Context.Messages.FindAsync(query.MessageId, cancellationToken);
             MessageDto messageDto = Mapper.Map<MessageDto>(message);
-            messageDto.Author = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(message.Author));
-            Chat chat = await Context.Chats.FindAsync(message.ChatId);
-            if (chat is Channel channel) messageDto.ServerId = channel.ServerId;
+
+
+            Chat chat = await Context.Chats.FindAsync(message.ChatId, cancellationToken);
+            if (chat is Channel channel)
+                messageDto.ServerId = channel.ServerId;
 
             await SendAsync(ClientMethods.MessageUpdated, messageDto, GetConnections(chat));
         }
 
         public NotifyMessageUpdatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) :
             base(hubContextProvider, context, mapper)
-        { }
+        {
+        }
     }
 }

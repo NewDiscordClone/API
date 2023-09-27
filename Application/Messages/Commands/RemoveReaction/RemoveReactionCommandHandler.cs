@@ -14,7 +14,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
             Message message = await Context.Messages.FindAsync(command.MessageId);
             Reaction reaction = message.Reactions[command.ReactionIndex];
 
-            if (reaction.User != UserId)
+            if (reaction.AuthorProfile != UserId)
                 throw new NoPermissionsException("This isn't your reaction");
 
             message.Reactions.RemoveAt(command.ReactionIndex);
