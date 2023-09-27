@@ -6,8 +6,10 @@ namespace Sparkle.DataAccess.Repositories
 {
     public class ServerProfileRepository : SimpleSqlDbSet<ServerProfile>, IServerProfileRepository
     {
+        //private new DbSet<UserProfile> DbSet { get; }
         public ServerProfileRepository(AppDbContext context) : base(context)
         {
+            // DbSet = Context.Set<UserProfile>();
         }
 
         public async Task RemoveRolesAsync(Guid profileId, params Guid[] roleIds)
@@ -38,16 +40,16 @@ namespace Sparkle.DataAccess.Repositories
 
             await Context.SaveChangesAsync();
         }
-        public UserProfile? FindUserProfileOnServer(string serverId, Guid userId)
+        public ServerProfile? FindUserProfileOnServer(string serverId, Guid userId)
         {
             return DbSet.SingleOrDefault(profile => profile.ServerId
-            == serverId && profile.Id == userId);
+            == serverId && profile.UserId == userId);
         }
 
-        public async Task<UserProfile?> FindUserProfileOnServerAsync(string serverId, Guid userId, CancellationToken cancellationToken = default)
+        public async Task<ServerProfile?> FindUserProfileOnServerAsync(string serverId, Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.SingleOrDefaultAsync(profile => profile.ServerId
-            == serverId && profile.Id == userId, cancellationToken);
+            return await DbSet.SingleOrDefaultAsync(profile => profile.ServerId == serverId
+                && profile.UserId == userId, cancellationToken);
         }
 
         public bool IsUserServerMember(string serverId, Guid userId)

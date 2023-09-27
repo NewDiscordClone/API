@@ -13,7 +13,7 @@ namespace Sparkle.Application.Messages.Commands.EditMessage
 
             Message message = await Context.Messages.FindAsync(command.MessageId);
 
-            if (message.User != UserId)
+            if (message.Author != UserId)
                 throw new NoPermissionsException("You don't have permission to edit the message");
 
             message.Text = command.NewText;

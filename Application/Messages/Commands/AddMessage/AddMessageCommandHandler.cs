@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
@@ -8,12 +10,23 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
 {
     public class AddMessageCommandHandler : RequestHandlerBase, IRequestHandler<AddMessageCommand, MessageDto>
     {
+        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IServerProfileRepository _serverProfileRepository;
+
         public async Task<MessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Chat chat = await Context.Chats.FindAsync(request.ChatId);
-            User user = await Context.SqlUsers.FindAsync(UserId);
+            Chat chat = await Context.Chats.FindAsync(request.ChatId, cancellationToken);
+            UserProfile profile;
+            if (chat is Channel channel)
+            {
+                profile = await _serverProfileRepository.FindUserProfileOnServerAsync(channel.ServerId, UserId, cancellationToken)
+                    ?? throw new EntityNotFoundException(message: $"User {UserId} profile not found in server {channel.ServerId}", "");
+
+            }
+            else
+                profile = await _userProfileRepository.FindByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
 
             List<Attachment> attachments = new();
 
@@ -34,15 +47,20 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
                 Text = request.Text,
                 ChatId = request.ChatId,
                 SendTime = DateTime.UtcNow,
-                User = UserId,
+                Author = profile.Id,
                 Attachments = attachments
             };
-            return Mapper.Map<MessageDto>(await Context.Messages.AddAsync(message));
+
+            await Context.Messages.AddAsync(message, cancellationToken);
+
+            return Mapper.Map<MessageDto>(message);
         }
 
-        public AddMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
+        public AddMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IUserProfileRepository userProfileRepository, IServerProfileRepository serverProfileRepository) :
             base(context, userProvider, mapper)
         {
+            _userProfileRepository = userProfileRepository;
+            _serverProfileRepository = serverProfileRepository;
         }
     }
 }

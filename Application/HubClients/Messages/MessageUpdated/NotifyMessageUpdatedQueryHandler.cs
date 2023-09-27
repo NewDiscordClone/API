@@ -13,7 +13,7 @@ namespace Sparkle.Application.HubClients.Messages.MessageUpdated
             SetToken(cancellationToken);
             Message message = await Context.Messages.FindAsync(query.MessageId);
             MessageDto messageDto = Mapper.Map<MessageDto>(message);
-            messageDto.User = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(message.User));
+            messageDto.Author = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(message.Author));
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
             if (chat is Channel channel) messageDto.ServerId = channel.ServerId;
 

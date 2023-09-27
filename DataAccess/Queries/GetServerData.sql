@@ -1,4 +1,4 @@
-declare  @serverId nvarChar(24) = '6512f1ff632677cbf8db3a47'
+declare  @serverId nvarChar(24) = '65142c1fa23798be4c0e748f'
 
 
 select * from UserProfiles where ServerId = @serverId;

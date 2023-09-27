@@ -15,9 +15,11 @@ namespace Sparkle.DataAccess.Repositories
             return DbSet.Any(profile => profile.ChatId == chatId && profile.UserId == userId);
         }
 
-        public async Task<bool> ChatContainsUserAsync(string chatId, Guid userId)
+        public async Task<bool> ChatContainsUserAsync(string chatId, Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(profile => profile.ChatId == chatId && profile.UserId == userId);
+            return await DbSet.AnyAsync(profile => profile.ChatId == chatId
+                && profile.UserId == userId,
+                cancellationToken);
         }
 
         public override async Task<UserProfile> AddAsync(UserProfile entity, CancellationToken cancellationToken = default)
@@ -84,14 +86,18 @@ namespace Sparkle.DataAccess.Repositories
         }
 
 
-        public async Task<UserProfile> FindByChatIdAndUserIdAsync(string chatId, Guid userId)
+        public async Task<UserProfile> FindByChatIdAndUserIdAsync(string chatId, Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.SingleAsync(profile => profile.ChatId == chatId && profile.UserId == userId);
+            return await DbSet.SingleAsync(profile => profile.ChatId == chatId
+                && profile.UserId == userId,
+                cancellationToken: cancellationToken);
         }
 
-        public async Task<UserProfile?> FindOrDefaultByChatIdAndUserIdAsync(string chatId, Guid userId)
+        public async Task<UserProfile?> FindOrDefaultByChatIdAndUserIdAsync(string chatId, Guid userId, CancellationToken cancellationToken = default)
         {
-            return await DbSet.SingleOrDefaultAsync(profile => profile.ChatId == chatId && profile.UserId == userId);
+            return await DbSet.SingleOrDefaultAsync(profile => profile.ChatId == chatId
+                && profile.UserId == userId,
+                cancellationToken: cancellationToken);
         }
     }
 }

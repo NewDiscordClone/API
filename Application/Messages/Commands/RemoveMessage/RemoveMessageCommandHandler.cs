@@ -14,7 +14,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveMessage
             Message message = await Context.Messages.FindAsync(command.MessageId);
             Chat chat = await Context.Chats.FindAsync(message.ChatId);
 
-            if (message.User != UserId)
+            if (message.Author != UserId)
             {
                 //TODO: Перевірити юзера на відповідну роль на сервері
                 // Channel? channel = await Context.Channels

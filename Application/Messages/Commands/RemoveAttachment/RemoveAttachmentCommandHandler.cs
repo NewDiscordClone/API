@@ -14,7 +14,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveAttachment
             Message message = await Context.Messages.FindAsync(command.MessageId);
             User user = await Context.SqlUsers.FindAsync(UserId);
 
-            if (message.User != user.Id)
+            if (message.Author != user.Id)
                 throw new NoPermissionsException("You don't have permission to edit the message");
 
             string path = message.Attachments[command.AttachmentIndex].Path;
