@@ -47,7 +47,8 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
                 Text = request.Text,
                 ChatId = request.ChatId,
                 SendTime = DateTime.UtcNow,
-                Author = profile.Id,
+                AuthorProfile = profile.Id,
+                Author = profile.UserId,
                 Attachments = attachments
             };
 

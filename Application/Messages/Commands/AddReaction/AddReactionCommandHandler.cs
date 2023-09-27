@@ -15,7 +15,7 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
 
             Reaction reaction = new()
             {
-                AuthorProfile = message.Author,
+                AuthorProfile = message.AuthorProfile,
                 Emoji = command.Emoji,
             };
 

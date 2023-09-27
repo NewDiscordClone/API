@@ -21,8 +21,8 @@ namespace Sparkle.Application.Messages.Queries.GetMessages
                 MessageDto res = Mapper.Map<MessageDto>(message);
 
                 UserProfile? userProfile = await Context.UserProfiles
-                    .FindAsync(new object?[] { message.Author }, cancellationToken: cancellationToken)
-                    ?? throw new EntityNotFoundException(message.Author);
+                    .FindAsync(new object?[] { message.AuthorProfile }, cancellationToken: cancellationToken)
+                    ?? throw new EntityNotFoundException(message.AuthorProfile);
 
                 User? user = await Context.Users.FindAsync(new object?[] { userProfile.UserId }, cancellationToken: cancellationToken) ??
                     throw new EntityNotFoundException(userProfile.UserId);

@@ -51,6 +51,7 @@ public class Message
     /// <summary>
     /// Message author ID
     /// </summary>
+    public Guid AuthorProfile { get; set; }
     public Guid Author { get; set; }
     /// <summary>
     /// Chat Id as an string representation of an ObjectId type
