@@ -77,7 +77,6 @@ namespace Sparkle.Application.Common.Factories
             Id = Constants.Constants.Roles.GroupChatOwnerId,
             Name = Constants.Constants.Roles.GroupChatOwnerName,
             Color = Constants.Constants.Roles.DefaultColor,
-            ChatId = null,
             ServerId = null,
             Priority = 1,
         };
@@ -87,7 +86,6 @@ namespace Sparkle.Application.Common.Factories
             Id = Constants.Constants.Roles.GroupChatMemberId,
             Name = Constants.Constants.Roles.GroupChatMemberName,
             Color = Constants.Constants.Roles.DefaultColor,
-            ChatId = null,
             ServerId = null,
             Priority = 0,
         };
@@ -97,7 +95,6 @@ namespace Sparkle.Application.Common.Factories
             Id = Constants.Constants.Roles.PrivateChatMemberId,
             Name = Constants.Constants.Roles.PrivateChatMemberName,
             Color = Constants.Constants.Roles.DefaultColor,
-            ChatId = null,
             ServerId = null,
             Priority = 0,
         };

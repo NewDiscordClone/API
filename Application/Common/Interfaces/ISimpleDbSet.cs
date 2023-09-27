@@ -21,7 +21,7 @@ namespace Sparkle.Application.Common.Interfaces
         Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
         Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
 
-        void AddMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+        void AddMany(IEnumerable<TEntity> entities);
         Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
         Task AddManyAsync(IEnumerable<TEntity> profiles, CancellationToken cancellationToken = default);
 

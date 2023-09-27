@@ -37,7 +37,7 @@ namespace Sparkle.DataAccess
             return res;
         }
 
-        public virtual void AddMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        public virtual void AddMany(IEnumerable<TEntity> entities)
         {
             _dbSet.AddRange(entities);
             _context.SaveChanges();

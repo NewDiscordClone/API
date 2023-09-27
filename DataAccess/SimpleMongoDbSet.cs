@@ -30,9 +30,9 @@ namespace Sparkle.DataAccess
         }
 
 
-        public void AddMany(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        public void AddMany(IEnumerable<TEntity> entities)
         {
-            _collection.InsertMany(entities, null, cancellationToken);
+            _collection.InsertMany(entities, null);
         }
 
         public virtual async Task AddManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)

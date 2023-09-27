@@ -38,14 +38,15 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
             chat.Profiles = profiles.ConvertAll(p => p.Id);
             chat.OwnerId = ownerProfile.Id;
 
-            await _userProfileRepository.AddManyAsync(profiles);
-            await Context.GroupChats.AddAsync(chat);
+            await _userProfileRepository.AddManyAsync(profiles, cancellationToken);
+            await Context.GroupChats.AddAsync(chat, cancellationToken);
             return chat.Id;
         }
 
-        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IUserProfileRepository userProfileRepository) : base(context, userProvider, mapper)
+        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IUserProfileRepository userProfileRepository, IRoleFactory roleFactory) : base(context, userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;
+            _roleFactory = roleFactory;
         }
     }
 }

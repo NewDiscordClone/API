@@ -85,7 +85,7 @@ namespace Sparkle.WebApi.Controllers
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
-            return CreatedAtAction(nameof(GetGroupChatDetails), chatId, chatId);
+            return CreatedAtAction(nameof(GetGroupChatDetails), new { chatId }, chatId);
         }
 
         /// <summary>

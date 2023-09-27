@@ -17,9 +17,8 @@ namespace Sparkle.DataAccess.Repositories
             {
                 claim.RoleId = role.Id;
                 await Context.RoleClaims.AddAsync(claim, cancellationToken);
-
-                await Context.SaveChangesAsync(cancellationToken);
             }
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task AddClaimToRoleAsync(Role role, IdentityRoleClaim<Guid> claim, CancellationToken cancellationToken = default)
