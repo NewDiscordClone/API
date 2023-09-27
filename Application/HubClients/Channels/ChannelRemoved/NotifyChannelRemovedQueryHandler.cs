@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.Channels.ChannelRemoved
 {
@@ -13,9 +12,8 @@ namespace Sparkle.Application.HubClients.Channels.ChannelRemoved
         public async Task Handle(NotifyChannelRemovedQuery query, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
-            Channel channel = await Context.Channels.FindAsync(query.ChannelId);
 
-            await SendAsync(ClientMethods.ChannelDeleted, channel, GetConnections(channel));
+            await SendAsync(ClientMethods.ChannelDeleted, query.Channel, GetConnections(query.Channel));
         }
     }
 }

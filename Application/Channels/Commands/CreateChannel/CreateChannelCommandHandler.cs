@@ -11,7 +11,7 @@ namespace Sparkle.Application.Channels.Commands.CreateChannel
         {
             Context.SetToken(cancellationToken);
 
-            Server server = await Context.Servers.FindAsync(command.ServerId);
+            Server server = await Context.Servers.FindAsync(command.ServerId, cancellationToken);
 
             Channel channel = new()
             {

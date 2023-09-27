@@ -5,6 +5,6 @@ namespace Sparkle.Application.HubClients.Channels.ChannelRemoved
 {
     public record NotifyChannelRemovedQuery : IRequest
     {
-        public string ChannelId { get; init; }
+        public Channel Channel { get; init; }
     }
 }
