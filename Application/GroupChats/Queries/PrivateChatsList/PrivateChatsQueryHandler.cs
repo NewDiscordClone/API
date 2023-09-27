@@ -29,8 +29,13 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
             Context.SetToken(cancellationToken);
             List<PrivateChatLookUp> chatDtos = new();
 
+            List<string?> chatIds = await Context.UserProfiles.
+                Where(profile => profile.UserId == UserId && profile.ChatId != null)
+                .Select(profile => profile.ChatId)
+                .ToListAsync(cancellationToken);
+
             List<PersonalChat> chats = await Context.PersonalChats
-                .FilterAsync(chat => _userRepository.ChatContainsUser(chat.Id, UserId));
+                .FilterAsync(chat => chatIds.Contains(chat.Id), cancellationToken);
 
             foreach (PersonalChat chat in chats)
             {

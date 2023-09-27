@@ -24,14 +24,14 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
             {
                 UserId = id,
                 ChatId = chat.Id,
-                Roles = { _roleFactory.GetGroupChatMemberRole(chat.Id) }
+                Roles = { _roleFactory.GroupChatMemberRole }
             });
 
             UserProfile ownerProfile = new()
             {
                 UserId = UserId,
                 ChatId = chat.Id,
-                Roles = { _roleFactory.GetGroupChatOwnerRole(chat.Id) }
+                Roles = { _roleFactory.GroupChatOwnerRole }
             };
 
             profiles.Add(ownerProfile);

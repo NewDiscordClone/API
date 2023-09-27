@@ -49,13 +49,13 @@ namespace Sparkle.Application.Users.Commands.FriendRequest
                         {
                             UserId = UserId,
                             ChatId = chat.Id,
-                            Roles = { _roleFactory.GetRoleForPersonalChat(chat.Id) }
+                            Roles = { _roleFactory.PersonalChatMemberRole }
                         },
                         new()
                         {
                             UserId = request.UserId,
                             ChatId = chat.Id,
-                            Roles = { _roleFactory.GetRoleForPersonalChat(chat.Id) }
+                            Roles = { _roleFactory.PersonalChatMemberRole }
                         }
                     };
 

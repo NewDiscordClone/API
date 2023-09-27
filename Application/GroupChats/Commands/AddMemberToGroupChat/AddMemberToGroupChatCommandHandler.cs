@@ -23,7 +23,7 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
             {
                 ChatId = chat.Id,
                 UserId = command.NewMemberId,
-                Roles = { _roleFactory.GetGroupChatMemberRole(chat.Id) }
+                Roles = { _roleFactory.GroupChatMemberRole }
             };
 
             chat.Profiles.Add(profile.Id);

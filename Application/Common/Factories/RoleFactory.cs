@@ -72,6 +72,48 @@ namespace Sparkle.Application.Common.Factories
             return serverClaims;
         }
 
+        private readonly Role _groupChatOwnerRole = new()
+        {
+            Id = Constants.Constants.Roles.GroupChatOwnerId,
+            Name = Constants.Constants.Roles.GroupChatOwnerName,
+            Color = Constants.Constants.Roles.DefaultColor,
+            ChatId = null,
+            ServerId = null,
+            Priority = 1,
+        };
+
+        private readonly Role _groupChatMemberRole = new()
+        {
+            Id = Constants.Constants.Roles.GroupChatMemberId,
+            Name = Constants.Constants.Roles.GroupChatMemberName,
+            Color = Constants.Constants.Roles.DefaultColor,
+            ChatId = null,
+            ServerId = null,
+            Priority = 0,
+        };
+
+        private readonly Role _personalChatMemberRole = new()
+        {
+            Id = Constants.Constants.Roles.PrivateChatMemberId,
+            Name = Constants.Constants.Roles.PrivateChatMemberName,
+            Color = Constants.Constants.Roles.DefaultColor,
+            ChatId = null,
+            ServerId = null,
+            Priority = 0,
+        };
+
+        public Role PersonalChatMemberRole => _personalChatMemberRole;
+
+        public Role GroupChatMemberRole => _groupChatMemberRole;
+
+        public Role GroupChatOwnerRole => _groupChatOwnerRole;
+
+        public string[] GroupChatOwnerClaims => _groupChatOwnerClaims;
+
+        public string[] GroupChatMemberClaims => _groupChatMemberClaims;
+
+        public string[] PersonalChatMemberClaims => _personalChatMemberClaims;
+
         public async Task<List<Role>> GetDefaultServerRolesAsync(string serverId)
         {
             Role ownerRole = new()
@@ -101,66 +143,12 @@ namespace Sparkle.Application.Common.Factories
             return new() { ownerRole, memberRole };
         }
 
-        public Role GetRoleForPersonalChat(string chatId)
+        public List<Role> GetGroupChatRoles()
         {
-            Role role = new()
-            {
-                Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
-                Color = "#FFF000",
-                ChatId = chatId,
-                Priority = 0
-            };
-
-            //   CreateClaimsForRole(role, _personalChatMemberClaims);
-
-            //  _roleRepository.AddClaimsToRoleAsync(role, roleClaims);
-
-            return role;
-        }
-
-        public List<Role> GetGroupChatRoles(string chatId)
-        {
-            Role ownerRole = GetGroupChatOwnerRole(chatId);
-            Role memberRole = GetGroupChatMemberRole(chatId);
+            Role ownerRole = GroupChatOwnerRole;
+            Role memberRole = GroupChatMemberRole;
 
             return new() { ownerRole, memberRole };
-        }
-
-        public Role GetGroupChatMemberRole(string chatId)
-        {
-            Role memberRole = new()
-            {
-                Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
-                Color = "#FFF000",
-                ChatId = chatId,
-                Priority = 0
-            };
-
-            //     List<IdentityRoleClaim<Guid>> memberRoleClaims = CreateClaimsForRole(memberRole, _groupChatMemberClaims)
-            //        .ConvertAll(c => c as IdentityRoleClaim<Guid>);
-
-            //     _roleRepository.AddClaimsToRoleAsync(memberRole, memberRoleClaims);
-
-            return memberRole;
-        }
-
-        public Role GetGroupChatOwnerRole(string chatId)
-        {
-            Role ownerRole = new()
-            {
-                Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
-                Color = "#FFF000",
-                IsAdmin = true,
-                ChatId = chatId,
-                Priority = 1
-            };
-
-            //     List<IdentityRoleClaim<Guid>> ownerRoleClaims = CreateClaimsForRole(ownerRole, _groupChatOwnerClaims)
-            //         .ConvertAll(c => c as IdentityRoleClaim<Guid>);
-
-            //    _roleRepository.AddClaimsToRoleAsync(ownerRole, ownerRoleClaims);
-
-            return ownerRole;
         }
     }
 }
