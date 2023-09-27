@@ -67,8 +67,7 @@ namespace Sparkle.WebApi.Controllers
             CreateRoleCommand command = Mapper.Map<CreateRoleCommand>((serverId, request));
             Role role = await Mediator.Send(command);
 
-            RoleResponse response = Mapper.Map<RoleResponse>(role);
-            return CreatedAtAction(nameof(GetRole), new { serverId, roleId = role.Id }, response);
+            return CreatedAtAction(nameof(GetRole), new { serverId, roleId = role.Id }, role.Id);
         }
 
         /// <summary>

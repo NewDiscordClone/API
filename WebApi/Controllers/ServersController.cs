@@ -122,7 +122,7 @@ namespace Sparkle.WebApi.Controllers
         {
             Server server = await Mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetServerDetails), new { serverId = server.Id }, server);
+            return CreatedAtAction(nameof(GetServerDetails), new { serverId = server.Id }, server.Id);
         }
 
         /// <summary>
