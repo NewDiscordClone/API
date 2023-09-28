@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Constants;
-using Sparkle.Application.Common.Validation;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName
 {
@@ -8,7 +7,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
     {
         public ChangeServerProfileDisplayNameCommandValidator()
         {
-            RuleFor(x => x.NewDisplayName).RequiredMaximumLength(Constants.ServerProfile.DisplayNameMaxLength);
+            RuleFor(x => x.NewDisplayName).MaximumLength(Constants.ServerProfile.DisplayNameMaxLength);
             RuleFor(x => x.ProfileId).NotNull();
         }
     }

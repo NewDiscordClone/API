@@ -12,5 +12,9 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
         bool IsUserServerMember(string serverId, Guid userId);
         Task RemoveRoleFromServerProfilesAsync(Role role, string serverId, CancellationToken cancellationToken = default);
         Task RemoveRolesAsync(Guid profileId, params Guid[] roleIds);
+        bool IsServerOwner(ServerProfile profile);
+        bool IsServerOwner(Guid profileId);
+        Task<bool> IsServerOwnerAsync(ServerProfile profile);
+        Task<bool> IsServerOwnerAsync(Guid profileId);
     }
 }

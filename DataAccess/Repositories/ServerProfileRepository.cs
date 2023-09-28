@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
@@ -75,6 +76,27 @@ namespace Sparkle.DataAccess.Repositories
             return await DbSet.Where(profile => profile.Id == profileId)
                 .SelectMany(profile => profile.Roles)
                 .ToListAsync(cancellationToken);
+        }
+
+        public bool IsServerOwner(ServerProfile profile)
+        {
+            return IsServerOwner(profile.Id);
+        }
+
+        public bool IsServerOwner(Guid profileId)
+        {
+            return DbSet.Any(profile => profile.Id == profileId
+            && profile.Roles.Any(role => role.Id == Constants.Roles.ServerOwnerId));
+        }
+
+        public async Task<bool> IsServerOwnerAsync(ServerProfile profile)
+        {
+            return await IsServerOwnerAsync(profile.Id);
+        }
+        public async Task<bool> IsServerOwnerAsync(Guid profileId)
+        {
+            return await DbSet.AnyAsync(profile => profile.Id == profileId
+            && profile.Roles.Any(role => role.Id == Constants.Roles.ServerOwnerId));
         }
     }
 }

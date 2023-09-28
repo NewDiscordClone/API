@@ -14,7 +14,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
 
         public async Task Handle(ChangeServerProfileDisplayNameCommand command, CancellationToken cancellationToken)
         {
-            ServerProfile serverProfile = await _serverProfileRepository.FindAsync(command.ProfileId);
+            ServerProfile serverProfile = await _serverProfileRepository.FindAsync(command.ProfileId, cancellationToken);
 
             serverProfile.DisplayName = command.NewDisplayName;
             await _serverProfileRepository.UpdateAsync(serverProfile);

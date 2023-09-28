@@ -5,6 +5,6 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
     public record ChangeServerProfileDisplayNameCommand : IRequest
     {
         public Guid ProfileId { get; init; }
-        public string NewDisplayName { get; init; }
+        public string? NewDisplayName { get; init; }
     }
 }

@@ -11,7 +11,6 @@ using Sparkle.Application.Servers.Commands.JoinServer;
 using Sparkle.Application.Servers.Commands.UpdateServer;
 using Sparkle.Application.Servers.Queries.ServerDetails;
 using Sparkle.Application.Servers.Queries.ServersList;
-using Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer;
 using Sparkle.Contracts.Servers;
 
 namespace Sparkle.WebApi.Controllers
@@ -40,25 +39,6 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> JoinServer(string invitationId)
         {
             await Mediator.Send(new JoinServerCommand() { InvitationId = invitationId });
-
-            return NoContent();
-        }
-
-        /// <summary>
-        /// Leave the given server
-        /// </summary>
-        /// <param name="serverId">Id of the server to leave from</param>
-        /// <returns>NoContent if the operation is successful</returns>
-        /// <response code="204">NoContent. Successful operation</response>
-        /// <response code="400">Bad Request. The server is not found</response>
-        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
-        [HttpDelete("{serverId}/leave")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> LeaveServer(string serverId)
-        {
-            await Mediator.Send(new LeaveServerCommand() { ServerId = serverId });
 
             return NoContent();
         }
