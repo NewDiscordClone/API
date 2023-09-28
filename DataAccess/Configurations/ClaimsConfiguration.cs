@@ -8,7 +8,6 @@ namespace Sparkle.DataAccess.Configurations
 {
     public class ClaimsConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<Guid>>
     {
-
         public void Configure(EntityTypeBuilder<IdentityRoleClaim<Guid>> builder)
         {
             int id = 1;
@@ -44,7 +43,7 @@ namespace Sparkle.DataAccess.Configurations
                     ClaimType = ServerClaims.ManageChannels,
                     ClaimValue = "true"
                 },
-        
+
                 // Group Chat Member Claims
                 new IdentityRoleClaim<Guid>
                 {
@@ -82,11 +81,49 @@ namespace Sparkle.DataAccess.Configurations
                     RoleId = Constants.Roles.GroupChatOwnerId,
                     ClaimType = ServerClaims.ManageMessages,
                     ClaimValue = "true"
-                }
+                },
+
+                // Server Member Claims
+                new IdentityRoleClaim<Guid>
+                {
+                    Id = id++,
+                    RoleId = Constants.Roles.ServerMemberId,
+                    ClaimType = ServerClaims.ChangeServerName,
+                    ClaimValue = "true"
+                },
+
+                // Server Owner Claims
+                new IdentityRoleClaim<Guid>
+                {
+                    Id = id++,
+                    RoleId = Constants.Roles.ServerOwnerId,
+                    ClaimType = ServerClaims.ChangeServerName,
+                    ClaimValue = "true"
+                },
+                new IdentityRoleClaim<Guid>
+                {
+                    Id = id++,
+                    RoleId = Constants.Roles.ServerOwnerId,
+                    ClaimType = ServerClaims.ManageServer,
+                    ClaimValue = "true"
+                },
+                new IdentityRoleClaim<Guid>
+                {
+                    Id = id++,
+                    RoleId = Constants.Roles.ServerOwnerId,
+                    ClaimType = ServerClaims.ManageRoles,
+                    ClaimValue = "true"
+                },
+                new IdentityRoleClaim<Guid>
+                {
+                    Id = id++,
+                    RoleId = Constants.Roles.ServerOwnerId,
+                    ClaimType = ServerClaims.ManageChannels,
+                    ClaimValue = "true"
+                },
             };
 
             builder.HasData(data);
         }
-
     }
 }

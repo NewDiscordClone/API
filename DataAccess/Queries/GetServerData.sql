@@ -1,4 +1,4 @@
-declare  @serverId nvarChar(24) = '65142c1fa23798be4c0e748f'
+declare  @serverId nvarChar(24) = '65144d73d911379586fd6db1'
 
 
 select * from UserProfiles where ServerId = @serverId;
@@ -18,4 +18,5 @@ JOIN
 LEFT JOIN 
     UserProfiles AS u ON ru.UserProfileId = u.Id
 WHERE 
-    u.ServerId = @serverId;
+    u.ServerId = @serverId
+ORDER BY RoleName DESC; 

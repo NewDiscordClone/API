@@ -36,7 +36,29 @@ namespace Sparkle.DataAccess.Configurations
                 Priority = 0,
             };
 
-            builder.HasData(groupChatOwnerRole, groupChatMemberRole, personalChatMemberRole);
+            Role serverOwnerRole = new()
+            {
+                Id = Constants.Roles.ServerOwnerId,
+                Name = Constants.Roles.ServerOwnerName,
+                Color = Constants.Roles.DefaultColor,
+                ServerId = null,
+                Priority = 100,
+            };
+
+            Role serverMemberRole = new()
+            {
+                Id = Constants.Roles.ServerMemberId,
+                Name = Constants.Roles.ServerMemberName,
+                Color = Constants.Roles.DefaultColor,
+                ServerId = null,
+                Priority = 0,
+            };
+
+            builder.HasData(groupChatOwnerRole,
+                            groupChatMemberRole,
+                            personalChatMemberRole,
+                            serverOwnerRole,
+                            serverMemberRole);
         }
     }
 }
