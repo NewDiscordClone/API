@@ -4,12 +4,10 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
-    public class ServerProfileRepository : SimpleSqlDbSet<ServerProfile>, IServerProfileRepository
+    public class ServerProfileRepository : BaseProfileRepository<ServerProfile>, IServerProfileRepository
     {
-        //private new DbSet<UserProfile> DbSet { get; }
         public ServerProfileRepository(AppDbContext context) : base(context)
         {
-            // DbSet = Context.Set<UserProfile>();
         }
 
         public async Task RemoveRolesAsync(Guid profileId, params Guid[] roleIds)
@@ -40,6 +38,7 @@ namespace Sparkle.DataAccess.Repositories
 
             await Context.SaveChangesAsync();
         }
+
         public ServerProfile? FindUserProfileOnServer(string serverId, Guid userId)
         {
             return DbSet.SingleOrDefault(profile => profile.ServerId

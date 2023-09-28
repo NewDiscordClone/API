@@ -4,7 +4,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
-    public class UserProfileRepository : SimpleSqlDbSet<UserProfile>, IUserProfileRepository
+    public class UserProfileRepository : BaseProfileRepository<UserProfile>, IUserProfileRepository
     {
         public UserProfileRepository(AppDbContext context) : base(context)
         {
@@ -21,70 +21,6 @@ namespace Sparkle.DataAccess.Repositories
                 && profile.UserId == userId,
                 cancellationToken);
         }
-
-        public override async Task<UserProfile> AddAsync(UserProfile entity, CancellationToken cancellationToken = default)
-        {
-            List<RoleUserProfile> roles = entity.Roles
-                .ConvertAll(entity => new RoleUserProfile()
-                {
-                    RolesId = entity.Id,
-                    UserProfileId = entity.Id
-                });
-
-            entity.Roles.Clear();
-
-            await Context.RoleUserProfile.AddRangeAsync(roles, cancellationToken);
-            await Context.UserProfiles.AddAsync(entity, cancellationToken);
-
-            await Context.SaveChangesAsync(cancellationToken);
-
-            return entity;
-        }
-
-        public override void AddMany(IEnumerable<UserProfile> entities)
-        {
-            List<RoleUserProfile> roleUserProfiles = new();
-
-            foreach (UserProfile entity in entities)
-            {
-                IEnumerable<RoleUserProfile> roles = entity.Roles.Select(role => new RoleUserProfile
-                {
-                    RolesId = role.Id,
-                    UserProfileId = entity.Id
-                });
-
-                roleUserProfiles.AddRange(roles);
-                entity.Roles.Clear();
-            }
-
-            Context.RoleUserProfile.AddRange(roleUserProfiles);
-            Context.UserProfiles.AddRangeAsync(entities);
-
-            Context.SaveChanges();
-        }
-
-        public override async Task AddManyAsync(IEnumerable<UserProfile> entities, CancellationToken cancellationToken = default)
-        {
-            List<RoleUserProfile> roleUserProfiles = new();
-
-            foreach (UserProfile entity in entities)
-            {
-                IEnumerable<RoleUserProfile> roles = entity.Roles.Select(role => new RoleUserProfile
-                {
-                    RolesId = role.Id,
-                    UserProfileId = entity.Id
-                });
-
-                roleUserProfiles.AddRange(roles);
-                entity.Roles.Clear();
-            }
-
-            await Context.RoleUserProfile.AddRangeAsync(roleUserProfiles, cancellationToken);
-            await Context.UserProfiles.AddRangeAsync(entities, cancellationToken);
-
-            await Context.SaveChangesAsync(cancellationToken);
-        }
-
 
         public async Task<UserProfile> FindByChatIdAndUserIdAsync(string chatId, Guid userId, CancellationToken cancellationToken = default)
         {
