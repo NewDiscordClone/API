@@ -21,7 +21,18 @@
 
             public static readonly Guid ServerMemberId = Guid.Parse("8ce979a9-c05c-4d70-bb45-6476892ced6c");
             public const string ServerMemberName = "SERVER-MEMBER";
+
+            public static readonly Guid[] DefaultRoleIds = new Guid[]
+            {
+                GroupChatOwnerId,
+                GroupChatMemberId,
+                PrivateChatMemberId,
+                ServerOwnerId,
+                ServerMemberId
+            };
+
 #pragma warning restore IDE1006 // Naming Styles
+
         }
     }
 }

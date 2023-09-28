@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sparkle.Application.Servers.Roles.Common.Validation;
 
 namespace Sparkle.Application.Servers.Roles.Commands.ChangePriority
 {
@@ -6,7 +7,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.ChangePriority
     {
         public ChangeRolePriorityCommandValidator()
         {
-            RuleFor(c => c.RoleId).NotNull();
+            RuleFor(c => c.RoleId).NotDefaultRole();
 
             RuleFor(c => c.Priority).NotNull().GreaterThanOrEqualTo(0);
         }

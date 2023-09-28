@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sparkle.Application.Servers.Roles.Common.Validation;
 
 namespace Sparkle.Application.Servers.Roles.Commands.Delete
 {
@@ -6,7 +7,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.Delete
     {
         public DeleteRoleCommandValidator()
         {
-            RuleFor(x => x.RoleId).NotNull();
+            RuleFor(x => x.RoleId).NotDefaultRole();
         }
     }
 }

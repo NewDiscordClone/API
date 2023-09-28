@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Validation;
+using Sparkle.Application.Servers.Roles.Common.Validation;
 
 namespace Sparkle.Application.Servers.Roles.Commands.ChangeName
 {
@@ -8,7 +9,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.ChangeName
     {
         public ChangeRoleNameCommandValidator()
         {
-            RuleFor(c => c.RoleId).NotNull();
+            RuleFor(c => c.RoleId).NotDefaultRole();
 
             RuleFor(c => c.Name).RequiredMaximumLength(Constants.ServerProfile.RoleNameMaxLength);
         }

@@ -9,7 +9,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.Update
     {
         public UpdateRoleCommandValidator()
         {
-            RuleFor(c => c.Id).NotNull();
+            RuleFor(c => c.Id).NotDefaultRole();
 
             RuleFor(c => c.Name).RequiredMaximumLength(
                Constants.ServerProfile.RoleNameMaxLength);
