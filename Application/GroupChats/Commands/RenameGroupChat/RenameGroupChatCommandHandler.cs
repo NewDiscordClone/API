@@ -10,11 +10,11 @@ namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
         {
             Context.SetToken(cancellationToken);
 
-            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId);
+            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId, cancellationToken);
 
             chat.Title = command.NewTitle;
 
-            await Context.GroupChats.UpdateAsync(chat);
+            await Context.GroupChats.UpdateAsync(chat, cancellationToken);
         }
 
         public RenameGroupChatCommandHandler(IAppDbContext context) : base(

@@ -14,9 +14,9 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
         {
             Context.SetToken(cancellationToken);
 
-            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId);
+            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId, cancellationToken);
 
-            if (await _repository.ChatContainsUserAsync(chat.Id, command.NewMemberId))
+            if (await _repository.ChatContainsUserAsync(chat.Id, command.NewMemberId, cancellationToken))
                 throw new NoPermissionsException("User is already a member of the chat");
 
             UserProfile profile = new()
@@ -27,8 +27,8 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
             };
 
             chat.Profiles.Add(profile.Id);
-            await _repository.AddAsync(profile);
-            await Context.GroupChats.UpdateAsync(chat);
+            await _repository.AddAsync(profile, cancellationToken);
+            await Context.GroupChats.UpdateAsync(chat, cancellationToken);
         }
 
         public AddMemberToGroupChatCommandHandler(IAppDbContext context, IUserProfileRepository repository, IRoleFactory roleFactory)
