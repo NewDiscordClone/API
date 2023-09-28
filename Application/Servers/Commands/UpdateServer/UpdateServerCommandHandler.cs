@@ -10,7 +10,7 @@ namespace Sparkle.Application.Servers.Commands.UpdateServer
         {
             Context.SetToken(cancellationToken);
 
-            Server server = await Context.Servers.FindAsync(command.ServerId);
+            Server server = await Context.Servers.FindAsync(command.ServerId, cancellationToken);
 
             if (command.Image != null && server.Image != null)
                 await Context.CheckRemoveMedia(server.Image[(server.Image.LastIndexOf('/') - 1)..]);
@@ -18,7 +18,7 @@ namespace Sparkle.Application.Servers.Commands.UpdateServer
             server.Title = command.Title ?? server.Title;
             server.Image = command.Image ?? server.Image;
 
-            await Context.Servers.UpdateAsync(server);
+            await Context.Servers.UpdateAsync(server, cancellationToken);
         }
 
         public UpdateServerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,

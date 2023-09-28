@@ -7,6 +7,7 @@ namespace Sparkle.Application.Users.Queries.GetUserDetails
 {
     public record GetUserDetailsServerProfileDto : IMapWith<ServerProfile>
     {
+        public Guid Id { get; set; }
         /// <summary>
         /// User's username displayed on this server.
         /// </summary>

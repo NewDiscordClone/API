@@ -53,7 +53,7 @@ namespace Sparkle.DataAccess.Repositories
 
         public bool IsUserServerMember(string serverId, Guid userId)
         {
-            return DbSet.Any(profile => profile.ServerId == serverId && profile.Id == userId);
+            return DbSet.Any(profile => profile.ServerId == serverId && profile.UserId == userId);
         }
 
         public async Task RemoveRoleFromServerProfilesAsync(Role role, string serverId, CancellationToken cancellationToken = default)

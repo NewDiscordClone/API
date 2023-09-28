@@ -9,65 +9,77 @@ namespace Sparkle.DataAccess.Repositories
         {
         }
 
-        public override async Task<TProfile> AddAsync(TProfile entity, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Adds a user profile to the database with the associated roles.
+        /// </summary>
+        /// <param name="profile">The user profile to add.</param>
+        /// <param name="cancellationToken">A cancellation token for the asynchronous operation.</param>
+        /// <returns>The added user profile.</returns>
+        public override async Task<TProfile> AddAsync(TProfile profile, CancellationToken cancellationToken = default)
         {
-            List<RoleUserProfile> roles = entity.Roles
-                .ConvertAll(entity => new RoleUserProfile()
+            Role[] profileRoles = new Role[profile.Roles.Count];
+
+            profile.Roles.CopyTo(profileRoles);
+
+            IEnumerable<RoleUserProfile> roles = profileRoles
+                .Select(role => new RoleUserProfile()
                 {
-                    RolesId = entity.Id,
-                    UserProfileId = entity.Id
+                    RolesId = role.Id,
+                    UserProfileId = profile.Id
                 });
 
-            entity.Roles.Clear();
+            profile.Roles.Clear();
 
+            await Context.UserProfiles.AddAsync(profile, cancellationToken);
             await Context.RoleUserProfile.AddRangeAsync(roles, cancellationToken);
-            await Context.UserProfiles.AddAsync(entity, cancellationToken);
 
             await Context.SaveChangesAsync(cancellationToken);
 
-            return entity;
+            profile.Roles.AddRange(profileRoles);
+
+            return profile;
         }
 
-        public override void AddMany(IEnumerable<TProfile> entities)
+        public override void AddMany(IEnumerable<TProfile> profiles)
         {
             List<RoleUserProfile> roleUserProfiles = new();
 
-            foreach (TProfile entity in entities)
+            foreach (TProfile profile in profiles)
             {
-                IEnumerable<RoleUserProfile> roles = entity.Roles.Select(role => new RoleUserProfile
+                IEnumerable<RoleUserProfile> roles = profile.Roles.Select(role => new RoleUserProfile
                 {
                     RolesId = role.Id,
-                    UserProfileId = entity.Id
+                    UserProfileId = profile.Id
                 });
 
                 roleUserProfiles.AddRange(roles);
-                entity.Roles.Clear();
+                profile.Roles.Clear();
             }
 
             Context.RoleUserProfile.AddRange(roleUserProfiles);
-            Context.UserProfiles.AddRangeAsync(entities);
+            Context.UserProfiles.AddRangeAsync(profiles);
 
             Context.SaveChanges();
         }
 
-        public override async Task AddManyAsync(IEnumerable<TProfile> entities, CancellationToken cancellationToken = default)
+        public override async Task AddManyAsync(IEnumerable<TProfile> profiles, CancellationToken cancellationToken = default)
         {
             List<RoleUserProfile> roleUserProfiles = new();
 
-            foreach (TProfile entity in entities)
+            foreach (TProfile profile in profiles)
             {
-                IEnumerable<RoleUserProfile> roles = entity.Roles.Select(role => new RoleUserProfile
+                IEnumerable<RoleUserProfile> roles = profile.Roles.Select(role => new RoleUserProfile
                 {
                     RolesId = role.Id,
-                    UserProfileId = entity.Id
+                    UserProfileId = profile.Id
                 });
 
                 roleUserProfiles.AddRange(roles);
-                entity.Roles.Clear();
+                profile.Roles.Clear();
             }
 
             await Context.RoleUserProfile.AddRangeAsync(roleUserProfiles, cancellationToken);
-            await Context.UserProfiles.AddRangeAsync(entities, cancellationToken);
+            await Context.UserProfiles.AddRangeAsync(profiles, cancellationToken);
 
             await Context.SaveChangesAsync(cancellationToken);
         }

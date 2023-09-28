@@ -99,53 +99,56 @@ namespace Sparkle.Application.Common.Factories
             Priority = 0,
         };
 
+        private readonly Role _serverOwnerRole = new()
+        {
+            Id = Constants.Constants.Roles.ServerOwnerId,
+            Name = Constants.Constants.Roles.ServerOwnerName,
+            Color = Constants.Constants.Roles.DefaultColor,
+            ServerId = null,
+            Priority = 100,
+        };
+
+        private readonly Role _serverMemberRole = new()
+        {
+            Id = Constants.Constants.Roles.ServerMemberId,
+            Name = Constants.Constants.Roles.ServerMemberName,
+            Color = Constants.Constants.Roles.DefaultColor,
+            ServerId = null,
+            Priority = 0,
+        };
         public Role PersonalChatMemberRole => _personalChatMemberRole;
-
         public Role GroupChatMemberRole => _groupChatMemberRole;
-
+        public Role ServerOwnerRole => _serverOwnerRole;
+        public Role ServerMemberRole => _serverMemberRole;
         public Role GroupChatOwnerRole => _groupChatOwnerRole;
 
         public string[] GroupChatOwnerClaims => _groupChatOwnerClaims;
-
         public string[] GroupChatMemberClaims => _groupChatMemberClaims;
-
         public string[] PersonalChatMemberClaims => _personalChatMemberClaims;
+        public string[] ServerOwnerDefaultClaims => _serverOwnerDefaultClaims;
+        public string[] ServerMemberDefaultClaims => _serverMemberDefaultClaims;
 
-        public async Task<List<Role>> GetDefaultServerRolesAsync(string serverId)
-        {
-            Role ownerRole = new()
-            {
-                Name = Constants.Constants.ServerProfile.DefaultOwnerRoleName,
-                Color = "#FFF000",
-                IsAdmin = true,
-                ServerId = serverId,
-                Priority = 100
-            };
-
-
-            Role memberRole = new()
-            {
-                Name = Constants.Constants.ServerProfile.DefaultMemberRoleName,
-                Color = "#FFF000",
-                ServerId = serverId,
-                Priority = 0
-            };
-
-            await _roleRepository.AddAsync(ownerRole);
-            await _roleRepository.AddAsync(memberRole);
-
-            await CreateClaimsForRoleAsync(memberRole, _serverMemberDefaultClaims);
-            await CreateClaimsForRoleAsync(ownerRole, _serverOwnerDefaultClaims);
-
-            return new() { ownerRole, memberRole };
-        }
+        public List<Role> GetDefaultServerRoles()
+            => new() { ServerOwnerRole, ServerMemberRole };
 
         public List<Role> GetGroupChatRoles()
-        {
-            Role ownerRole = GroupChatOwnerRole;
-            Role memberRole = GroupChatMemberRole;
+            => new() { GroupChatOwnerRole, GroupChatMemberRole };
 
-            return new() { ownerRole, memberRole };
+        public async Task<Role> CreateRoleAsync(string name, string color, int priority, string[] claims, string? serverId)
+        {
+            Role role = new()
+            {
+                Name = name,
+                Color = color,
+                Priority = priority,
+                ServerId = serverId,
+            };
+
+            await _roleRepository.AddAsync(role);
+
+            await CreateClaimsForRoleAsync(role, claims);
+
+            return role;
         }
     }
 }

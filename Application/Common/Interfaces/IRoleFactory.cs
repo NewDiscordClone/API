@@ -7,11 +7,16 @@ namespace Sparkle.Application.Common.Interfaces
         Role PersonalChatMemberRole { get; }
         Role GroupChatMemberRole { get; }
         Role GroupChatOwnerRole { get; }
+        Role ServerOwnerRole { get; }
+        Role ServerMemberRole { get; }
         string[] GroupChatOwnerClaims { get; }
         string[] GroupChatMemberClaims { get; }
         string[] PersonalChatMemberClaims { get; }
+        string[] ServerMemberDefaultClaims { get; }
+        string[] ServerOwnerDefaultClaims { get; }
 
-        Task<List<Role>> GetDefaultServerRolesAsync(string serverId);
+        Task<Role> CreateRoleAsync(string name, string color, int priority, string[] claims, string? serverId);
+        List<Role> GetDefaultServerRoles();
         List<Role> GetGroupChatRoles();
     }
 }
