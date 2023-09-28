@@ -1,4 +1,5 @@
-﻿using Sparkle.Application.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Common.Interfaces
 {
@@ -15,7 +16,9 @@ namespace Sparkle.Application.Common.Interfaces
         string[] ServerMemberDefaultClaims { get; }
         string[] ServerOwnerDefaultClaims { get; }
 
-        Task<Role> CreateRoleAsync(string name, string color, int priority, string[] claims, string? serverId);
+        Task<Role> CreateServerRoleAsync(string name, string color, int priority, string[] claims, string serverId);
+        Task<Role> CreateServerRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims);
+        Task<Role> CreateServerRoleAsync(Role role, string[] strings);
         List<Role> GetDefaultServerRoles();
         List<Role> GetGroupChatRoles();
     }

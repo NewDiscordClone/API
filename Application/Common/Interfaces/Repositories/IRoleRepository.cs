@@ -12,5 +12,6 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
         Task RemoveClaimsFromRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims, CancellationToken cancellationToken = default);
         Task RemoveClaimsFromRoleAsync(Role role, CancellationToken cancellationToken = default);
         Task RemoveClaimFromRoleAsync(Role role, IdentityRoleClaim<Guid> claim, CancellationToken cancellationToken = default);
+        bool IsPriorityUniqueInServer(string serverId, int priority);
     }
 }

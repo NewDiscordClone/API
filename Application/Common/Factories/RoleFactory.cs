@@ -1,4 +1,5 @@
-﻿using Sparkle.Application.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
@@ -50,7 +51,7 @@ namespace Sparkle.Application.Common.Factories
             ServerClaims.ManageMessages,
         };
 
-        private async Task<List<ServerClaim>> CreateClaimsForRoleAsync(Role role, params string[] claims)
+        private static List<ServerClaim> CreateClaimsForRole(Role role, params string[] claims)
         {
             if (!claims.All(claim => ServerClaims.GetClaims().Contains(claim)))
                 throw new ArgumentException("Invalid claim(s) provided");
@@ -66,8 +67,6 @@ namespace Sparkle.Application.Common.Factories
                 };
                 serverClaims.Add(serverClaim);
             }
-
-            await _roleRepository.AddClaimsToRoleAsync(role, serverClaims);
 
             return serverClaims;
         }
@@ -134,7 +133,7 @@ namespace Sparkle.Application.Common.Factories
         public List<Role> GetGroupChatRoles()
             => new() { GroupChatOwnerRole, GroupChatMemberRole };
 
-        public async Task<Role> CreateRoleAsync(string name, string color, int priority, string[] claims, string? serverId)
+        public Task<Role> CreateServerRoleAsync(string name, string color, int priority, string[] claims, string serverId)
         {
             Role role = new()
             {
@@ -144,11 +143,29 @@ namespace Sparkle.Application.Common.Factories
                 ServerId = serverId,
             };
 
-            await _roleRepository.AddAsync(role);
+            List<ServerClaim> identityClaims = CreateClaimsForRole(role, claims);
 
-            await CreateClaimsForRoleAsync(role, claims);
+            return CreateServerRoleAsync(role, identityClaims);
+        }
+
+        public async Task<Role> CreateServerRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims)
+        {
+            if (role.ServerId is null)
+            {
+                throw new ArgumentNullException(nameof(role.ServerId), "Server id cant be null in server role");
+            }
+
+            await _roleRepository.AddAsync(role);
+            await _roleRepository.AddClaimsToRoleAsync(role, claims);
 
             return role;
+        }
+
+        public Task<Role> CreateServerRoleAsync(Role role, string[] strings)
+        {
+            List<ServerClaim> claims = CreateClaimsForRole(role, strings);
+
+            return CreateServerRoleAsync(role, claims);
         }
     }
 }

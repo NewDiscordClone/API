@@ -41,6 +41,11 @@ namespace Sparkle.DataAccess.Repositories
                 cancellationToken);
         }
 
+        public bool IsPriorityUniqueInServer(string serverId, int priority)
+        {
+            return !DbSet.Any(role => role.ServerId == serverId && priority == role.Priority);
+        }
+
         public async Task RemoveClaimFromRoleAsync(Role role, IdentityRoleClaim<Guid> claim, CancellationToken cancellationToken = default)
         {
             Context.RoleClaims.Remove(claim);

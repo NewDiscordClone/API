@@ -17,7 +17,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.Update
             RuleFor(c => c.Color).NotNull().NotEmpty();
             RuleFor(c => c.Color).IsColor();
 
-            RuleFor(c => c.Priority).NotNull().GreaterThanOrEqualTo(0);
+            RuleFor(c => c.Priority).NotNull().GreaterThan(0).LessThan(100);
 
             RuleFor(c => c.Claims).NotNull();
             RuleForEach(c => c.Claims).SetValidator(new ClaimValidator());

@@ -9,7 +9,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.ChangePriority
         {
             RuleFor(c => c.RoleId).NotDefaultRole();
 
-            RuleFor(c => c.Priority).NotNull().GreaterThanOrEqualTo(0);
+            RuleFor(c => c.Priority).NotNull().GreaterThan(0).LessThan(100);
         }
     }
 }

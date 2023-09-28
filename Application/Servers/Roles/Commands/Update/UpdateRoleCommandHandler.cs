@@ -16,6 +16,9 @@ namespace Sparkle.Application.Servers.Roles.Commands.Update
         {
             Role role = await _roleRepository.FindAsync(command.Id, cancellationToken);
 
+            if (_roleRepository.IsPriorityUniqueInServer(role.ServerId!, role.Priority))
+                throw new InvalidOperationException("Priority must be unique in server");
+
             await _roleRepository.RemoveClaimsFromRoleAsync(role, cancellationToken);
 
             await _roleRepository.AddClaimsToRoleAsync(role, command.Claims, cancellationToken);
