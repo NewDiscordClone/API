@@ -9,10 +9,20 @@ namespace Sparkle.WebApi.Attributes
 {
     public class ExceptionFilterAttribute : Microsoft.AspNetCore.Mvc.Filters.ExceptionFilterAttribute
     {
+        private readonly ILogger<ExceptionFilterAttribute> _logger;
+
+        public ExceptionFilterAttribute(ILogger<ExceptionFilterAttribute> logger)
+        {
+            _logger = logger;
+        }
+
         public override async Task OnExceptionAsync(ExceptionContext context)
         {
 
             Exception exception = context.Exception;
+
+            _logger.LogError(exception, message: exception.Message);
+
             if (exception is ValidationException validationException)
             {
                 context.Result = ValidationError(context, validationException);
