@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Roles.Queries.GetClaims;
+using Sparkle.Application.Servers.Roles.Queries.GetClaims;
 
 namespace Sparkle.WebApi.Controllers
 {

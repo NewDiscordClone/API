@@ -11,23 +11,25 @@ namespace Sparkle.Application.Servers.Commands.JoinServer
     public class JoinServerCommandHandler : RequestHandlerBase, IRequestHandler<JoinServerCommand, ServerDetailsDto>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
-        public JoinServerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IServerProfileRepository serverProfileRepository) : base(context, userProvider, mapper)
+        private readonly IRoleFactory _roleFactory;
+        public JoinServerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IServerProfileRepository serverProfileRepository, IRoleFactory roleFactory) : base(context, userProvider, mapper)
         {
             _serverProfileRepository = serverProfileRepository;
+            _roleFactory = roleFactory;
         }
 
         public async Task<ServerDetailsDto> Handle(JoinServerCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
-            Invitation invitation = await Context.Invitations.FindAsync(command.InvitationId);
+            Invitation invitation = await Context.Invitations.FindAsync(command.InvitationId, cancellationToken);
             if (invitation.ExpireTime < DateTime.Now)
             {
-                await Context.Invitations.DeleteAsync(invitation);
+                await Context.Invitations.DeleteAsync(invitation, cancellationToken);
                 throw new NoPermissionsException("The invitation is expired");
             }
 
-            Server server = await Context.Servers.FindAsync(invitation.ServerId);
+            Server server = await Context.Servers.FindAsync(invitation.ServerId, cancellationToken);
 
 
             if (_serverProfileRepository.IsUserServerMember(server.Id, UserId))
@@ -36,21 +38,24 @@ namespace Sparkle.Application.Servers.Commands.JoinServer
             if (server.BannedUsers.Contains(UserId))
                 throw new NoPermissionsException("You are banned from the server");
 
-            User user = await Context.SqlUsers.FindAsync(UserId);
+            List<Channel> channels = await Context.Channels
+                .FilterAsync(channel => channel.ServerId == server.Id, cancellationToken);
 
-            //TODO Добавить роли новому пользователю
+            Role memberRole = _roleFactory.ServerMemberRole;
+
             ServerProfile profile = new()
             {
                 UserId = UserId,
-                DisplayName = user.DisplayName,
                 ServerId = server.Id,
+                Roles = { memberRole }
             };
 
             server.Profiles.Add(profile.Id);
-            await _serverProfileRepository.AddAsync(profile);
-            await Context.Servers.UpdateAsync(server);
+            channels.ForEach(channel => channel.Profiles.Add(profile.Id));
+            await _serverProfileRepository.AddAsync(profile, cancellationToken);
+            await Context.Servers.UpdateAsync(server, cancellationToken);
 
-            return Mapper.Map<ServerDetailsDto>(await Context.Servers.UpdateAsync(server));
+            return Mapper.Map<ServerDetailsDto>(await Context.Servers.UpdateAsync(server, cancellationToken));
         }
     }
 }

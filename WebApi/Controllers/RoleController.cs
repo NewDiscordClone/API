@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.Application.Roles.Commands.ChangeColor;
-using Sparkle.Application.Roles.Commands.ChangeName;
-using Sparkle.Application.Roles.Commands.ChangePriority;
-using Sparkle.Application.Roles.Commands.Create;
-using Sparkle.Application.Roles.Commands.Delete;
-using Sparkle.Application.Roles.Commands.Update;
-using Sparkle.Application.Roles.Commands.UpdateClaims;
-using Sparkle.Application.Roles.Queries.RoleDetails;
-using Sparkle.Application.Roles.Queries.ServerRolesList;
+using Sparkle.Application.Servers.Roles.Commands.ChangeColor;
+using Sparkle.Application.Servers.Roles.Commands.ChangeName;
+using Sparkle.Application.Servers.Roles.Commands.ChangePriority;
+using Sparkle.Application.Servers.Roles.Commands.Create;
+using Sparkle.Application.Servers.Roles.Commands.Delete;
+using Sparkle.Application.Servers.Roles.Commands.Update;
+using Sparkle.Application.Servers.Roles.Commands.UpdateClaims;
+using Sparkle.Application.Servers.Roles.Queries.RoleDetails;
+using Sparkle.Application.Servers.Roles.Queries.ServerRolesList;
 using Sparkle.Contracts.Roles;
 
 namespace Sparkle.WebApi.Controllers
@@ -67,8 +67,7 @@ namespace Sparkle.WebApi.Controllers
             CreateRoleCommand command = Mapper.Map<CreateRoleCommand>((serverId, request));
             Role role = await Mediator.Send(command);
 
-            RoleResponse response = Mapper.Map<RoleResponse>(role);
-            return CreatedAtAction(nameof(GetRole), new { serverId, roleId = role.Id }, response);
+            return CreatedAtAction(nameof(GetRole), new { serverId, roleId = role.Id }, role.Id);
         }
 
         /// <summary>

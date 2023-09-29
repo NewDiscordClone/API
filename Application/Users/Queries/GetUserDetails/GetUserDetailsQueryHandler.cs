@@ -13,13 +13,13 @@ namespace Sparkle.Application.Users.Queries.GetUserDetails
         {
             Context.SetToken(cancellationToken);
 
-            User user = await Context.SqlUsers.FindAsync(query.UserId);
+            User user = await Context.SqlUsers.FindAsync(query.UserId, cancellationToken);
             GetUserDetailsDto userDto = Mapper.Map<GetUserDetailsDto>(user);
 
             if (query.ServerId is not null)
             {
-                Server server = await Context.Servers.FindAsync(query.ServerId);
-                ServerProfile? serverProfile = await _serverProfileRepository.SingleAsync(profile => profile.UserId == user.Id);
+                ServerProfile? serverProfile = await _serverProfileRepository
+                    .FindUserProfileOnServerAsync(query.ServerId, query.UserId, cancellationToken);
                 userDto.ServerProfile = Mapper.Map<GetUserDetailsServerProfileDto>(serverProfile);
             }
             return userDto;

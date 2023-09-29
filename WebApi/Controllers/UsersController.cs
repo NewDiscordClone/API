@@ -1,8 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Messages.MessageAdded;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.HubClients.Users.RelationshipUpdated;
 using Sparkle.Application.Users.Commands.AcceptFriendRequest;
@@ -72,10 +70,10 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> SendMessageToUser(SendMessageToUserRequest request)
         {
             MessageChatDto messageChat = await Mediator.Send(request);
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = messageChat.ChatId });
-            await Mediator.Send(new NotifyMessageAddedQuery() { MessageId = messageChat.MessageId });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
+            //await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = messageChat.ChatId });
+            //await Mediator.Send(new NotifyMessageAddedQuery() { MessageId = messageChat.MessageId });
+            //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
+            //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
             return NoContent();
         }
 

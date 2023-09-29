@@ -14,7 +14,7 @@
         /// </summary>
         public Guid UserId { get; set; }
 
-        public string ChatId { get; set; }
+        public string? ChatId { get; set; }
 
         public UserProfile()
         {

@@ -2,10 +2,14 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Servers.Commands.BanUser;
-using Sparkle.Application.Servers.Commands.ChangeServerProfileDisplayName;
-using Sparkle.Application.Servers.Commands.ChangeServerProfileRoles;
-using Sparkle.Application.Servers.Commands.UnbanUser;
+using Sparkle.Application.Models;
+using Sparkle.Application.Servers.ServerProfiles.Commands.BanUser;
+using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName;
+using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles;
+using Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer;
+using Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser;
+using Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles;
+using Sparkle.Application.Servers.ServerProfiles.Queries.ServerProfileDetails;
 using Sparkle.Contracts.Servers;
 
 namespace Sparkle.WebApi.Controllers
@@ -15,6 +19,24 @@ namespace Sparkle.WebApi.Controllers
     {
         public ServerProfileController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator, userProvider, mapper)
         {
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetServerProfiles(string serverId)
+        {
+            ServerProfilesQuery query = new() { ServerId = serverId };
+            List<ServerProfile> profiles = await Mediator.Send(query);
+
+            return Ok(profiles.ConvertAll(Mapper.Map<ServerProfileLookupResponse>));
+        }
+
+        [HttpGet("{profileId}")]
+        public async Task<ActionResult> GetServerProfile(Guid profileId)
+        {
+            ServerProfileDetailsQuery query = new() { ProfileId = profileId };
+            ServerProfile profile = await Mediator.Send(query);
+
+            return Ok(Mapper.Map<ServerProfileResponse>(profile));
         }
 
         /// <summary>
@@ -34,10 +56,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> KickUser(string serverId, Guid profileId)
         {
-            //KickUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
-            //  await Mediator.Send(command);
+            LeaveServerCommand command = new() { ServerId = serverId, ProfileId = profileId };
+            await Mediator.Send(command);
 
-            return Problem(statusCode: StatusCodes.Status501NotImplemented);
+            return NoContent();
         }
 
         /// <summary>
@@ -60,6 +82,30 @@ namespace Sparkle.WebApi.Controllers
         {
             BanUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
             await Mediator.Send(command);
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Leave the given server
+        /// </summary>
+        /// <param name="serverId">Id of the server to leave from</param>
+        /// <param name="profileId">Id of the user's profile to leave the server</param>
+        /// <returns>NoContent if the operation is successful</returns>
+        /// <response code="204">NoContent. Successful operation</response>
+        /// <response code="400">Bad Request. The server is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        [HttpDelete("{profileId}/leave")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> LeaveServer(string serverId, Guid profileId)
+        {
+            await Mediator.Send(new LeaveServerCommand()
+            {
+                ServerId = serverId,
+                ProfileId = profileId
+            });
 
             return NoContent();
         }
@@ -91,7 +137,6 @@ namespace Sparkle.WebApi.Controllers
         /// Changes the Display name of the server profile
         /// </summary>
         ///<param name="profileId">Id of the user to change the display name</param>
-        ///<param name="serverId">Id of the server to change the display name</param>
         ///<param name="newName">New display name</param>
         /// <returns>No Content if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
@@ -103,10 +148,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> ChangeServerProfileDisplayName(
-           string serverId,
-            Guid profileId,
-            string newName)
+        public async Task<ActionResult> ChangeServerProfileDisplayName(Guid profileId, string? newName)
         {
             ChangeServerProfileDisplayNameCommand command = new()
             {

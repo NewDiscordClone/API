@@ -22,7 +22,11 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
         public async Task Handle(NotifyPrivateChatSavedQuery request, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
-            Chat chat = await Context.PersonalChats.FindAsync(request.ChatId);
+            Chat? chat = await Context.PersonalChats.FindOrDefaultAsync(request.ChatId);
+
+            if (chat == null)
+                return;
+
             foreach (Guid profile in chat.Profiles)
             {
                 Guid userId = Context.UserProfiles.Find(profile)!.UserId;

@@ -88,9 +88,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveChannel(string channelId)
         {
-            await Mediator.Send(new RemoveChannelCommand { ChatId = channelId });
-            await Mediator.Send(new NotifyChannelRemovedQuery() { ChannelId = channelId });
-            // return deleted response
+            var channel = await Mediator.Send(new RemoveChannelCommand { ChatId = channelId });
+
+            await Mediator.Send(new NotifyChannelRemovedQuery() { Channel = channel });
+
             return NoContent();
         }
     }

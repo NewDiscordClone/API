@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -65,9 +64,10 @@ namespace Sparkle.DataAccess
             new SimpleMongoDbSet<RelationshipList, Guid>(MongoDb.GetCollection<RelationshipList>("relationships"),
                 _token);
 
-        public ISimpleDbSet<Role, Guid> SqlRoles => new SimpleSqlDbSet<Role>(Roles, this, _token);
-        public ISimpleDbSet<User, Guid> SqlUsers => new SimpleSqlDbSet<User>(Users, this, _token);
+        public ISimpleDbSet<Role, Guid> SqlRoles => new SimpleSqlDbSet<Role>(this);
+        public ISimpleDbSet<User, Guid> SqlUsers => new SimpleSqlDbSet<User>(this);
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<RoleUserProfile> RoleUserProfile { get; set; }
         public IMongoDatabase MongoDb { get; }
         public void SetToken(CancellationToken cancellationToken)
         {
@@ -98,6 +98,8 @@ namespace Sparkle.DataAccess
             builder.Entity<Role>()
                 .Property(r => r.Id)
                 .ValueGeneratedNever();
+
+            builder.Entity<ServerProfile>().HasBaseType<UserProfile>();
 
             base.OnModelCreating(builder);
         }
@@ -132,51 +134,6 @@ namespace Sparkle.DataAccess
         async Task IAppDbContext.SaveChangesAsync()
         {
             await SaveChangesAsync(_token);
-        }
-
-        public async Task<List<IdentityRoleClaim<Guid>>> GetRoleClaimAsync(Role role)
-        {
-            return await RoleClaims
-                .Where(t => t.RoleId == role.Id)
-                .ToListAsync();
-        }
-
-        public async Task AddClaimToRoleAsync(Role role, IdentityRoleClaim<Guid> claim)
-        {
-            await AddClaimsToRoleAsync(role, new List<IdentityRoleClaim<Guid>> { claim });
-        }
-
-        public async Task AddClaimsToRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims)
-        {
-            foreach (IdentityRoleClaim<Guid> claim in claims)
-            {
-                claim.RoleId = role.Id;
-                await RoleClaims.AddAsync(claim);
-            }
-        }
-
-        public async Task RemoveClaimsFromRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims)
-        {
-            for (int i = claims.Count() - 1; i >= 0; i--)
-            {
-                IdentityRoleClaim<Guid> claim = claims.ElementAt(i);
-
-                await RemoveClaimFromRoleAsync(role, claim);
-            }
-        }
-
-        public async Task RemoveClaimsFromRoleAsync(Role role)
-        {
-            List<IdentityRoleClaim<Guid>> claimToRemove = await RoleClaims
-                .Where(rc => rc.RoleId == role.Id).ToListAsync();
-
-            RoleClaims.RemoveRange(claimToRemove);
-        }
-
-        public async Task RemoveClaimFromRoleAsync(Role role, IdentityRoleClaim<Guid> claim)
-        {
-            RoleClaims.Remove(claim);
-            await Task.CompletedTask;
         }
     }
 }

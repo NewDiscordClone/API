@@ -9,7 +9,7 @@ namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
         public RenameGroupChatCommandValidator()
         {
             RuleFor(c => c.ChatId).NotNull().IsObjectId();
-            RuleFor(c => c.NewTitle).RequiredMaximumLength(Constants.Channel.TitleMaxLength);
+            RuleFor(c => c.NewTitle).MaximumLength(Constants.Channel.TitleMaxLength);
         }
     }
 }

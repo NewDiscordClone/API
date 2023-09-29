@@ -51,7 +51,8 @@ public class Message
     /// <summary>
     /// Message author ID
     /// </summary>
-    public Guid User { get; set; }
+    public Guid AuthorProfile { get; set; }
+    public Guid Author { get; set; }
     /// <summary>
     /// Chat Id as an string representation of an ObjectId type
     /// </summary>
@@ -59,4 +60,9 @@ public class Message
     [StringLength(24, MinimumLength = 24)]
     [DefaultValue("5f95a3c3d0ddad0017ea9291")]
     public string ChatId { get; set; }
+
+    public Message()
+    {
+        Id = ObjectId.GenerateNewId().ToString();
+    }
 }

@@ -4,7 +4,7 @@ namespace Sparkle.Application.Models
 {
     public class ServerClaim : IdentityRoleClaim<Guid>
     {
-        public new bool ClaimValue { get; set; } = true;
+        public override string? ClaimValue { get; set; } = "true";
 
     }
 }

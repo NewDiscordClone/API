@@ -11,17 +11,20 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
         {
             Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(command.MessageId);
+            Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
 
             Reaction reaction = new()
             {
-                User = UserId,
+                AuthorProfile = message.AuthorProfile,
                 Emoji = command.Emoji,
             };
 
+            if (message.Reactions.Contains(reaction))
+                throw new InvalidOperationException("Reaction already exists");
+
             message.Reactions.Add(reaction);
 
-            await Context.Messages.UpdateAsync(message);
+            await Context.Messages.UpdateAsync(message, cancellationToken);
         }
 
         public AddReactionCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :

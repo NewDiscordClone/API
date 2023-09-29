@@ -11,10 +11,10 @@ namespace Sparkle.Application.Messages.Commands.RemoveMessage
         {
             Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(command.MessageId);
-            Chat chat = await Context.Chats.FindAsync(message.ChatId);
+            Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
+            Chat chat = await Context.Chats.FindAsync(message.ChatId, cancellationToken);
 
-            if (message.User != UserId)
+            if (message.Author != UserId)
             {
                 //TODO: Перевірити юзера на відповідну роль на сервері
                 // Channel? channel = await Context.Channels
@@ -27,7 +27,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveMessage
             }
 
 
-            await Context.Messages.DeleteAsync(message);
+            await Context.Messages.DeleteAsync(message, cancellationToken);
             return chat;
         }
 

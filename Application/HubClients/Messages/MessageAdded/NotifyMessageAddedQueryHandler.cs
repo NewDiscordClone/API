@@ -11,10 +11,10 @@ namespace Sparkle.Application.HubClients.Messages.MessageAdded
         public async Task Handle(NotifyMessageAddedQuery query, CancellationToken cancellationToken)
         {
             SetToken(cancellationToken);
-            Message message = await Context.Messages.FindAsync(query.MessageId);
-            MessageDto messageDto = Mapper.Map<MessageDto>(message);
-            messageDto.User = Mapper.Map<UserLookUp>(await Context.SqlUsers.FindAsync(message.User));
-            Chat chat = await Context.Chats.FindAsync(message.ChatId);
+
+            MessageDto messageDto = query.MessageDto;
+
+            Chat chat = await Context.Chats.FindAsync(messageDto.ChatId, cancellationToken);
             if (chat is Channel channel)
                 messageDto.ServerId = channel.ServerId;
 

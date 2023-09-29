@@ -10,7 +10,7 @@ namespace Sparkle.Application.Channels.Commands.RenameChannel
         {
             Context.SetToken(cancellationToken);
 
-            Channel chat = await Context.Channels.FindAsync(command.ChatId);
+            Channel chat = await Context.Channels.FindAsync(command.ChatId, cancellationToken);
             chat.Title = command.NewTitle;
 
             await Context.Channels.UpdateAsync(chat);

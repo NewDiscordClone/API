@@ -1,29 +1,31 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using System.Security.Claims;
-using Microsoft.AspNetCore.SignalR;
 
 namespace Sparkle.WebApi.Providers
 {
     public class AuthorizedUserProvider : IAuthorizedUserProvider
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IAppDbContext _context;
+        private readonly IRoleRepository _roleRepository;
         private ClaimsPrincipal User;
 
-        public AuthorizedUserProvider(IHttpContextAccessor httpContextAccessor, IAppDbContext context)
+        public AuthorizedUserProvider(IHttpContextAccessor httpContextAccessor, IRoleRepository roleRepository)
         {
             _httpContextAccessor = httpContextAccessor;
-            _context = context;
             User = httpContextAccessor.HttpContext?.User;
+            //?? throw new Exception("User not authenticated");
+            _roleRepository = roleRepository;
         }
 
         public Guid GetUserId()
         {
             string? userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!string.IsNullOrEmpty(userIdClaim)) return Guid.Parse(userIdClaim);
+            if (!string.IsNullOrEmpty(userIdClaim))
+                return Guid.Parse(userIdClaim);
 
             throw new NoSuchUserException();
         }
@@ -41,7 +43,7 @@ namespace Sparkle.WebApi.Providers
             List<string> matchingUserClaims = new();
             foreach (Role role in profile.Roles.OrderByDescending(role => role.Priority))
             {
-                foreach (IdentityRoleClaim<Guid> identityClaim in await _context.GetRoleClaimAsync(role))
+                foreach (IdentityRoleClaim<Guid> identityClaim in await _roleRepository.GetRoleClaimAsync(role))
                 {
                     Claim claim = identityClaim.ToClaim();
                     if (claimTypes.Any(claimType => string.Equals(claim.Type, claimType)))

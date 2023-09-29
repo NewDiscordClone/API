@@ -11,9 +11,9 @@ namespace Sparkle.Application.Messages.Commands.EditMessage
         {
             Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(command.MessageId);
+            Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
 
-            if (message.User != UserId)
+            if (message.Author != UserId)
                 throw new NoPermissionsException("You don't have permission to edit the message");
 
             message.Text = command.NewText;
@@ -24,11 +24,11 @@ namespace Sparkle.Application.Messages.Commands.EditMessage
             attachments.AddRange(message.Attachments);
             message.Attachments = attachments;
 
-            await Context.Messages.UpdateAsync(message);
+            await Context.Messages.UpdateAsync(message, cancellationToken);
         }
 
-        public EditMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
-            userProvider)
+        public EditMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider)
+            : base(context, userProvider)
         {
         }
     }

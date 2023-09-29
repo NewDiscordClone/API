@@ -1,6 +1,7 @@
 ﻿using Mapster;
-using Sparkle.Application.Servers.Commands.ChangeServerProfileRoles;
+using Sparkle.Application.Models;
 using Sparkle.Application.Servers.Commands.UpdateServer;
+using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles;
 using Sparkle.Contracts.Servers;
 
 namespace Sparkle.WebApi.Common.Mapping.Configuration
@@ -16,6 +17,13 @@ namespace Sparkle.WebApi.Common.Mapping.Configuration
             config.NewConfig<(Guid ProfileId, UpdateServerProfileRolesRequest Request), UpdateServerProfileRolesCommand>()
                 .Map(dest => dest.Roles, src => src.Request.Roles)
                 .Map(dest => dest.ProfileId, src => src.ProfileId);
+
+            config.NewConfig<ServerProfile, ServerProfileLookupResponse>()
+                .Map(dest => dest.Name, src => src.DisplayName)
+                .Map(dest => dest.MainRole, src => src.Roles.MaxBy(role => role.Priority));
+
+            config.NewConfig<ServerProfile, ServerProfileResponse>()
+                .Map(dest => dest.Name, src => src.DisplayName);
         }
     }
 }

@@ -10,88 +10,86 @@ namespace Sparkle.DataAccess
 {
     public class SimpleMongoDbSet<TEntity, TKey> : ISimpleDbSet<TEntity, TKey> where TEntity : class
     {
-        public CancellationToken CancellationToken { get; set; } = default;
 
         private IMongoCollection<TEntity> _collection;
 
         public SimpleMongoDbSet(IMongoCollection<TEntity> collection, CancellationToken cancellationToken = default)
         {
             _collection = collection;
-            CancellationToken = cancellationToken;
         }
 
-        public Task<TEntity> FindAsync(TKey id)
+        public Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            ObjectId objectId = ConvertToId(id);
-            return FindByIdAsync(objectId);
+            ObjectId objectId = ConvertToId(id, cancellationToken);
+            return FindByIdAsync(objectId, cancellationToken);
         }
 
-        public Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression)
+        public Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return _collection.Find(expression).ToListAsync(CancellationToken);
+            return _collection.Find(expression).ToListAsync(cancellationToken);
         }
 
 
         public void AddMany(IEnumerable<TEntity> entities)
         {
-            _collection.InsertMany(entities, null, CancellationToken);
+            _collection.InsertMany(entities, null);
         }
 
-        public async Task AddManyAsync(IEnumerable<TEntity> entities)
+        public virtual async Task AddManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            await _collection.InsertManyAsync(entities, cancellationToken: CancellationToken);
+            await _collection.InsertManyAsync(entities, cancellationToken: cancellationToken);
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             PropertyInfo idProp = GetIdProperty();
 
-            ObjectId? objectId = idProp.GetValue(entity) as ObjectId?;
-            if (objectId == null)
+            object? id = idProp.GetValue(entity);
+            if (id == null || !ObjectId.TryParse(id.ToString(), out ObjectId objectId))
             {
                 objectId = ObjectId.GenerateNewId();
                 idProp.SetValue(entity, objectId.ToString());
             }
 
-            await _collection.InsertOneAsync(entity, null, CancellationToken);
-            return await FindByIdAsync(objectId.Value);
+            await _collection.InsertOneAsync(entity, null, cancellationToken);
+            return await FindByIdAsync(objectId, cancellationToken);
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity entity)
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            ObjectId id = GetId(entity);
+            ObjectId id = GetId(entity, cancellationToken);
             await _collection.ReplaceOneAsync(
-                GetIdFilter(id),
+                GetIdFilter(id, cancellationToken),
                 entity,
-                cancellationToken: CancellationToken);
-            return await FindByIdAsync(id);
+                cancellationToken: cancellationToken);
+            return await FindByIdAsync(id, cancellationToken);
         }
 
-        public async Task DeleteAsync(TKey id)
+        public virtual async Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            ObjectId objId = ConvertToId(id);
-            await _collection.DeleteOneAsync(GetIdFilter(objId), null, CancellationToken);
+            ObjectId objId = ConvertToId(id, cancellationToken);
+            await _collection.DeleteOneAsync(GetIdFilter(objId, cancellationToken), null, cancellationToken);
         }
 
-        public async Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression)
+        public virtual async Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            await _collection.DeleteManyAsync(expression, null, CancellationToken);
+            await _collection.DeleteManyAsync(expression, null, cancellationToken);
         }
 
-        public Task<long> CountAsync(Expression<Func<TEntity, bool>> expression)
+        public Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return _collection.CountDocumentsAsync(expression, null, CancellationToken);
+            return _collection.CountDocumentsAsync(expression, null, cancellationToken);
         }
 
-        public async Task DeleteAsync(TEntity entity)
+        public virtual async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            ObjectId id = GetId(entity);
-            await _collection.DeleteOneAsync(GetIdFilter(id), null, CancellationToken);
+            ObjectId id = GetId(entity, cancellationToken);
+            await _collection.DeleteOneAsync(GetIdFilter(id, cancellationToken), null, cancellationToken);
         }
 
-        private static ObjectId GetId(TEntity entity)
+        private static ObjectId GetId(TEntity entity, CancellationToken cancellationToken = default)
         {
-            return ConvertToId(GetIdProperty().GetValue(entity));
+            return ConvertToId(GetIdProperty().GetValue(entity), cancellationToken);
         }
 
         private static PropertyInfo GetIdProperty()
@@ -103,7 +101,7 @@ namespace Sparkle.DataAccess
                        $"There is no property that has [BsonId] attribute in {typeof(TEntity).Name}");
         }
 
-        private static ObjectId ConvertToId(object? id)
+        private static ObjectId ConvertToId(object? id, CancellationToken cancellationToken = default)
         {
             ObjectId? objectId = null;
             if (id != null)
@@ -117,24 +115,29 @@ namespace Sparkle.DataAccess
                    throw new ArgumentException("Id is not a string or ObjectId instance");
         }
 
-        private static FilterDefinition<TEntity> GetIdFilter(ObjectId id)
+        private static FilterDefinition<TEntity> GetIdFilter(ObjectId id, CancellationToken cancellationToken = default)
         {
             return Builders<TEntity>.Filter.Eq("_id", id);
         }
 
 
-        private async Task<TEntity> FindByIdAsync(ObjectId id)
+        private async Task<TEntity> FindByIdAsync(ObjectId id, CancellationToken cancellationToken = default)
         {
-            FilterDefinition<TEntity> filter = GetIdFilter(id);
+            FilterDefinition<TEntity> filter = GetIdFilter(id, cancellationToken);
             TEntity result =
-                await (await _collection.FindAsync(filter, null, CancellationToken)).FirstOrDefaultAsync(
-                    CancellationToken);
-            if (result == null)
-                throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
-            return result;
+                await (await _collection.FindAsync(filter, null, cancellationToken)).FirstOrDefaultAsync(
+                    cancellationToken);
+
+            return result
+                ?? throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
         }
 
-        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression)
+        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

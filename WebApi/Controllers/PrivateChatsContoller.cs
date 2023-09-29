@@ -85,7 +85,7 @@ namespace Sparkle.WebApi.Controllers
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
 
-            return CreatedAtAction(nameof(GetGroupChatDetails), chatId, chatId);
+            return CreatedAtAction(nameof(GetGroupChatDetails), new { chatId }, chatId);
         }
 
         /// <summary>
@@ -161,7 +161,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RenameGroupChat(string chatId, string name)
+        public async Task<ActionResult> RenameGroupChat(string chatId, string? name)
         {
             RenameGroupChatCommand command = new()
             {
@@ -197,7 +197,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> LeaveFromGroupChat(string chatId, RemoveUserFromGroupChatRequest request)
         {
-            RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((chatId, request));
+            RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((request, chatId));
             await Mediator.Send(command);
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
@@ -256,7 +256,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveGroupChatMember(string chatId, RemoveUserFromGroupChatRequest request)
         {
-            RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((chatId, request));
+            RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((request, chatId));
             await Mediator.Send(command);
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });

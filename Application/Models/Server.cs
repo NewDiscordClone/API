@@ -33,15 +33,14 @@ public class Server : IUserProfileProvider
     [RegularExpression(@"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\/api\/media\/[a-z0-9]{24}$")]
     [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]
     public string? Image { get; set; }
-
-    /// <summary>
-    ///  User that created server
-    /// </summary>
-    public Guid Owner { get; set; }
-
     public List<Guid> Roles { get; set; } = new();
 
     public List<Guid> BannedUsers { get; set; } = new();
 
     public List<Guid> Profiles { get; set; } = new();
+
+    public Server()
+    {
+        Id = ObjectId.GenerateNewId().ToString();
+    }
 }

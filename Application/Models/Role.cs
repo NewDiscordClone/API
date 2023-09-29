@@ -10,7 +10,7 @@ public class Role : IdentityRole<Guid>
     public override Guid Id { get; set; }
 
     [DefaultValue("Admin")]
-    public override string Name { get; set; }
+    public new string Name { get; set; }
 
     [DefaultValue("#FF0000")]
     public string Color { get; set; }
@@ -23,13 +23,6 @@ public class Role : IdentityRole<Guid>
     public string? ServerId { get; set; }
 
     /// <summary>
-    /// String representation of an ObjectId type if role is personal or group chat role
-    /// </summary>
-    [BsonRepresentation(BsonType.ObjectId)]
-    [DefaultValue("5f95a3c3d0ddad0017ea9291")]
-    public string? ChatId { get; set; }
-
-    /// <summary>
     /// Admin flag. True if role gives admin permissions 
     /// </summary>
     public bool IsAdmin { get; set; }
@@ -38,7 +31,6 @@ public class Role : IdentityRole<Guid>
     /// Gets or sets the priority of the role. Higher priority roles take precedence in permission checks.
     /// </summary>
     public int Priority { get; set; }
-    public List<IdentityRoleClaim<Guid>> Claims { get; set; }
     public Role()
     {
         Id = Guid.NewGuid();

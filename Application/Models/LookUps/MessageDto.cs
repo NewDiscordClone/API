@@ -50,7 +50,7 @@ namespace Sparkle.Application.Models.LookUps
         /// <summary>
         /// Message author look up
         /// </summary>
-        public UserLookUp User { get; set; }
+        public UserLookUp Author { get; set; }
         [StringLength(24, MinimumLength = 24)]
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string? ServerId { get; set; }
@@ -65,7 +65,7 @@ namespace Sparkle.Application.Models.LookUps
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Message, MessageDto>()
-                .ForMember(m => m.User,
+                .ForMember(m => m.Author,
                     opt =>
                         opt.Ignore())
                 .ForMember(m => m.ServerId,

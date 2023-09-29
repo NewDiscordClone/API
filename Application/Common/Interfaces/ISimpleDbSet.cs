@@ -4,15 +4,13 @@ namespace Sparkle.Application.Common.Interfaces
 {
     public interface ISimpleDbSet<TEntity, TId> where TEntity : class
     {
-        CancellationToken CancellationToken { set; }
+        Task<TEntity> FindAsync(TId id, CancellationToken cancellationToken = default);
 
-        Task<TEntity> FindAsync(TId id);
-
-        async Task<TEntity?> FindOrDefaultAsync(TId id)
+        async Task<TEntity?> FindOrDefaultAsync(TId id, CancellationToken cancellationToken = default)
         {
             try
             {
-                return await FindAsync(id);
+                return await FindAsync(id, cancellationToken);
             }
             catch
             {
@@ -20,19 +18,20 @@ namespace Sparkle.Application.Common.Interfaces
             }
         }
 
-        Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression);
-        Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression);
+        Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+        Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
 
         void AddMany(IEnumerable<TEntity> entities);
-        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
+        Task AddManyAsync(IEnumerable<TEntity> profiles, CancellationToken cancellationToken = default);
 
-        Task<TEntity> UpdateAsync(TEntity entity);
+        Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-        Task DeleteAsync(TEntity entity);
-        Task DeleteAsync(TId id);
-        Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression);
+        Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+        Task DeleteAsync(TId id, CancellationToken cancellationToken = default);
+        Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+        Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
 
-        Task<long> CountAsync(Expression<Func<TEntity, bool>> expression);
-        Task AddManyAsync(IEnumerable<TEntity> profiles);
+        Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
     }
 }

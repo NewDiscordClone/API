@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.HubClients.Messages.MessageAdded
 {
     public record NotifyMessageAddedQuery : IRequest
     {
-        public string MessageId { get; init; }
+        public MessageDto MessageDto { get; init; }
     }
 }
