@@ -13,6 +13,6 @@ namespace Sparkle.Application.Users.Queries.GetRelationships
         /// <summary>
         /// Type of relationship
         /// </summary>
-        public RelationshipType RelationshipType { get; set; }
+        public RelationshipTypes RelationshipType { get; set; }
     }
 }

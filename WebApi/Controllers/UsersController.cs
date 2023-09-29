@@ -1,14 +1,14 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.HubClients.Users.RelationshipUpdated;
-using Sparkle.Application.Users.Commands.AcceptFriendRequest;
-using Sparkle.Application.Users.Commands.FriendRequest;
+using Sparkle.Application.Models;
 using Sparkle.Application.Users.Commands.SendMessageToUser;
 using Sparkle.Application.Users.Queries.GetRelationships;
 using Sparkle.Application.Users.Queries.GetUserByUserName;
 using Sparkle.Application.Users.Queries.GetUserDetails;
+using Sparkle.Application.Users.Relationships.AcceptFriendRequest;
+using Sparkle.Application.Users.Relationships.FriendRequest;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -69,12 +69,13 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> SendMessageToUser(SendMessageToUserRequest request)
         {
+            return Problem(statusCode: StatusCodes.Status501NotImplemented);
+
             MessageChatDto messageChat = await Mediator.Send(request);
             //await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = messageChat.ChatId });
             //await Mediator.Send(new NotifyMessageAddedQuery() { MessageId = messageChat.MessageId });
             //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
             //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
-            return NoContent();
         }
 
         /// <summary>
@@ -90,13 +91,15 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<List<RelationshipDto>>> GetRelationships()
         {
+            return Problem(statusCode: StatusCodes.Status501NotImplemented);
+
             return Ok(await Mediator.Send(new GetRelationshipQuery()));
         }
 
         /// <summary>
         /// Sends a friend request to the user with the provided id
         /// </summary>
-        /// <param name="userId">Id of the user to send a friend request to</param>
+        /// <param name="friendId">Id of the user to send a friend request to</param>
         /// <response code="204">No Content. The request was sent successfully</response>
         /// <response code="400">Bad Request. The requested user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
@@ -106,15 +109,12 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> SendFriendRequest(Guid userId)
+        public async Task<ActionResult> SendFriendRequest(Guid friendId)
         {
-            CreateFriendRequestCommand request = new() { UserId = userId };
-            string? newChat = await Mediator.Send(request);
+            CreateFriendRequestCommand request = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(request);
 
-            if (newChat != null)
-                await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = newChat });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = userId });
+            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
 
             return NoContent();
         }
@@ -122,7 +122,7 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Accepts a friend request from the user with the provided id
         /// </summary>
-        /// <param name="userId">Id of the user to accept a friend request from</param>
+        /// <param name="friendId">Id of the user to accept a friend request from</param>
         /// <response code="204">No Content. The request was accepted successfully</response>
         /// <response code="400">Bad Request. The requested user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
@@ -132,12 +132,12 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> AcceptFriendRequest(Guid userId)
+        public async Task<ActionResult> AcceptFriendRequest(Guid friendId)
         {
-            AcceptFriendRequestCommand command = new() { UserId = userId };
-            await Mediator.Send(command);
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = userId });
+            AcceptFriendRequestCommand command = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
 
             return NoContent();
         }
