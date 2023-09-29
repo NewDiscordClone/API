@@ -60,14 +60,13 @@ namespace Sparkle.DataAccess
 
         public ISimpleDbSet<Invitation, string> Invitations =>
             new SimpleMongoDbSet<Invitation, string>(MongoDb.GetCollection<Invitation>("invitations"), _token);
-        public ISimpleDbSet<RelationshipList, Guid> RelationshipLists =>
-            new SimpleMongoDbSet<RelationshipList, Guid>(MongoDb.GetCollection<RelationshipList>("relationships"),
-                _token);
 
-        public ISimpleDbSet<Role, Guid> SqlRoles => new SimpleSqlDbSet<Role>(this);
-        public ISimpleDbSet<User, Guid> SqlUsers => new SimpleSqlDbSet<User>(this);
+        public ISimpleDbSet<Role, Guid> SqlRoles => new SimpleSqlDbSet<Role, Guid>(this);
+        public ISimpleDbSet<User, Guid> SqlUsers => new SimpleSqlDbSet<User, Guid>(this);
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<RoleUserProfile> RoleUserProfile { get; set; }
+        public DbSet<Relationship> Relationships { get; set; }
+
         public IMongoDatabase MongoDb { get; }
         public void SetToken(CancellationToken cancellationToken)
         {

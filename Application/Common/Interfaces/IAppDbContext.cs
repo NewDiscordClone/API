@@ -14,7 +14,6 @@ public interface IAppDbContext
     ISimpleDbSet<Media, string> Media { get; }
     ISimpleDbSet<Server, string> Servers { get; }
     ISimpleDbSet<Invitation, string> Invitations { get; }
-    ISimpleDbSet<RelationshipList, Guid> RelationshipLists { get; }
     ISimpleDbSet<Role, Guid> SqlRoles { get; }
 
     ISimpleDbSet<User, Guid> SqlUsers { get; }

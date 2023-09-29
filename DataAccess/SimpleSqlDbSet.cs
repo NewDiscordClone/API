@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Sparkle.DataAccess
 {
-    public class SimpleSqlDbSet<TEntity> : ISimpleDbSet<TEntity, Guid> where TEntity : class
+    public class SimpleSqlDbSet<TEntity, TKey> : ISimpleDbSet<TEntity, TKey> where TEntity : class
     {
         public DbSet<TEntity> DbSet => _dbSet;
         public AppDbContext Context => _context;
@@ -26,7 +26,7 @@ namespace Sparkle.DataAccess
             _dbSet = _context.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity> FindAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return await FindByIdAsync(id, cancellationToken);
         }
@@ -69,7 +69,7 @@ namespace Sparkle.DataAccess
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
             _dbSet.Remove(await FindByIdAsync(id, cancellationToken));
             await _context.SaveChangesAsync(cancellationToken);
@@ -92,10 +92,10 @@ namespace Sparkle.DataAccess
             return await _dbSet.CountAsync(cancellationToken);
         }
 
-        private async Task<TEntity> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        private async Task<TEntity> FindByIdAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return await _dbSet.FindAsync(new object?[] { id }, cancellationToken: cancellationToken) ??
-                   throw new EntityNotFoundException($"Entity {typeof(TEntity).Name} ({id}) not found", id.ToString());
+                   throw new EntityNotFoundException($"Entity {typeof(TEntity).Name} ({id}) not found", id!);
         }
 
         public virtual async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
