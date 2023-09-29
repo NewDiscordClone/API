@@ -23,7 +23,6 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             {
                 profile = await _serverProfileRepository.FindUserProfileOnServerAsync(channel.ServerId, UserId, cancellationToken)
                     ?? throw new EntityNotFoundException(message: $"User {UserId} profile not found in server {channel.ServerId}", "");
-
             }
             else
                 profile = await _userProfileRepository.FindByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
@@ -54,7 +53,19 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
 
             await Context.Messages.AddAsync(message, cancellationToken);
 
-            return Mapper.Map<MessageDto>(message);
+            MessageDto dto = Mapper.Map<MessageDto>(message);
+
+            User? user = await Context.Users.FindAsync(new object?[] { UserId }, cancellationToken: cancellationToken)!;
+
+            dto.Author = Mapper.Map<UserLookUp>(user);
+
+            if (profile is not null and ServerProfile serverProfile)
+            {
+                dto.Author.DisplayName = serverProfile.DisplayName
+                    ?? dto.Author.DisplayName;
+            }
+
+            return dto;
         }
 
         public AddMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IUserProfileRepository userProfileRepository, IServerProfileRepository serverProfileRepository) :
