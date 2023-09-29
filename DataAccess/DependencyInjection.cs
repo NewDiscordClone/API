@@ -30,6 +30,7 @@ namespace Sparkle.DataAccess
         {
             services.AddScoped<IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IServerProfileRepository, ServerProfileRepository>();
+            services.AddScoped<IRelationshipRepository, RelationshipRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
 
             return services;
