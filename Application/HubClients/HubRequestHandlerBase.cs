@@ -18,14 +18,33 @@ namespace Sparkle.Application.HubClients
         }
         protected IEnumerable<string> GetConnections(Chat chat)
         {
-            Guid[] userIds = Context.UserProfiles
-                .Where(profile => profile.ChatId == chat.Id)
-                .Select(profile => profile.UserId)
-                .ToArray();
+            Guid[] userIds = chat switch
+            {
+                PersonalChat p => GetPersonalChatUserIds(p),
+                Channel c => GetChannelUserIds(c),
+                _ => throw new Exception("Unknown chat type")
+            };
 
             return userIds
                 .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
                 .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+        }
+
+        private Guid[] GetChannelUserIds(Channel cannel)
+        {
+            return Context.UserProfiles
+                  .OfType<ServerProfile>()
+                  .Where(profile => profile.ServerId == cannel.ServerId)
+                  .Select(profile => profile.UserId)
+                  .ToArray();
+        }
+
+        private Guid[] GetPersonalChatUserIds(PersonalChat chat)
+        {
+            return Context.UserProfiles
+                  .Where(profile => profile.ChatId == chat.Id)
+                  .Select(profile => profile.UserId)
+                  .ToArray();
         }
 
         protected IEnumerable<string> GetConnections(Server server)
