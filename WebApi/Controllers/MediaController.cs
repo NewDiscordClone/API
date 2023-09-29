@@ -73,10 +73,10 @@ namespace Sparkle.WebApi.Controllers
         {
             if (file == null || file.Count == 0)
                 return BadRequest("No file uploaded.");
-            
+
             List<string> paths = new();
 
-            foreach (var formFile in file)
+            foreach (IFormFile formFile in file)
             {
                 if (formFile.Length == 0)
                     continue; // Skip empty file
@@ -84,9 +84,9 @@ namespace Sparkle.WebApi.Controllers
                 if (formFile.Length >= _maxFileSizeMb * 1024 * 1024)
                     return BadRequest($"File '{formFile.FileName}' is too big, please upload file less than {_maxFileSizeMb} MB");
 
-                Media media = await Mediator.Send(new UploadMediaCommand() { File = formFile});
+                Media media = await Mediator.Send(new UploadMediaCommand() { File = formFile });
 
-                paths.Add($"{Request.Scheme}://{Request.Host}/api/Media/" + media.Id + Path.GetExtension(media.FileName));
+                paths.Add($"{Request.Scheme}://{Request.Host}/api/media/" + media.Id + Path.GetExtension(media.FileName));
             }
             return Ok(paths);
         }
