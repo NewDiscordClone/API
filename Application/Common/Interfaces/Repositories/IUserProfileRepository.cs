@@ -2,7 +2,7 @@
 
 namespace Sparkle.Application.Common.Interfaces.Repositories
 {
-    public interface IUserProfileRepository : ISimpleDbSet<UserProfile, Guid>
+    public interface IUserProfileRepository : IRepository<UserProfile, Guid>
     {
         bool ChatContainsUser(string chatId, Guid userId);
         Task<bool> ChatContainsUserAsync(string chatId, Guid userId, CancellationToken cancellationToken = default);

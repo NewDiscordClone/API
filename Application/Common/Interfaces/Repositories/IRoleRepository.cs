@@ -3,7 +3,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Common.Interfaces.Repositories
 {
-    public interface IRoleRepository : ISimpleDbSet<Role, Guid>
+    public interface IRoleRepository : IRepository<Role, Guid>
     {
         Task<Role> GetServerMemberRoleAsync(string serverId, CancellationToken cancellationToken = default);
         Task<List<IdentityRoleClaim<Guid>>> GetRoleClaimAsync(Role role, CancellationToken cancellationToken = default);

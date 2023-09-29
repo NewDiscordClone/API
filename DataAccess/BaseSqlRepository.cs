@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Sparkle.DataAccess
 {
-    public class SimpleSqlDbSet<TEntity, TKey> : ISimpleDbSet<TEntity, TKey> where TEntity : class
+    public abstract class BaseSqlRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
         public DbSet<TEntity> DbSet => _dbSet;
         public AppDbContext Context => _context;
@@ -14,13 +14,13 @@ namespace Sparkle.DataAccess
         private readonly DbSet<TEntity> _dbSet;
         private readonly AppDbContext _context;
 
-        public SimpleSqlDbSet(DbSet<TEntity> original, AppDbContext context)
+        public BaseSqlRepository(DbSet<TEntity> original, AppDbContext context)
         {
             _dbSet = original;
             _context = context;
         }
 
-        public SimpleSqlDbSet(AppDbContext context)
+        public BaseSqlRepository(AppDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();

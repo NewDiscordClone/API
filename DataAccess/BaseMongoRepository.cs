@@ -8,12 +8,12 @@ using System.Reflection;
 
 namespace Sparkle.DataAccess
 {
-    public class SimpleMongoDbSet<TEntity, TKey> : ISimpleDbSet<TEntity, TKey> where TEntity : class
+    public class BaseMongoRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
 
         private IMongoCollection<TEntity> _collection;
 
-        public SimpleMongoDbSet(IMongoCollection<TEntity> collection, CancellationToken cancellationToken = default)
+        public BaseMongoRepository(IMongoCollection<TEntity> collection, CancellationToken cancellationToken = default)
         {
             _collection = collection;
         }
