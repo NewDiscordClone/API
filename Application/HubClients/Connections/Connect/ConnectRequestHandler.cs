@@ -20,13 +20,13 @@ namespace Sparkle.Application.HubClients.Connections.Connect
 
         public async Task Handle(ConnectRequest request, CancellationToken cancellationToken)
         {
-            UserConnections? userConnections = await Context.UserConnections.FindOrDefaultAsync(UserId)!;
+            UserConnections? userConnections = await Context.UserConnections.FindOrDefaultAsync(UserId);
             if (userConnections == null)
             {
                 userConnections = new UserConnections
-                    { UserId = UserId, Connections = new HashSet<string>() { request.ConnectionId } };
+                { UserId = UserId, Connections = new HashSet<string>() { request.ConnectionId } };
                 await Context.UserConnections.AddAsync(userConnections);
-                User user = await Context.SqlUsers.FindAsync(UserId);
+                User user = await Context.Users.FindAsync(UserId)!;
                 user.Status = UserStatus.Online;
                 await Context.SqlUsers.UpdateAsync(user);
             }
