@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.FriendRequest
+namespace Sparkle.Application.Users.Relationships.SendFriendRequest
 {
     public record CreateFriendRequestCommand : IRequest<Relationship>
     {

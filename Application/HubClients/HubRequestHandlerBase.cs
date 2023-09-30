@@ -16,6 +16,13 @@ namespace Sparkle.Application.HubClients
         {
             return Context.UserConnections.FindOrDefaultAsync(userId).Result?.Connections ?? new HashSet<string>();
         }
+
+        protected IEnumerable<string> GetConnections(params Guid[] userIds)
+        {
+            return userIds
+                .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
+                .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+        }
         protected IEnumerable<string> GetConnections(Chat chat)
         {
             Guid[] userIds = Context.UserProfiles
@@ -23,9 +30,7 @@ namespace Sparkle.Application.HubClients
                 .Select(profile => profile.UserId)
                 .ToArray();
 
-            return userIds
-                .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
-                .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+            return GetConnections(userIds);
         }
 
         protected IEnumerable<string> GetConnections(Server server)
@@ -36,9 +41,7 @@ namespace Sparkle.Application.HubClients
               .Select(profile => profile.UserId)
               .ToArray();
 
-            return userIds
-               .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
-               .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+            return GetConnections(userIds);
         }
 
         protected void SetToken(CancellationToken cancellationToken)

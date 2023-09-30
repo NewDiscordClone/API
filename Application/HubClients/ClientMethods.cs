@@ -2,6 +2,7 @@
 {
     public static class ClientMethods
     {
+#pragma warning disable IDE1006 // Naming Styles
         public const string ChannelCreated = "ChannelCreated";
         public const string ChannelUpdated = "ChannelUpdated";
         public const string ChannelDeleted = "ChannelDeleted";
@@ -14,6 +15,8 @@
         public const string ServerDeleted = "ServerDeleted";
         public const string FriendRequest = "FriendRequest";
         public const string RelationshipsUpdated = "RelationshipsUpdated";
+        public const string RelationshipsDeleted = "RelationshipsDeleted";
         public const string UserUpdated = "UserUpdated";
+#pragma warning restore IDE1006 // Naming Styles
     }
 }

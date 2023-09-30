@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.FriendRequest
+namespace Sparkle.Application.Users.Relationships.SendFriendRequest
 {
     public class CreateFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<CreateFriendRequestCommand, Relationship>
     {

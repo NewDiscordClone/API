@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Users.RelationshipDeleted;
 using Sparkle.Application.HubClients.Users.RelationshipUpdated;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Commands.SendMessageToUser;
@@ -8,7 +9,8 @@ using Sparkle.Application.Users.Queries.GetRelationships;
 using Sparkle.Application.Users.Queries.GetUserByUserName;
 using Sparkle.Application.Users.Queries.GetUserDetails;
 using Sparkle.Application.Users.Relationships.AcceptFriendRequest;
-using Sparkle.Application.Users.Relationships.FriendRequest;
+using Sparkle.Application.Users.Relationships.CancelFriendRequest;
+using Sparkle.Application.Users.Relationships.SendFriendRequest;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -104,7 +106,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="400">Bad Request. The requested user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client is blocked by the requested user</response>
-        [HttpPost("add-friend")]
+        [HttpPost("friends")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -127,7 +129,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="400">Bad Request. The requested user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has no friend request from the requested user</response>
-        [HttpPost("accept-friend")]
+        [HttpPatch("friends")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -138,6 +140,17 @@ namespace Sparkle.WebApi.Controllers
             Relationship relationship = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
+
+            return NoContent();
+        }
+
+        [HttpDelete("friends/cancel")]
+        public async Task<ActionResult> CancelFriendRequest(Guid friendId)
+        {
+            CancelFriendRequestCommand command = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
 
             return NoContent();
         }
