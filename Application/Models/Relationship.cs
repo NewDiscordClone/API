@@ -5,7 +5,6 @@
         Acquaintance,
         Friend,
         Pending,
-        Waiting,
         Blocked
     }
     public class Relationship
