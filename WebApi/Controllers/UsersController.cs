@@ -10,6 +10,7 @@ using Sparkle.Application.Users.Queries.GetUserByUserName;
 using Sparkle.Application.Users.Queries.GetUserDetails;
 using Sparkle.Application.Users.Relationships.AcceptFriendRequest;
 using Sparkle.Application.Users.Relationships.CancelFriendRequest;
+using Sparkle.Application.Users.Relationships.DeleteFriend;
 using Sparkle.Application.Users.Relationships.SendFriendRequest;
 
 namespace Sparkle.WebApi.Controllers
@@ -148,6 +149,17 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> CancelFriendRequest(Guid friendId)
         {
             CancelFriendRequestCommand command = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+
+            return NoContent();
+        }
+
+        [HttpDelete("friends")]
+        public async Task<ActionResult> DeleteFriendRequest(Guid friendId)
+        {
+            DeleteFriendCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
