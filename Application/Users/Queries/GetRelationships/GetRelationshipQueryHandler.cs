@@ -16,7 +16,7 @@ namespace Sparkle.Application.Users.Queries.GetRelationships
         public async Task<List<Relationship>> Handle(GetRelationshipQuery query, CancellationToken cancellationToken)
         {
             return await Context.Relationships
-                .Where(rel => rel.UserActive == UserId || rel.UserPassive == UserId)
+                .Where(rel => rel.Active == UserId || rel.Passive == UserId)
                 .ToListAsync(cancellationToken);
         }
     }

@@ -16,7 +16,7 @@ namespace Sparkle.Application.HubClients.Users.RelationshipUpdated
             Relationship relationship = query.Relationship;
 
             await SendAsync(ClientMethods.RelationshipsUpdated, relationship,
-                GetConnections(relationship.UserActive, relationship.UserPassive));
+                GetConnections(relationship.Active, relationship.Passive));
         }
     }
 }

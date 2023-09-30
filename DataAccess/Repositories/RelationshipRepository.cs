@@ -16,7 +16,7 @@ namespace Sparkle.DataAccess.Repositories
             {
                 // Проверка наличия "перевернутой" записи
                 Relationship? reverseRelationship = await
-                    FindOrDefaultAsync((entity.UserPassive, entity.UserActive), cancellationToken);
+                    FindOrDefaultAsync((entity.Passive, entity.Active), cancellationToken);
 
                 if (reverseRelationship != null)
                 {

@@ -27,8 +27,8 @@ namespace Sparkle.Application.Users.Relationships.SendFriendRequest
 
             relationship = new Relationship
             {
-                UserActive = UserId,
-                UserPassive = command.FriendId,
+                Active = UserId,
+                Passive = command.FriendId,
                 RelationshipType = RelationshipTypes.Pending
             };
 

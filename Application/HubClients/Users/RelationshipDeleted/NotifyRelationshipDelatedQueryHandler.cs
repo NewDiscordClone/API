@@ -15,7 +15,7 @@ namespace Sparkle.Application.HubClients.Users.RelationshipDeleted
             Models.Relationship relationship = query.Relationship;
 
             await SendAsync(ClientMethods.RelationshipsDeleted, relationship,
-                GetConnections(relationship.UserPassive, relationship.UserPassive));
+                GetConnections(relationship.Passive, relationship.Passive));
         }
     }
 }

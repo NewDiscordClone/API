@@ -23,7 +23,7 @@ namespace Sparkle.Application.Users.Relationships.AcceptFriendRequest
             if (relationship.RelationshipType != RelationshipTypes.Pending)
                 throw new InvalidOperationException("Friend request is not pending");
 
-            if (UserId != relationship.UserPassive)
+            if (UserId != relationship.Passive)
                 throw new NoPermissionsException("You can't accept your own friend request");
 
             relationship.RelationshipType = RelationshipTypes.Friend;

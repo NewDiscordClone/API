@@ -15,8 +15,8 @@ SELECT
 FROM
     Relationships R
 INNER JOIN
-    AspNetUsers U1 ON R.UserActive = U1.Id
+    AspNetUsers U1 ON R.Active = U1.Id
 INNER JOIN
-    AspNetUsers U2 ON R.UserPassive = U2.Id
+    AspNetUsers U2 ON R.Passive = U2.Id
 WHERE
-    R.UserActive = @userId OR R.UserPassive = @userId
+    R.Active = @userId OR R.Passive = @userId
