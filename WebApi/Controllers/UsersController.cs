@@ -83,6 +83,11 @@ namespace Sparkle.WebApi.Controllers
             //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
         }
 
+        /// <summary>
+        /// Changes the current user's display name
+        /// </summary>
+        /// <param name="displayName">New display name. Send null to remove display name</param>
+        /// <respose code="204">No Content. The display name was changed successfully</respose>
         [HttpPatch("displayname")]
         public async Task<ActionResult> UpdateDisplayName(string? displayName)
         {
@@ -98,7 +103,6 @@ namespace Sparkle.WebApi.Controllers
         /// Gets all relationships of the current user
         /// </summary>
         /// <response code="200">Ok. List of current user relationships in JSON</response>
-        /// <response code="400">Bad Request. The requested user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <returns>List of current user relationships</returns>
         [HttpGet("relationships")]
@@ -115,9 +119,7 @@ namespace Sparkle.WebApi.Controllers
         /// </summary>
         /// <param name="friendId">Id of the user to send a friend request to</param>
         /// <response code="204">No Content. The request was sent successfully</response>
-        /// <response code="400">Bad Request. The requested user is not found</response>
-        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
-        /// <response code="403">Forbidden. The client is blocked by the requested user</response>
+        /// <response code="400">Bad Request. Invalid friend id</response>
         [HttpPost("friends")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -156,6 +158,13 @@ namespace Sparkle.WebApi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Cancels a friend request to the user with the provided id
+        /// </summary>
+        /// <remarks>Friend request con be canceled from both sides</remarks>
+        /// <param name="friendId">Id of the user to cancel a friend request</param>
+        ///  <response code="204">No Content. The request was canceled successfully</response>
+        ///  <response code="400">Bad Request. The friend request between users does not exists</response>
         [HttpDelete("friends/cancel")]
         public async Task<ActionResult> CancelFriendRequest(Guid friendId)
         {
@@ -167,6 +176,12 @@ namespace Sparkle.WebApi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a friend from the user with the provided id
+        /// </summary>
+        /// <param name="friendId">Id of the user to delete a friend</param>
+        /// <response code="204">No Content. The friend was deleted successfully</response>
+        /// <response code="400">Bad Request. You are no friends with this user</response>
         [HttpDelete("friends")]
         public async Task<ActionResult> DeleteFriendRequest(Guid friendId)
         {
