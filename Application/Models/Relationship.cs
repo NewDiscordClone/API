@@ -26,5 +26,10 @@
         {
             return HashCode.Combine(Active, Passive);
         }
+
+        public override string ToString()
+        {
+            return $"Active: {Active}, Passive: {Passive}, RelationshipType: {RelationshipType}";
+        }
     }
 }
