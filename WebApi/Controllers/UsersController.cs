@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Users.RelationshipDeleted;
 using Sparkle.Application.HubClients.Users.RelationshipUpdated;
+using Sparkle.Application.HubClients.Users.UserUpdated;
 using Sparkle.Application.Models;
+using Sparkle.Application.Users.Commands.ChangeDisplayName;
 using Sparkle.Application.Users.Commands.SendMessageToUser;
 using Sparkle.Application.Users.Queries.GetRelationships;
 using Sparkle.Application.Users.Queries.GetUserByUserName;
@@ -79,6 +81,17 @@ namespace Sparkle.WebApi.Controllers
             //await Mediator.Send(new NotifyMessageAddedQuery() { MessageId = messageChat.MessageId });
             //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
             //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
+        }
+
+        [HttpPatch("displayname")]
+        public async Task<ActionResult> UpdateDisplayName(string? displayName)
+        {
+            ChangeDisplayNameCommand command = new() { DisplayName = displayName };
+            User user = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+
+            return NoContent();
         }
 
         /// <summary>
