@@ -28,6 +28,10 @@ namespace Sparkle.DataAccess
 
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            //TODO: figure out how to register BaseMongoRepository as IRepository
+            services.AddScoped(typeof(IRepository<,>), typeof(BaseSqlRepository<,>));
+
+            //TODO: figure out how to register all repositories at once
             services.AddScoped<IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IServerProfileRepository, ServerProfileRepository>();
             services.AddScoped<IRelationshipRepository, RelationshipRepository>();
