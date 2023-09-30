@@ -5,10 +5,10 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.Connections.Disconnect
 {
-    public class DisconnectRequestHandler : HubRequestHandlerBase, IRequestHandler<DeleteUserConnectionCommand, User?>
+    public class DeleteUserConnectionCommandHandler : HubRequestHandlerBase, IRequestHandler<DeleteUserConnectionCommand, User?>
     {
         private readonly IRepository<User, Guid> _userRepository;
-        public DisconnectRequestHandler(
+        public DeleteUserConnectionCommandHandler(
             IHubContextProvider hubContextProvider,
             IAppDbContext context,
             IAuthorizedUserProvider userProvider,
@@ -19,7 +19,7 @@ namespace Sparkle.Application.HubClients.Connections.Disconnect
             _userRepository = userRepository;
         }
 
-        public async Task<User?> Handle(DeleteUserConnectionCommand request, CancellationToken cancellationToken)
+        public async Task<User?> Handle(DeleteUserConnectionCommand command, CancellationToken cancellationToken)
         {
             UserConnections? userConnections = await Context.UserConnections
                 .FindOrDefaultAsync(UserId, cancellationToken)!;
@@ -29,7 +29,7 @@ namespace Sparkle.Application.HubClients.Connections.Disconnect
             if (userConnections == null)
                 return null;
 
-            userConnections.Connections.Remove(request.ConnectionId);
+            userConnections.Connections.Remove(command.ConnectionId);
             if (userConnections.Connections.Count == 0)
             {
                 await Context.UserConnections.DeleteAsync(userConnections, cancellationToken);
