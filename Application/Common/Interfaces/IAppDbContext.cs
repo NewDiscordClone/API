@@ -20,6 +20,7 @@ public interface IAppDbContext
     DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
     DbSet<UserProfile> UserProfiles { get; set; }
+    DbSet<Relationship> Relationships { get; set; }
     Task SaveChangesAsync();
 
     void SetToken(CancellationToken cancellationToken);

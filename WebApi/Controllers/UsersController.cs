@@ -92,10 +92,8 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<RelationshipDto>>> GetRelationships()
+        public async Task<ActionResult> GetRelationships()
         {
-            return Problem(statusCode: StatusCodes.Status501NotImplemented);
-
             return Ok(await Mediator.Send(new GetRelationshipQuery()));
         }
 
