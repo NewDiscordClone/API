@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sparkle.DataAccess;
 
@@ -11,9 +12,11 @@ using Sparkle.DataAccess;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230929133317_AddRelationships")]
+    partial class AddRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,38 +230,18 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Sparkle.Application.Models.Relationship", b =>
                 {
-                    b.Property<Guid>("Active")
+                    b.Property<Guid>("UserActive")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("Passive")
+                    b.Property<Guid>("UserPassive")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("RelationshipType")
                         .HasColumnType("int");
 
-                    b.HasKey("Active", "Passive");
+                    b.HasKey("UserActive", "UserPassive");
 
                     b.ToTable("Relationships");
-
-                    b.HasData(
-                        new
-                        {
-                            Active = new Guid("c1ce2c28-9cf4-4ab1-bddb-b99c5408ee34"),
-                            Passive = new Guid("7aef2538-e1b3-42d7-a3db-a2809a81ac91"),
-                            RelationshipType = 1
-                        },
-                        new
-                        {
-                            Active = new Guid("7aef2538-e1b3-42d7-a3db-a2809a81ac91"),
-                            Passive = new Guid("ba1ce081-e200-41da-9fb2-3d317627c9d4"),
-                            RelationshipType = 2
-                        },
-                        new
-                        {
-                            Active = new Guid("c1ce2c28-9cf4-4ab1-bddb-b99c5408ee34"),
-                            Passive = new Guid("ba1ce081-e200-41da-9fb2-3d317627c9d4"),
-                            RelationshipType = 1
-                        });
                 });
 
             modelBuilder.Entity("Sparkle.Application.Models.Role", b =>

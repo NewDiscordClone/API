@@ -1,14 +1,19 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
+using Sparkle.Application.HubClients.Users.RelationshipDeleted;
 using Sparkle.Application.HubClients.Users.RelationshipUpdated;
-using Sparkle.Application.Users.Commands.AcceptFriendRequest;
-using Sparkle.Application.Users.Commands.FriendRequest;
+using Sparkle.Application.HubClients.Users.UserUpdated;
+using Sparkle.Application.Models;
+using Sparkle.Application.Users.Commands.ChangeDisplayName;
 using Sparkle.Application.Users.Commands.SendMessageToUser;
 using Sparkle.Application.Users.Queries.GetRelationships;
 using Sparkle.Application.Users.Queries.GetUserByUserName;
 using Sparkle.Application.Users.Queries.GetUserDetails;
+using Sparkle.Application.Users.Relationships.AcceptFriendRequest;
+using Sparkle.Application.Users.Relationships.CancelFriendRequest;
+using Sparkle.Application.Users.Relationships.DeleteFriend;
+using Sparkle.Application.Users.Relationships.SendFriendRequest;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -69,11 +74,28 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> SendMessageToUser(SendMessageToUserRequest request)
         {
+            return Problem(statusCode: StatusCodes.Status501NotImplemented);
+
             MessageChatDto messageChat = await Mediator.Send(request);
             //await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = messageChat.ChatId });
             //await Mediator.Send(new NotifyMessageAddedQuery() { MessageId = messageChat.MessageId });
             //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
             //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
+        }
+
+        /// <summary>
+        /// Changes the current user's display name
+        /// </summary>
+        /// <param name="displayName">New display name. Send null to remove display name</param>
+        /// <respose code="204">No Content. The display name was changed successfully</respose>
+        [HttpPatch("displayname")]
+        public async Task<ActionResult> UpdateDisplayName(string? displayName)
+        {
+            ChangeDisplayNameCommand command = new() { DisplayName = displayName };
+            User user = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+
             return NoContent();
         }
 
@@ -81,14 +103,13 @@ namespace Sparkle.WebApi.Controllers
         /// Gets all relationships of the current user
         /// </summary>
         /// <response code="200">Ok. List of current user relationships in JSON</response>
-        /// <response code="400">Bad Request. The requested user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <returns>List of current user relationships</returns>
         [HttpGet("relationships")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<RelationshipDto>>> GetRelationships()
+        public async Task<ActionResult> GetRelationships()
         {
             return Ok(await Mediator.Send(new GetRelationshipQuery()));
         }
@@ -96,25 +117,20 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Sends a friend request to the user with the provided id
         /// </summary>
-        /// <param name="userId">Id of the user to send a friend request to</param>
+        /// <param name="friendId">Id of the user to send a friend request to</param>
         /// <response code="204">No Content. The request was sent successfully</response>
-        /// <response code="400">Bad Request. The requested user is not found</response>
-        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
-        /// <response code="403">Forbidden. The client is blocked by the requested user</response>
-        [HttpPost("add-friend")]
+        /// <response code="400">Bad Request. Invalid friend id</response>
+        [HttpPost("friends")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> SendFriendRequest(Guid userId)
+        public async Task<ActionResult> SendFriendRequest(Guid friendId)
         {
-            CreateFriendRequestCommand request = new() { UserId = userId };
-            string? newChat = await Mediator.Send(request);
+            CreateFriendRequestCommand request = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(request);
 
-            if (newChat != null)
-                await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = newChat });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = userId });
+            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
 
             return NoContent();
         }
@@ -122,22 +138,57 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Accepts a friend request from the user with the provided id
         /// </summary>
-        /// <param name="userId">Id of the user to accept a friend request from</param>
+        /// <param name="friendId">Id of the user to accept a friend request from</param>
         /// <response code="204">No Content. The request was accepted successfully</response>
         /// <response code="400">Bad Request. The requested user is not found</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         /// <response code="403">Forbidden. The client has no friend request from the requested user</response>
-        [HttpPost("accept-friend")]
+        [HttpPatch("friends")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> AcceptFriendRequest(Guid userId)
+        public async Task<ActionResult> AcceptFriendRequest(Guid friendId)
         {
-            AcceptFriendRequestCommand command = new() { UserId = userId };
-            await Mediator.Send(command);
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
-            await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = userId });
+            AcceptFriendRequestCommand command = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Cancels a friend request to the user with the provided id
+        /// </summary>
+        /// <remarks>Friend request con be canceled from both sides</remarks>
+        /// <param name="friendId">Id of the user to cancel a friend request</param>
+        ///  <response code="204">No Content. The request was canceled successfully</response>
+        ///  <response code="400">Bad Request. The friend request between users does not exists</response>
+        [HttpDelete("friends/cancel")]
+        public async Task<ActionResult> CancelFriendRequest(Guid friendId)
+        {
+            CancelFriendRequestCommand command = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Deletes a friend from the user with the provided id
+        /// </summary>
+        /// <param name="friendId">Id of the user to delete a friend</param>
+        /// <response code="204">No Content. The friend was deleted successfully</response>
+        /// <response code="400">Bad Request. You are no friends with this user</response>
+        [HttpDelete("friends")]
+        public async Task<ActionResult> DeleteFriendRequest(Guid friendId)
+        {
+            DeleteFriendCommand command = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
 
             return NoContent();
         }

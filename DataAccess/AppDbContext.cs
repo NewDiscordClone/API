@@ -36,38 +36,37 @@ namespace Sparkle.DataAccess
 
         private CancellationToken _token = default;
 
-        public ISimpleDbSet<UserConnections, Guid> UserConnections =>
-            new SimpleMongoDbSet<UserConnections, Guid>(MongoDb.GetCollection<UserConnections>("userConnections"), _token);
-        public ISimpleDbSet<Message, string> Messages =>
-            new SimpleMongoDbSet<Message, string>(MongoDb.GetCollection<Message>("messages"), _token);
+        public IRepository<UserConnections, Guid> UserConnections =>
+            new BaseMongoRepository<UserConnections, Guid>(MongoDb.GetCollection<UserConnections>("userConnections"), _token);
+        public IRepository<Message, string> Messages =>
+            new BaseMongoRepository<Message, string>(MongoDb.GetCollection<Message>("messages"), _token);
 
-        public ISimpleDbSet<Chat, string> Chats =>
-            new SimpleMongoDbSet<Chat, string>(MongoDb.GetCollection<Chat>("chats"), _token);
+        public IRepository<Chat, string> Chats =>
+            new BaseMongoRepository<Chat, string>(MongoDb.GetCollection<Chat>("chats"), _token);
 
-        public ISimpleDbSet<PersonalChat, string> PersonalChats =>
-            new SimpleMongoDbSet<PersonalChat, string>(MongoDb.GetCollection<Chat>("chats").OfType<PersonalChat>(), _token);
-        public ISimpleDbSet<GroupChat, string> GroupChats =>
-            new SimpleMongoDbSet<GroupChat, string>(MongoDb.GetCollection<Chat>("chats").OfType<GroupChat>(), _token);
+        public IRepository<PersonalChat, string> PersonalChats =>
+            new BaseMongoRepository<PersonalChat, string>(MongoDb.GetCollection<Chat>("chats").OfType<PersonalChat>(), _token);
+        public IRepository<GroupChat, string> GroupChats =>
+            new BaseMongoRepository<GroupChat, string>(MongoDb.GetCollection<Chat>("chats").OfType<GroupChat>(), _token);
 
-        public ISimpleDbSet<Channel, string> Channels =>
-            new SimpleMongoDbSet<Channel, string>(MongoDb.GetCollection<Chat>("chats").OfType<Channel>(), _token);
+        public IRepository<Channel, string> Channels =>
+            new BaseMongoRepository<Channel, string>(MongoDb.GetCollection<Chat>("chats").OfType<Channel>(), _token);
 
-        public ISimpleDbSet<Media, string> Media =>
-            new SimpleMongoDbSet<Media, string>(MongoDb.GetCollection<Media>("media"), _token);
+        public IRepository<Media, string> Media =>
+            new BaseMongoRepository<Media, string>(MongoDb.GetCollection<Media>("media"), _token);
 
-        public ISimpleDbSet<Server, string> Servers =>
-            new SimpleMongoDbSet<Server, string>(MongoDb.GetCollection<Server>("servers"), _token);
+        public IRepository<Server, string> Servers =>
+            new BaseMongoRepository<Server, string>(MongoDb.GetCollection<Server>("servers"), _token);
 
-        public ISimpleDbSet<Invitation, string> Invitations =>
-            new SimpleMongoDbSet<Invitation, string>(MongoDb.GetCollection<Invitation>("invitations"), _token);
-        public ISimpleDbSet<RelationshipList, Guid> RelationshipLists =>
-            new SimpleMongoDbSet<RelationshipList, Guid>(MongoDb.GetCollection<RelationshipList>("relationships"),
-                _token);
+        public IRepository<Invitation, string> Invitations =>
+            new BaseMongoRepository<Invitation, string>(MongoDb.GetCollection<Invitation>("invitations"), _token);
 
-        public ISimpleDbSet<Role, Guid> SqlRoles => new SimpleSqlDbSet<Role>(this);
-        public ISimpleDbSet<User, Guid> SqlUsers => new SimpleSqlDbSet<User>(this);
+        public IRepository<Role, Guid> SqlRoles => new BaseSqlRepository<Role, Guid>(this);
+        public IRepository<User, Guid> SqlUsers => new BaseSqlRepository<User, Guid>(this);
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<RoleUserProfile> RoleUserProfile { get; set; }
+        public DbSet<Relationship> Relationships { get; set; }
+
         public IMongoDatabase MongoDb { get; }
         public void SetToken(CancellationToken cancellationToken)
         {

@@ -16,6 +16,13 @@ namespace Sparkle.Application.HubClients
         {
             return Context.UserConnections.FindOrDefaultAsync(userId).Result?.Connections ?? new HashSet<string>();
         }
+
+        protected IEnumerable<string> GetConnections(params Guid[] userIds)
+        {
+            return userIds
+                .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
+                .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+        }
         protected IEnumerable<string> GetConnections(Chat chat)
         {
             Guid[] userIds = chat switch
@@ -25,9 +32,7 @@ namespace Sparkle.Application.HubClients
                 _ => throw new Exception("Unknown chat type")
             };
 
-            return userIds
-                .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
-                .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+            return GetConnections(userIds);
         }
 
         private Guid[] GetChannelUserIds(Channel cannel)
@@ -55,9 +60,7 @@ namespace Sparkle.Application.HubClients
               .Select(profile => profile.UserId)
               .ToArray();
 
-            return userIds
-               .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
-               .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+            return GetConnections(userIds);
         }
 
         protected void SetToken(CancellationToken cancellationToken)

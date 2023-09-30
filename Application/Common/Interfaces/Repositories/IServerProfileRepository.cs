@@ -2,7 +2,7 @@
 
 namespace Sparkle.Application.Common.Interfaces.Repositories
 {
-    public interface IServerProfileRepository : ISimpleDbSet<ServerProfile, Guid>
+    public interface IServerProfileRepository : IRepository<ServerProfile, Guid>
     {
         Task AddRolesAsync(Guid profileId, params Guid[] roleIds);
         ServerProfile? FindUserProfileOnServer(string serverId, Guid userId);

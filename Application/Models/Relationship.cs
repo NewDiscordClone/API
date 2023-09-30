@@ -1,24 +1,35 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-
-namespace Sparkle.Application.Models
+﻿namespace Sparkle.Application.Models
 {
-    public enum RelationshipType
+    public enum RelationshipTypes
     {
         Acquaintance,
         Friend,
         Pending,
-        Waiting,
         Blocked
-    }
-    public class RelationshipList
-    {
-        [BsonId]
-        public Guid Id { get; set; }
-        public List<Relationship> Relationships { get; set; }
     }
     public class Relationship
     {
-        public Guid UserId { get; set; }
-        public RelationshipType RelationshipType { get; set; }
+        public Guid Active { get; set; }
+        public Guid Passive { get; set; }
+        public RelationshipTypes RelationshipType { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Relationship relationship)
+            {
+                return relationship.Active == Active && relationship.Passive == Passive;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Active, Passive);
+        }
+
+        public override string ToString()
+        {
+            return $"Active: {Active}, Passive: {Passive}, RelationshipType: {RelationshipType}";
+        }
     }
 }

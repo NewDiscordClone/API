@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;
 
 namespace Sparkle.DataAccess
 {
-    public class SimpleSqlDbSet<TEntity> : ISimpleDbSet<TEntity, Guid> where TEntity : class
+    public class BaseSqlRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
         public DbSet<TEntity> DbSet => _dbSet;
         public AppDbContext Context => _context;
@@ -14,21 +15,22 @@ namespace Sparkle.DataAccess
         private readonly DbSet<TEntity> _dbSet;
         private readonly AppDbContext _context;
 
-        public SimpleSqlDbSet(DbSet<TEntity> original, AppDbContext context)
+        public BaseSqlRepository(DbSet<TEntity> original, AppDbContext context)
         {
             _dbSet = original;
             _context = context;
         }
 
-        public SimpleSqlDbSet(AppDbContext context)
+        public BaseSqlRepository(AppDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity> FindAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            return await FindByIdAsync(id, cancellationToken);
+            return await _dbSet.FindAsync(new object?[] { id }, cancellationToken: cancellationToken) ??
+                   throw new EntityNotFoundException($"Entity {typeof(TEntity).Name} ({id}) not found", id!);
         }
 
         public virtual async Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
@@ -51,7 +53,7 @@ namespace Sparkle.DataAccess
 
         public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TEntity> result = await _dbSet.AddAsync(entity, cancellationToken);
+            EntityEntry<TEntity> result = await _dbSet.AddAsync(entity, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return result.Entity;
         }
@@ -69,9 +71,9 @@ namespace Sparkle.DataAccess
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public virtual async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            _dbSet.Remove(await FindByIdAsync(id, cancellationToken));
+            _dbSet.Remove(await FindAsync(id, cancellationToken));
             await _context.SaveChangesAsync(cancellationToken);
         }
 
@@ -90,12 +92,6 @@ namespace Sparkle.DataAccess
         public virtual async Task<long> CountAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
             return await _dbSet.CountAsync(cancellationToken);
-        }
-
-        private async Task<TEntity> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            return await _dbSet.FindAsync(new object?[] { id }, cancellationToken: cancellationToken) ??
-                   throw new EntityNotFoundException($"Entity {typeof(TEntity).Name} ({id}) not found", id.ToString());
         }
 
         public virtual async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)

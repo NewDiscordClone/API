@@ -2,7 +2,7 @@
 
 namespace Sparkle.Application.Common.Interfaces
 {
-    public interface ISimpleDbSet<TEntity, TId> where TEntity : class
+    public interface IRepository<TEntity, TId> where TEntity : class
     {
         Task<TEntity> FindAsync(TId id, CancellationToken cancellationToken = default);
 

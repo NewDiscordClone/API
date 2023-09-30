@@ -5,22 +5,22 @@ namespace Sparkle.Application.Common.Interfaces;
 
 public interface IAppDbContext
 {
-    ISimpleDbSet<UserConnections, Guid> UserConnections { get; }
-    ISimpleDbSet<Message, string> Messages { get; }
-    ISimpleDbSet<Chat, string> Chats { get; }
-    ISimpleDbSet<PersonalChat, string> PersonalChats { get; }
-    ISimpleDbSet<GroupChat, string> GroupChats { get; }
-    ISimpleDbSet<Channel, string> Channels { get; }
-    ISimpleDbSet<Media, string> Media { get; }
-    ISimpleDbSet<Server, string> Servers { get; }
-    ISimpleDbSet<Invitation, string> Invitations { get; }
-    ISimpleDbSet<RelationshipList, Guid> RelationshipLists { get; }
-    ISimpleDbSet<Role, Guid> SqlRoles { get; }
+    IRepository<UserConnections, Guid> UserConnections { get; }
+    IRepository<Message, string> Messages { get; }
+    IRepository<Chat, string> Chats { get; }
+    IRepository<PersonalChat, string> PersonalChats { get; }
+    IRepository<GroupChat, string> GroupChats { get; }
+    IRepository<Channel, string> Channels { get; }
+    IRepository<Media, string> Media { get; }
+    IRepository<Server, string> Servers { get; }
+    IRepository<Invitation, string> Invitations { get; }
+    IRepository<Role, Guid> SqlRoles { get; }
 
-    ISimpleDbSet<User, Guid> SqlUsers { get; }
+    IRepository<User, Guid> SqlUsers { get; }
     DbSet<Role> Roles { get; set; }
     DbSet<User> Users { get; set; }
     DbSet<UserProfile> UserProfiles { get; set; }
+    DbSet<Relationship> Relationships { get; set; }
     Task SaveChangesAsync();
 
     void SetToken(CancellationToken cancellationToken);

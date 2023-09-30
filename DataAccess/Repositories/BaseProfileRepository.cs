@@ -2,7 +2,7 @@
 
 namespace Sparkle.DataAccess.Repositories
 {
-    public abstract class BaseProfileRepository<TProfile> : SimpleSqlDbSet<TProfile>
+    public abstract class BaseProfileRepository<TProfile> : BaseSqlRepository<TProfile, Guid>
         where TProfile : UserProfile
     {
         protected BaseProfileRepository(AppDbContext context) : base(context)

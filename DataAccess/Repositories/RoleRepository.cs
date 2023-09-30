@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
-    internal class RoleRepository : SimpleSqlDbSet<Role>, IRoleRepository
+    internal class RoleRepository : BaseSqlRepository<Role, Guid>, IRoleRepository
     {
         public RoleRepository(AppDbContext context) : base(context)
         {
