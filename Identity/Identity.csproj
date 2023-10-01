@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Sparkle.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <UserSecretsId>002410c2-fee5-4c08-ab89-64dad61540a0</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
