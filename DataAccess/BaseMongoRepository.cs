@@ -8,6 +8,11 @@ using System.Reflection;
 
 namespace Sparkle.DataAccess
 {
+    /// <summary>
+    /// Base repository class for MongoDB data access.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity being accessed.</typeparam>
+    /// <typeparam name="TKey">The type of the entity's primary key.</typeparam>
     public class BaseMongoRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
 
