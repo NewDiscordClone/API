@@ -5,6 +5,9 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
+    /// <summary>
+    /// Repository for managing <see cref="Relationship"/> entities.
+    /// </summary>
     public class RelationshipRepository : BaseSqlRepository<Relationship, (Guid Active, Guid Passive)>, IRelationshipRepository
     {
         public RelationshipRepository(AppDbContext context) : base(context)
@@ -29,7 +32,6 @@ namespace Sparkle.DataAccess.Repositories
 
             await DeleteAsync(relationship, cancellationToken);
         }
-
 
         public override async Task<Relationship> AddAsync(Relationship entity, CancellationToken cancellationToken = default)
         {
@@ -59,6 +61,12 @@ namespace Sparkle.DataAccess.Repositories
                 ?? throw new EntityNotFoundException("Relationship not found", id);
         }
 
+        /// <summary>
+        /// Finds a <see cref="Relationship"/> entity with the specified IDs, or returns null if not found.
+        /// </summary>
+        /// <param name="id">The IDs of the relationship to find.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The found relationship, or null if not found.</returns>
         public async Task<Relationship?> FindOrDefaultAsync((Guid Active, Guid Passive) id,
             CancellationToken cancellationToken = default)
         {

@@ -6,6 +6,11 @@ using System.Linq.Expressions;
 
 namespace Sparkle.DataAccess
 {
+    /// <summary>
+    /// Base repository class for SQL data access.
+    /// </summary>
+    /// <typeparam name="TEntity">The entity type.</typeparam>
+    /// <typeparam name="TKey">The entity key type.</typeparam>
     public class BaseSqlRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
         public DbSet<TEntity> DbSet => _dbSet;

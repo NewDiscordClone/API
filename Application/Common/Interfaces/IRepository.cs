@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Sparkle.Application.Common.Exceptions;
 
 namespace Sparkle.Application.Common.Interfaces
 {
@@ -16,6 +17,7 @@ namespace Sparkle.Application.Common.Interfaces
         /// <param name="id">The identifier of the entity to find.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the entity with the specified identifier, or null if the entity was not found.</returns>
+        /// <exception cref="EntityNotFoundException">Thrown when the entity with the specified identifier was not found.</exception>
         Task<TEntity> FindAsync(TId id, CancellationToken cancellationToken = default);
 
         /// <summary>
