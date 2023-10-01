@@ -3,6 +3,8 @@ using IdentityServer4;
 using IdentityServer4.Configuration;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
+using Microsoft.CodeAnalysis.Options;
+using Microsoft.Extensions.Options;
 using Sparkle.Application.Models;
 using System.Security.Claims;
 
@@ -10,6 +12,8 @@ namespace Sparkle.Identity
 {
     public static class Configuration
     {
+        private static IdentitySettings _identitySettings;
+
         /// <summary>
         /// Adds and configures IdentityServer
         /// </summary>
@@ -23,9 +27,15 @@ namespace Sparkle.Identity
             return services.AddIdentityServer();
         }
 
+        /// <summary>
+        /// Adds and configures IdentityServer with in-memory configuration
+        /// </summary>
         public static IIdentityServerBuilder AddIdentityServer4WithConfiguration(this IServiceCollection services,
             Action<IdentityServerOptions>? options = null)
         {
+            _identitySettings = services.BuildServiceProvider()
+            .GetRequiredService<IOptions<IdentitySettings>>().Value;
+
             IIdentityServerBuilder builder = options is null
                 ? services.AddIdentityServer4()
                 : services.AddIdentityServer4(options);
@@ -70,8 +80,7 @@ namespace Sparkle.Identity
         private static IEnumerable<Client> Clients =>
             new List<Client>
             {
-                new Client
-                {
+                new() {
                     ClientId = "react-client",
                     ClientSecrets = { new Secret("react-client-super-secret") },
                     AllowedGrantTypes = GrantTypes.Code,
@@ -86,6 +95,8 @@ namespace Sparkle.Identity
                     },
                     RequireConsent = false,
                     RequireClientSecret = false,
+                    //infinitely long access token (not recommended in production)
+                    AccessTokenLifetime = _identitySettings.AccessTokenLifetime
                 }
             };
         private static List<TestUser> TestUsers =>
@@ -98,9 +109,9 @@ namespace Sparkle.Identity
                     Password = "testuser",
                     Claims = new List<Claim>
                     {
-                        new Claim("role", "admin"), // Роль пользователя
-                        new Claim("given_name", "Test"),
-                        new Claim("family_name", "User")
+                        new("role", "admin"),
+                        new("given_name", "Test"),
+                        new("family_name", "User")
                     }
                 }
             };
