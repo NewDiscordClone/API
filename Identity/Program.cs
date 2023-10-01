@@ -26,6 +26,11 @@ namespace Sparkle.Identity
                     .GetExecutingAssembly());
             });
 
+            //add IdentitySettings to DI as IOptions
+
+            services.Configure<IdentitySettings>(builder.Configuration
+                .GetSection(IdentitySettings.SectionName));
+
             services.AddIdentity<User, Role>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -46,7 +51,7 @@ namespace Sparkle.Identity
 
             services.ConfigureApplicationCookie(config =>
             {
-                config.Cookie.Name = "Spark.Identity.Cookie";
+                config.Cookie.Name = "Sparkle.Identity.Cookie";
                 config.LoginPath = "/Authentication/Login";
                 config.LogoutPath = "/Authentication/Logout";
             });
