@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
@@ -27,7 +28,6 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
         public async Task<List<PrivateChatLookUp>> Handle(PrivateChatsQuery query, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
-            List<PrivateChatLookUp> chatDtos = new();
 
             List<string?> chatIds = await Context.UserProfiles.
                 Where(profile => profile.UserId == UserId && profile.ChatId != null)
@@ -37,43 +37,56 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
             List<PersonalChat> chats = await Context.PersonalChats
                 .FilterAsync(chat => chatIds.Contains(chat.Id), cancellationToken);
 
+
+            List<PrivateChatLookUp> chatDtos = new();
             foreach (PersonalChat chat in chats)
             {
-                if (chat is GroupChat groupChat)
+                PrivateChatLookUp lookUp = chat switch
                 {
-                    PrivateChatLookUp lookUp = Mapper.Map<PrivateChatLookUp>(groupChat);
+                    GroupChat groupChat => await GetDtoFromGroupChat(groupChat, cancellationToken),
+                    PersonalChat => await GetDtoFromPersonalChat(chat, cancellationToken)
+                };
 
-                    List<Guid> userIds = await Context.UserProfiles
-                        .Where(profile => profile.ChatId == groupChat.Id)
-                        .Select(profile => profile.UserId)
-                        .ToListAsync(cancellationToken);
-
-                    if (string.IsNullOrWhiteSpace(groupChat.Title))
-                    {
-                        List<string?> userDisplayNames = await Context.Users
-                            .Where(user => user.Id != UserId && userIds.Contains(user.Id))
-                            .Select(u => u.DisplayName ?? u.UserName)
-                            .ToListAsync(cancellationToken);
-
-                        lookUp.Title = string.Join(", ", userDisplayNames);
-                    }
-
-                    chatDtos.Add(lookUp);
-                }
-                else
-                {
-                    Guid otherUserId = await Context.UserProfiles
-                        .Where(profile => profile.ChatId == chat.Id && profile.UserId != UserId)
-                        .Select(profile => profile.UserId)
-                        .SingleAsync(cancellationToken);
-
-                    User? otherUser = await Context.Users.FindAsync(new object[] { otherUserId }, cancellationToken: cancellationToken);
-                    chatDtos.Add(new PrivateChatLookUp(chat, Mapper.Map<UserLookUp>(otherUser)));
-                }
+                chatDtos.Add(lookUp);
             }
 
             return chatDtos;
         }
 
+        private async Task<PrivateChatLookUp> GetDtoFromPersonalChat(PersonalChat chat, CancellationToken cancellationToken)
+        {
+            Guid otherUserId = await Context.UserProfiles
+                .Where(profile => profile.ChatId == chat.Id && profile.UserId != UserId)
+                .Select(profile => profile.UserId)
+                .SingleAsync(cancellationToken);
+
+            User? otherUser = await Context.Users.FindAsync(new object[] { otherUserId },
+                cancellationToken: cancellationToken)
+                ?? throw new EntityNotFoundException(message: $"User {otherUserId} not found", otherUserId);
+
+            return new(chat, otherUser);
+        }
+
+        private async Task<PrivateChatLookUp> GetDtoFromGroupChat(GroupChat groupChat, CancellationToken cancellationToken)
+        {
+            PrivateChatLookUp lookUp = Mapper.Map<PrivateChatLookUp>(groupChat);
+
+            List<Guid> userIds = await Context.UserProfiles
+                .Where(profile => profile.ChatId == groupChat.Id)
+                .Select(profile => profile.UserId)
+                .ToListAsync(cancellationToken);
+
+            if (string.IsNullOrWhiteSpace(groupChat.Title))
+            {
+                List<string> userDisplayNames = await Context.Users
+                    .Where(user => user.Id != UserId && userIds.Contains(user.Id))
+                    .Select(u => u.DisplayName ?? u.UserName!)
+                    .ToListAsync(cancellationToken);
+
+                lookUp.Title = string.Join(", ", userDisplayNames);
+            }
+
+            return lookUp;
+        }
     }
 }
