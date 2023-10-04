@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.AcceptFriendRequest
+namespace Sparkle.Application.Users.Relationships.Commands.AcceptFriendRequest
 {
     public record AcceptFriendRequestCommand : IRequest<Relationship>
     {

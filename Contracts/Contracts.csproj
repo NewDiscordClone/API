@@ -14,4 +14,9 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Users\" />
+    <Folder Include="Users\Relationships\" />
+  </ItemGroup>
+
 </Project>

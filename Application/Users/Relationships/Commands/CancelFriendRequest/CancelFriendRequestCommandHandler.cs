@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.CancelFriendRequest
+namespace Sparkle.Application.Users.Relationships.Commands.CancelFriendRequest
 {
     public class CancelFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<CancelFriendRequestCommand, Relationship>
     {
