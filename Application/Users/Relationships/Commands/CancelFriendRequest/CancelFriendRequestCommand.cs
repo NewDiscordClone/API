@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.CancelFriendRequest
+namespace Sparkle.Application.Users.Relationships.Commands.CancelFriendRequest
 {
     public record CancelFriendRequestCommand : IRequest<Relationship>
     {

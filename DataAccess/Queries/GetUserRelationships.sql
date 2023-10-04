@@ -6,10 +6,9 @@ SELECT
     U2.UserName AS PassiveName,
     U2.Id AS PassiveId,
     CASE
-        WHEN R.RelationshipType = 0 THEN 'Acquaintance'
-        WHEN R.RelationshipType = 1 THEN 'Friend'
-        WHEN R.RelationshipType = 2 THEN 'Pending'
-        WHEN R.RelationshipType = 3 THEN 'Blocked'
+        WHEN R.RelationshipType = 0 THEN 'Friend'
+        WHEN R.RelationshipType = 1 THEN 'Pending'
+        WHEN R.RelationshipType = 2 THEN 'Blocked'
     END AS RelationshipType
 FROM
     Relationships R

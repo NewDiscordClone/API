@@ -5,6 +5,7 @@ using Sparkle.Application.Common.Behaviors;
 using Sparkle.Application.Common.Factories;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Mapping;
+using Sparkle.Application.Users.Relationships.Common;
 using System.Reflection;
 
 namespace Sparkle.Application
@@ -30,6 +31,8 @@ namespace Sparkle.Application
             });
 
             services.AddScoped<IRoleFactory, RoleFactory>();
+            services.AddScoped<IRelationshipConvertor, RelationshipConvertor>();
+
             return services;
         }
     }

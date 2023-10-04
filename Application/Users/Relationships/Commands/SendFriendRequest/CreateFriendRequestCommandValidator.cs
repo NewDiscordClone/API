@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Sparkle.Application.Users.Relationships.SendFriendRequest
+namespace Sparkle.Application.Users.Relationships.Commands.SendFriendRequest
 {
     public class CreateFriendRequestCommandValidator : AbstractValidator<CreateFriendRequestCommand>
     {
