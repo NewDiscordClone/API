@@ -24,6 +24,9 @@ public abstract class Chat : IUserProfileProvider
     /// </summary>
     public virtual List<Guid> Profiles { get; set; } = new();
 
+    public virtual DateTime CreatedDate { get; set; }
+    public virtual DateTime UpdatedDate { get; set; }
+
     public Chat()
     {
         Id = ObjectId.GenerateNewId().ToString();

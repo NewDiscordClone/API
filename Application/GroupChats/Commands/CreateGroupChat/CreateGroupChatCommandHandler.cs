@@ -18,6 +18,8 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
             {
                 Title = command.Title,
                 Image = command.Image,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
             };
 
             List<UserProfile> profiles = command.UsersId.ConvertAll(id => new UserProfile()
