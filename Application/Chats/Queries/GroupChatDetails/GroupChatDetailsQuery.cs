@@ -2,7 +2,7 @@
 using Sparkle.Application.Models;
 using System.ComponentModel;
 
-namespace Sparkle.Application.GroupChats.Queries.GroupChatDetails
+namespace Sparkle.Application.Chats.Queries.GroupChatDetails
 {
     public record GroupChatDetailsQuery : IRequest<GroupChat>
     {

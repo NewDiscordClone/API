@@ -1,6 +1,7 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Chats.Queries.PrivateChatsList;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
 using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
@@ -9,7 +10,6 @@ using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
 using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
-using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;

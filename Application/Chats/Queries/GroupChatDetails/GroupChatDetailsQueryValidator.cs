@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.GroupChats.Queries.GroupChatDetails
+namespace Sparkle.Application.Chats.Queries.GroupChatDetails
 {
     public class GroupChatDetailsQueryValidator : AbstractValidator<GroupChatDetailsQuery>
     {

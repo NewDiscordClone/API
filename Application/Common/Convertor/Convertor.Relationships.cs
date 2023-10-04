@@ -3,28 +3,28 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Relationships.Queries.GetRelationships;
 
-namespace Sparkle.Application.Users.Relationships.Common
+namespace Sparkle.Application.Common.Convertor
 {
-    public class RelationshipConvertor : IRelationshipConvertor
+    public partial class Convertor : IConvertor
     {
-        private readonly IRepository<User, Guid> _userRepository;
+        private readonly IAppDbContext _context;
         private readonly IAuthorizedUserProvider _userProvider;
         private readonly IMapper _mapper;
 
-        public RelationshipConvertor(IRepository<User, Guid> userRepository,
-            IAuthorizedUserProvider userProvider,
-            IMapper mapper)
+        public Convertor(IAuthorizedUserProvider userProvider,
+            IMapper mapper,
+            IAppDbContext context)
         {
-            _userRepository = userRepository;
             _userProvider = userProvider;
             _mapper = mapper;
+            _context = context;
         }
 
         public RelationshipViewModel Convert(Relationship relationship)
         {
             Guid userId = _userProvider.GetUserId();
 
-            User? user = _userRepository
+            User? user = _context.Users
                  .FindAsync(relationship.Active == userId
                  ? relationship.Passive : relationship.Active)
                  .Result;
