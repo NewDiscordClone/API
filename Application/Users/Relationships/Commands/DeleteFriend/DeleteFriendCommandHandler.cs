@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.DeleteFriend
+namespace Sparkle.Application.Users.Relationships.Commands.DeleteFriend
 {
     public class DeleteFriendCommandHandler : RequestHandlerBase, IRequestHandler<DeleteFriendCommand, Relationship>
     {

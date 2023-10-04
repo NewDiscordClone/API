@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.AcceptFriendRequest
+namespace Sparkle.Application.Users.Relationships.Commands.AcceptFriendRequest
 {
     public class AcceptFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<AcceptFriendRequestCommand, Relationship>
     {

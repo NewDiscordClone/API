@@ -7,13 +7,13 @@ using Sparkle.Application.HubClients.Users.UserUpdated;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Commands.ChangeDisplayName;
 using Sparkle.Application.Users.Commands.SendMessageToUser;
-using Sparkle.Application.Users.Queries.GetRelationships;
 using Sparkle.Application.Users.Queries.GetUserByUserName;
 using Sparkle.Application.Users.Queries.GetUserDetails;
-using Sparkle.Application.Users.Relationships.AcceptFriendRequest;
-using Sparkle.Application.Users.Relationships.CancelFriendRequest;
-using Sparkle.Application.Users.Relationships.DeleteFriend;
-using Sparkle.Application.Users.Relationships.SendFriendRequest;
+using Sparkle.Application.Users.Relationships.Commands.AcceptFriendRequest;
+using Sparkle.Application.Users.Relationships.Commands.CancelFriendRequest;
+using Sparkle.Application.Users.Relationships.Commands.DeleteFriend;
+using Sparkle.Application.Users.Relationships.Commands.SendFriendRequest;
+using Sparkle.Application.Users.Relationships.Queries.GetRelationships;
 
 namespace Sparkle.WebApi.Controllers
 {
