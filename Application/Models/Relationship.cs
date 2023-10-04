@@ -2,7 +2,6 @@
 {
     public enum RelationshipTypes
     {
-        Acquaintance,
         Friend,
         Pending,
         Blocked
