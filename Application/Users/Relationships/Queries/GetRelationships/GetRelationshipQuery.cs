@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Sparkle.Application.Models;
+using Sparkle.Contracts.Users.Relationships;
 
 namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
 {
     public record GetRelationshipQuery()
-        : IRequest<List<Relationship>>;
+        : IRequest<List<RelationshipViewModel>>;
 }
