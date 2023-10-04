@@ -1,7 +1,6 @@
 ﻿using Sparkle.Application.Models;
-using Sparkle.Application.Users.Relationships.Queries.GetRelationships;
 
-namespace Sparkle.Contracts.Users.Relationships
+namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
 {
     /// <summary>
     /// Represents a relationship view model.

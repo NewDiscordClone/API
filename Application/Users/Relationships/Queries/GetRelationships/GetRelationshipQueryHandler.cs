@@ -2,16 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.Contracts.Users.Relationships;
 
 namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
 {
     public class GetRelationshipQueryHandler : RequestHandlerBase,
         IRequestHandler<GetRelationshipQuery, List<RelationshipViewModel>>
     {
-        public GetRelationshipQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider)
+        private readonly IRelationshipConvertor _convertor;
+
+        public GetRelationshipQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IRelationshipConvertor convertor)
             : base(context, userProvider)
         {
+            _convertor = convertor;
         }
 
         public async Task<List<RelationshipViewModel>> Handle(GetRelationshipQuery query, CancellationToken cancellationToken)
@@ -20,21 +22,7 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
                 .Where(rel => rel.Active == UserId || rel.Passive == UserId)
                 .ToListAsync(cancellationToken);
 
-            return relationships.ConvertAll(ToViewModel);
-        }
-
-        private RelationshipViewModel ToViewModel(Relationship relationship)
-        {
-            User? user = Context.Users
-                .Find(relationship.Active == UserId
-                ? relationship.Passive : relationship.Active);
-
-            return new RelationshipViewModel
-            {
-                IsActive = relationship.Active != UserId,
-                User = Mapper.Map<UserLookupViewModel>(user),
-                Type = relationship.RelationshipType
-            };
+            return relationships.ConvertAll(_convertor.Convert);
         }
     }
 }

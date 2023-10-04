@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Sparkle.Contracts.Users.Relationships;
 
 namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
 {
