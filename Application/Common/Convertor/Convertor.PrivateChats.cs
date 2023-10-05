@@ -45,13 +45,13 @@ namespace Sparkle.Application.Common.Convertor
 
             if (string.IsNullOrWhiteSpace(groupChat.Title))
             {
-                lookUp.Title = await FillChatTitle(userIds, cancellationToken);
+                lookUp.Title = await FillChatTitleAsync(userIds, cancellationToken);
             }
 
             return lookUp;
         }
 
-        public async Task<string> FillChatTitle(List<Guid> userIds, CancellationToken cancellationToken)
+        public async Task<string> FillChatTitleAsync(List<Guid> userIds, CancellationToken cancellationToken)
         {
             List<string> userDisplayNames = await _context.Users
                 .Where(user => user.Id != UserId && userIds.Contains(user.Id))

@@ -16,12 +16,15 @@ namespace Sparkle.Application.HubClients
         {
             return Context.UserConnections.FindOrDefaultAsync(userId).Result?.Connections ?? new HashSet<string>();
         }
-
-        protected IEnumerable<string> GetConnections(params Guid[] userIds)
+        protected IEnumerable<string> GetConnections(IEnumerable<Guid> userIds)
         {
             return userIds
-                .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
-                .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+               .Where(userId => Context.UserConnections.FindOrDefaultAsync(userId)?.Result != null)
+               .SelectMany(userId => Context.UserConnections.FindAsync(userId).Result.Connections);
+        }
+        protected IEnumerable<string> GetConnections(params Guid[] userIds)
+        {
+            return GetConnections(userIds.AsEnumerable());
         }
         protected IEnumerable<string> GetConnections(Chat chat)
         {

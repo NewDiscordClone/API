@@ -15,7 +15,7 @@ namespace Sparkle.Application.Common.Interfaces
 
         Task<PrivateChatLookUp> ConvertAsync(PersonalChat chat, CancellationToken cancellationToken = default);
         PrivateChatLookUp Convert(PersonalChat chat);
-        Task<string> FillChatTitle(List<Guid> userIds, CancellationToken cancellationToken);
-        // PrivateChatViewModel Convert(PersonalChat chat);
+
+        Task<string> FillChatTitleAsync(List<Guid> userIds, CancellationToken cancellationToken = default);
     }
 }
