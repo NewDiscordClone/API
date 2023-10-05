@@ -53,6 +53,9 @@ h3 {
     font-size: 18px;
     /*color: white; TODO*/
 }
+.input-container > label {
+    text-transform: uppercase;
+}
 .input-container > input {
     width: calc(100% - 26px);
     border-radius: 5px;
