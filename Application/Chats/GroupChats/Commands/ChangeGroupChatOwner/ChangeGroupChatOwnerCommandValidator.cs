@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
+namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
 {
     public class ChangeGroupChatOwnerCommandValidator : AbstractValidator<ChangeGroupChatOwnerCommand>
     {

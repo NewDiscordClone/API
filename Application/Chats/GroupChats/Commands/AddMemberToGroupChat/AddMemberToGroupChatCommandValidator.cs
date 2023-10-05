@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
 {
     public class AddMemberToGroupChatCommandValidator : AbstractValidator<AddMemberToGroupChatCommand>
     {

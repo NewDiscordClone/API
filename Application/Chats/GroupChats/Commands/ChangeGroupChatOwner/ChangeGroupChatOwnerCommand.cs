@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.ComponentModel;
 
-namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner
+namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
 {
     public record ChangeGroupChatOwnerCommand : IRequest
     {

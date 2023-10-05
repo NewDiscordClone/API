@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
 {
     public class AddMemberToGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<AddMemberToGroupChatCommand>
     {

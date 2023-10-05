@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Chats.Queries.GroupChatDetails
+namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
 {
-    public class GroupChatDetailsQueryHandler : RequestHandlerBase, IRequestHandler<PrivateChatDetailsQuery, PrivateChatViewModel>
+    public class PrivateChatDetailsQueryHandler : RequestHandlerBase, IRequestHandler<PrivateChatDetailsQuery, PrivateChatViewModel>
     {
-        public GroupChatDetailsQueryHandler(IAppDbContext context,
+        public PrivateChatDetailsQueryHandler(IAppDbContext context,
             IAuthorizedUserProvider userProvider,
             IMapper mapper)
             : base(context, userProvider, mapper)

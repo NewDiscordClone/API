@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.ComponentModel;
 
-namespace Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
     public record RemoveUserFromGroupChatCommand : IRequest
     {

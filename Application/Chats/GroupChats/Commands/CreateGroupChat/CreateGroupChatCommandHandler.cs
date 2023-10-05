@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
 {
     public class CreateGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatCommand, GroupChat>
     {
@@ -22,7 +22,7 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
                 UpdatedDate = DateTime.UtcNow
             };
 
-            List<UserProfile> profiles = command.UsersId.ConvertAll(id => new UserProfile()
+            List<UserProfile> profiles = command.UserIds.ConvertAll(id => new UserProfile()
             {
                 UserId = id,
                 ChatId = chat.Id,

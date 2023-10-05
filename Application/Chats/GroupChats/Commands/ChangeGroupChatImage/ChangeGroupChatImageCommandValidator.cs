@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage
+namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
 {
     public class ChangeGroupChatImageCommandValidator : AbstractValidator<ChangeGroupChatImageCommand>
     {

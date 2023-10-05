@@ -1,5 +1,5 @@
 ﻿using Mapster;
-using Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat;
+using Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat;
 using Sparkle.Contracts.PrivateChats;
 
 namespace Sparkle.WebApi.Common.Mapping.Configuration

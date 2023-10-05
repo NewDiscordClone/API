@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
     public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand>
     {

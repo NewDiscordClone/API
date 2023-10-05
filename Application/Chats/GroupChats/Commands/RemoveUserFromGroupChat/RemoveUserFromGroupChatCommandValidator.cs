@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
     public class RemoveUserFromGroupChatCommandValidator : AbstractValidator<RemoveUserFromGroupChatCommand>
     {

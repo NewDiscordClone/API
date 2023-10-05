@@ -1,16 +1,17 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat;
+using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage;
+using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner;
+using Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat;
+using Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat;
 using Sparkle.Application.Chats.PersonalChats.Commands.CreateChat;
 using Sparkle.Application.Chats.Queries.GroupChatDetails;
+using Sparkle.Application.Chats.Queries.PrivateChatDetails;
 using Sparkle.Application.Chats.Queries.PrivateChatsList;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
-using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
-using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
-using Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat;
-using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -84,7 +85,7 @@ namespace Sparkle.WebApi.Controllers
             if (userIds.Count == 1)
                 chat = await Mediator.Send(new CreatePersonalChatCommand { UserId = userIds[0] });
             else
-                chat = await Mediator.Send(new CreateGroupChatCommand { UsersId = userIds });
+                chat = await Mediator.Send(new CreateGroupChatCommand { UserIds = userIds });
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chat.Id });
 

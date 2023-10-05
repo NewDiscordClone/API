@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Sparkle.Application.Chats.Queries.GroupChatDetails
+namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
 {
     public record PrivateChatDetailsQuery : IRequest<PrivateChatViewModel>
     {

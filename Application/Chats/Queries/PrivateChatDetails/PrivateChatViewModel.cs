@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Chats.Queries.GroupChatDetails
+namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
 {
     public class PrivateChatViewModel : IMapWith<PersonalChat>
     {

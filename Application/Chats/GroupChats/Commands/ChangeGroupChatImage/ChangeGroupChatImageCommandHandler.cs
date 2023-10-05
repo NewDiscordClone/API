@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage
+namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
 {
     public class ChangeGroupChatImageCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatImageCommand>
     {

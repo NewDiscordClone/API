@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat
 {
     public class RenameGroupChatCommandValidator : AbstractValidator<RenameGroupChatCommand>
     {

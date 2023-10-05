@@ -2,7 +2,7 @@
 using Sparkle.Application.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
 {
     public record CreateGroupChatCommand : IRequest<GroupChat>
     {
@@ -20,6 +20,6 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
         /// <summary>
         /// The list of unique identifiers of users to be added to the group chat.
         /// </summary>
-        public List<Guid> UsersId { get; init; }
+        public List<Guid> UserIds { get; init; }
     }
 }

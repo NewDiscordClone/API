@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.ComponentModel;
 
-namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
 {
     public record AddMemberToGroupChatCommand : IRequest
     {

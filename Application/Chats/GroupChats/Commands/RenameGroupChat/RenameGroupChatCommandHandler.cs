@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.GroupChats.Commands.RenameGroupChat
+namespace Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat
 {
     public class RenameGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RenameGroupChatCommand>
     {
