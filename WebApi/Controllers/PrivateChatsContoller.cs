@@ -1,6 +1,7 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Chats.PersonalChats.Commands.CreateChat;
 using Sparkle.Application.Chats.Queries.GroupChatDetails;
 using Sparkle.Application.Chats.Queries.PrivateChatsList;
 using Sparkle.Application.Common.Interfaces;
@@ -66,26 +67,28 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Creates new group chat
         /// </summary>
-        /// <param name="command">
-        /// ```
-        /// title: string // up to 100 characters
-        /// image?: string // URL to the image media file
-        /// usersId: number[] // users that are members of the chat from the beginning
-        /// ```
-        /// </param>
+        ///<param name="userIds">
+        ///List of the users to add to the chat. 
+        ///If list contains only one user request will create personal chat
+        ///</param>
         /// <returns>String representation of an ObjectId of a newly created group chat</returns>
         /// <response code="201">Created. String representation of an ObjectId of a newly created group chat</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<string>> CreateGroupChat(CreateGroupChatCommand command)
+        public async Task<ActionResult<string>> CreateChat([FromBody] List<Guid> userIds)
         {
-            string chatId = await Mediator.Send(command);
+            PersonalChat chat;
 
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            if (userIds.Count == 1)
+                chat = await Mediator.Send(new CreatePersonalChatCommand { UserId = userIds[0] });
+            else
+                chat = await Mediator.Send(new CreateGroupChatCommand { UsersId = userIds });
 
-            return CreatedAtAction(nameof(GetGroupChatDetails), new { chatId }, chatId);
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chat.Id });
+
+            return CreatedAtAction(nameof(GetGroupChatDetails), new { chatId = chat.Id }, chat.Id);
         }
 
         /// <summary>

@@ -11,10 +11,12 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
         private readonly IUserProfileRepository _userProfileRepository;
         public CreatePersonalChatCommandHandler(IAppDbContext context,
             IAuthorizedUserProvider userProvider,
-            IUserProfileRepository userProfileRepository)
+            IUserProfileRepository userProfileRepository,
+            IRoleFactory roleFactory)
             : base(context, userProvider)
         {
             _userProfileRepository = userProfileRepository;
+            _roleFactory = roleFactory;
         }
 
         public async Task<PersonalChat> Handle(CreatePersonalChatCommand command, CancellationToken cancellationToken)

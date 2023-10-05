@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
 {
-    public record CreateGroupChatCommand : IRequest<string>
+    public record CreateGroupChatCommand : IRequest<GroupChat>
     {
         /// <summary>
         /// The title of the group chat.
