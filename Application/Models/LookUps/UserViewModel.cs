@@ -14,9 +14,9 @@ namespace Sparkle.Application.Models.LookUps
         /// <summary>
         /// Non-unique user name
         /// </summary>
-        public string? DisplayName { get; set; }
+        public string DisplayName { get; set; }
 
-        public string? UserName { get; set; }
+        public string UserName { get; set; }
         /// <summary>
         /// Avatar url
         /// </summary>
@@ -28,7 +28,9 @@ namespace Sparkle.Application.Models.LookUps
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<User, UserViewModel>();
+            profile.CreateMap<User, UserViewModel>()
+                .ForMember(dest => dest.DisplayName, opt =>
+                    opt.MapFrom(src => src.DisplayName ?? src.UserName));
         }
     }
 }

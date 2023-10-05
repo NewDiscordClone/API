@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Chats.Queries.PrivateChatDetails;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
@@ -59,6 +61,48 @@ namespace Sparkle.Application.Common.Convertor
                 .ToListAsync(cancellationToken);
 
             return string.Join(", ", userDisplayNames);
+        }
+
+        public async Task<PrivateChatViewModel> ConvertToViewModelAsync(PersonalChat chat, CancellationToken cancellationToken = default)
+        {
+            PrivateChatViewModel viewModel = _mapper.Map<PrivateChatViewModel>(chat);
+
+            List<UserProfileViewModel> profiles = await _context.UserProfiles
+                .Where(profile => profile.ChatId == chat.Id)
+                .ProjectTo<UserProfileViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+
+            foreach (UserProfileViewModel profile in profiles)
+            {
+                var user = await _context.Users
+                    .Where(u => u.Id == profile.UserId)
+                    .Select(user => user.DisplayName != null
+                    ? new { Name = user.DisplayName, AvatarUrl = user.Avatar }
+                    : new { Name = user.UserName, AvatarUrl = user.Avatar })
+                    .SingleAsync(cancellationToken);
+
+                profile.Name = user.Name;
+                profile.AvatarUrl = user.AvatarUrl;
+
+                viewModel.Profiles.Add(profile);
+            }
+
+            if (string.IsNullOrEmpty(viewModel.Title))
+            {
+                List<string> userNames = viewModel.Profiles
+                    .Where(profile => profile.UserId != UserId)
+                    .Select(profile => profile.Name)
+                    .ToList();
+
+                viewModel.Title = string.Join(", ", userNames);
+            }
+
+            if (chat is GroupChat groupChat)
+            {
+                viewModel.OwnerId = groupChat.OwnerId;
+            }
+
+            return viewModel;
         }
     }
 }
