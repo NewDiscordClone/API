@@ -58,7 +58,7 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
 
             User? user = await Context.Users.FindAsync(new object?[] { UserId }, cancellationToken: cancellationToken)!;
 
-            dto.Author = Mapper.Map<UserLookUp>(user);
+            dto.Author = Mapper.Map<UserViewModel>(user);
 
             if (profile is not null and ServerProfile serverProfile)
             {

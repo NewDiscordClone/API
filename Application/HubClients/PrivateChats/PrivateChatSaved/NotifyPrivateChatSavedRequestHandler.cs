@@ -47,7 +47,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
                         .SingleAsync(user => user.UserProfiles
                         .Any(profile => profile.ChatId == chat.Id && user.Id != UserId));
 
-                    lookUp = new PrivateChatLookUp(pChat, Mapper.Map<UserLookUp>(other));
+                    lookUp = new PrivateChatLookUp(pChat, other);
                     break;
                 default:
                     throw new ArgumentException("the given chat is not an private chat");

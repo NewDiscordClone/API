@@ -25,10 +25,7 @@ namespace Sparkle.Application.Common.Convertor
 
         private async Task<PrivateChatLookUp> GetDtoFromPersonalChat(PersonalChat chat, CancellationToken cancellationToken)
         {
-            Guid otherUserId = await _context.UserProfiles
-                .Where(profile => profile.ChatId == chat.Id && profile.UserId != UserId)
-                .Select(profile => profile.UserId)
-                .SingleAsync(cancellationToken);
+            Guid otherUserId = chat.Profiles.Single(id => id != UserId);
 
             User? otherUser = await _context.Users.FindAsync(new object[] { otherUserId },
                 cancellationToken: cancellationToken)
@@ -48,13 +45,13 @@ namespace Sparkle.Application.Common.Convertor
 
             if (string.IsNullOrWhiteSpace(groupChat.Title))
             {
-                lookUp.Title = await FillGroupChatTitle(userIds, cancellationToken);
+                lookUp.Title = await FillChatTitle(userIds, cancellationToken);
             }
 
             return lookUp;
         }
 
-        private async Task<string> FillGroupChatTitle(List<Guid> userIds, CancellationToken cancellationToken)
+        public async Task<string> FillChatTitle(List<Guid> userIds, CancellationToken cancellationToken)
         {
             List<string> userDisplayNames = await _context.Users
                 .Where(user => user.Id != UserId && userIds.Contains(user.Id))

@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Validation;
 
 namespace Sparkle.Application.Chats.Queries.GroupChatDetails
 {
-    public class GroupChatDetailsQueryValidator : AbstractValidator<GroupChatDetailsQuery>
+    public class GroupChatDetailsQueryValidator : AbstractValidator<PrivateChatDetailsQuery>
     {
         public GroupChatDetailsQueryValidator()
         {

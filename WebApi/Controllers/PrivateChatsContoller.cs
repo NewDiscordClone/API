@@ -1,6 +1,7 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Chats.Queries.GroupChatDetails;
 using Sparkle.Application.Chats.Queries.PrivateChatsList;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
@@ -9,7 +10,6 @@ using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
 using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat;
 using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
-using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -57,8 +57,8 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<GroupChat>> GetGroupChatDetails(string chatId)
         {
-            GroupChat chat = await Mediator
-                .Send(new GroupChatDetailsQuery() { ChatId = chatId });
+            PrivateChatViewModel chat = await Mediator
+                .Send(new PrivateChatDetailsQuery() { ChatId = chatId });
 
             return Ok(chat);
         }

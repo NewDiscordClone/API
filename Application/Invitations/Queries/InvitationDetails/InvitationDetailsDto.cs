@@ -12,7 +12,7 @@ namespace Sparkle.Application.Invitations.Queries.InvitationDetails
         /// <summary>
         /// The user associated with the invitation. (Optional)
         /// </summary>
-        public UserLookUp? User { get; set; }
+        public UserViewModel? User { get; set; }
 
         /// <summary>
         /// The server associated with the invitation.
