@@ -49,7 +49,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
 
-        private const int _maxFileSizeMb = 5;
+        private const int _maxFileSizeMb = 10;
         /// <summary>
         /// Uploads media files to the database
         /// </summary>
