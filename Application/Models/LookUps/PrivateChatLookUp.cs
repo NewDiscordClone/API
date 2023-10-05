@@ -40,7 +40,7 @@ namespace Sparkle.Application.Models.LookUps
         {
             Id = personalChat.Id;
             Image = other.Avatar;
-            Title = other.DisplayName;
+            Title = other.DisplayName ?? other.UserName;
             MembersCount = personalChat.Profiles.Count;
         }
     }

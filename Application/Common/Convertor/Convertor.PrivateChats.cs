@@ -27,7 +27,11 @@ namespace Sparkle.Application.Common.Convertor
 
         private async Task<PrivateChatLookUp> GetDtoFromPersonalChat(PersonalChat chat, CancellationToken cancellationToken)
         {
-            Guid otherUserId = chat.Profiles.Single(id => id != UserId);
+            Guid otherUserId = await _context.UserProfiles
+                .Where(profile => profile.ChatId == chat.Id && profile.UserId != UserId)
+                .Select(profile => profile.UserId)
+                .SingleAsync(cancellationToken);
+
 
             User? otherUser = await _context.Users.FindAsync(new object[] { otherUserId },
                 cancellationToken: cancellationToken)

@@ -8,6 +8,7 @@ using Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat;
 using Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat;
 using Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat;
 using Sparkle.Application.Chats.PersonalChats.Commands.CreateChat;
+using Sparkle.Application.Chats.PersonalChats.Queries;
 using Sparkle.Application.Chats.Queries.PrivateChatDetails;
 using Sparkle.Application.Chats.Queries.PrivateChatsList;
 using Sparkle.Application.Common.Interfaces;
@@ -43,7 +44,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get details about the given group chat. The details include Title, Image, OwnerId and Users
+        /// Get details about the given chat. The details include Title, Image, OwnerId and Users
         /// </summary>
         /// <param name="chatId">Chat Id to get detailed information from</param>
         /// <returns>Json group chat object</returns>
@@ -56,10 +57,30 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<GroupChat>> GetGroupChatDetails(string chatId)
+        public async Task<ActionResult<GroupChat>> GetGroupChatById(string chatId)
         {
             PrivateChatViewModel chat = await Mediator
                 .Send(new PrivateChatDetailsQuery() { ChatId = chatId });
+
+            return Ok(chat);
+        }
+        /// <summary>
+        /// Get details about the given personal chat. The details include Title, Image, and Users
+        /// </summary>
+        /// <returns>Json group chat object</returns>
+        /// <response code="200">Ok. Json group chat object</response>
+        /// <response code="400">Bad Request. The requested group chat is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+        [HttpGet("find")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<GroupChat>> GetPersonalChat(Guid userId)
+        {
+            PrivateChatViewModel chat = await Mediator
+                .Send(new GetPersonalChatByUserIdQuery() { UserId = userId });
 
             return Ok(chat);
         }
@@ -88,7 +109,7 @@ namespace Sparkle.WebApi.Controllers
 
             await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chat.Id });
 
-            return CreatedAtAction(nameof(GetGroupChatDetails), new { chatId = chat.Id }, chat.Id);
+            return CreatedAtAction(nameof(GetGroupChatById), new { chatId = chat.Id }, chat.Id);
         }
 
         /// <summary>
