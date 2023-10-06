@@ -78,15 +78,14 @@ namespace Sparkle.Application.Common.Convertor
 
             foreach (UserProfileViewModel profile in profiles)
             {
-                var user = await _context.Users
+                User user = await _context.Users
                     .Where(u => u.Id == profile.UserId)
-                    .Select(user => user.DisplayName != null
-                    ? new { Name = user.DisplayName, AvatarUrl = user.Avatar }
-                    : new { Name = user.UserName, AvatarUrl = user.Avatar })
                     .SingleAsync(cancellationToken);
 
-                profile.Name = user.Name;
-                profile.AvatarUrl = user.AvatarUrl;
+                profile.Name = user.DisplayName ?? user.UserName;
+                profile.AvatarUrl = user.Avatar;
+                profile.Status = user.Status;
+                profile.TextStatus = user.TextStatus;
 
                 viewModel.Profiles.Add(profile);
             }

@@ -4,6 +4,7 @@ namespace Sparkle.Application.Common
 {
     public static class ServerClaims
     {
+#pragma warning disable IDE1006 // Naming Styles
         public const string ManageMessages = "ManageMessages";
         public const string ManageChannels = "ManageChannels";
         public const string ManageRoles = "ManageRoles";
@@ -11,6 +12,7 @@ namespace Sparkle.Application.Common
         public const string ChangeServerName = "ChangeServerName";
         public const string ChangeSomeoneServerName = "ChangeSomeoneServerName";
         public const string RemoveMembers = "RemoveMembers";
+#pragma warning restore IDE1006 // Naming Styles
 
         public static string[] GetClaims()
         {

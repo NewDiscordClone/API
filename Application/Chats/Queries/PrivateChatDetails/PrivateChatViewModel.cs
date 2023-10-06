@@ -26,6 +26,8 @@ namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
         public Guid UserId { get; init; }
         public string Name { get; set; }
         public string? AvatarUrl { get; set; }
+        public string? TextStatus { get; set; }
+        public UserStatus Status { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<UserProfile, UserProfileViewModel>();
