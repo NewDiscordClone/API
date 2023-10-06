@@ -52,7 +52,9 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             };
 
             await Context.Messages.AddAsync(message, cancellationToken);
-            chat.UpdatedDate = DateTime.UtcNow;
+
+            chat.UpdatedDate = message.SendTime;
+            await Context.Chats.UpdateAsync(chat, cancellationToken);
 
             MessageDto dto = Mapper.Map<MessageDto>(message);
 

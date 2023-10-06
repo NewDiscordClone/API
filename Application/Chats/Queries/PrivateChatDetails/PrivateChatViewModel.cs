@@ -10,6 +10,8 @@ namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
         public string Title { get; set; }
         public string? Image { get; init; }
         public Guid? OwnerId { get; set; }
+        public DateTime CreatedDate { get; init; }
+        public DateTime UpdatedDate { get; init; }
         public List<UserProfileViewModel> Profiles { get; set; } = new();
         public void Mapping(Profile profile)
         {

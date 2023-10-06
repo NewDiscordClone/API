@@ -19,6 +19,7 @@ namespace Sparkle.Application.Models.LookUps
         /// The title of the private chat.
         /// </summary>
         public string? Title { get; set; }
+        public DateTime UpdatedDate { get; init; }
 
         /// <summary>
         /// The number of members in the private chat.
@@ -40,6 +41,7 @@ namespace Sparkle.Application.Models.LookUps
         {
             Id = personalChat.Id;
             Image = other.Avatar;
+            UpdatedDate = personalChat.UpdatedDate;
             Title = other.DisplayName ?? other.UserName;
             MembersCount = personalChat.Profiles.Count;
         }
