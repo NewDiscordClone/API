@@ -1,6 +1,7 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat;
 using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage;
 using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner;
@@ -11,6 +12,7 @@ using Sparkle.Application.Chats.PersonalChats.Commands.CreateChat;
 using Sparkle.Application.Chats.PersonalChats.Queries;
 using Sparkle.Application.Chats.Queries.PrivateChatDetails;
 using Sparkle.Application.Chats.Queries.PrivateChatsList;
+using Sparkle.Application.Common.Convertors;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
@@ -20,6 +22,7 @@ using Sparkle.Contracts.PrivateChats;
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/private-chats")]
+    [JsonConverter(typeof(PrivateChatLookUpConverter))]
     public class PrivateChatsController : ApiControllerBase
     {
         public PrivateChatsController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper)
@@ -36,7 +39,8 @@ namespace Sparkle.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
+
+        public async Task<ActionResult> GetAllPrivateChats()
         {
             PrivateChatsQuery query = new();
             List<PrivateChatLookUp> list = await Mediator.Send(query);
