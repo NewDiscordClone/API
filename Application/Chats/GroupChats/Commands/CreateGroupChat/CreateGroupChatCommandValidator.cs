@@ -25,7 +25,7 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
             RuleForEach(x => x.UserIds)
                 .NotEmpty();
             RuleForEach(x => x.UserIds)
-                .IsNotUser(userProvider)
+                .NotCurrentUser(userProvider)
                 .WithMessage("You cant create group chat with yourself");
 
 

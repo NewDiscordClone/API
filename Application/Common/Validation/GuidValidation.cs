@@ -11,7 +11,7 @@ namespace Sparkle.Application.Common.Validation
                 .WithMessage("{PropertyValue} is not guid");
         }
 
-        public static IRuleBuilderOptions<T, Guid> IsNotUser<T>(this IRuleBuilder<T, Guid> ruleBuilder,
+        public static IRuleBuilderOptions<T, Guid> NotCurrentUser<T>(this IRuleBuilder<T, Guid> ruleBuilder,
             IAuthorizedUserProvider userProvider)
         {
             return ruleBuilder.NotEqual(userProvider.GetUserId());
