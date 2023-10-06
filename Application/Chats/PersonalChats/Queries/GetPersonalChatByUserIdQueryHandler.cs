@@ -27,7 +27,7 @@ namespace Sparkle.Application.Chats.PersonalChats.Queries
             Relationship relationship = await _relationshipRepository.FindAsync((query.UserId, UserId), cancellationToken);
 
             if (relationship.PersonalChatId is null)
-                throw new EntityNotFoundException($"Cant find chat with user {query.UserId}", query.UserId);
+                throw new EntityNotFoundException($"Chat with user {query.UserId} does not exists", query.UserId);
 
             PersonalChat chat = await Context.PersonalChats.FindAsync(relationship.PersonalChatId, cancellationToken);
 

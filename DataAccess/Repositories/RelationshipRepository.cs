@@ -1,4 +1,5 @@
-﻿using Sparkle.Application.Common.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
@@ -74,12 +75,15 @@ namespace Sparkle.DataAccess.Repositories
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The updated relationship.</returns>
         public async Task<Relationship> UpdateWithKeysAsync(Relationship relationship, CancellationToken cancellationToken = default)
+
         {
             Relationship originalRelationship = await FindAsync((relationship.Active, relationship.Passive),
                 cancellationToken);
 
             if (originalRelationship == relationship)
             {
+                Context.Entry(originalRelationship).State = EntityState.Detached;
+                Context.Entry(relationship).State = EntityState.Detached;
                 await UpdateAsync(relationship, cancellationToken);
             }
             else
