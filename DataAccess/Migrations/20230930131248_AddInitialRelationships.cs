@@ -27,9 +27,9 @@ namespace DataAccess.Migrations
                 columns: new[] { "Active", "Passive", "RelationshipType" },
                 values: new object[,]
                 {
-                    { new Guid("7aef2538-e1b3-42d7-a3db-a2809a81ac91"), new Guid("ba1ce081-e200-41da-9fb2-3d317627c9d4"), 1 },
-                    { new Guid("c1ce2c28-9cf4-4ab1-bddb-b99c5408ee34"), new Guid("7aef2538-e1b3-42d7-a3db-a2809a81ac91"), 0 },
-                    { new Guid("c1ce2c28-9cf4-4ab1-bddb-b99c5408ee34"), new Guid("ba1ce081-e200-41da-9fb2-3d317627c9d4"), 0 }
+                    { new Guid("7aef2538-e1b3-42d7-a3db-a2809a81ac91"), new Guid("ba1ce081-e200-41da-9fb2-3d317627c9d4"), 2 },
+                    { new Guid("c1ce2c28-9cf4-4ab1-bddb-b99c5408ee34"), new Guid("7aef2538-e1b3-42d7-a3db-a2809a81ac91"), 1 },
+                    { new Guid("c1ce2c28-9cf4-4ab1-bddb-b99c5408ee34"), new Guid("ba1ce081-e200-41da-9fb2-3d317627c9d4"), 1 }
                 });
         }
 

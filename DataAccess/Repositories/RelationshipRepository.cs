@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sparkle.Application.Common.Exceptions;
+﻿using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
@@ -40,18 +39,10 @@ namespace Sparkle.DataAccess.Repositories
                     FindOrDefaultAsync((entity.Passive, entity.Active), cancellationToken);
 
                 if (reverseRelationship != null)
-                {
-                    reverseRelationship.RelationshipType = entity.RelationshipType;
-                    DbSet.Entry(reverseRelationship).State = EntityState.Modified;
-                    await Context.SaveChangesAsync(cancellationToken);
+                    throw new InvalidOperationException("Relationship already exists");
 
-                    return reverseRelationship;
-                }
-                else
-                {
-                    Relationship addedRelationship = await base.AddAsync(entity, cancellationToken);
-                    return addedRelationship;
-                }
+                Relationship addedRelationship = await base.AddAsync(entity, cancellationToken);
+                return addedRelationship;
             }
         }
 
@@ -74,5 +65,30 @@ namespace Sparkle.DataAccess.Repositories
             return relationship ?? await DbSet.FindAsync(new object?[] { id.Passive, id.Active }, cancellationToken: cancellationToken);
         }
 
+        /// <summary>
+        /// Updates a relationship with the given keys. If the relationship already exists with swapped keys, it will deleted and added.
+        /// Otherwise, it will be updated.
+        /// </summary>
+        /// <remarks> This method is used to update a relationship with the ability to swap keys.</remarks>
+        /// <param name="relationship">The relationship to update.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The updated relationship.</returns>
+        public async Task<Relationship> UpdateWithKeysAsync(Relationship relationship, CancellationToken cancellationToken = default)
+        {
+            Relationship originalRelationship = await FindAsync((relationship.Active, relationship.Passive),
+                cancellationToken);
+
+            if (originalRelationship == relationship)
+            {
+                await UpdateAsync(relationship, cancellationToken);
+            }
+            else
+            {
+                await DeleteAsync((relationship.Active, relationship.Passive), cancellationToken);
+                await AddAsync(relationship, cancellationToken);
+            }
+
+            return relationship;
+        }
     }
 }

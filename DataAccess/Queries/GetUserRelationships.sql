@@ -1,4 +1,4 @@
-﻿DECLARE @userId AS UNIQUEIDENTIFIER = 'BA1CE081-E200-41DA-9FB2-3D317627C9D4'
+﻿DECLARE @userId AS UNIQUEIDENTIFIER = 'C1CE2C28-9CF4-4AB1-BDDB-B99C5408EE34'
 
 SELECT
     U1.UserName AS ActiveName,   
@@ -6,10 +6,12 @@ SELECT
     U2.UserName AS PassiveName,
     U2.Id AS PassiveId,
     CASE
-        WHEN R.RelationshipType = 0 THEN 'Friend'
-        WHEN R.RelationshipType = 1 THEN 'Pending'
-        WHEN R.RelationshipType = 2 THEN 'Blocked'
-    END AS RelationshipType
+        WHEN R.RelationshipType = 0 THEN 'Acquaintance'
+        WHEN R.RelationshipType = 1 THEN 'Friend'
+        WHEN R.RelationshipType = 2 THEN 'Pending'
+        WHEN R.RelationshipType = 3 THEN 'Blocked'
+    END AS RelationshipType,
+    R.PersonalChatId AS PersonalChat
 FROM
     Relationships R
 INNER JOIN
