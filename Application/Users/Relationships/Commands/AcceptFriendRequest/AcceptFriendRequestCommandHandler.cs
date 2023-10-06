@@ -20,7 +20,7 @@ namespace Sparkle.Application.Users.Relationships.Commands.AcceptFriendRequest
             Relationship relationship = await _relationshipRepository
                 .FindAsync((UserId, command.FriendId), cancellationToken);
 
-            if (relationship.RelationshipType != RelationshipTypes.Pending)
+            if (relationship != RelationshipTypes.Pending)
                 throw new InvalidOperationException("Friend request is not pending");
 
             if (UserId != relationship.Passive)

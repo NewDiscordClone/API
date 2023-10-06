@@ -33,7 +33,8 @@ namespace Sparkle.Application.Common.Convertor
             {
                 IsActive = relationship.Active != userId,
                 User = _mapper.Map<UserLookupViewModel>(user),
-                Type = relationship.RelationshipType
+                Type = relationship.RelationshipType,
+                ChatId = relationship.PersonalChatId
             };
         }
     }

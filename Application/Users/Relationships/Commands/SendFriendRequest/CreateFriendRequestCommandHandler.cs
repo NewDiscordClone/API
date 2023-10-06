@@ -20,11 +20,11 @@ namespace Sparkle.Application.Users.Relationships.Commands.SendFriendRequest
                 .FindOrDefaultAsync((UserId, command.FriendId), cancellationToken);
             bool isNull = relationship is null;
 
-            if (relationship != null && relationship.RelationshipType == RelationshipTypes.Blocked)
+            if (relationship != null && relationship == RelationshipTypes.Blocked)
                 throw new InvalidOperationException("You are blocked by this user");
 
-            if (relationship != null && (relationship.RelationshipType == RelationshipTypes.Friend
-                    || relationship.RelationshipType == RelationshipTypes.Pending))
+            if (relationship != null && (relationship == RelationshipTypes.Friend
+                    || relationship == RelationshipTypes.Pending))
             {
                 throw new InvalidOperationException("You are already friends");
             }

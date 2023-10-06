@@ -9,18 +9,27 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
     {
         private readonly IRoleFactory _roleFactory;
         private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IRelationshipRepository _relationshipRepository;
         public CreatePersonalChatCommandHandler(IAppDbContext context,
             IAuthorizedUserProvider userProvider,
             IUserProfileRepository userProfileRepository,
-            IRoleFactory roleFactory)
+            IRoleFactory roleFactory,
+            IRelationshipRepository relationshipRepository)
             : base(context, userProvider)
         {
             _userProfileRepository = userProfileRepository;
             _roleFactory = roleFactory;
+            _relationshipRepository = relationshipRepository;
         }
 
         public async Task<PersonalChat> Handle(CreatePersonalChatCommand command, CancellationToken cancellationToken)
         {
+            Relationship? relationship = await _relationshipRepository
+                .FindOrDefaultAsync((command.UserId, UserId), cancellationToken);
+
+            if (relationship is not null && relationship.PersonalChatId != null)
+                throw new InvalidOperationException("Chat already exists");
+
             PersonalChat chat = new()
             {
                 CreatedDate = DateTime.UtcNow,
@@ -42,6 +51,24 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
                     ChatId = chat.Id
                 }
             };
+
+            if (relationship is not null)
+            {
+                relationship.PersonalChatId = chat.Id;
+                await _relationshipRepository.UpdateAsync(relationship, cancellationToken);
+            }
+            else
+            {
+                relationship = new()
+                {
+                    Active = UserId,
+                    Passive = command.UserId,
+                    RelationshipType = RelationshipTypes.Acquaintance,
+                    PersonalChatId = chat.Id
+                };
+
+                await _relationshipRepository.AddAsync(relationship, cancellationToken);
+            }
 
             chat.Profiles = profiles.Select(profile => profile.Id).ToList();
 

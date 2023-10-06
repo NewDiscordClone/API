@@ -10,7 +10,7 @@ namespace Sparkle.Application.Chats.PersonalChats.Queries
         {
             RuleFor(query => query.UserId)
                 .NotEmpty()
-                .IsNotUser(userProvider)
+                .NotCurrentUser(userProvider)
                 .WithMessage("You cant find chat with yourself");
         }
     }

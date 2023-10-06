@@ -149,7 +149,10 @@ namespace Sparkle.WebApi.Controllers
             CancelFriendRequestCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            if (relationship == RelationshipTypes.DELETED)
+                await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            else
+                await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
 
             return NoContent();
         }
@@ -166,7 +169,10 @@ namespace Sparkle.WebApi.Controllers
             DeleteFriendCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            if (relationship == RelationshipTypes.DELETED)
+                await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            else
+                await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
 
             return NoContent();
         }
