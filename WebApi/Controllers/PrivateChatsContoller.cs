@@ -1,15 +1,17 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat;
+using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage;
+using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner;
+using Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat;
+using Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat;
+using Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat;
+using Sparkle.Application.Chats.PersonalChats.Commands.CreateChat;
+using Sparkle.Application.Chats.PersonalChats.Queries;
+using Sparkle.Application.Chats.Queries.PrivateChatDetails;
+using Sparkle.Application.Chats.Queries.PrivateChatsList;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat;
-using Sparkle.Application.GroupChats.Commands.ChangeGroupChatImage;
-using Sparkle.Application.GroupChats.Commands.ChangeGroupChatOwner;
-using Sparkle.Application.GroupChats.Commands.CreateGroupChat;
-using Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat;
-using Sparkle.Application.GroupChats.Commands.RenameGroupChat;
-using Sparkle.Application.GroupChats.Queries.GroupChatDetails;
-using Sparkle.Application.GroupChats.Queries.PrivateChatsList;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -42,7 +44,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get details about the given group chat. The details include Title, Image, OwnerId and Users
+        /// Get details about the given chat. The details include Title, Image, OwnerId and Users
         /// </summary>
         /// <param name="chatId">Chat Id to get detailed information from</param>
         /// <returns>Json group chat object</returns>
@@ -55,10 +57,30 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<GroupChat>> GetGroupChatDetails(string chatId)
+        public async Task<ActionResult<GroupChat>> GetGroupChatById(string chatId)
         {
-            GroupChat chat = await Mediator
-                .Send(new GroupChatDetailsQuery() { ChatId = chatId });
+            PrivateChatViewModel chat = await Mediator
+                .Send(new PrivateChatDetailsQuery() { ChatId = chatId });
+
+            return Ok(chat);
+        }
+        /// <summary>
+        /// Get details about the given personal chat. The details include Title, Image, and Users
+        /// </summary>
+        /// <returns>Json group chat object</returns>
+        /// <response code="200">Ok. Json group chat object</response>
+        /// <response code="400">Bad Request. The requested group chat is not found</response>
+        /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
+        /// <response code="403">Forbidden. The client has not permissions to perform this action</response>
+        [HttpGet("find")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        public async Task<ActionResult<GroupChat>> GetPersonalChat(Guid userId)
+        {
+            PrivateChatViewModel chat = await Mediator
+                .Send(new GetPersonalChatByUserIdQuery() { UserId = userId });
 
             return Ok(chat);
         }
@@ -66,26 +88,28 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Creates new group chat
         /// </summary>
-        /// <param name="command">
-        /// ```
-        /// title: string // up to 100 characters
-        /// image?: string // URL to the image media file
-        /// usersId: number[] // users that are members of the chat from the beginning
-        /// ```
-        /// </param>
+        ///<param name="userIds">
+        ///List of the users to add to the chat. 
+        ///If list contains only one user request will create personal chat
+        ///</param>
         /// <returns>String representation of an ObjectId of a newly created group chat</returns>
         /// <response code="201">Created. String representation of an ObjectId of a newly created group chat</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<string>> CreateGroupChat(CreateGroupChatCommand command)
+        public async Task<ActionResult<string>> CreateChat([FromBody] List<Guid> userIds)
         {
-            string chatId = await Mediator.Send(command);
+            PersonalChat chat;
 
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            if (userIds.Count == 1)
+                chat = await Mediator.Send(new CreatePersonalChatCommand { UserId = userIds[0] });
+            else
+                chat = await Mediator.Send(new CreateGroupChatCommand { UserIds = userIds });
 
-            return CreatedAtAction(nameof(GetGroupChatDetails), new { chatId }, chatId);
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chat.Id });
+
+            return CreatedAtAction(nameof(GetGroupChatById), new { chatId = chat.Id }, chat.Id);
         }
 
         /// <summary>

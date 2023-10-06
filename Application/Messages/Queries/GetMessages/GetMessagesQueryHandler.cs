@@ -27,7 +27,7 @@ namespace Sparkle.Application.Messages.Queries.GetMessages
                 User? user = await Context.Users.FindAsync(new object?[] { userProfile.UserId }, cancellationToken: cancellationToken) ??
                     throw new EntityNotFoundException(userProfile.UserId);
 
-                res.Author = Mapper.Map<UserLookUp>(user);
+                res.Author = Mapper.Map<UserViewModel>(user);
 
                 if (userProfile is not null and ServerProfile serverProfile)
                 {

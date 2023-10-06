@@ -18,10 +18,19 @@ namespace Sparkle.Application.Users.Relationships.Commands.DeleteFriend
             Relationship? relationship = await _relationshipsRepository
                 .FindOrDefaultAsync((UserId, command.FriendId), cancellationToken);
 
-            if (relationship is null || relationship.RelationshipType != RelationshipTypes.Friend)
+            if (relationship is null || relationship != RelationshipTypes.Friend)
                 throw new InvalidOperationException("You are not friends");
 
-            await _relationshipsRepository.DeleteAsync(relationship, cancellationToken);
+            if (relationship.PersonalChatId is null)
+            {
+                await _relationshipsRepository.DeleteAsync(relationship, cancellationToken);
+                relationship.RelationshipType = RelationshipTypes.DELETED;
+            }
+            else
+            {
+                relationship.RelationshipType = RelationshipTypes.Acquaintance;
+                await _relationshipsRepository.UpdateAsync(relationship, cancellationToken);
+            }
 
             return relationship;
         }

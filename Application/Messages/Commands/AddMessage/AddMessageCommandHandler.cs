@@ -53,11 +53,14 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
 
             await Context.Messages.AddAsync(message, cancellationToken);
 
+            chat.UpdatedDate = message.SendTime;
+            await Context.Chats.UpdateAsync(chat, cancellationToken);
+
             MessageDto dto = Mapper.Map<MessageDto>(message);
 
             User? user = await Context.Users.FindAsync(new object?[] { UserId }, cancellationToken: cancellationToken)!;
 
-            dto.Author = Mapper.Map<UserLookUp>(user);
+            dto.Author = Mapper.Map<UserViewModel>(user);
 
             if (profile is not null and ServerProfile serverProfile)
             {

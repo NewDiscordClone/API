@@ -1,4 +1,4 @@
-﻿DECLARE @userId AS UNIQUEIDENTIFIER = 'BA1CE081-E200-41DA-9FB2-3D317627C9D4'
+﻿DECLARE @userId AS UNIQUEIDENTIFIER = '7AEF2538-E1B3-42D7-A3DB-A2809A81AC91'
 
 SELECT
     U1.UserName AS ActiveName,   
@@ -6,10 +6,13 @@ SELECT
     U2.UserName AS PassiveName,
     U2.Id AS PassiveId,
     CASE
-        WHEN R.RelationshipType = 0 THEN 'Friend'
-        WHEN R.RelationshipType = 1 THEN 'Pending'
-        WHEN R.RelationshipType = 2 THEN 'Blocked'
-    END AS RelationshipType
+        WHEN R.RelationshipType = 0 THEN 'Acquaintance'
+        WHEN R.RelationshipType = 1 THEN 'Friend'
+        WHEN R.RelationshipType = 2 THEN 'Pending'
+        WHEN R.RelationshipType = 3 THEN 'Blocked'
+        WHEN R.RelationshipType = 4 THEN 'DELETED' -- This should never happen
+    END AS RelationshipType,
+    R.PersonalChatId AS PersonalChat
 FROM
     Relationships R
 INNER JOIN

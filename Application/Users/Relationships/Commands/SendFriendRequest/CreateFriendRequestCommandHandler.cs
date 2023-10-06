@@ -18,21 +18,29 @@ namespace Sparkle.Application.Users.Relationships.Commands.SendFriendRequest
         {
             Relationship? relationship = await _relationshipRepository
                 .FindOrDefaultAsync((UserId, command.FriendId), cancellationToken);
+            bool isNull = relationship is null;
 
-            if (relationship != null)
-                throw new InvalidOperationException("Relationship already exists");
+            if (relationship != null && relationship == RelationshipTypes.Blocked)
+                throw new InvalidOperationException("You are blocked by this user");
 
-            if (UserId == command.FriendId)
-                throw new InvalidOperationException("You can't add yourself");
+            if (relationship != null && (relationship == RelationshipTypes.Friend
+                    || relationship == RelationshipTypes.Pending))
+            {
+                throw new InvalidOperationException("You are already friends");
+            }
 
             relationship = new Relationship
             {
                 Active = UserId,
                 Passive = command.FriendId,
-                RelationshipType = RelationshipTypes.Pending
+                RelationshipType = RelationshipTypes.Pending,
+                PersonalChatId = relationship?.PersonalChatId
             };
 
-            await _relationshipRepository.AddAsync(relationship, cancellationToken);
+            if (isNull)
+                await _relationshipRepository.AddAsync(relationship, cancellationToken);
+            else
+                await _relationshipRepository.UpdateWithKeysAsync(relationship, cancellationToken);
 
             return relationship;
         }

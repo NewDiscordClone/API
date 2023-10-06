@@ -1,9 +1,9 @@
-using System.Security.Claims;
 using Sparkle.Application.Models;
+using System.Security.Claims;
 
 namespace Sparkle.Application.Common.Interfaces
 {
-    /// <summary>
+        /// <summary>
         /// Provides functionality to retrieve and manipulate information about an authorized user.
         /// </summary>
         public interface IAuthorizedUserProvider

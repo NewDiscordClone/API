@@ -30,7 +30,7 @@ namespace Sparkle.Application.Invitations.Queries.InvitationDetails
             {
                 Id = query.InvitationId,
                 Server = Mapper.Map<ServerLookupDto>(server),
-                User = user == null ? null : Mapper.Map<UserLookUp>(user),
+                User = user == null ? null : Mapper.Map<UserViewModel>(user),
                 ExpireTime = invitation.ExpireTime
             };
         }
