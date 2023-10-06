@@ -17,9 +17,10 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
                 .WithMessage(users => $"You cant create group chat with less than 2 people." +
                     $" You added {users.UserIds.Count} user");
 
+            int maxUsersCount = Constants.Chats.GroupChatMaxUsers - 1;
             RuleFor(x => x.UserIds)
-                .Must(u => u.Count <= 9)
-                .WithMessage(users => $"You cant create group chat with more than 9 people." +
+                .Must(u => u.Count <= maxUsersCount)
+                .WithMessage(users => $"You cant create group chat with more than {maxUsersCount} people." +
                     $" You added {users.UserIds.Count} users");
 
             RuleForEach(x => x.UserIds)
