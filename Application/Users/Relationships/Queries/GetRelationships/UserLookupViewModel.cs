@@ -20,7 +20,7 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
         /// <summary>
         /// Gets or sets the display name of the user.
         /// </summary>
-        public string? DisplayName { get; init; }
+        public string DisplayName { get; init; }
 
         /// <summary>
         /// Gets or sets the avatar URL of the user.
@@ -38,7 +38,9 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
         /// <param name="profile">The AutoMapper profile.</param>
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<User, UserLookupViewModel>();
+            profile.CreateMap<User, UserLookupViewModel>()
+                .ForMember(dest => dest.DisplayName, opt => opt
+                .MapFrom(src => src.DisplayName ?? src.UserName));
         }
     }
 }
