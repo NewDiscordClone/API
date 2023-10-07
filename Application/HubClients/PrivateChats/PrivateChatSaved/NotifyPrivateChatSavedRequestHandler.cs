@@ -46,7 +46,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
             switch (chat)
             {
                 case GroupChat gChat:
-                    lookUp = Mapper.Map<PrivateChatLookUp>(gChat);
+                    lookUp = Mapper.Map<GroupChatLookup>(gChat);
                     break;
                 case PersonalChat pChat:
                     User other = await Context.Users
@@ -54,7 +54,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
                         .Any(profile => profile.ChatId == chat.Id && user.Id != UserId),
                         cancellationToken: cancellationToken);
 
-                    lookUp = new PrivateChatLookUp(pChat, other);
+                    lookUp = Mapper.Map<PersonalChatLookup>((other, pChat));
                     break;
                 default:
                     throw new ArgumentException("the given chat is not an private chat");

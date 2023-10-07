@@ -23,7 +23,7 @@ namespace Sparkle.Identity.RequestHandlers
             string userName = user?.UserName ?? string.Empty;
 
             return await _signInManager
-                .PasswordSignInAsync(userName, request.Password, request.RememberMe, true);
+                .PasswordSignInAsync(userName, request.Password, true, true);
         }
     }
 }
