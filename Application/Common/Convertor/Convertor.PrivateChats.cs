@@ -16,16 +16,16 @@ namespace Sparkle.Application.Common.Convertor
             return ConvertAsync(chat).Result;
         }
 
-        public Task<PrivateChatLookUp> ConvertAsync(PersonalChat chat, CancellationToken cancellationToken = default)
+        public async Task<PrivateChatLookUp> ConvertAsync(PersonalChat chat, CancellationToken cancellationToken = default)
         {
             return chat switch
             {
-                GroupChat groupChat => GetDtoFromGroupChat(groupChat, cancellationToken),
-                PersonalChat personalChat => GetDtoFromPersonalChat(personalChat, cancellationToken)
+                GroupChat groupChat => await GetDtoFromGroupChat(groupChat, cancellationToken),
+                PersonalChat personalChat => await GetDtoFromPersonalChat(personalChat, cancellationToken)
             };
         }
 
-        private async Task<PrivateChatLookUp> GetDtoFromPersonalChat(PersonalChat chat, CancellationToken cancellationToken)
+        private async Task<PersonalChatLookup> GetDtoFromPersonalChat(PersonalChat chat, CancellationToken cancellationToken)
         {
             Guid otherUserId = await _context.UserProfiles
                 .Where(profile => profile.ChatId == chat.Id && profile.UserId != UserId)
@@ -37,12 +37,12 @@ namespace Sparkle.Application.Common.Convertor
                 cancellationToken: cancellationToken)
                 ?? throw new EntityNotFoundException(message: $"User {otherUserId} not found", otherUserId);
 
-            return new(chat, otherUser);
+            return _mapper.Map<(User User, PersonalChat Chat), PersonalChatLookup>((otherUser, chat));
         }
 
-        private async Task<PrivateChatLookUp> GetDtoFromGroupChat(GroupChat groupChat, CancellationToken cancellationToken)
+        private async Task<GroupChatLookup> GetDtoFromGroupChat(GroupChat groupChat, CancellationToken cancellationToken)
         {
-            PrivateChatLookUp lookUp = _mapper.Map<PrivateChatLookUp>(groupChat);
+            GroupChatLookup lookUp = _mapper.Map<GroupChatLookup>(groupChat);
 
             List<Guid> userIds = await _context.UserProfiles
                 .Where(profile => profile.ChatId == groupChat.Id)

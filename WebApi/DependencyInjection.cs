@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Sparkle.Application.Common.Convertors;
 using Sparkle.WebApi.Attributes;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -11,6 +12,9 @@ namespace Sparkle.WebApi
             services.AddControllers(options =>
             {
                 options.Filters.Add<ExceptionFilterAttribute>();
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new PrivateChatLookUpConverter());
             });
 
             services.AddSwagger();
