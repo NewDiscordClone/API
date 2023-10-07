@@ -52,8 +52,8 @@ namespace Sparkle.DataAccess
 
             if (typeof(TKey) == typeof(string) && id == null)
             {
-                id = ObjectId.GenerateNewId();
-                idProp.SetValue(entity, id.ToString());
+                id = ObjectId.GenerateNewId().ToString();
+                idProp.SetValue(entity, id);
             }
 
             await _collection.InsertOneAsync(entity, null, cancellationToken);
