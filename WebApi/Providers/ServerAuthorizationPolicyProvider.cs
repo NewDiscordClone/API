@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using Sparkle.Application.Common;
 using Sparkle.WebApi.Authorization;
-using Sparkle.WebApi.Authorization.Requirements;
 using System.Text.RegularExpressions;
 
 namespace WebApi.Providers
@@ -28,17 +27,17 @@ namespace WebApi.Providers
             if (!TryParsePolicyType(policyName, out ServerPolicies policyType))
                 return await FallbackPolicyProvider.GetPolicyAsync(policyName);
 
-            if (!TryParseProfileId(policyName, out string profileId))
-                throw new InvalidOperationException("No server id provided");
+            if (!TryParseProfileId(policyName, out Guid profileId))
+                throw new InvalidOperationException("No profile id provided");
 
             AuthorizationPolicyBuilder policy = new();
 
             switch (policyType)
             {
                 case ServerPolicies.SendMessages:
-                case ServerPolicies.ServerMember:
-                    policy.AddRequirements(new ServerMemberRequirement(profileId));
-                    return policy.Build();
+                //  case ServerPolicies.ServerMember:
+                //    policy.AddRequirements(new ServerMemberRequirement(profileId));
+                //   return policy.Build();
                 case ServerPolicies.ManageMessages:
                     policy.RequireRoleClaims(profileId, ServerClaims.ManageMessages);
                     return policy.Build();
@@ -48,7 +47,7 @@ namespace WebApi.Providers
                     return policy.Build();
                 case ServerPolicies.ManageServer:
                     policy.RequireRoleClaims(profileId,
-                        ServerClaims.ManageRoles);
+                        ServerClaims.ManageServer);
                     return policy.Build();
                 case ServerPolicies.ChangeName:
                     policy.RequireRoleClaims(profileId, ServerClaims.ChangeServerName);
@@ -64,9 +63,9 @@ namespace WebApi.Providers
             }
         }
 
-        private bool TryParseProfileId(string policyName, out string serverId)
+        private bool TryParseProfileId(string policyName, out Guid profileId)
         {
-            serverId = string.Empty;
+            profileId = default;
 
             if (string.IsNullOrEmpty(policyName))
             {
@@ -77,7 +76,7 @@ namespace WebApi.Providers
             Match match = serverIdRegex.Match(policyName);
             if (match.Success)
             {
-                serverId = match.Value;
+                profileId = Guid.Parse(match.Value);
                 return true;
             }
             return false;
@@ -90,7 +89,7 @@ namespace WebApi.Providers
                 policyType = default;
                 return false;
             }
-
+            //TODO: check is policy is server policy
             Regex policyNameRegex = GetPolicyNameRegex();
             string name = policyNameRegex.Match(policyName).Value;
             if (Enum.TryParse(name, true, out policyType))
@@ -103,7 +102,7 @@ namespace WebApi.Providers
         [GeneratedRegex("^\\w+")]
         private static partial Regex GetPolicyNameRegex();
 
-        [GeneratedRegex("(?<=profileId:)[a-fA-F0-9]+")]
+        [GeneratedRegex("(?<=profileId:)(?i)(?![{(]?[0]{8}[-]?(?:[0]{4}[-]?){3}[0]{12}[)}]?)(?>([0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12})|{[0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12}}|[0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12}|[0-9A-F]{32})")]
         private static partial Regex GetProfileIdRegex();
     }
     public enum ServerPolicies

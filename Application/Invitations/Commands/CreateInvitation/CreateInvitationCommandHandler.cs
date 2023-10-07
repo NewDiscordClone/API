@@ -20,7 +20,7 @@ namespace Sparkle.Application.Invitations.Commands.CreateInvitation
                 ExpireTime = command.ExpireTime,
                 UserId = command.IncludeUser ? UserId : null
             };
-            return (await Context.Invitations.AddAsync(invitation)).Id;
+            return (await Context.Invitations.AddAsync(invitation, cancellationToken)).Id;
         }
     }
 }

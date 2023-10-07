@@ -35,4 +35,9 @@ public class Role : IdentityRole<Guid>
     {
         Id = Guid.NewGuid();
     }
+
+    public override string ToString()
+    {
+        return Name;
+    }
 }

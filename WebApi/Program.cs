@@ -52,6 +52,7 @@ services.AddScoped<IHubContextProvider, HubContextProvider>();
 
 services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
 services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
+services.AddScoped<IAuthorizationHandler, ServerClaimsAuthorizationRequirementHandler>();
 services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
 services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
 

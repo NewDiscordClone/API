@@ -22,7 +22,7 @@ namespace Sparkle.WebApi.Authorization.Handlers
             RoleClaimsAuthorizationRequirement requirement)
         {
             UserProfile? profile = await _repository
-                .FindOrDefaultAsync(Guid.Parse(requirement.UserProfileId));
+                .FindOrDefaultAsync(requirement.UserProfileId, includeRoles: true);
 
             if (profile is null)
                 return;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Sparkle.Application.Common.RegularExpressions;
 using System.Security.Claims;
 
 namespace Sparkle.WebApi.Authorization
@@ -13,7 +12,7 @@ namespace Sparkle.WebApi.Authorization
 
         public override Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, string policyName)
         {
-            if (resource is string profileId && Regexes.ObjectIdRegex().IsMatch(profileId))
+            if (resource is Guid profileId)
             {
                 policyName += $"[profileId:{profileId}]";
             }
