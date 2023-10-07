@@ -12,9 +12,9 @@ namespace Sparkle.WebApi
             services.AddControllers(options =>
             {
                 options.Filters.Add<ExceptionFilterAttribute>();
-            }).AddNewtonsoftJson(options =>
+            }).AddJsonOptions(options =>
             {
-                options.SerializerSettings.Converters.Add(new PrivateChatLookUpConverter());
+                options.JsonSerializerOptions.Converters.Add(new PrivateChatLookUpConverter());
             });
 
             services.AddSwagger();
