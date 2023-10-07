@@ -130,7 +130,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedResult))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ForbidResult))]
-        [ServerAuthorize(Policy = Constants.Authorization.ManageServer)]
+        [ServerAuthorize(Policy = Constants.Policies.ManageServer)]
         public async Task<ActionResult> UpdateServer(string serverId, UpdateServerRequest request)
         {
             UpdateServerCommand command = _mapper.Map<UpdateServerCommand>((request, serverId));

@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Sparkle.Application.Common;
 using Sparkle.WebApi.Authorization;
 using System.Text.RegularExpressions;
+using static Sparkle.Application.Common.Constants.Constants;
 
 namespace WebApi.Providers
 {
     public partial class ServerAuthorizationPolicyProvider : IAuthorizationPolicyProvider
     {
+        private AuthorizationPolicyBuilder _policyBuilder;
+
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
 
         public ServerAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options)
@@ -22,45 +24,45 @@ namespace WebApi.Providers
             await FallbackPolicyProvider.GetFallbackPolicyAsync();
 
 
-        public async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
+        public async Task<AuthorizationPolicy?> GetPolicyAsync(string policy)
         {
-            if (!TryParsePolicyType(policyName, out ServerPolicies policyType))
+            if (!TryParsePolicyType(policy, out string policyName))
                 return await FallbackPolicyProvider.GetPolicyAsync(policyName);
 
-            if (!TryParseProfileId(policyName, out Guid profileId))
+            if (!TryParseProfileId(policy, out Guid profileId))
                 throw new InvalidOperationException("No profile id provided");
 
-            AuthorizationPolicyBuilder policy = new();
+            _policyBuilder = new();
 
-            switch (policyType)
+            switch (policyName)
             {
-                case ServerPolicies.SendMessages:
-                //  case ServerPolicies.ServerMember:
-                //    policy.AddRequirements(new ServerMemberRequirement(profileId));
-                //   return policy.Build();
-                case ServerPolicies.ManageMessages:
-                    policy.RequireRoleClaims(profileId, ServerClaims.ManageMessages);
-                    return policy.Build();
-                case ServerPolicies.MangeRoles:
-                    policy.RequireRoleClaims(profileId,
-                        ServerClaims.ManageRoles);
-                    return policy.Build();
-                case ServerPolicies.ManageServer:
-                    policy.RequireRoleClaims(profileId,
-                        ServerClaims.ManageServer);
-                    return policy.Build();
-                case ServerPolicies.ChangeName:
-                    policy.RequireRoleClaims(profileId, ServerClaims.ChangeServerName);
-                    return policy.Build();
-                case ServerPolicies.ChangeSomeoneName:
-                    policy.RequireRoleClaims(profileId, ServerClaims.ChangeSomeoneServerName);
-                    return policy.Build();
-                case ServerPolicies.RemoveMembers:
-                    policy.RequireRoleClaims(profileId, ServerClaims.RemoveMembers);
-                    return policy.Build();
+                case Policies.ManageMessages:
+                    return GetClaimPolicy(profileId, Claims.ManageMessages);
+                case Policies.SendMessages:
+                    // TODO: Добавьте логику для SendMessages, если необходимо
+                    break;
+                case Policies.ManageRoles:
+                    return GetClaimPolicy(profileId, Claims.ManageRoles);
+                case Policies.ManageServer:
+                    return GetClaimPolicy(profileId, Claims.ManageServer);
+                case Policies.ChangeName:
+                    return GetClaimPolicy(profileId, Claims.ChangeServerName);
+                case Policies.ChangeSomeoneName:
+                    return GetClaimPolicy(profileId, Claims.ChangeSomeoneServerName);
+                case Policies.RemoveMembers:
+                    return GetClaimPolicy(profileId, Claims.RemoveMembers);
                 default:
                     return await FallbackPolicyProvider.GetPolicyAsync(policyName);
             }
+
+
+        }
+
+        private AuthorizationPolicy GetClaimPolicy(Guid profileId,
+        params string[] claims)
+        {
+            _policyBuilder.RequireRoleClaims(profileId, claims);
+            return _policyBuilder.Build();
         }
 
         private bool TryParseProfileId(string policyName, out Guid profileId)
@@ -82,18 +84,19 @@ namespace WebApi.Providers
             return false;
         }
 
-        private static bool TryParsePolicyType(string policyName, out ServerPolicies policyType)
+        private static bool TryParsePolicyType(string policy, out string policyName)
         {
-            if (string.IsNullOrEmpty(policyName))
-            {
-                policyType = default;
+            policyName = string.Empty;
+
+            if (string.IsNullOrEmpty(policy))
                 return false;
-            }
-            //TODO: check is policy is server policy
+
             Regex policyNameRegex = GetPolicyNameRegex();
-            string name = policyNameRegex.Match(policyName).Value;
-            if (Enum.TryParse(name, true, out policyType))
+            string name = policyNameRegex.Match(policy).Value;
+
+            if (Policies.GetPolicies().Contains(name))
             {
+                policyName = name;
                 return true;
             }
             return false;
@@ -104,16 +107,5 @@ namespace WebApi.Providers
 
         [GeneratedRegex("(?<=profileId:)(?i)(?![{(]?[0]{8}[-]?(?:[0]{4}[-]?){3}[0]{12}[)}]?)(?>([0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12})|{[0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12}}|[0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12}|[0-9A-F]{32})")]
         private static partial Regex GetProfileIdRegex();
-    }
-    public enum ServerPolicies
-    {
-        SendMessages,
-        ServerMember,
-        ManageMessages,
-        MangeRoles,
-        ManageServer,
-        ChangeName,
-        ChangeSomeoneName,
-        RemoveMembers,
     }
 }
