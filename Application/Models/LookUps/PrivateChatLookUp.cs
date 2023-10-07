@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using Sparkle.Application.Common.Interfaces;
-
-namespace Sparkle.Application.Models.LookUps
+﻿namespace Sparkle.Application.Models.LookUps
 {
     public record PrivateChatLookUp : IMapWith<GroupChat>
     {
