@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using Sparkle.Application;
+using Sparkle.Application.Common.Convertors;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.DataAccess;
 using Sparkle.WebApi;
@@ -25,6 +26,9 @@ services.AddApplication();
 services.AddControllers(options =>
 {
     options.Filters.Add<ExceptionFilterAttribute>();
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new PrivateChatLookUpConverter());
 });
 
 services.AddDatabase(builder.Configuration);

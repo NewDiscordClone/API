@@ -1,44 +1,42 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Sparkle.Application.Models.LookUps;
+﻿using Sparkle.Application.Models.LookUps;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Sparkle.Application.Common.Convertors
 {
     public class PrivateChatLookUpConverter : JsonConverter<PrivateChatLookUp>
     {
-        public override PrivateChatLookUp? ReadJson(JsonReader reader, Type objectType, PrivateChatLookUp? existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override PrivateChatLookUp? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            JObject jObject = JObject.Load(reader);
+            using JsonDocument document = JsonDocument.ParseValue(ref reader);
+            JsonElement element = document.RootElement;
 
-            if (jObject["membersCount"] != null)
+            if (element.TryGetProperty("membersCount", out JsonElement typeElement))
             {
-                return jObject.ToObject<GroupChatLookup>(serializer);
+                int? type = typeElement.GetInt32();
+                return type switch
+                {
+                    null => JsonSerializer.Deserialize<PersonalChatLookup>(element.GetRawText(), options),
+                    int => JsonSerializer.Deserialize<GroupChatLookup>(element.GetRawText(), options),
+                };
             }
-            else
-            {
-                return jObject.ToObject<PersonalChatLookup>(serializer);
-            }
+
+            return null;
         }
 
-        public override void WriteJson(JsonWriter writer, PrivateChatLookUp? value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, PrivateChatLookUp value, JsonSerializerOptions options)
         {
-            JObject jObject;
             switch (value)
             {
+                case PersonalChatLookup privateChat:
+                    JsonSerializer.Serialize(writer, privateChat, options);
+                    break;
                 case GroupChatLookup groupChat:
-                    jObject = JObject.FromObject(groupChat, serializer);
-                    jObject.WriteTo(writer);
+                    JsonSerializer.Serialize(writer, groupChat, options);
                     break;
-
-                case PersonalChatLookup personalChat:
-                    jObject = JObject.FromObject(personalChat, serializer);
-                    jObject.WriteTo(writer);
-                    break;
-
                 default:
-                    throw new ArgumentException("the given value is not a private chat look up");
+                    throw new ArgumentOutOfRangeException(nameof(value));
             }
-
         }
     }
 }
