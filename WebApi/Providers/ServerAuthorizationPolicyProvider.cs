@@ -44,6 +44,7 @@ namespace WebApi.Providers
                 Policies.RemoveMembers => GetClaimsPolicy(profileId, Claims.RemoveMembers),
                 Policies.DeleteServer => GetRolesPolicy(profileId, Roles.ServerOwnerName),
                 Policies.CreateInvitation => GetClaimsPolicy(profileId, Claims.CreateInvitation), //TODO Добавить возможность проверить настройки сервера
+                Policies.ManageChannels => GetClaimsPolicy(profileId, Claims.ManageChannels),
                 _ => await FallbackPolicyProvider.GetPolicyAsync(policyName),
             };
         }
