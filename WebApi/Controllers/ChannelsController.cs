@@ -15,7 +15,7 @@ namespace Sparkle.WebApi.Controllers
 {
 
     [Route("api/servers/{serverId}/channels")]
-    [ServerAuthorize(Policy = Constants.Policies.ManageChannels)]
+    [ServerAuthorize(Claims = Constants.Claims.ManageChannels)]
     public class ChannelsController : ApiControllerBase
     {
         public ChannelsController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)

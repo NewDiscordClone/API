@@ -56,7 +56,7 @@ namespace Sparkle.WebApi.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ServerAuthorize(Policy = Constants.Policies.CreateInvitation)]
+        [ServerAuthorize(Claims = Constants.Claims.CreateInvitation)]
         public async Task<ActionResult<string>> Invite(string serverId, CreateInvitationRequest request)
         {
             CreateInvitationCommand command = Mapper.Map<CreateInvitationCommand>((serverId, request));

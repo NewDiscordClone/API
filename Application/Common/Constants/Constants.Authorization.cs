@@ -7,16 +7,8 @@ namespace Sparkle.Application.Common.Constants
         public static class Policies
         {
 #pragma warning disable IDE1006 // Naming Styles
-            public const string ManageMessages = "ManageMessages";
-            public const string ManageChannels = "ManageChannels";
-            public const string ManageRoles = "ManageRoles";
-            public const string ManageServer = "ManageServer";
-            public const string ChangeName = "ChangeServerName";
-            public const string ChangeSomeoneName = "ChangeSomeoneServerName";
-            public const string RemoveMembers = "RemoveMembers";
             public const string SendMessages = "SendMessages";
-            public const string DeleteServer = "DeleteServer";
-            public const string CreateInvitation = "CreateInvitation";
+            public const string ChangeProfileName = "ChangeProfileName";
 #pragma warning restore IDE1006 // Naming Styles
 
             public static string[] GetPolicies()
@@ -51,6 +43,9 @@ namespace Sparkle.Application.Common.Constants
             public const string ChangeSomeoneServerName = "ChangeSomeoneServerName";
             public const string RemoveMembers = "RemoveMembers";
             public const string CreateInvitation = "CreateInvitation";
+            public const string BanUsers = "BanUsers";
+            public const string KickUsers = "KickUsers";
+
 #pragma warning restore IDE1006 // Naming Styles
 
             public static string[] GetClaims()

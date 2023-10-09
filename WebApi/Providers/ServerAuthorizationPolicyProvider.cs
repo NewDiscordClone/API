@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 using Sparkle.Application.Common.RegularExpressions;
 using Sparkle.WebApi.Authorization;
+using Sparkle.WebApi.Authorization.Requirements;
 using System.Text.RegularExpressions;
 using static Sparkle.Application.Common.Constants.Constants;
 
@@ -131,19 +133,23 @@ namespace WebApi.Providers
 
         private async Task<AuthorizationPolicy?> GetDefaultPolicyAsync(string policyName, Guid profileId)
         {
-            return policyName switch
+            switch (policyName)
             {
-                Policies.ManageMessages => GetClaimsPolicy(profileId, Claims.ManageMessages),
-                Policies.SendMessages => throw new NotImplementedException(),// TODO: Добавьте логику для SendMessages, если необходимо
-                Policies.ManageRoles => GetClaimsPolicy(profileId, Claims.ManageRoles),
-                Policies.ManageServer => GetClaimsPolicy(profileId, Claims.ManageServer),
-                Policies.ChangeName => GetClaimsPolicy(profileId, Claims.ChangeServerName),
-                Policies.ChangeSomeoneName => GetClaimsPolicy(profileId, Claims.ChangeSomeoneServerName),
-                Policies.RemoveMembers => GetClaimsPolicy(profileId, Claims.RemoveMembers),
-                Policies.DeleteServer => GetRolesPolicy(profileId, Roles.ServerOwnerName),
-                Policies.CreateInvitation => GetClaimsPolicy(profileId, Claims.CreateInvitation), //TODO Добавить возможность проверить настройки сервера
-                Policies.ManageChannels => GetClaimsPolicy(profileId, Claims.ManageChannels),
-                _ => await FallbackPolicyProvider.GetPolicyAsync(policyName),
+                case Policies.SendMessages:
+                    throw new NotImplementedException();// TODO: Добавьте логику для SendMessages
+                case Policies.ChangeProfileName:
+                    // выполняться должно хотя бы одно из требований чтобы политика выполнилась
+                    RoleClaimsRequirement requirement1 = new(profileId,
+                        new List<string> { Claims.ChangeSomeoneServerName });
+                    _policyBuilder.RequireRoleClaims(profileId, Claims.ChangeSomeoneServerName);
+
+                    ProfileOwnerRequirement requirement2 = new();
+
+                    _policyBuilder.Requirements.Add(requirement1);
+                    _policyBuilder.Requirements.Add(requirement2);
+                    return _policyBuilder.Build();
+                default:
+                    return await FallbackPolicyProvider.GetPolicyAsync(policyName);
             };
         }
 

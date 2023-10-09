@@ -13,7 +13,7 @@ namespace Sparkle.WebApi.Authorization
         public static AuthorizationPolicyBuilder RequireRoleClaims
             (this AuthorizationPolicyBuilder builder, Guid profileId, IEnumerable<string> claimTypes)
         {
-            builder.Requirements.Add(new RoleClaimsAuthorizationRequirement(profileId, claimTypes));
+            builder.Requirements.Add(new RoleClaimsRequirement(profileId, claimTypes));
             return builder;
         }
 

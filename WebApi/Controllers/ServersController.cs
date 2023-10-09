@@ -130,7 +130,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedResult))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ForbidResult))]
-        [ServerAuthorize(Policy = Constants.Policies.ManageServer)]
+        [ServerAuthorize(Claims = Constants.Claims.ManageServer)]
         public async Task<ActionResult> UpdateServer(string serverId, UpdateServerRequest request)
         {
             UpdateServerCommand command = _mapper.Map<UpdateServerCommand>((request, serverId));
@@ -158,7 +158,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ServerAuthorize(Policy = Constants.Policies.DeleteServer)]
+        [ServerAuthorize(Roles = Constants.Roles.ServerOwnerName)]
         public async Task<ActionResult> DeleteServer(string serverId)
         {
             DeleteServerCommand command = new() { ServerId = serverId };

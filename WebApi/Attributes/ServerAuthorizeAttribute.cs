@@ -50,11 +50,6 @@ namespace Sparkle.WebApi.Attributes
                 return;
             }
 
-            //if (string.IsNullOrEmpty(Policy) && (context.HttpContext.User.Identity?.IsAuthenticated ?? false))
-            //{
-            //    await next();
-            //    return;
-            //}
             string authParams = "";
 
             if (!string.IsNullOrEmpty(Claims))
@@ -110,7 +105,7 @@ namespace Sparkle.WebApi.Attributes
             IUserProfileRepository repository = context.HttpContext.RequestServices.GetService<IUserProfileRepository>()
                 ?? throw new InvalidOperationException();
 
-            UserProfile? profile = await repository.FindByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
+            UserProfile? profile = await repository.FindOrDefaultByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
             return profile;
         }
     }
