@@ -2,10 +2,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Invitations.Commands.CreateInvitation;
 using Sparkle.Application.Invitations.Queries.InvitationDetails;
 using Sparkle.Contracts.Invitations;
+using Sparkle.WebApi.Attributes;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -50,11 +52,11 @@ namespace Sparkle.WebApi.Controllers
         /// <returns>Invitation details in JSON</returns>
         /// <response code="201">Created. InvitationLink</response>
         /// <response code="401">Unauthorized. The client must be authorized to send this request</response>
-        //TODO: Перевірити чи користувач має відповідні права
         [HttpPost("servers/{serverId}/invitations/create")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ServerAuthorize(Policy = Constants.Policies.CreateInvitation)]
         public async Task<ActionResult<string>> Invite(string serverId, CreateInvitationRequest request)
         {
             CreateInvitationCommand command = Mapper.Map<CreateInvitationCommand>((serverId, request));

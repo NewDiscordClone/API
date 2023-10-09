@@ -33,35 +33,31 @@ namespace WebApi.Providers
 
             _policyBuilder = new();
 
-            switch (policyName)
+            return policyName switch
             {
-                case Policies.ManageMessages:
-                    return GetClaimPolicy(profileId, Claims.ManageMessages);
-                case Policies.SendMessages:
-                    // TODO: Добавьте логику для SendMessages, если необходимо
-                    throw new NotImplementedException();
-                case Policies.ManageRoles:
-                    return GetClaimPolicy(profileId, Claims.ManageRoles);
-                case Policies.ManageServer:
-                    return GetClaimPolicy(profileId, Claims.ManageServer);
-                case Policies.ChangeName:
-                    return GetClaimPolicy(profileId, Claims.ChangeServerName);
-                case Policies.ChangeSomeoneName:
-                    return GetClaimPolicy(profileId, Claims.ChangeSomeoneServerName);
-                case Policies.RemoveMembers:
-                    return GetClaimPolicy(profileId, Claims.RemoveMembers);
-                case Policies.DeleteServer:
-                    _policyBuilder.RequireProfileRole(profileId, Roles.ServerOwnerName);
-                    return _policyBuilder.Build();
-                default:
-                    return await FallbackPolicyProvider.GetPolicyAsync(policyName);
-            }
+                Policies.ManageMessages => GetClaimsPolicy(profileId, Claims.ManageMessages),
+                Policies.SendMessages => throw new NotImplementedException(),// TODO: Добавьте логику для SendMessages, если необходимо
+                Policies.ManageRoles => GetClaimsPolicy(profileId, Claims.ManageRoles),
+                Policies.ManageServer => GetClaimsPolicy(profileId, Claims.ManageServer),
+                Policies.ChangeName => GetClaimsPolicy(profileId, Claims.ChangeServerName),
+                Policies.ChangeSomeoneName => GetClaimsPolicy(profileId, Claims.ChangeSomeoneServerName),
+                Policies.RemoveMembers => GetClaimsPolicy(profileId, Claims.RemoveMembers),
+                Policies.DeleteServer => GetRolesPolicy(profileId, Roles.ServerOwnerName),
+                Policies.CreateInvitation => GetClaimsPolicy(profileId, Claims.CreateInvitation), //TODO Добавить возможность проверить настройки сервера
+                _ => await FallbackPolicyProvider.GetPolicyAsync(policyName),
+            };
         }
 
-        private AuthorizationPolicy GetClaimPolicy(Guid profileId,
+        private AuthorizationPolicy GetClaimsPolicy(Guid profileId,
         params string[] claims)
         {
             _policyBuilder.RequireRoleClaims(profileId, claims);
+            return _policyBuilder.Build();
+        }
+        private AuthorizationPolicy GetRolesPolicy(Guid profileId,
+        params string[] roles)
+        {
+            _policyBuilder.RequireProfileRole(profileId, roles);
             return _policyBuilder.Build();
         }
 

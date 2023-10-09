@@ -16,6 +16,7 @@ namespace Sparkle.Application.Common.Constants
             public const string RemoveMembers = "RemoveMembers";
             public const string SendMessages = "SendMessages";
             public const string DeleteServer = "DeleteServer";
+            public const string CreateInvitation = "CreateInvitation";
 #pragma warning restore IDE1006 // Naming Styles
 
             public static string[] GetPolicies()
@@ -49,6 +50,7 @@ namespace Sparkle.Application.Common.Constants
             public const string ChangeServerName = "ChangeServerName";
             public const string ChangeSomeoneServerName = "ChangeSomeoneServerName";
             public const string RemoveMembers = "RemoveMembers";
+            public const string CreateInvitation = "CreateInvitation";
 #pragma warning restore IDE1006 // Naming Styles
 
             public static string[] GetClaims()
