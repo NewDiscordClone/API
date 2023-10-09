@@ -16,5 +16,17 @@ namespace Sparkle.WebApi.Authorization
             builder.Requirements.Add(new RoleClaimsAuthorizationRequirement(profileId, claimTypes));
             return builder;
         }
+
+        public static AuthorizationPolicyBuilder RequireProfileRole(this AuthorizationPolicyBuilder builder,
+            Guid profileId, IEnumerable<string> roles)
+        {
+            builder.Requirements.Add(new ProfileRoleRequirement(profileId, roles.ToArray()));
+            return builder;
+        }
+        public static AuthorizationPolicyBuilder RequireProfileRole(this AuthorizationPolicyBuilder builder,
+            Guid profileId, params string[] roles)
+        {
+            return builder.RequireProfileRole(profileId, (IEnumerable<string>)roles);
+        }
     }
 }

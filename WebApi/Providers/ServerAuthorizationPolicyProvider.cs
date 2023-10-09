@@ -9,7 +9,6 @@ namespace WebApi.Providers
     public partial class ServerAuthorizationPolicyProvider : IAuthorizationPolicyProvider
     {
         private AuthorizationPolicyBuilder _policyBuilder;
-
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
 
         public ServerAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options)
@@ -40,7 +39,7 @@ namespace WebApi.Providers
                     return GetClaimPolicy(profileId, Claims.ManageMessages);
                 case Policies.SendMessages:
                     // TODO: Добавьте логику для SendMessages, если необходимо
-                    break;
+                    throw new NotImplementedException();
                 case Policies.ManageRoles:
                     return GetClaimPolicy(profileId, Claims.ManageRoles);
                 case Policies.ManageServer:
@@ -51,11 +50,12 @@ namespace WebApi.Providers
                     return GetClaimPolicy(profileId, Claims.ChangeSomeoneServerName);
                 case Policies.RemoveMembers:
                     return GetClaimPolicy(profileId, Claims.RemoveMembers);
+                case Policies.DeleteServer:
+                    _policyBuilder.RequireProfileRole(profileId, Roles.ServerOwnerName);
+                    return _policyBuilder.Build();
                 default:
                     return await FallbackPolicyProvider.GetPolicyAsync(policyName);
             }
-
-
         }
 
         private AuthorizationPolicy GetClaimPolicy(Guid profileId,

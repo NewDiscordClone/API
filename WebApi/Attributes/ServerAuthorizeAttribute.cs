@@ -45,7 +45,7 @@ namespace Sparkle.WebApi.Attributes
 
             if (profile is null)
             {
-                context.Result = new NotFoundResult();
+                context.Result = new ForbidResult();
                 return;
             }
 
