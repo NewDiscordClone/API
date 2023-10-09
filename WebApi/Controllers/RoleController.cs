@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Servers.Roles.Commands.ChangeColor;
@@ -14,6 +15,7 @@ using Sparkle.Application.Servers.Roles.Commands.UpdateClaims;
 using Sparkle.Application.Servers.Roles.Queries.RoleDetails;
 using Sparkle.Application.Servers.Roles.Queries.ServerRolesList;
 using Sparkle.Contracts.Roles;
+using Sparkle.WebApi.Attributes;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -35,6 +37,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize]
         public async Task<ActionResult> GetRoles(string serverId)
         {
             List<Role> roles = await Mediator.Send(new ServerRolesListQuery { ServerId = serverId });
@@ -62,6 +65,7 @@ namespace Sparkle.WebApi.Controllers
         /// <param name="serverId">Id of the server to create the role</param>
         /// <param name="request">Role details</param>
         [HttpPost]
+        [ServerAuthorize(Policy = Constants.Policies.ManageRoles)]
         public async Task<ActionResult> CreateRole(string serverId, CreateRoleRequest request)
         {
             CreateRoleCommand command = Mapper.Map<CreateRoleCommand>((serverId, request));
@@ -81,6 +85,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Policy = Constants.Policies.ManageRoles)]
         public async Task<ActionResult> DeleteRole(Guid roleId)
         {
             await Mediator.Send(new DeleteRoleCommand { RoleId = roleId });
@@ -95,6 +100,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="204">Operation is successful.</response>
         /// <response code="404">Not Found. The role is not found</response>
         [HttpPut("{roleId}")]
+        [ServerAuthorize(Policy = Constants.Policies.ManageRoles)]
         public async Task<ActionResult> UpdateRole(Guid roleId, UpdateRoleRequest request)
         {
             UpdateRoleCommand command = Mapper.Map<UpdateRoleCommand>((roleId, request));
@@ -112,6 +118,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="400">Bad Request. Invalid input data.</response>
         /// <response code="404">Not Found. The role is not found.</response>
         [HttpPatch("{roleId}/name")]
+        [ServerAuthorize(Policy = Constants.Policies.ManageRoles)]
         public async Task<ActionResult> UpdateRoleName(Guid roleId, string name)
         {
             await Mediator.Send(new ChangeRoleNameCommand { RoleId = roleId, Name = name });
@@ -128,6 +135,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="400">Bad Request. Invalid input data.</response>
         /// <response code="404">Not Found. The role is not found.</response>
         [HttpPatch("{roleId}/color")]
+        [ServerAuthorize(Policy = Constants.Policies.ManageRoles)]
         public async Task<ActionResult> UpdateRoleColor(Guid roleId, string color)
         {
             await Mediator.Send(new ChangeRoleColorCommand { RoleId = roleId, Color = color });
@@ -144,6 +152,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="400">Bad Request. Invalid input data.</response>
         /// <response code="404">Not Found. The role is not found.</response>
         [HttpPatch("{roleId}/priority")]
+        [ServerAuthorize(Policy = Constants.Policies.ManageRoles)]
         public async Task<ActionResult> UpdateRolePriority(Guid roleId, int priority)
         {
             await Mediator.Send(new ChangeRolePriorityCommand { RoleId = roleId });
@@ -157,6 +166,7 @@ namespace Sparkle.WebApi.Controllers
         /// <param name="claims">New set of claims</param>
         /// <returns></returns>
         [HttpPatch("{roleId}/claims")]
+        [ServerAuthorize(Policy = Constants.Policies.ManageRoles)]
         public async Task<ActionResult> UpdateRoleClaims(Guid roleId, List<ClaimRequest> claims)
         {
             List<IdentityRoleClaim<Guid>> identityClaims = claims
