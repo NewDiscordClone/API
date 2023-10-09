@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Sparkle.Application.Common.RegularExpressions;
 using Sparkle.WebApi.Authorization;
 using System.Text.RegularExpressions;
 using static Sparkle.Application.Common.Constants.Constants;
 
 namespace WebApi.Providers
 {
-    public partial class ServerAuthorizationPolicyProvider : IAuthorizationPolicyProvider
+    public class ServerAuthorizationPolicyProvider : IAuthorizationPolicyProvider
     {
         private AuthorizationPolicyBuilder _policyBuilder;
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
@@ -25,14 +26,111 @@ namespace WebApi.Providers
 
         public async Task<AuthorizationPolicy?> GetPolicyAsync(string policy)
         {
-            if (!TryParsePolicyType(policy, out string policyName))
-                return await FallbackPolicyProvider.GetPolicyAsync(policyName);
-
             if (!TryParseProfileId(policy, out Guid profileId))
                 throw new InvalidOperationException("No profile id provided");
-
             _policyBuilder = new();
 
+            if (TryParsePolicyName(policy, out string policyName))
+                return await GetDefaultPolicyAsync(policyName, profileId);
+
+            if (TryParseRoles(policy, out string[] roles))
+            {
+                _policyBuilder.RequireProfileRole(profileId, roles);
+            }
+
+            if (TryParseClaims(policy, out string[] claims))
+            {
+                _policyBuilder.RequireRoleClaims(profileId, claims);
+            }
+
+            return _policyBuilder.Build();
+
+        }
+
+        private static bool TryParseClaims(string policy, out string[] claims)
+        {
+            claims = Array.Empty<string>();
+
+            if (string.IsNullOrEmpty(policy))
+            {
+                return false;
+            }
+
+            Regex claimsRegex = Regexes.Authorization.ClaimsRegex;
+            Match match = claimsRegex.Match(policy);
+            if (match.Success)
+            {
+                claims = match.Groups[1].Value.Split(',');
+                return true;
+            }
+
+            if (claims.Any(claim => !Claims.GetClaims().Contains(claim)))
+                throw new InvalidOperationException("Invalid claim");
+
+            return false;
+        }
+
+        private static bool TryParseRoles(string policy, out string[] roles)
+        {
+            roles = Array.Empty<string>();
+
+            if (string.IsNullOrEmpty(policy))
+            {
+                return false;
+            }
+
+            Regex rolesRegex = Regexes.Authorization.RolesRegex;
+            Match match = rolesRegex.Match(policy);
+            if (match.Success)
+            {
+                roles = match.Groups[1].Value.Split(',');
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool TryParsePolicyName(string policy, out string policyName)
+        {
+            policyName = string.Empty;
+
+            if (string.IsNullOrEmpty(policy))
+            {
+                return false;
+            }
+
+            Regex policyNameRegex = Regexes.Authorization.PolicyRegex;
+            Match match = policyNameRegex.Match(policy);
+            if (match.Success)
+            {
+                policyName = match.Groups[1].Value;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool TryParseProfileId(string policyName, out Guid profileId)
+        {
+            profileId = default;
+
+            if (string.IsNullOrEmpty(policyName))
+            {
+                return false;
+            }
+
+            Regex serverIdRegex = Regexes.Authorization.ProfileIdRegex;
+            Match match = serverIdRegex.Match(policyName);
+            if (match.Success)
+            {
+                profileId = Guid.Parse(match.Value);
+                return true;
+            }
+            return false;
+        }
+
+        private async Task<AuthorizationPolicy?> GetDefaultPolicyAsync(string policyName, Guid profileId)
+        {
             return policyName switch
             {
                 Policies.ManageMessages => GetClaimsPolicy(profileId, Claims.ManageMessages),
@@ -61,48 +159,5 @@ namespace WebApi.Providers
             _policyBuilder.RequireProfileRole(profileId, roles);
             return _policyBuilder.Build();
         }
-
-        private bool TryParseProfileId(string policyName, out Guid profileId)
-        {
-            profileId = default;
-
-            if (string.IsNullOrEmpty(policyName))
-            {
-                return false;
-            }
-
-            Regex serverIdRegex = GetProfileIdRegex();
-            Match match = serverIdRegex.Match(policyName);
-            if (match.Success)
-            {
-                profileId = Guid.Parse(match.Value);
-                return true;
-            }
-            return false;
-        }
-
-        private static bool TryParsePolicyType(string policy, out string policyName)
-        {
-            policyName = string.Empty;
-
-            if (string.IsNullOrEmpty(policy))
-                return false;
-
-            Regex policyNameRegex = GetPolicyNameRegex();
-            string name = policyNameRegex.Match(policy).Value;
-
-            if (Policies.GetPolicies().Contains(name))
-            {
-                policyName = name;
-                return true;
-            }
-            return false;
-        }
-
-        [GeneratedRegex("^\\w+")]
-        private static partial Regex GetPolicyNameRegex();
-
-        [GeneratedRegex("(?<=profileId:)(?i)(?![{(]?[0]{8}[-]?(?:[0]{4}[-]?){3}[0]{12}[)}]?)(?>([0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12})|{[0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12}}|[0-9A-F]{8}-(?:[0-9A-F]{4}-){3}[0-9A-F]{12}|[0-9A-F]{32})")]
-        private static partial Regex GetProfileIdRegex();
     }
 }

@@ -10,7 +10,8 @@ namespace Sparkle.WebApi.Attributes
     public partial class ServerAuthorizeAttribute : ActionFilterAttribute
     {
         public string? Policy { get; set; }
-
+        public string? Roles { get; set; }
+        public string? Claims { get; set; }
 
         private static string GetServerId(ActionExecutingContext context)
         {
@@ -49,13 +50,35 @@ namespace Sparkle.WebApi.Attributes
                 return;
             }
 
-            if (Policy is null)
+            //if (string.IsNullOrEmpty(Policy) && (context.HttpContext.User.Identity?.IsAuthenticated ?? false))
+            //{
+            //    await next();
+            //    return;
+            //}
+            string authParams = "";
+
+            if (!string.IsNullOrEmpty(Claims))
             {
-                throw new Exception();
+                authParams += $"Claims:{Claims}|";
+            }
+            if (!string.IsNullOrEmpty(Roles))
+            {
+                authParams += $"Roles:{Roles}|";
+            }
+            if (!string.IsNullOrEmpty(Policy))
+            {
+                authParams += $"Policy:{Policy}|";
             }
 
+            if (string.IsNullOrEmpty(authParams) && (context.HttpContext.User.Identity?.IsAuthenticated ?? false))
+            {
+                await next();
+                return;
+            }
+
+            authParams += $"[profileId:{profile.Id}]";
             AuthorizationResult result = await authorizationService
-                .AuthorizeAsync(context.HttpContext.User, profile.Id, Policy);
+                .AuthorizeAsync(context.HttpContext.User, profile.Id, authParams);
 
             if (result.Succeeded)
             {
