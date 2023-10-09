@@ -15,6 +15,7 @@ namespace Sparkle.Application.Common.Constants
             public const string ChangeSomeoneName = "ChangeSomeoneServerName";
             public const string RemoveMembers = "RemoveMembers";
             public const string SendMessages = "SendMessages";
+            public const string DeleteServer = "DeleteServer";
 #pragma warning restore IDE1006 // Naming Styles
 
             public static string[] GetPolicies()

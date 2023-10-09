@@ -158,7 +158,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        // [ServerAuthorize(Policy = ServerClaims.ManageServer)]
+        [ServerAuthorize(Policy = Constants.Policies.DeleteServer)]
         public async Task<ActionResult> DeleteServer(string serverId)
         {
             DeleteServerCommand command = new() { ServerId = serverId };

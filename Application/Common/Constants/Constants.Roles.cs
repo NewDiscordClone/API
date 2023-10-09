@@ -31,6 +31,15 @@
                 ServerMemberId
             };
 
+            public static readonly string[] DefaultRoleNames = new string[]
+            {
+                GroupChatOwnerName,
+                GroupChatMemberName,
+                PrivateChatMemberName,
+                ServerOwnerName,
+                ServerMemberName
+            };
+
 #pragma warning restore IDE1006 // Naming Styles
 
         }

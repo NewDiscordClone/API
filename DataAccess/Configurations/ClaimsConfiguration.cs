@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Sparkle.Application.Common;
-using Sparkle.Application.Common.Constants;
+using static Sparkle.Application.Common.Constants.Constants;
 
 namespace Sparkle.DataAccess.Configurations
 {
@@ -18,29 +17,29 @@ namespace Sparkle.DataAccess.Configurations
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.PrivateChatMemberId,
-                    ClaimType = ServerClaims.ManageRoles,
+                    RoleId = Roles.PrivateChatMemberId,
+                    ClaimType = Claims.ManageRoles,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.PrivateChatMemberId,
-                    ClaimType = ServerClaims.ManageServer,
+                    RoleId = Roles.PrivateChatMemberId,
+                    ClaimType = Claims.ManageServer,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.PrivateChatMemberId,
-                    ClaimType = ServerClaims.ManageMessages,
+                    RoleId = Roles.PrivateChatMemberId,
+                    ClaimType = Claims.ManageMessages,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.PrivateChatMemberId,
-                    ClaimType = ServerClaims.ManageChannels,
+                    RoleId = Roles.PrivateChatMemberId,
+                    ClaimType = Claims.ManageChannels,
                     ClaimValue = "true"
                 },
 
@@ -48,29 +47,29 @@ namespace Sparkle.DataAccess.Configurations
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.GroupChatMemberId,
-                    ClaimType = ServerClaims.ManageRoles,
+                    RoleId = Roles.GroupChatMemberId,
+                    ClaimType = Claims.ManageRoles,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.GroupChatMemberId,
-                    ClaimType = ServerClaims.ManageServer,
+                    RoleId = Roles.GroupChatMemberId,
+                    ClaimType = Claims.ManageServer,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.GroupChatMemberId,
-                    ClaimType = ServerClaims.ManageMessages,
+                    RoleId = Roles.GroupChatMemberId,
+                    ClaimType = Claims.ManageMessages,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.GroupChatMemberId,
-                    ClaimType = ServerClaims.ManageChannels,
+                    RoleId = Roles.GroupChatMemberId,
+                    ClaimType = Claims.ManageChannels,
                     ClaimValue = "true"
                 },
 
@@ -78,8 +77,8 @@ namespace Sparkle.DataAccess.Configurations
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.GroupChatOwnerId,
-                    ClaimType = ServerClaims.ManageMessages,
+                    RoleId = Roles.GroupChatOwnerId,
+                    ClaimType = Claims.ManageMessages,
                     ClaimValue = "true"
                 },
 
@@ -87,8 +86,8 @@ namespace Sparkle.DataAccess.Configurations
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.ServerMemberId,
-                    ClaimType = ServerClaims.ChangeServerName,
+                    RoleId = Roles.ServerMemberId,
+                    ClaimType = Claims.ChangeServerName,
                     ClaimValue = "true"
                 },
 
@@ -96,29 +95,29 @@ namespace Sparkle.DataAccess.Configurations
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.ServerOwnerId,
-                    ClaimType = ServerClaims.ChangeServerName,
+                    RoleId = Roles.ServerOwnerId,
+                    ClaimType = Claims.ChangeServerName,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.ServerOwnerId,
-                    ClaimType = ServerClaims.ManageServer,
+                    RoleId = Roles.ServerOwnerId,
+                    ClaimType = Claims.ManageServer,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.ServerOwnerId,
-                    ClaimType = ServerClaims.ManageRoles,
+                    RoleId = Roles.ServerOwnerId,
+                    ClaimType = Claims.ManageRoles,
                     ClaimValue = "true"
                 },
                 new IdentityRoleClaim<Guid>
                 {
                     Id = id++,
-                    RoleId = Constants.Roles.ServerOwnerId,
-                    ClaimType = ServerClaims.ManageChannels,
+                    RoleId = Roles.ServerOwnerId,
+                    ClaimType = Claims.ManageChannels,
                     ClaimValue = "true"
                 },
             };

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Sparkle.Application.Common;
+using Sparkle.Application.Common.Constants;
 
 namespace Sparkle.Application.Servers.Roles.Queries.GetClaims
 {
@@ -8,7 +8,7 @@ namespace Sparkle.Application.Servers.Roles.Queries.GetClaims
         public async Task<IEnumerable<string>> Handle(GetClaimsQuery request, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
-            return ServerClaims.GetClaims();
+            return Constants.Claims.GetClaims();
         }
     }
 }

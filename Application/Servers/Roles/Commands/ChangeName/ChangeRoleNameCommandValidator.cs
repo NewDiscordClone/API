@@ -9,9 +9,10 @@ namespace Sparkle.Application.Servers.Roles.Commands.ChangeName
     {
         public ChangeRoleNameCommandValidator()
         {
-            RuleFor(c => c.RoleId).NotDefaultRole();
+            RuleFor(c => c.RoleId).NotDefaultRoleId();
 
-            RuleFor(c => c.Name).RequiredMaximumLength(Constants.ServerProfile.RoleNameMaxLength);
+            RuleFor(c => c.Name).RequiredMaximumLength(Constants.ServerProfile.RoleNameMaxLength)
+                .NotDefaultRoleName();
         }
     }
 }
