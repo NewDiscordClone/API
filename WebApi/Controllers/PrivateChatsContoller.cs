@@ -40,7 +40,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
 
-        public async Task<ActionResult> GetAllPrivateChats()
+        public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
             PrivateChatsQuery query = new();
             List<PrivateChatLookUp> list = await Mediator.Send(query);
@@ -61,7 +61,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<GroupChat>> GetGroupChatById(string chatId)
+        public async Task<ActionResult<PrivateChatViewModel>> GetGroupChatById(string chatId)
         {
             PrivateChatViewModel chat = await Mediator
                 .Send(new PrivateChatDetailsQuery() { ChatId = chatId });
@@ -81,7 +81,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<GroupChat>> GetPersonalChat(Guid userId)
+        public async Task<ActionResult<PrivateChatViewModel>> GetPersonalChat(Guid userId)
         {
             PrivateChatViewModel chat = await Mediator
                 .Send(new GetPersonalChatByUserIdQuery() { UserId = userId });
