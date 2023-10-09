@@ -25,7 +25,7 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
         /// <summary>
         /// Gets or sets the avatar URL of the user.
         /// </summary>
-        public string? AvatarUrl { get; init; }
+        public string? Avatar { get; init; }
 
         /// <summary>
         /// Gets or sets the status of the user.

@@ -92,12 +92,12 @@ namespace Sparkle.Application.Common.Convertor
 
             if (string.IsNullOrEmpty(viewModel.Title))
             {
-                List<string> userNames = viewModel.Profiles
+                List<Guid> userIds = viewModel.Profiles
                     .Where(profile => profile.UserId != UserId)
-                    .Select(profile => profile.Name)
+                    .Select(profile => profile.UserId)
                     .ToList();
 
-                viewModel.Title = string.Join(", ", userNames);
+                viewModel.Title = await FillChatTitleAsync(userIds, cancellationToken);
             }
 
             if (chat is GroupChat groupChat)
