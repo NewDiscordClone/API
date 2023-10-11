@@ -2,12 +2,12 @@
 
 namespace Sparkle.WebApi.Authorization.Requirements
 {
-    public record RoleClaimsAuthorizationRequirement : IAuthorizationRequirement
+    public record RoleClaimsRequirement : IAuthorizationRequirement
     {
-        public string UserProfileId { get; init; }
+        public Guid UserProfileId { get; init; }
         public IEnumerable<string> ClaimTypes { get; init; }
 
-        public RoleClaimsAuthorizationRequirement(string userProfileId, IEnumerable<string> claimTypes)
+        public RoleClaimsRequirement(Guid userProfileId, IEnumerable<string> claimTypes)
         {
             UserProfileId = userProfileId;
             ClaimTypes = claimTypes;

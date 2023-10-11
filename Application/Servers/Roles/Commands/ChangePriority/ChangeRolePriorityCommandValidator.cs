@@ -7,7 +7,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.ChangePriority
     {
         public ChangeRolePriorityCommandValidator()
         {
-            RuleFor(c => c.RoleId).NotDefaultRole();
+            RuleFor(c => c.RoleId).NotDefaultRoleId();
 
             RuleFor(c => c.Priority).NotNull().GreaterThan(0).LessThan(100);
         }

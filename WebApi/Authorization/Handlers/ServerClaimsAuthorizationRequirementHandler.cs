@@ -7,22 +7,22 @@ using Sparkle.WebApi.Authorization.Requirements;
 namespace Sparkle.WebApi.Authorization.Handlers
 {
     public class ServerClaimsAuthorizationRequirementHandler :
-        AuthorizationHandler<RoleClaimsAuthorizationRequirement>
+        AuthorizationHandler<RoleClaimsRequirement>
     {
         private readonly IAuthorizedUserProvider _userProvider;
-        private readonly IUserProfileRepository _repository;
+        private readonly Application.Common.Interfaces.Repositories.IUserProfileRepository _repository;
 
-        public ServerClaimsAuthorizationRequirementHandler(IAuthorizedUserProvider userProvider, IUserProfileRepository repository)
+        public ServerClaimsAuthorizationRequirementHandler(IAuthorizedUserProvider userProvider, Application.Common.Interfaces.Repositories.IUserProfileRepository repository)
         {
             _userProvider = userProvider;
             _repository = repository;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
-            RoleClaimsAuthorizationRequirement requirement)
+            RoleClaimsRequirement requirement)
         {
             UserProfile? profile = await _repository
-                .FindOrDefaultAsync(Guid.Parse(requirement.UserProfileId));
+                .FindOrDefaultAsync(requirement.UserProfileId, includeRoles: true);
 
             if (profile is null)
                 return;

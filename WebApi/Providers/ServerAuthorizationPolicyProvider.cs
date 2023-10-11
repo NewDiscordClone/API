@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using Sparkle.Application.Common;
 using Sparkle.WebApi.Authorization;
-using Sparkle.WebApi.Authorization.Requirements;
-using System.Text.RegularExpressions;
+using Sparkle.WebApi.Common.Parsers;
+using static Sparkle.Application.Common.Constants.Constants;
 
 namespace WebApi.Providers
 {
-    public partial class ServerAuthorizationPolicyProvider : IAuthorizationPolicyProvider
+    public class ServerAuthorizationPolicyProvider : IAuthorizationPolicyProvider
     {
+        private AuthorizationPolicyBuilder _policyBuilder;
+        private IAuthorizationParser _parser;
         public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
 
-        public ServerAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options)
+        public ServerAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options, IAuthorizationParser parser)
         {
             FallbackPolicyProvider = new(options);
+            _parser = parser;
         }
 
         public async Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
@@ -23,98 +25,38 @@ namespace WebApi.Providers
             await FallbackPolicyProvider.GetFallbackPolicyAsync();
 
 
-        public async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
+        public async Task<AuthorizationPolicy?> GetPolicyAsync(string policy)
         {
-            if (!TryParsePolicyType(policyName, out ServerPolicies policyType))
-                return await FallbackPolicyProvider.GetPolicyAsync(policyName);
+            if (!_parser.TryParseProfileId(policy, out Guid profileId))
+                throw new InvalidOperationException("No profile id provided");
+            _policyBuilder = new();
 
-            if (!TryParseProfileId(policyName, out string profileId))
-                throw new InvalidOperationException("No server id provided");
+            if (_parser.TryParseName(policy, out string policyName))
+                return await GetDefaultPolicyAsync(policyName, profileId);
 
-            AuthorizationPolicyBuilder policy = new();
-
-            switch (policyType)
+            if (_parser.TryParseRoles(policy, out string[] roles))
             {
-                case ServerPolicies.SendMessages:
-                case ServerPolicies.ServerMember:
-                    policy.AddRequirements(new ServerMemberRequirement(profileId));
-                    return policy.Build();
-                case ServerPolicies.ManageMessages:
-                    policy.RequireRoleClaims(profileId, ServerClaims.ManageMessages);
-                    return policy.Build();
-                case ServerPolicies.MangeRoles:
-                    policy.RequireRoleClaims(profileId,
-                        ServerClaims.ManageRoles);
-                    return policy.Build();
-                case ServerPolicies.ManageServer:
-                    policy.RequireRoleClaims(profileId,
-                        ServerClaims.ManageRoles);
-                    return policy.Build();
-                case ServerPolicies.ChangeName:
-                    policy.RequireRoleClaims(profileId, ServerClaims.ChangeServerName);
-                    return policy.Build();
-                case ServerPolicies.ChangeSomeoneName:
-                    policy.RequireRoleClaims(profileId, ServerClaims.ChangeSomeoneServerName);
-                    return policy.Build();
-                case ServerPolicies.RemoveMembers:
-                    policy.RequireRoleClaims(profileId, ServerClaims.RemoveMembers);
-                    return policy.Build();
+                _policyBuilder.RequireProfileRole(profileId, roles);
+            }
+
+            if (_parser.TryParseClaims(policy, out string[] claims))
+            {
+                _policyBuilder.RequireRoleClaims(profileId, claims);
+            }
+
+            return _policyBuilder.Build();
+
+        }
+
+        private async Task<AuthorizationPolicy?> GetDefaultPolicyAsync(string policyName, Guid profileId)
+        {
+            switch (policyName)
+            {
+                case Policies.SendMessages:
+                    throw new NotImplementedException();// TODO: Добавьте логику для SendMessages
                 default:
                     return await FallbackPolicyProvider.GetPolicyAsync(policyName);
-            }
+            };
         }
-
-        private bool TryParseProfileId(string policyName, out string serverId)
-        {
-            serverId = string.Empty;
-
-            if (string.IsNullOrEmpty(policyName))
-            {
-                return false;
-            }
-
-            Regex serverIdRegex = GetProfileIdRegex();
-            Match match = serverIdRegex.Match(policyName);
-            if (match.Success)
-            {
-                serverId = match.Value;
-                return true;
-            }
-            return false;
-        }
-
-        private static bool TryParsePolicyType(string policyName, out ServerPolicies policyType)
-        {
-            if (string.IsNullOrEmpty(policyName))
-            {
-                policyType = default;
-                return false;
-            }
-
-            Regex policyNameRegex = GetPolicyNameRegex();
-            string name = policyNameRegex.Match(policyName).Value;
-            if (Enum.TryParse(name, true, out policyType))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        [GeneratedRegex("^\\w+")]
-        private static partial Regex GetPolicyNameRegex();
-
-        [GeneratedRegex("(?<=profileId:)[a-fA-F0-9]+")]
-        private static partial Regex GetProfileIdRegex();
-    }
-    public enum ServerPolicies
-    {
-        SendMessages,
-        ServerMember,
-        ManageMessages,
-        MangeRoles,
-        ManageServer,
-        ChangeName,
-        ChangeSomeoneName,
-        RemoveMembers,
     }
 }

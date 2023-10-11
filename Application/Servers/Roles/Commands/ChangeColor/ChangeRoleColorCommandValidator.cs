@@ -7,9 +7,9 @@ namespace Sparkle.Application.Servers.Roles.Commands.ChangeColor
     {
         public ChangeRoleColorCommandValidator()
         {
-            RuleFor(c => c.RoleId).NotDefaultRole();
+            RuleFor(c => c.RoleId).NotDefaultRoleId();
 
-            RuleFor(c => c.Color).NotNull().IsColor();
+            RuleFor(c => c.Color).NotNull().Color();
         }
     }
 }

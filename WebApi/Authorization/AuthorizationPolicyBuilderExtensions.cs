@@ -6,14 +6,33 @@ namespace Sparkle.WebApi.Authorization
     public static class AuthorizationPolicyBuilderExtensions
     {
         public static AuthorizationPolicyBuilder RequireRoleClaims
-            (this AuthorizationPolicyBuilder builder, string profileId, params string[] claimTypes)
+            (this AuthorizationPolicyBuilder builder, Guid profileId, params string[] claimTypes)
         {
             return builder.RequireRoleClaims(profileId, (IEnumerable<string>)claimTypes);
         }
         public static AuthorizationPolicyBuilder RequireRoleClaims
-            (this AuthorizationPolicyBuilder builder, string profileId, IEnumerable<string> claimTypes)
+            (this AuthorizationPolicyBuilder builder, Guid profileId, IEnumerable<string> claimTypes)
         {
-            builder.Requirements.Add(new RoleClaimsAuthorizationRequirement(profileId, claimTypes));
+            builder.Requirements.Add(new RoleClaimsRequirement(profileId, claimTypes));
+            return builder;
+        }
+
+        public static AuthorizationPolicyBuilder RequireProfileRole(this AuthorizationPolicyBuilder builder,
+            Guid profileId, IEnumerable<string> roles)
+        {
+            builder.Requirements.Add(new ProfileRoleRequirement(profileId, roles.ToArray()));
+            return builder;
+        }
+        public static AuthorizationPolicyBuilder RequireProfileRole(this AuthorizationPolicyBuilder builder,
+            Guid profileId, params string[] roles)
+        {
+            return builder.RequireProfileRole(profileId, (IEnumerable<string>)roles);
+        }
+
+        public static AuthorizationPolicyBuilder AddRequirement(this AuthorizationPolicyBuilder builder,
+                       IAuthorizationRequirement requirement)
+        {
+            builder.Requirements.Add(requirement);
             return builder;
         }
     }

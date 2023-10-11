@@ -8,9 +8,9 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.DataAccess;
 using Sparkle.WebApi;
 using Sparkle.WebApi.Attributes;
-using Sparkle.WebApi.Authorization;
 using Sparkle.WebApi.Authorization.Handlers;
 using Sparkle.WebApi.Common.Mapping;
+using Sparkle.WebApi.Common.Parsers;
 using Sparkle.WebApi.Hubs;
 using Sparkle.WebApi.Providers;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -52,12 +52,14 @@ services.AddAuthorization();
 
 services.AddScoped<IAuthorizedUserProvider, AuthorizedUserProvider>();
 
+services.AddSingleton<IAuthorizationParser, StringPolicyParser>();
 services.AddScoped<IHubContextProvider, HubContextProvider>();
 
 services.AddSingleton<IAuthorizationPolicyProvider, ServerAuthorizationPolicyProvider>();
 services.AddScoped<IAuthorizationHandler, ServerMemberAuthorizationHandler>();
+services.AddScoped<IAuthorizationHandler, ServerClaimsAuthorizationRequirementHandler>();
+services.AddScoped<IAuthorizationHandler, ProfileRoleRequirementHandler>();
 services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
-services.AddScoped<IAuthorizationService, ServerAuthorizationService>();
 
 services.AddHttpContextAccessor();
 

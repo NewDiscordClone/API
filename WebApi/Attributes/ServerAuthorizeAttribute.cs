@@ -10,7 +10,8 @@ namespace Sparkle.WebApi.Attributes
     public partial class ServerAuthorizeAttribute : ActionFilterAttribute
     {
         public string? Policy { get; set; }
-
+        public string? Roles { get; set; }
+        public string? Claims { get; set; }
 
         private static string GetServerId(ActionExecutingContext context)
         {
@@ -45,17 +46,34 @@ namespace Sparkle.WebApi.Attributes
 
             if (profile is null)
             {
-                context.Result = new NotFoundResult();
+                context.Result = new ForbidResult();
                 return;
             }
 
-            if (Policy is null)
+            string authParams = "";
+
+            if (!string.IsNullOrEmpty(Claims))
             {
-                throw new Exception();
+                authParams += $"Claims:{Claims}|";
+            }
+            if (!string.IsNullOrEmpty(Roles))
+            {
+                authParams += $"Roles:{Roles}|";
+            }
+            if (!string.IsNullOrEmpty(Policy))
+            {
+                authParams += $"Policy:{Policy}|";
             }
 
+            if (string.IsNullOrEmpty(authParams) && (context.HttpContext.User.Identity?.IsAuthenticated ?? false))
+            {
+                await next();
+                return;
+            }
+
+            authParams += $"[profileId:{profile.Id}]";
             AuthorizationResult result = await authorizationService
-                .AuthorizeAsync(context.HttpContext.User, profile.Id, Policy);
+                .AuthorizeAsync(context.HttpContext.User, profile.Id, authParams);
 
             if (result.Succeeded)
             {
@@ -84,10 +102,10 @@ namespace Sparkle.WebApi.Attributes
             IAuthorizedUserProvider userProvider = context.HttpContext.RequestServices.GetService<IAuthorizedUserProvider>()
                 ?? throw new InvalidOperationException();
 
-            IUserProfileRepository repository = context.HttpContext.RequestServices.GetService<IUserProfileRepository>()
+            Application.Common.Interfaces.Repositories.IUserProfileRepository repository = context.HttpContext.RequestServices.GetService<Application.Common.Interfaces.Repositories.IUserProfileRepository>()
                 ?? throw new InvalidOperationException();
 
-            UserProfile? profile = await repository.FindByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
+            UserProfile? profile = await repository.FindOrDefaultByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
             return profile;
         }
     }

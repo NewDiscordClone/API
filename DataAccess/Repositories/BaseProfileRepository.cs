@@ -1,4 +1,6 @@
-﻿using Sparkle.Application.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
@@ -7,7 +9,7 @@ namespace Sparkle.DataAccess.Repositories
     /// Base repository for profiles with CRUD operations.
     /// </summary>
     /// <typeparam name="TProfile">Type of profile entity. Must inherit from <see cref="UserProfile"/> </typeparam>
-    public abstract class BaseProfileRepository<TProfile> : BaseSqlRepository<TProfile, Guid>
+    public abstract class BaseProfileRepository<TProfile> : BaseSqlRepository<TProfile, Guid>, IProfileRepository<TProfile>
         where TProfile : UserProfile
 
 
@@ -104,6 +106,16 @@ namespace Sparkle.DataAccess.Repositories
             await Context.UserProfiles.AddRangeAsync(profiles, cancellationToken);
 
             await Context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<TProfile?> FindOrDefaultAsync(Guid id, CancellationToken cancellationToken = default, bool includeRoles = false)
+        {
+            if (includeRoles)
+                return await DbSet
+                    .Include(profile => profile.Roles)
+                    .FirstOrDefaultAsync(profile => profile.Id == id, cancellationToken);
+
+            return await FindOrDefaultAsync(id, cancellationToken);
         }
     }
 }

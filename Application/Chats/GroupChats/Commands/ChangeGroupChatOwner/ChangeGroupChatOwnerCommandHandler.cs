@@ -7,7 +7,7 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
 {
     public class ChangeGroupChatOwnerCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatOwnerCommand>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
         public async Task Handle(ChangeGroupChatOwnerCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
@@ -28,7 +28,7 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
         }
 
-        public ChangeGroupChatOwnerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IUserProfileRepository userProfileRepository) : base(
+        public ChangeGroupChatOwnerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(
             context, userProvider)
         {
             _userProfileRepository = userProfileRepository;

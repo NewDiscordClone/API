@@ -1,6 +1,7 @@
 ﻿using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Servers.ServerProfiles.Commands.BanUser;
@@ -11,6 +12,7 @@ using Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser;
 using Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles;
 using Sparkle.Application.Servers.ServerProfiles.Queries.ServerProfileDetails;
 using Sparkle.Contracts.Servers;
+using Sparkle.WebApi.Attributes;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -54,6 +56,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Claims = Constants.Claims.KickUsers)]
         public async Task<ActionResult> KickUser(string serverId, Guid profileId)
         {
             LeaveServerCommand command = new() { ServerId = serverId, ProfileId = profileId };
@@ -78,6 +81,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Claims = Constants.Claims.BanUsers)]
         public async Task<ActionResult> BanUser(string serverId, Guid profileId)
         {
             BanUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
@@ -99,6 +103,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ServerAuthorize]
         public async Task<ActionResult> LeaveServer(string serverId, Guid profileId)
         {
             await Mediator.Send(new LeaveServerCommand()
@@ -125,6 +130,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Claims = Constants.Claims.BanUsers)]
         public async Task<ActionResult> UnbanUser(string serverId, Guid profileId)
         {
             UnbanUserCommand command = new() { ServerId = serverId, UserId = profileId };
@@ -175,6 +181,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
         public async Task<ActionResult> ChangeServerProfileRoles(Guid profileId, UpdateServerProfileRolesRequest request)
         {
             UpdateServerProfileRolesCommand command = Mapper

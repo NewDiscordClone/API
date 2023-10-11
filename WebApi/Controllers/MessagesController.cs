@@ -1,6 +1,7 @@
 ﻿using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Messages.MessageAdded;
 using Sparkle.Application.HubClients.Messages.MessageRemoved;
@@ -19,11 +20,13 @@ using Sparkle.Application.Messages.Queries.GetPinnedMessages;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 using Sparkle.Contracts.Messages;
+using Sparkle.WebApi.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/chats/{chatId}/messages")]
+    [ServerAuthorize]
     public class MessagesController : ApiControllerBase
     {
         public MessagesController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator,
@@ -198,6 +201,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Claims = Constants.Claims.RemoveMessageReactions)]
         public async Task<ActionResult> RemoveAllReactions(string messageId)
         {
             RemoveAllReactionsCommand command = new() { MessageId = messageId };
@@ -311,7 +315,6 @@ namespace Sparkle.WebApi.Controllers
             UnpinMessageCommand command = new() { MessageId = messageId };
             await Mediator.Send(command);
 
-            //TODO: Реалізація відправки Message
             return NoContent();
         }
     }

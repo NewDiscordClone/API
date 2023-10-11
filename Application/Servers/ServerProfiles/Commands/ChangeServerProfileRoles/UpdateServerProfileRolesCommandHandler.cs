@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles
 {
@@ -14,19 +14,23 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
 
         public async Task Handle(UpdateServerProfileRolesCommand command, CancellationToken cancellationToken)
         {
-            ServerProfile profile = await _serverProfileRepository.FindAsync(command.ProfileId, cancellationToken);
+            Guid profileId = command.ProfileId;
 
-            List<Guid> currentRoles = await _serverProfileRepository.GetRolesIdsAsync(profile.Id, cancellationToken);
+            List<Guid> currentRoles = await _serverProfileRepository.GetRolesIdsAsync(profileId, cancellationToken);
             List<Guid> newRoles = command.Roles;
 
             List<Guid> rolesToAdd = newRoles.Except(currentRoles).ToList();
-            List<Guid> rolesToRemove = currentRoles.Except(newRoles).ToList();
+
+            List<Guid> rolesToRemove = currentRoles
+                .Except(newRoles)
+                .Except(Constants.Roles.DefaultRoleIds)
+                .ToList();
 
             if (rolesToRemove.Count > 0)
-                await _serverProfileRepository.RemoveRolesAsync(profile.Id, rolesToRemove.ToArray());
+                await _serverProfileRepository.RemoveRolesAsync(profileId, rolesToRemove.ToArray());
 
             if (rolesToAdd.Count > 0)
-                await _serverProfileRepository.AddRolesAsync(profile.Id, rolesToAdd.ToArray());
+                await _serverProfileRepository.AddRolesAsync(profileId, rolesToAdd.ToArray());
         }
     }
 }

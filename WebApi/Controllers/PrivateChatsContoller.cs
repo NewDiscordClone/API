@@ -1,7 +1,6 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat;
 using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage;
 using Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner;
@@ -12,17 +11,17 @@ using Sparkle.Application.Chats.PersonalChats.Commands.CreateChat;
 using Sparkle.Application.Chats.PersonalChats.Queries;
 using Sparkle.Application.Chats.Queries.PrivateChatDetails;
 using Sparkle.Application.Chats.Queries.PrivateChatsList;
-using Sparkle.Application.Common.Convertors;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 using Sparkle.Contracts.PrivateChats;
+using Sparkle.WebApi.Attributes;
 
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/private-chats")]
-    [JsonConverter(typeof(PrivateChatLookUpConverter))]
     public class PrivateChatsController : ApiControllerBase
     {
         public PrivateChatsController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper)
@@ -39,7 +38,6 @@ namespace Sparkle.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-
         public async Task<ActionResult<List<PrivateChatLookUp>>> GetAllPrivateChats()
         {
             PrivateChatsQuery query = new();
@@ -131,6 +129,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize]
         public async Task<ActionResult> AddMemberToGroupChat(string chatId, Guid userId)
         {
             AddMemberToGroupChatCommand command = new()
@@ -160,6 +159,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize]
         public async Task<ActionResult> ChangeGroupChatImage(string chatId, [FromBody] string imageUrl)
         {
             ChangeGroupChatImageCommand command = new()
@@ -189,6 +189,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize]
         public async Task<ActionResult> RenameGroupChat(string chatId, string? name)
         {
             RenameGroupChatCommand command = new()
@@ -223,6 +224,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize]
         public async Task<ActionResult> LeaveFromGroupChat(string chatId, RemoveUserFromGroupChatRequest request)
         {
             RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((request, chatId));
@@ -248,6 +250,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Roles = Constants.Roles.GroupChatOwnerName)]
         public async Task<ActionResult> ChangeGroupChatOwner(string chatId, Guid newOwnerId)
         {
             ChangeGroupChatOwnerCommand command = new()
@@ -282,6 +285,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ServerAuthorize(Roles = Constants.Roles.GroupChatOwnerName)]
         public async Task<ActionResult> RemoveGroupChatMember(string chatId, RemoveUserFromGroupChatRequest request)
         {
             RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((request, chatId));

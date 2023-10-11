@@ -11,7 +11,7 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
     public class GetPinnedMessagesQueryHandler : RequestHandlerBase,
         IRequestHandler<GetPinnedMessagesQuery, List<MessageDto>>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
         public async Task<List<MessageDto>> Handle(GetPinnedMessagesQuery query,
             CancellationToken cancellationToken)
         {
@@ -45,7 +45,7 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 
 
         public GetPinnedMessagesQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
-            IMapper mapper, IUserProfileRepository userProfileRepository) : base(
+            IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(
             context, userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;

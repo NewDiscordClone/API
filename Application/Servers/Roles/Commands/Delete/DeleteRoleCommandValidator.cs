@@ -7,7 +7,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.Delete
     {
         public DeleteRoleCommandValidator()
         {
-            RuleFor(x => x.RoleId).NotDefaultRole();
+            RuleFor(x => x.RoleId).NotDefaultRoleId();
         }
     }
 }

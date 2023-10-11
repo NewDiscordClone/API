@@ -1,6 +1,7 @@
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Servers.ServerDeleted;
 using Sparkle.Application.HubClients.Servers.ServerUpdated;
@@ -12,6 +13,7 @@ using Sparkle.Application.Servers.Commands.UpdateServer;
 using Sparkle.Application.Servers.Queries.ServerDetails;
 using Sparkle.Application.Servers.Queries.ServersList;
 using Sparkle.Contracts.Servers;
+using Sparkle.WebApi.Attributes;
 
 namespace Sparkle.WebApi.Controllers
 {
@@ -128,7 +130,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(BadRequestResult))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(UnauthorizedResult))]
         [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(ForbidResult))]
-        // [ServerAuthorize(Policy = ServerClaims.ManageServer)]
+        [ServerAuthorize(Claims = Constants.Claims.ManageServer)]
         public async Task<ActionResult> UpdateServer(string serverId, UpdateServerRequest request)
         {
             UpdateServerCommand command = _mapper.Map<UpdateServerCommand>((request, serverId));
@@ -156,7 +158,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        // [ServerAuthorize(Policy = ServerClaims.ManageServer)]
+        [ServerAuthorize(Roles = Constants.Roles.ServerOwnerName)]
         public async Task<ActionResult> DeleteServer(string serverId)
         {
             DeleteServerCommand command = new() { ServerId = serverId };

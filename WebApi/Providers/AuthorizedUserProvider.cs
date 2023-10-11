@@ -41,11 +41,15 @@ namespace Sparkle.WebApi.Providers
                 return false;
 
             List<string> matchingUserClaims = new();
-            foreach (Role role in profile.Roles.OrderByDescending(role => role.Priority))
+            IOrderedEnumerable<Role> roles = profile.Roles.OrderByDescending(role => role.Priority);
+
+            foreach (Role role in roles)
             {
-                foreach (IdentityRoleClaim<Guid> identityClaim in await _roleRepository.GetRoleClaimAsync(role))
+                List<IdentityRoleClaim<Guid>> identityClaims = await _roleRepository.GetRoleClaimAsync(role);
+                List<Claim> claims = identityClaims.ConvertAll(claim => claim.ToClaim());
+
+                foreach (Claim claim in claims)
                 {
-                    Claim claim = identityClaim.ToClaim();
                     if (claimTypes.Any(claimType => string.Equals(claim.Type, claimType)))
                     {
                         if (!bool.Parse(claim.Value) && !matchingUserClaims.Contains(claim.Type))
@@ -60,7 +64,7 @@ namespace Sparkle.WebApi.Providers
                     }
                 }
             }
-            return true;
+            return false;
         }
 
         public async Task<bool> HasClaimsAsync(UserProfile profile, params string[] claimTypes)

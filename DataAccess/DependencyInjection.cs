@@ -32,7 +32,7 @@ namespace Sparkle.DataAccess
             services.AddScoped(typeof(IRepository<,>), typeof(BaseSqlRepository<,>));
 
             //TODO: figure out how to register all repositories at once
-            services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+            services.AddScoped<Application.Common.Interfaces.Repositories.IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IServerProfileRepository, ServerProfileRepository>();
             services.AddScoped<IRelationshipRepository, RelationshipRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();

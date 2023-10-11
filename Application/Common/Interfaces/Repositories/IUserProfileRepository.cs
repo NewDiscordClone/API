@@ -5,7 +5,7 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
     /// <summary>
     /// Interface for a repository that manages user profiles.
     /// </summary>
-    public interface IUserProfileRepository : IRepository<UserProfile, Guid>
+    public interface IUserProfileRepository : IProfileRepository<UserProfile>
     {
         /// <summary>
         /// Checks if a chat contains a user.

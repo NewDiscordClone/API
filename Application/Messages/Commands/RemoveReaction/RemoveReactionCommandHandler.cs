@@ -8,7 +8,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
 {
     public class RemoveReactionCommandHandler : RequestHandlerBase, IRequestHandler<RemoveReactionCommand>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
         public async Task Handle(RemoveReactionCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
@@ -35,7 +35,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
             await Context.Messages.UpdateAsync(message, cancellationToken);
         }
 
-        public RemoveReactionCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IUserProfileRepository userProfileRepository) : base(context,
+        public RemoveReactionCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(context,
             userProvider)
         {
             _userProfileRepository = userProfileRepository;

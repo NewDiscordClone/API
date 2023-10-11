@@ -5,7 +5,7 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
     /// <summary>
     /// Interface for a repository that manages server profiles.
     /// </summary>
-    public interface IServerProfileRepository : IRepository<ServerProfile, Guid>
+    public interface IServerProfileRepository : IProfileRepository<ServerProfile>
     {
         ///<summary>
         /// Adds roles to a server profile.
