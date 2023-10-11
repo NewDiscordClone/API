@@ -17,7 +17,7 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
         public async Task Handle(NotifyUserUpdatedQuery query, CancellationToken cancellationToken)
         {
             User user = query.UpdatedUser;
-            UserLookUp notifyArg = Mapper.Map<UserLookUp>(user);
+            UserViewModel notifyArg = Mapper.Map<UserViewModel>(user);
 
             await SendAsync(ClientMethods.UserUpdated, notifyArg, GetConnections(UserId));
 

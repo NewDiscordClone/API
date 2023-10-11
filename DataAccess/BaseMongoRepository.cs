@@ -143,14 +143,24 @@ namespace Sparkle.DataAccess
                 ?? throw new EntityNotFoundException($"{typeof(TEntity).Name} {id} not found", id.ToString());
         }
 
-        public Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
+        public async Task<TEntity> SingleAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            List<TEntity> result = await _collection.Find(expression, null)
+                .ToListAsync(cancellationToken);
+
+            if (result.Count == 0)
+                throw new EntityNotFoundException($"{typeof(TEntity).Name} not found", "");
+
+            if (result.Count > 1)
+                throw new InvalidOperationException($"More than one {typeof(TEntity).Name} found");
+
+            return result[0];
         }
 
         public Task DeleteManyAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return _collection.DeleteManyAsync(entity =>
+                 entities.Contains(entity), cancellationToken: cancellationToken);
         }
     }
 }

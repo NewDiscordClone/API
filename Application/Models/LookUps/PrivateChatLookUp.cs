@@ -1,57 +1,61 @@
 ﻿using AutoMapper;
 using Sparkle.Application.Common.Interfaces;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Models.LookUps
 {
-    public record PrivateChatLookUp : IMapWith<GroupChat>
+    public abstract class PrivateChatLookUp
     {
         /// <summary>
         /// The unique identifier of the private chat.
         /// </summary>
-        [StringLength(24, MinimumLength = 24)]
-        [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string Id { get; init; }
-
-        /// <summary>
-        /// The URL of the private chat's image.
-        /// </summary>
-        [DataType(DataType.ImageUrl)]
-        [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]
-        public string Image { get; init; }
 
         /// <summary>
         /// The title of the private chat.
         /// </summary>
-        [DefaultValue("Title")]
         public string Title { get; set; }
-
         /// <summary>
-        /// The subtitle of the private chat with extra information such as users count for group chat or user's status for personal chat.
+        /// The URL of the private chat's image.
         /// </summary>
-        [DefaultValue("4 members")]
-        public string Subtitle { get; init; }
+        public string? Image { get; init; }
+        public DateTime UpdatedDate { get; init; }
+        public abstract void Mapping(Profile profile);
+    }
+    public class PersonalChatLookup : PrivateChatLookUp, IMapWith<User>
+    {
+        public UserStatus UserStatus { get; init; }
+        public string UserTextStatus { get; init; }
 
-        public void Mapping(Profile profile)
+        public override void Mapping(Profile profile)
         {
-            profile.CreateMap<GroupChat, PrivateChatLookUp>()
-                .ForMember(dto => dto.Subtitle,
-                    opt =>
-                        opt.MapFrom(chat => chat.Profiles.Count + " members"))
-                .ForMember(dto => dto.Title,
-                    opt =>
-                        opt.Condition((_, _, title) => !string.IsNullOrWhiteSpace(title)));
+            profile.CreateMap<(User User, PersonalChat Chat), PersonalChatLookup>()
+                .ForMember(dto => dto.UserStatus, opt => opt
+                .MapFrom(src => src.User.Status))
+                .ForMember(dto => dto.UserTextStatus, opt => opt
+                .MapFrom(src => src.User.TextStatus))
+                .ForMember(dto => dto.Title, opt => opt
+                .MapFrom(src => src.User.DisplayName ?? src.User.UserName))
+                .ForMember(dto => dto.Image, opt => opt
+                .MapFrom(src => src.User.Avatar))
+                .ForMember(dto => dto.Id, opt => opt
+                .MapFrom(src => src.Chat.Id))
+                .ForMember(dto => dto.UpdatedDate, opt => opt
+                .MapFrom(src => src.Chat.UpdatedDate));
         }
+    }
 
-        public PrivateChatLookUp() { }
+    public class GroupChatLookup : PrivateChatLookUp, IMapWith<GroupChat>
+    {
+        /// <summary>
+        /// The number of members in the private chat.
+        /// </summary>
+        public int MembersCount { get; init; }
 
-        public PrivateChatLookUp(PersonalChat personalChat, UserLookUp other)
+        public override void Mapping(Profile profile)
         {
-            Id = personalChat.Id;
-            Image = other.Avatar;
-            Title = other.DisplayName;
-            Subtitle = other.TextStatus;
+            profile.CreateMap<GroupChat, GroupChatLookup>()
+                .ForMember(dto => dto.MembersCount, opt => opt
+                .MapFrom(src => src.Profiles.Count));
         }
     }
 }

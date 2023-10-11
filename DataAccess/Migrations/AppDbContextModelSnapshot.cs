@@ -233,6 +233,9 @@ namespace DataAccess.Migrations
                     b.Property<Guid>("Passive")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("PersonalChatId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("RelationshipType")
                         .HasColumnType("int");
 
@@ -423,6 +426,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 

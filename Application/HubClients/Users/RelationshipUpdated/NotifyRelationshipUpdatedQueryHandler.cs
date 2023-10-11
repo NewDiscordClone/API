@@ -7,9 +7,9 @@ namespace Sparkle.Application.HubClients.Users.RelationshipUpdated
 {
     public class NotifyRelationshipUpdatedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyRelationshipUpdatedQuery>
     {
-        private readonly IRelationshipConvertor _convertor;
+        private readonly IConvertor _convertor;
         public NotifyRelationshipUpdatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context,
-            IRelationshipConvertor convertor)
+            IConvertor convertor)
             : base(hubContextProvider, context)
         {
             _convertor = convertor;

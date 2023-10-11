@@ -8,9 +8,9 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
     public class GetRelationshipQueryHandler : RequestHandlerBase,
         IRequestHandler<GetRelationshipQuery, List<RelationshipViewModel>>
     {
-        private readonly IRelationshipConvertor _convertor;
+        private readonly IConvertor _convertor;
 
-        public GetRelationshipQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IRelationshipConvertor convertor)
+        public GetRelationshipQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IConvertor convertor)
             : base(context, userProvider)
         {
             _convertor = convertor;

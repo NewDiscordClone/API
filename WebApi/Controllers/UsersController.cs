@@ -6,7 +6,6 @@ using Sparkle.Application.HubClients.Users.RelationshipUpdated;
 using Sparkle.Application.HubClients.Users.UserUpdated;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Commands.ChangeDisplayName;
-using Sparkle.Application.Users.Commands.SendMessageToUser;
 using Sparkle.Application.Users.Queries.GetUserByUserName;
 using Sparkle.Application.Users.Queries.GetUserDetails;
 using Sparkle.Application.Users.Relationships.Commands.AcceptFriendRequest;
@@ -60,27 +59,6 @@ namespace Sparkle.WebApi.Controllers
                 user = await Mediator.Send(query);
             }
             return Ok(user);
-        }
-
-
-        /// <param name="request">
-        ///
-        /// </param>
-        /// <returns></returns>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> SendMessageToUser(SendMessageToUserRequest request)
-        {
-            return Problem(statusCode: StatusCodes.Status501NotImplemented);
-
-            MessageChatDto messageChat = await Mediator.Send(request);
-            //await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = messageChat.ChatId });
-            //await Mediator.Send(new NotifyMessageAddedQuery() { MessageId = messageChat.MessageId });
-            //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = UserId });
-            //await Mediator.Send(new NotifyRelationshipUpdatedRequest() { UserId = request.UserId });
         }
 
         /// <summary>
@@ -171,7 +149,10 @@ namespace Sparkle.WebApi.Controllers
             CancelFriendRequestCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            if (relationship == RelationshipTypes.DELETED)
+                await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            else
+                await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
 
             return NoContent();
         }
@@ -188,7 +169,10 @@ namespace Sparkle.WebApi.Controllers
             DeleteFriendCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            if (relationship == RelationshipTypes.DELETED)
+                await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            else
+                await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
 
             return NoContent();
         }

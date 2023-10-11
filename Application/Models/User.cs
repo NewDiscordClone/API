@@ -29,7 +29,7 @@ namespace Sparkle.Application.Models
         /// Unique username for the user.
         /// </summary>
         [DefaultValue("username")]
-        public override string? UserName { get; set; }
+        public override string UserName { get; set; }
 
         /// <summary>
         /// Non-unique display name shown to other users.

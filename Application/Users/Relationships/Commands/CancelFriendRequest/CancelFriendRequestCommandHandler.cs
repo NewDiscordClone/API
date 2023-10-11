@@ -19,10 +19,20 @@ namespace Sparkle.Application.Users.Relationships.Commands.CancelFriendRequest
         {
             Relationship? relationship = await _relationshipRepository.FindOrDefaultAsync((command.FriendId, UserId), cancellationToken);
 
-            if (relationship is null || relationship.RelationshipType != RelationshipTypes.Pending)
+            if (relationship is null || relationship != RelationshipTypes.Pending)
                 throw new InvalidOperationException("No friend pending");
 
-            await _relationshipRepository.DeleteAsync(relationship, cancellationToken);
+            if (relationship.PersonalChatId is null)
+            {
+                await _relationshipRepository.DeleteAsync(relationship, cancellationToken);
+                relationship.RelationshipType = RelationshipTypes.DELETED;
+            }
+            else
+            {
+                relationship.RelationshipType = RelationshipTypes.Acquaintance;
+                await _relationshipRepository.UpdateAsync(relationship, cancellationToken);
+            }
+
             return relationship;
         }
     }

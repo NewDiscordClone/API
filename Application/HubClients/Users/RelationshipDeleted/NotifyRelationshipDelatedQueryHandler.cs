@@ -7,9 +7,9 @@ namespace Sparkle.Application.HubClients.Users.RelationshipDeleted
 {
     public class NotifyRelationshipDelatedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyRelationshipDelatedQuery>
     {
-        private readonly IRelationshipConvertor _convertor;
+        private readonly IConvertor _convertor;
         public NotifyRelationshipDelatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context,
-            IRelationshipConvertor convertor)
+            IConvertor convertor)
             : base(hubContextProvider, context)
         {
             _convertor = convertor;

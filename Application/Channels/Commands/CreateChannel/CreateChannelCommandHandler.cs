@@ -17,10 +17,12 @@ namespace Sparkle.Application.Channels.Commands.CreateChannel
             {
                 Title = command.Title,
                 Profiles = server.Profiles,
-                ServerId = server.Id
+                ServerId = server.Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
             };
 
-            await Context.Channels.AddAsync(channel);
+            await Context.Channels.AddAsync(channel, cancellationToken);
             return channel.Id;
         }
 

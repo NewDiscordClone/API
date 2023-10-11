@@ -23,5 +23,9 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
         /// Gets or sets the relationship type.
         /// </summary>
         public RelationshipTypes Type { get; init; }
+        /// <summary>
+        /// Id of the chat between two users.
+        /// </summary>
+        public string? ChatId { get; init; }
     }
 }

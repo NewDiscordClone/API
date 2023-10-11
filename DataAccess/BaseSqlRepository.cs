@@ -65,7 +65,7 @@ namespace Sparkle.DataAccess
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<TEntity> result = _dbSet.Update(entity);
+            EntityEntry<TEntity> result = _dbSet.Update(entity);
             await _context.SaveChangesAsync(cancellationToken);
             return result.Entity;
         }

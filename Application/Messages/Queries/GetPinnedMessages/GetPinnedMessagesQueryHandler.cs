@@ -31,7 +31,7 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
                 User user = await Context.Users.FindAsync(new object?[] { profile.UserId }, cancellationToken: cancellationToken)
                     ?? throw new EntityNotFoundException(profile.UserId);
 
-                dto.Author = Mapper.Map<UserLookUp>(user);
+                dto.Author = Mapper.Map<UserViewModel>(user);
 
                 if (profile is ServerProfile serverProfile && chat is Channel channel)
                 {
