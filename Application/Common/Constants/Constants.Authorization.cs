@@ -42,6 +42,8 @@ namespace Sparkle.Application.Common.Constants
             public const string ChangeServerName = "ChangeServerName";
             public const string ChangeSomeoneServerName = "ChangeSomeoneServerName";
             public const string RemoveMembers = "RemoveMembers";
+            public const string RemoveMessages = "RemoveMessages";
+            public const string RemoveMessageReactions = "RemoveMessageReactions";
             public const string CreateInvitation = "CreateInvitation";
             public const string BanUsers = "BanUsers";
             public const string KickUsers = "KickUsers";

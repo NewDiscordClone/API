@@ -12,13 +12,13 @@ namespace Sparkle.Application.GroupChats.Queries.PrivateChatsList
         IRequestHandler<PrivateChatsQuery, List<PrivateChatLookUp>>
     {
 
-        private readonly IUserProfileRepository _userRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userRepository;
 
         public PrivateChatsQueryHandler(
             IAppDbContext appDbContext,
             IAuthorizedUserProvider userProvider,
             IMapper mapper,
-            IUserProfileRepository userRepository)
+            Common.Interfaces.Repositories.IUserProfileRepository userRepository)
             : base(appDbContext, userProvider, mapper)
         {
             _userRepository = userRepository;

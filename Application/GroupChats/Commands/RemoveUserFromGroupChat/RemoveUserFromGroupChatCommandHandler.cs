@@ -9,7 +9,7 @@ namespace Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat
     public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand>
     {
 
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
 
         public async Task Handle(RemoveUserFromGroupChatCommand command, CancellationToken cancellationToken)
         {
@@ -41,7 +41,7 @@ namespace Sparkle.Application.GroupChats.Commands.RemoveUserFromGroupChat
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
         }
 
-        public RemoveUserFromGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IUserProfileRepository userProfileRepository) : base(
+        public RemoveUserFromGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(
             context, userProvider)
         {
             _userProfileRepository = userProfileRepository;

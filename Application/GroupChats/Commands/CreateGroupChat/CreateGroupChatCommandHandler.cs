@@ -8,7 +8,7 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
 {
     public class CreateGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatCommand, string>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
         private readonly IRoleFactory _roleFactory;
         public async Task<string> Handle(CreateGroupChatCommand command, CancellationToken cancellationToken)
         {
@@ -43,7 +43,7 @@ namespace Sparkle.Application.GroupChats.Commands.CreateGroupChat
             return chat.Id;
         }
 
-        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IUserProfileRepository userProfileRepository, IRoleFactory roleFactory) : base(context, userProvider, mapper)
+        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository, IRoleFactory roleFactory) : base(context, userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;
             _roleFactory = roleFactory;

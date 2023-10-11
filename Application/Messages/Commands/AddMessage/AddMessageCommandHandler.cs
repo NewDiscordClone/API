@@ -10,7 +10,7 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
 {
     public class AddMessageCommandHandler : RequestHandlerBase, IRequestHandler<AddMessageCommand, MessageDto>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
         private readonly IServerProfileRepository _serverProfileRepository;
 
         public async Task<MessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             return dto;
         }
 
-        public AddMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IUserProfileRepository userProfileRepository, IServerProfileRepository serverProfileRepository) :
+        public AddMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository, IServerProfileRepository serverProfileRepository) :
             base(context, userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;

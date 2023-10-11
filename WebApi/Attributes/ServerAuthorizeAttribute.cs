@@ -102,7 +102,7 @@ namespace Sparkle.WebApi.Attributes
             IAuthorizedUserProvider userProvider = context.HttpContext.RequestServices.GetService<IAuthorizedUserProvider>()
                 ?? throw new InvalidOperationException();
 
-            IUserProfileRepository repository = context.HttpContext.RequestServices.GetService<IUserProfileRepository>()
+            Application.Common.Interfaces.Repositories.IUserProfileRepository repository = context.HttpContext.RequestServices.GetService<Application.Common.Interfaces.Repositories.IUserProfileRepository>()
                 ?? throw new InvalidOperationException();
 
             UserProfile? profile = await repository.FindOrDefaultByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());

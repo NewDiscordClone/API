@@ -154,7 +154,6 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ServerAuthorize(Policy = Constants.Policies.ChangeProfileName)]
         public async Task<ActionResult> ChangeServerProfileDisplayName(Guid profileId, string? newName)
         {
             ChangeServerProfileDisplayNameCommand command = new()
@@ -182,7 +181,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ServerAuthorize(Policy = Constants.Claims.ManageRoles)]
+        [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
         public async Task<ActionResult> ChangeServerProfileRoles(Guid profileId, UpdateServerProfileRolesRequest request)
         {
             UpdateServerProfileRolesCommand command = Mapper

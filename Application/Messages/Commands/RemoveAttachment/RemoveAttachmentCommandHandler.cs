@@ -8,7 +8,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveAttachment
 {
     public class RemoveAttachmentCommandHandler : RequestHandlerBase, IRequestHandler<RemoveAttachmentCommand>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
         public async Task Handle(RemoveAttachmentCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
@@ -34,7 +34,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveAttachment
             await Context.CheckRemoveMedia(path[(path.LastIndexOf('/') - 1)..]);
         }
 
-        public RemoveAttachmentCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IUserProfileRepository userProfileRepository) : base(context,
+        public RemoveAttachmentCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(context,
             userProvider)
         {
             _userProfileRepository = userProfileRepository;

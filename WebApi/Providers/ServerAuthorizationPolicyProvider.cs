@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Sparkle.WebApi.Authorization;
-using Sparkle.WebApi.Authorization.Requirements;
 using Sparkle.WebApi.Common.Parsers;
 using static Sparkle.Application.Common.Constants.Constants;
 
@@ -55,15 +54,6 @@ namespace WebApi.Providers
             {
                 case Policies.SendMessages:
                     throw new NotImplementedException();// TODO: Добавьте логику для SendMessages
-                case Policies.ChangeProfileName:
-
-                    RoleClaimsRequirement claimRequirement = new(profileId,
-                        new List<string> { Claims.ChangeSomeoneServerName });
-
-                    ProfileOwnerRequirement profileRequirement = new(profileId);
-
-                    _policyBuilder.AddRequirement(claimRequirement.Or(profileRequirement));
-                    return _policyBuilder.Build();
                 default:
                     return await FallbackPolicyProvider.GetPolicyAsync(policyName);
             };

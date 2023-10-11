@@ -8,7 +8,7 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
 {
     public class AddMemberToGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<AddMemberToGroupChatCommand>
     {
-        private readonly IUserProfileRepository _repository;
+        private readonly Common.Interfaces.Repositories.IUserProfileRepository _repository;
         private readonly IRoleFactory _roleFactory;
         public async Task Handle(AddMemberToGroupChatCommand command, CancellationToken cancellationToken)
         {
@@ -31,7 +31,7 @@ namespace Sparkle.Application.GroupChats.Commands.AddMemberToGroupChat
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
         }
 
-        public AddMemberToGroupChatCommandHandler(IAppDbContext context, IUserProfileRepository repository, IRoleFactory roleFactory)
+        public AddMemberToGroupChatCommandHandler(IAppDbContext context, Common.Interfaces.Repositories.IUserProfileRepository repository, IRoleFactory roleFactory)
             : base(context)
         {
             _repository = repository;

@@ -10,9 +10,9 @@ namespace Sparkle.WebApi.Authorization.Handlers
         AuthorizationHandler<RoleClaimsRequirement>
     {
         private readonly IAuthorizedUserProvider _userProvider;
-        private readonly IUserProfileRepository _repository;
+        private readonly Application.Common.Interfaces.Repositories.IUserProfileRepository _repository;
 
-        public ServerClaimsAuthorizationRequirementHandler(IAuthorizedUserProvider userProvider, IUserProfileRepository repository)
+        public ServerClaimsAuthorizationRequirementHandler(IAuthorizedUserProvider userProvider, Application.Common.Interfaces.Repositories.IUserProfileRepository repository)
         {
             _userProvider = userProvider;
             _repository = repository;
