@@ -28,5 +28,12 @@ namespace Sparkle.WebApi.Authorization
         {
             return builder.RequireProfileRole(profileId, (IEnumerable<string>)roles);
         }
+
+        public static AuthorizationPolicyBuilder AddRequirement(this AuthorizationPolicyBuilder builder,
+                       IAuthorizationRequirement requirement)
+        {
+            builder.Requirements.Add(requirement);
+            return builder;
+        }
     }
 }
