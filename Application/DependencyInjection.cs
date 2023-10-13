@@ -21,6 +21,9 @@ namespace Sparkle.Application
             services.AddScoped(
               typeof(IPipelineBehavior<,>),
               typeof(ValidationBehavior<,>));
+            services.AddTransient(
+              typeof(IPipelineBehavior<,>),
+              typeof(LoggingBehavior<,>));
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddAutoMapper(config =>

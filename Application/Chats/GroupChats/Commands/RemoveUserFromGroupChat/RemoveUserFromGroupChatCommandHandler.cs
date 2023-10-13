@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
@@ -19,8 +18,19 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
             if (pchat is not GroupChat chat)
                 throw new InvalidOperationException("This is not group chat");
 
-            UserProfile profile = await _userProfileRepository
-                .FindAsync(command.ProfileId, cancellationToken);
+
+            UserProfile profile;
+            if (command.ProfileId is not null)
+            {
+                profile = await _userProfileRepository
+                    .FindAsync(command.ProfileId.Value, cancellationToken);
+            }
+            else
+            {
+                profile = await _userProfileRepository
+                    .FindByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
+            }
+
 
             await _userProfileRepository.DeleteAsync(profile, cancellationToken);
 

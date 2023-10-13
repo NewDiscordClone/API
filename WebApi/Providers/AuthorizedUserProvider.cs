@@ -30,6 +30,16 @@ namespace Sparkle.WebApi.Providers
             throw new NoSuchUserException();
         }
 
+        public string GetUserName()
+        {
+            IEnumerable<Claim> claims = User.Claims;
+            string? userNameClaim = claims.FirstOrDefault(c => c.Type == "name")?.Value;
+            if (!string.IsNullOrEmpty(userNameClaim))
+                return userNameClaim;
+
+            throw new NoSuchUserException();
+        }
+
         public void SetUser(ClaimsPrincipal user)
         {
             User = user;

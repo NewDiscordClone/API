@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
+using Serilog;
 using Sparkle.Application;
 using Sparkle.Application.Common.Convertors;
 using Sparkle.Application.Common.Interfaces;
@@ -20,6 +21,8 @@ using ExceptionFilterAttribute = Sparkle.WebApi.Attributes.ExceptionFilterAttrib
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
+
+builder.Logging.AddSerilog();
 
 services.AddApplication();
 

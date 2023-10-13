@@ -15,6 +15,13 @@ namespace Sparkle.Application.Common.Interfaces
         Guid GetUserId();
 
         /// <summary>
+        /// Gets the unique name of the current authorized user.
+        /// </summary>
+        /// <returns>Current user's <see cref="User.UserName"/></returns>
+        string GetUserName();
+
+
+        /// <summary>
         /// Sets the current authorized user to the specified ClaimsPrincipal.
         /// </summary>
         /// <param name="user">The ClaimsPrincipal representing the current authorized user.</param>
