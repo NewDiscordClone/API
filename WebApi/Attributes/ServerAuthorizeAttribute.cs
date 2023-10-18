@@ -99,13 +99,23 @@ namespace Sparkle.WebApi.Attributes
 
         private static async Task<UserProfile?> GetProfileFromChat(string chatId, ActionExecutingContext context)
         {
-            IAuthorizedUserProvider userProvider = context.HttpContext.RequestServices.GetService<IAuthorizedUserProvider>()
+            IAuthorizedUserProvider userProvider = context.HttpContext
+                .RequestServices.GetService<IAuthorizedUserProvider>()
                 ?? throw new InvalidOperationException();
 
-            Application.Common.Interfaces.Repositories.IUserProfileRepository repository = context.HttpContext.RequestServices.GetService<Application.Common.Interfaces.Repositories.IUserProfileRepository>()
+            IUserProfileRepository userRepository = context.HttpContext
+                .RequestServices.GetService<IUserProfileRepository>()
                 ?? throw new InvalidOperationException();
 
-            UserProfile? profile = await repository.FindOrDefaultByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
+            IServerProfileRepository serverRepository = context.HttpContext
+                .RequestServices.GetService<IServerProfileRepository>()
+                ?? throw new InvalidOperationException();
+
+            UserProfile? profile = await userRepository
+                .FindOrDefaultByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
+
+            profile ??= await serverRepository.FindProfileByChannelIdAsync(chatId, userProvider.GetUserId());
+
             return profile;
         }
     }

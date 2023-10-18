@@ -52,6 +52,14 @@ namespace Sparkle.DataAccess.Repositories
                 && profile.UserId == userId, cancellationToken);
         }
 
+        public async Task<ServerProfile?> FindProfileByChannelIdAsync(string channelId, Guid userId,
+            CancellationToken cancellationToken = default)
+        {
+            Channel channel = await Context.Channels.FindAsync(channelId, cancellationToken);
+
+            return await FindUserProfileOnServerAsync(channel.ServerId, userId, cancellationToken);
+        }
+
         public bool IsUserServerMember(string serverId, Guid userId)
         {
             return DbSet.Any(profile => profile.ServerId == serverId && profile.UserId == userId);

@@ -1,6 +1,5 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Sparkle.Application.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +8,7 @@ namespace Sparkle.Application.Models;
 /// <summary>
 /// Representation of server
 /// </summary>
-public class Server : IUserProfileProvider
+public class Server
 {
     /// <summary>
     /// Unique Id as an string representation of an ObjectId type

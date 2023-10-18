@@ -1,12 +1,11 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Sparkle.Application.Common.Interfaces;
 
 namespace Sparkle.Application.Models;
 
 [BsonDiscriminator(RootClass = true)]
 [BsonKnownTypes(typeof(PersonalChat), typeof(GroupChat), typeof(Channel))]
-public abstract class Chat : IUserProfileProvider
+public abstract class Chat
 {
     /// <summary>
     /// Unique Id as an string representation of an ObjectId type

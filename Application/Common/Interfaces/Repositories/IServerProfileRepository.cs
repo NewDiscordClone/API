@@ -97,5 +97,6 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
         /// <param name="profileId">The ID of the server profile to check.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains true if the server profile is owned by the user associated with it, false otherwise.</returns>
         Task<bool> IsServerOwnerAsync(Guid profileId);
+        Task<ServerProfile?> FindProfileByChannelIdAsync(string channelId, Guid userId, CancellationToken cancellationToken = default);
     }
 }
