@@ -24,7 +24,6 @@ namespace Sparkle.Application.Users.Relationships.Commands.DeleteFriend
             if (relationship.PersonalChatId is null)
             {
                 await _relationshipsRepository.DeleteAsync(relationship, cancellationToken);
-                relationship.RelationshipType = RelationshipTypes.DELETED;
             }
             else
             {

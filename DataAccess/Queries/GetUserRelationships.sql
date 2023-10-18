@@ -10,7 +10,6 @@ SELECT
         WHEN R.RelationshipType = 1 THEN 'Friend'
         WHEN R.RelationshipType = 2 THEN 'Pending'
         WHEN R.RelationshipType = 3 THEN 'Blocked'
-        WHEN R.RelationshipType = 4 THEN 'DELETED' -- This should never happen
     END AS RelationshipType,
     R.PersonalChatId AS PersonalChat
 FROM
