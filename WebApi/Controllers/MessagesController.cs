@@ -246,6 +246,7 @@ namespace Sparkle.WebApi.Controllers
         /// This action can only be performed by the owner of the message or a server member with an appropriate role
         /// </remarks>
         ///<param name="messageId">string ObjectId representation of the message to remove</param>  
+        ///<param name="chatId"></param>  
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message is not found</response>
@@ -256,10 +257,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveMessage(string messageId)
+        public async Task<ActionResult> RemoveMessage(string messageId, string chatId)
         {
 
-            RemoveMessageCommand command = new() { MessageId = messageId };
+            RemoveMessageCommand command = new() { MessageId = messageId, ChatId = chatId };
             Chat chat = await Mediator.Send(command);
             await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = messageId, ChatId = chat.Id });
 

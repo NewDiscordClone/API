@@ -8,6 +8,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveMessage
         public RemoveMessageCommandValidator()
         {
             RuleFor(c => c.MessageId).NotNull().IsObjectId();
+            RuleFor(c => c.ChatId).NotNull().IsObjectId();
         }
     }
 }
