@@ -8,7 +8,7 @@ namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
     {
         public string Id { get; init; }
         public string Title { get; set; }
-        public string? Image { get; init; }
+        public string? Image { get; set; }
         public Guid? OwnerId { get; set; }
         public DateTime CreatedDate { get; init; }
         public DateTime UpdatedDate { get; init; }
@@ -16,7 +16,18 @@ namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
         public void Mapping(Profile profile)
         {
             profile.CreateMap<PersonalChat, PrivateChatViewModel>()
-                .ForMember(dto => dto.Profiles, opt => opt.Ignore());
+                .ForMember(dto => dto.Profiles, opt => opt.Ignore())
+                .AfterMap((chat, model) =>
+                {
+                    if (chat is GroupChat groupChat)
+                    {
+                        if (groupChat.Title != null)
+                        {
+                            model.Title = groupChat.Title;
+                        }
+                        model.Image ??= groupChat.Image;
+                    }
+                });
         }
     }
 
