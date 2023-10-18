@@ -5,8 +5,7 @@
         Acquaintance,
         Friend,
         Pending,
-        Blocked,
-        DELETED
+        Blocked
     }
     /// <summary>
     /// Represents a relationship between two users.
