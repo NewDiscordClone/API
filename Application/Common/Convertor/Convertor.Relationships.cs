@@ -20,14 +20,13 @@ namespace Sparkle.Application.Common.Convertor
             _context = context;
         }
 
-        public RelationshipViewModel Convert(Relationship relationship)
+        public RelationshipViewModel Convert(Relationship relationship, Guid? userId = null)
         {
-            Guid userId = _userProvider.GetUserId();
+            userId ??= _userProvider.GetUserId();
 
             User? user = _context.Users
-                 .FindAsync(relationship.Active == userId
-                 ? relationship.Passive : relationship.Active)
-                 .Result;
+                 .Find(relationship.Active == userId
+                 ? relationship.Passive : relationship.Active);
 
             return new RelationshipViewModel
             {

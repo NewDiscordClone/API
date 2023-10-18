@@ -6,7 +6,7 @@ namespace Sparkle.Application.Users.Relationships.Commands.AcceptFriendRequest
     {
         public AcceptFriendRequestCommandValidator()
         {
-            RuleFor(c => c.FriendId).NotNull();
+            RuleFor(c => c.FriendId).NotEmpty();
         }
     }
 }

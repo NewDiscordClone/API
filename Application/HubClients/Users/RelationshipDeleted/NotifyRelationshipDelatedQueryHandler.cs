@@ -9,8 +9,8 @@ namespace Sparkle.Application.HubClients.Users.RelationshipDeleted
     {
         private readonly IConvertor _convertor;
         public NotifyRelationshipDelatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context,
-            IConvertor convertor)
-            : base(hubContextProvider, context)
+            IConvertor convertor, IAuthorizedUserProvider userProvider)
+            : base(hubContextProvider, context, userProvider)
         {
             _convertor = convertor;
         }
@@ -18,10 +18,15 @@ namespace Sparkle.Application.HubClients.Users.RelationshipDeleted
         public async Task Handle(NotifyRelationshipDelatedQuery query, CancellationToken cancellationToken)
         {
             Relationship relationship = query.Relationship;
-            RelationshipViewModel viewModel = _convertor.Convert(relationship);
 
-            await SendAsync(ClientMethods.RelationshipsDeleted, viewModel,
-                GetConnections(relationship.Passive, relationship.Passive));
+            Guid notCurrentUserId = relationship.Active == UserId ?
+               relationship.Passive : relationship.Active;
+
+            RelationshipViewModel modelForCurrentUser = _convertor.Convert(relationship);
+            RelationshipViewModel modelForOtherUser = _convertor.Convert(relationship, notCurrentUserId);
+
+            await SendAsync(ClientMethods.RelationshipsDeleted, modelForCurrentUser, GetConnections(UserId));
+            await SendAsync(ClientMethods.RelationshipsDeleted, modelForOtherUser, GetConnections(notCurrentUserId));
         }
     }
 }
