@@ -22,7 +22,7 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
                 .Where(rel => rel.Active == UserId || rel.Passive == UserId)
                 .ToListAsync(cancellationToken);
 
-            return relationships.ConvertAll(_convertor.Convert);
+            return relationships.ConvertAll(relationship => _convertor.Convert(relationship));
         }
     }
 }

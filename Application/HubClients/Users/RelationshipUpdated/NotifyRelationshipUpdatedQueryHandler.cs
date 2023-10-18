@@ -9,8 +9,8 @@ namespace Sparkle.Application.HubClients.Users.RelationshipUpdated
     {
         private readonly IConvertor _convertor;
         public NotifyRelationshipUpdatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context,
-            IConvertor convertor)
-            : base(hubContextProvider, context)
+            IConvertor convertor, IAuthorizedUserProvider userProvider)
+            : base(hubContextProvider, context, userProvider)
         {
             _convertor = convertor;
         }
@@ -18,10 +18,15 @@ namespace Sparkle.Application.HubClients.Users.RelationshipUpdated
         public async Task Handle(NotifyRelationshipUpdatedQuery query, CancellationToken cancellationToken)
         {
             Relationship relationship = query.Relationship;
-            RelationshipViewModel viewModel = _convertor.Convert(relationship);
 
-            await SendAsync(ClientMethods.RelationshipsUpdated, viewModel,
-                GetConnections(relationship.Active, relationship.Passive));
+            Guid notCurrentUserId = relationship.Active == UserId ?
+                relationship.Passive : relationship.Active;
+
+            RelationshipViewModel modelForCurrentUser = _convertor.Convert(relationship);
+            RelationshipViewModel modelForOtherUser = _convertor.Convert(relationship, notCurrentUserId);
+
+            await SendAsync(ClientMethods.RelationshipsUpdated, modelForCurrentUser, GetConnections(UserId));
+            await SendAsync(ClientMethods.RelationshipsUpdated, modelForOtherUser, GetConnections(notCurrentUserId));
         }
     }
 }
