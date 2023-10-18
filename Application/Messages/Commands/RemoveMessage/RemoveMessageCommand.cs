@@ -11,5 +11,6 @@ namespace Sparkle.Application.Messages.Commands.RemoveMessage
         /// </summary>
         [DefaultValue("5f95a3c3d0ddad0017ea9291")]
         public string MessageId { get; init; }
+        public string ChatId { get; init; }
     }
 }
