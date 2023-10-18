@@ -16,6 +16,7 @@ namespace Sparkle.DataAccess.Configurations
                 Color = Constants.Roles.DefaultColor,
                 ServerId = null,
                 Priority = 1,
+                IsAdmin = true,
             };
 
             Role groupChatMemberRole = new()
@@ -43,6 +44,7 @@ namespace Sparkle.DataAccess.Configurations
                 Color = Constants.Roles.DefaultColor,
                 ServerId = null,
                 Priority = 100,
+                IsAdmin = true,
             };
 
             Role serverMemberRole = new()
