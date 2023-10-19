@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
-    public record RemoveUserFromGroupChatCommand : IRequest
+    public record RemoveUserFromGroupChatCommand : IRequest<RemoveUserFromGroupChatCommandResult>
     {
         /// <summary>
         /// The unique identifier of the group chat to leave from.

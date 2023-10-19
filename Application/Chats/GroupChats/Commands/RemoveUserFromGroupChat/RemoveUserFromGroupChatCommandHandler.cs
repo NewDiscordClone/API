@@ -5,12 +5,13 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
-    public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand>
+    public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand,
+RemoveUserFromGroupChatCommandResult>
     {
 
         private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
 
-        public async Task Handle(RemoveUserFromGroupChatCommand command, CancellationToken cancellationToken)
+        public async Task<RemoveUserFromGroupChatCommandResult> Handle(RemoveUserFromGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -38,7 +39,7 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
             {
                 await Context.GroupChats.DeleteAsync(chat, cancellationToken);
                 await Context.Messages.DeleteManyAsync(message => message.ChatId == chat.Id, cancellationToken);
-                return;
+                return new(chat, profile.UserId);
             }
 
             chat.Profiles.Remove(profile.Id);
@@ -49,6 +50,8 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
             }
 
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+
+            return new(chat, profile.UserId);
         }
 
         public RemoveUserFromGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(
