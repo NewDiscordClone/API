@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 
 namespace Sparkle.Application.Common.Behaviors
@@ -18,11 +19,20 @@ namespace Sparkle.Application.Common.Behaviors
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Executing request: {typeof(TRequest).Name} by {_userProvider.GetUserName()}");
+            string name = "";
+            try
+            {
+                name = "by " + _userProvider.GetUserName();
+            }
+            catch (NoSuchUserException)
+            {
+            }
+
+            _logger.LogInformation($"Executing request: {typeof(TRequest).Name} {name}");
 
             TResponse response = await next();
 
-            _logger.LogInformation($"Request {typeof(TRequest).Name} completed by {_userProvider.GetUserName()}");
+            _logger.LogInformation($"Request {typeof(TRequest).Name} completed {name}");
 
             return response;
         }
