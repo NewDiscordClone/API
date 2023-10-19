@@ -20,7 +20,7 @@ namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
         {
             List<Relationship> relationships = await Context.Relationships
                 .Where(relationship => relationship.Active == UserId || relationship.Passive == UserId
-                && relationship != RelationshipTypes.Acquaintance)
+                && relationship.RelationshipType != RelationshipTypes.Acquaintance)
                 .ToListAsync(cancellationToken);
 
             return relationships.ConvertAll(relationship => _convertor.Convert(relationship));
