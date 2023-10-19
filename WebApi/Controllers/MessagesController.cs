@@ -180,7 +180,8 @@ namespace Sparkle.WebApi.Controllers
             PinMessageCommand command = new() { MessageId = messageId };
             await Mediator.Send(command);
 
-            //TODO: Реалізація відправки Message
+            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+
             return NoContent();
         }
 
@@ -315,6 +316,8 @@ namespace Sparkle.WebApi.Controllers
         {
             UnpinMessageCommand command = new() { MessageId = messageId };
             await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
 
             return NoContent();
         }
