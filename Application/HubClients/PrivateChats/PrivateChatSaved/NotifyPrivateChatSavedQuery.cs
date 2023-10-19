@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
 {
     public record NotifyPrivateChatSavedQuery : IRequest
     {
-        public string ChatId { get; init; }
+        public Chat Chat { get; init; }
     }
 }

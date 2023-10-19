@@ -13,6 +13,7 @@ using Sparkle.Application.Chats.Queries.PrivateChatDetails;
 using Sparkle.Application.Chats.Queries.PrivateChatsList;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.PrivateChats.PrivateChatRemoved;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -289,9 +290,11 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> RemoveGroupChatMember(string chatId, RemoveUserFromGroupChatRequest request)
         {
             RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((request, chatId));
-            await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            RemoveUserFromGroupChatCommandResult result = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyPrivateChatRemovedQuery { ChatId = chatId, UserId = result.UserId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { Chat = result.Chat });
 
             return NoContent();
         }
