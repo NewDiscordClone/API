@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
 {
-    public record AddMemberToGroupChatCommand : IRequest
+    public record AddMemberToGroupChatCommand : IRequest<Chat>
     {
         /// <summary>
         /// The unique identifier of the group chat to add a new member to

@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
 {
-    public record ChangeGroupChatImageCommand : IRequest
+    public record ChangeGroupChatImageCommand : IRequest<Chat>
     {
         /// <summary>
         /// The unique identifier of the group chat to change the image for

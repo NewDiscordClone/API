@@ -1,14 +1,13 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
 {
-    public class ChangeGroupChatOwnerCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatOwnerCommand>
+    public class ChangeGroupChatOwnerCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatOwnerCommand, Chat>
     {
         private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
-        public async Task Handle(ChangeGroupChatOwnerCommand command, CancellationToken cancellationToken)
+        public async Task<Chat> Handle(ChangeGroupChatOwnerCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -18,7 +17,7 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
                 throw new InvalidOperationException("This is not group chat");
 
             if (chat.OwnerId == command.ProfileId)
-                return;
+                return chat;
 
             await _userProfileRepository.DeleteGroupChatOwner(chat.OwnerId, cancellationToken);
             await _userProfileRepository.SetGroupChatOwner(command.ProfileId, cancellationToken);
@@ -26,6 +25,8 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
             chat.OwnerId = command.ProfileId;
 
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+
+            return chat;
         }
 
         public ChangeGroupChatOwnerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(

@@ -110,7 +110,7 @@ namespace Sparkle.WebApi.Controllers
             else
                 chat = await Mediator.Send(new CreateGroupChatCommand { UserIds = userIds });
 
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chat.Id });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { Chat = chat });
 
             return CreatedAtAction(nameof(GetGroupChatById), new { chatId = chat.Id }, chat.Id);
         }
@@ -138,9 +138,8 @@ namespace Sparkle.WebApi.Controllers
                 ChatId = chatId,
                 NewMemberId = userId
             };
-            await Mediator.Send(command);
-
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            Chat chat = await Mediator.Send(command);
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { Chat = chat });
 
             return NoContent();
         }
@@ -168,9 +167,8 @@ namespace Sparkle.WebApi.Controllers
                 ChatId = chatId,
                 NewImage = imageUrl
             };
-            await Mediator.Send(command);
-
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            Chat chat = await Mediator.Send(command);
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { Chat = chat });
 
             return NoContent();
         }
@@ -198,9 +196,8 @@ namespace Sparkle.WebApi.Controllers
                 ChatId = chatId,
                 NewTitle = name
             };
-            await Mediator.Send(command);
-
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            Chat chat = await Mediator.Send(command);
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { Chat = chat });
 
             return NoContent();
         }
@@ -229,9 +226,10 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> LeaveFromGroupChat(string chatId, RemoveUserFromGroupChatRequest request)
         {
             RemoveUserFromGroupChatCommand command = Mapper.Map<RemoveUserFromGroupChatCommand>((request, chatId));
-            await Mediator.Send(command);
+            RemoveUserFromGroupChatCommandResult result = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { Chat = result.Chat });
+            await Mediator.Send(new NotifyPrivateChatRemovedQuery { ChatId = chatId, UserId = result.UserId });
 
             return NoContent();
         }
@@ -259,9 +257,9 @@ namespace Sparkle.WebApi.Controllers
                 ChatId = chatId,
                 ProfileId = newOwnerId
             };
-            await Mediator.Send(command);
+            Chat chat = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyPrivateChatSavedQuery { ChatId = chatId });
+            await Mediator.Send(new NotifyPrivateChatSavedQuery { Chat = chat });
 
             return NoContent();
         }
