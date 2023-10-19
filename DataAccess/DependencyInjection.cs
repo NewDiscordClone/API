@@ -15,8 +15,8 @@ namespace Sparkle.DataAccess
             services.AddDbContext<AppDbContext>(options
                 =>
             {
-                options.UseSqlServer(configuration
-                    .GetConnectionString("SqlServer") ?? throw new Exception("Connection doesn't exist"));
+                options.UseNpgsql(configuration
+                    .GetConnectionString("Postgres") ?? throw new Exception("Connection doesn't exist"));
             });
 
             services.AddScoped<IAppDbContext, AppDbContext>();
