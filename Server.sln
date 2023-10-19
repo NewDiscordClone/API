@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{BFE37E55-7652-49D7-BF2B-638FE264A943}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "Identity\Identity.csproj", "{97999B26-893E-4723-994F-0610AB3E1BC3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90019AAD-6DCD-483E-A10B-ECC338822F94}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -36,10 +34,6 @@ Global
 		{BFE37E55-7652-49D7-BF2B-638FE264A943}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFE37E55-7652-49D7-BF2B-638FE264A943}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFE37E55-7652-49D7-BF2B-638FE264A943}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97999B26-893E-4723-994F-0610AB3E1BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97999B26-893E-4723-994F-0610AB3E1BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97999B26-893E-4723-994F-0610AB3E1BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97999B26-893E-4723-994F-0610AB3E1BC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4CBF9552-FDBF-4EFE-BFAE-E3DEA5F3FE4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4CBF9552-FDBF-4EFE-BFAE-E3DEA5F3FE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CBF9552-FDBF-4EFE-BFAE-E3DEA5F3FE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
