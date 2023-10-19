@@ -6,11 +6,11 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
 {
-    public class AddMemberToGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<AddMemberToGroupChatCommand>
+    public class AddMemberToGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<AddMemberToGroupChatCommand, Chat>
     {
-        private readonly Common.Interfaces.Repositories.IUserProfileRepository _repository;
+        private readonly IUserProfileRepository _repository;
         private readonly IRoleFactory _roleFactory;
-        public async Task Handle(AddMemberToGroupChatCommand command, CancellationToken cancellationToken)
+        public async Task<Chat> Handle(AddMemberToGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -29,6 +29,8 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
             chat.Profiles.Add(profile.Id);
             await _repository.AddAsync(profile, cancellationToken);
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+
+            return chat;
         }
 
         public AddMemberToGroupChatCommandHandler(IAppDbContext context, Common.Interfaces.Repositories.IUserProfileRepository repository, IRoleFactory roleFactory)

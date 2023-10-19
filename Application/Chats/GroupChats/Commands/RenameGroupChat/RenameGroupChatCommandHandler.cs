@@ -4,9 +4,9 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat
 {
-    public class RenameGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RenameGroupChatCommand>
+    public class RenameGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RenameGroupChatCommand, Chat>
     {
-        public async Task Handle(RenameGroupChatCommand command, CancellationToken cancellationToken)
+        public async Task<Chat> Handle(RenameGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -15,6 +15,8 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat
             chat.Title = command.NewTitle;
 
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+
+            return chat;
         }
 
         public RenameGroupChatCommandHandler(IAppDbContext context) : base(
