@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 
-namespace Sparkle.Application.Models.Events.Roles
+namespace Sparkle.Application.Models.Events
 {
     public record RoleCreatedEvent(Role Role) : INotification;
     public record RoleUpdatedEvent(Role Role) : INotification;

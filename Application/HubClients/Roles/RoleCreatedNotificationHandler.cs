@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models.Events.Roles;
+using Sparkle.Application.Models.Events;
 
 namespace Sparkle.Application.HubClients.Roles
 {
