@@ -6,5 +6,7 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
         where TProfile : UserProfile
     {
         Task<TProfile?> FindOrDefaultAsync(Guid id, CancellationToken cancellationToken = default, bool includeRoles = false);
+        Task<List<Guid>> GetUserIdsFromChat(string chatId, CancellationToken cancellationToken = default);
+        Task<List<Guid>> GetUserIdsFromServer(string serverId, CancellationToken cancellationToken = default);
     }
 }

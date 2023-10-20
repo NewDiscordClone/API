@@ -17,6 +17,8 @@
         public const string RelationshipsUpdated = "RelationshipsUpdated";
         public const string RelationshipsDeleted = "RelationshipsDeleted";
         public const string UserUpdated = "UserUpdated";
+        public const string RoleUpdated = "RoleUpdated";
+        public const string RoleDeleted = "RoleDeleted";
 #pragma warning restore IDE1006 // Naming Styles
     }
 }

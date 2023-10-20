@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Commands.Delete
 {
-    public class DeleteRoleCommandHandler : RequestHandlerBase, IRequestHandler<DeleteRoleCommand>
+    public class DeleteRoleCommandHandler : RequestHandlerBase, IRequestHandler<DeleteRoleCommand, Role>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         public DeleteRoleCommandHandler(IAppDbContext context, IServerProfileRepository serverProfileRepository) : base(context)
@@ -13,7 +13,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.Delete
             _serverProfileRepository = serverProfileRepository;
         }
 
-        public async Task Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
+        public async Task<Role> Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -30,6 +30,8 @@ namespace Sparkle.Application.Servers.Roles.Commands.Delete
 
             await Context.SaveChangesAsync();
             await Context.Servers.UpdateAsync(server);
+
+            return role;
         }
     }
 }

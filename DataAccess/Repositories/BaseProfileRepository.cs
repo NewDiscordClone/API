@@ -11,8 +11,6 @@ namespace Sparkle.DataAccess.Repositories
     /// <typeparam name="TProfile">Type of profile entity. Must inherit from <see cref="UserProfile"/> </typeparam>
     public abstract class BaseProfileRepository<TProfile> : BaseSqlRepository<TProfile, Guid>, IProfileRepository<TProfile>
         where TProfile : UserProfile
-
-
     {
 
         /// <summary>
@@ -106,6 +104,23 @@ namespace Sparkle.DataAccess.Repositories
             await Context.UserProfiles.AddRangeAsync(profiles, cancellationToken);
 
             await Context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<List<Guid>> GetUserIdsFromServer(string serverId, CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                  .OfType<ServerProfile>()
+                  .Where(profile => profile.ServerId == serverId)
+                  .Select(profile => profile.UserId)
+                  .ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<Guid>> GetUserIdsFromChat(string chatId, CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                  .Where(profile => profile.ChatId == chatId)
+                  .Select(profile => profile.UserId)
+                  .ToListAsync(cancellationToken);
         }
 
         public async Task<TProfile?> FindOrDefaultAsync(Guid id, CancellationToken cancellationToken = default, bool includeRoles = false)
