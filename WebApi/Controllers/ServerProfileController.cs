@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
 using Sparkle.Application.Servers.ServerProfiles.Commands.BanUser;
 using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName;
 using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles;
@@ -60,7 +61,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> KickUser(string serverId, Guid profileId)
         {
             LeaveServerCommand command = new() { ServerId = serverId, ProfileId = profileId };
-            await Mediator.Send(command);
+            var profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileDeletedEvent(profile));
 
             return NoContent();
         }
@@ -85,7 +88,10 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> BanUser(string serverId, Guid profileId)
         {
             BanUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
-            await Mediator.Send(command);
+
+            var profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileDeletedEvent(profile));
 
             return NoContent();
         }
@@ -106,11 +112,13 @@ namespace Sparkle.WebApi.Controllers
         [ServerAuthorize]
         public async Task<ActionResult> LeaveServer(string serverId, Guid profileId)
         {
-            await Mediator.Send(new LeaveServerCommand()
+            var profile = await Mediator.Send(new LeaveServerCommand()
             {
                 ServerId = serverId,
                 ProfileId = profileId
             });
+
+            await Mediator.Publish(new ProfileDeletedEvent(profile));
 
             return NoContent();
         }
@@ -161,7 +169,9 @@ namespace Sparkle.WebApi.Controllers
                 ProfileId = profileId,
                 NewDisplayName = newName
             };
-            await Mediator.Send(command);
+            var profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileUpdatedEvent(profile));
 
             return NoContent();
         }
@@ -186,7 +196,9 @@ namespace Sparkle.WebApi.Controllers
         {
             UpdateServerProfileRolesCommand command = Mapper
                 .Map<UpdateServerProfileRolesCommand>((profileId, request));
-            await Mediator.Send(command);
+            var profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileUpdatedEvent(profile));
 
             return NoContent();
         }

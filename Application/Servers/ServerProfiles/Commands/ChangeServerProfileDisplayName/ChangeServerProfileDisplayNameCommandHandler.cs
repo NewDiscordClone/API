@@ -7,7 +7,8 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName
 {
-    public class ChangeServerProfileDisplayNameCommandHandler : RequestHandlerBase, IRequestHandler<ChangeServerProfileDisplayNameCommand>
+    public class ChangeServerProfileDisplayNameCommandHandler : RequestHandlerBase,
+        IRequestHandler<ChangeServerProfileDisplayNameCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         public ChangeServerProfileDisplayNameCommandHandler(IServerProfileRepository serverProfileRepository, IAuthorizedUserProvider userProvider)
@@ -16,7 +17,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
             _serverProfileRepository = serverProfileRepository;
         }
 
-        public async Task Handle(ChangeServerProfileDisplayNameCommand command, CancellationToken cancellationToken)
+        public async Task<ServerProfile> Handle(ChangeServerProfileDisplayNameCommand command, CancellationToken cancellationToken)
         {
             ServerProfile serverProfile = await _serverProfileRepository.FindAsync(command.ProfileId, cancellationToken);
 
@@ -37,7 +38,9 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
 
 
             serverProfile.DisplayName = command.NewDisplayName;
-            await _serverProfileRepository.UpdateAsync(serverProfile);
+            await _serverProfileRepository.UpdateAsync(serverProfile, cancellationToken);
+
+            return serverProfile;
         }
     }
 }

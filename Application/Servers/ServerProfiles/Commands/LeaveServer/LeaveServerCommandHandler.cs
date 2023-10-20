@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer
 {
-    public class LeaveServerCommandHandler : RequestHandlerBase, IRequestHandler<LeaveServerCommand>
+    public class LeaveServerCommandHandler : RequestHandlerBase, IRequestHandler<LeaveServerCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         public LeaveServerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
@@ -16,7 +16,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer
             _serverProfileRepository = serverProfileRepository;
         }
 
-        public async Task Handle(LeaveServerCommand command, CancellationToken cancellationToken)
+        public async Task<ServerProfile> Handle(LeaveServerCommand command, CancellationToken cancellationToken)
         {
             Server server = await Context.Servers.FindAsync(command.ServerId, cancellationToken);
 
@@ -30,6 +30,8 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.LeaveServer
 
             server.Profiles.Remove(serverProfile.Id);
             await Context.Servers.UpdateAsync(server, cancellationToken);
+
+            return serverProfile;
         }
     }
 }
