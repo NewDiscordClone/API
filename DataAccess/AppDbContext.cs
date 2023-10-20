@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
@@ -14,12 +15,19 @@ namespace Sparkle.DataAccess
         private string _mongoDbName { get; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options,
-            IConfiguration configuration,
-            string dbName = "SparkMongoDB")
+            IConfiguration configuration, ILogger<AppDbContext> logger)
             : base(options)
         {
+            string connectionString = configuration.GetConnectionString("MongoDB")
+                ?? throw new Exception("No mongo connection string provided");
+
+            string connection = connectionString.Split(';')[0];
+            string dbName = connectionString.Split(';')[1];
+
+            logger.LogDebug($"Connection {connection} Db {dbName}");
+
             _mongoDbName = dbName;
-            MongoClient client = new(configuration.GetConnectionString("MongoDB"));
+            MongoClient client = new(connection);
             _mongoClient = client;
             MongoDb = client.GetDatabase(dbName);
         }
