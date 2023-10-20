@@ -12,11 +12,12 @@ namespace Sparkle.DataAccess
         public static IServiceCollection AddDatabase(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options
-                =>
+            services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseNpgsql(configuration
-                    .GetConnectionString("Postgres") ?? throw new Exception("Connection doesn't exist"));
+                string connectionString = configuration.GetConnectionString("Postgres")
+                    ?? throw new Exception("Connection doesn't exist");
+
+                options.UseNpgsql(connectionString);
             });
 
             services.AddScoped<IAppDbContext, AppDbContext>();
@@ -32,7 +33,7 @@ namespace Sparkle.DataAccess
             services.AddScoped(typeof(IRepository<,>), typeof(BaseSqlRepository<,>));
 
             //TODO: figure out how to register all repositories at once
-            services.AddScoped<Application.Common.Interfaces.Repositories.IUserProfileRepository, UserProfileRepository>();
+            services.AddScoped<IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IServerProfileRepository, ServerProfileRepository>();
             services.AddScoped<IRelationshipRepository, RelationshipRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();

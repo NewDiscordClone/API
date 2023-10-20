@@ -46,7 +46,7 @@ services.AddAuthentication(config =>
     })
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "http://localhost:7198";
+        options.Authority = "https://localhost:7198";
         options.Audience = "MessageApi";
         options.RequireHttpsMetadata = false;
     });
