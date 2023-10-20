@@ -7,11 +7,11 @@ namespace Sparkle.Application.HubClients.Roles
 {
     public class RoleDeletedNotificationHandler : HubRequestHandlerBase, INotificationHandler<RoleDeletedEvent>
     {
-        private readonly IUserProfileRepository _profileRepository;
+        private readonly IServerProfileRepository _profileRepository;
 
         public RoleDeletedNotificationHandler(IHubContextProvider hubContextProvider,
             IAppDbContext context,
-            IUserProfileRepository profileRepository)
+            IServerProfileRepository profileRepository)
             : base(hubContextProvider, context)
         {
             _profileRepository = profileRepository;

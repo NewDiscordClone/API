@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.Application.Models.Events.Roles;
+using Sparkle.Application.Models.Events;
 using Sparkle.Application.Servers.Roles.Commands.ChangeColor;
 using Sparkle.Application.Servers.Roles.Commands.ChangeName;
 using Sparkle.Application.Servers.Roles.Commands.ChangePriority;

@@ -7,9 +7,13 @@ namespace Sparkle.Application.HubClients.Roles
 {
     public class RoleUpdatedNotificationHandler : HubRequestHandlerBase, INotificationHandler<RoleUpdatedEvent>
     {
-        private readonly IUserProfileRepository _profileRepository;
-        public RoleUpdatedNotificationHandler(IHubContextProvider hubContextProvider, IAppDbContext context) : base(hubContextProvider, context)
+        private readonly IServerProfileRepository _profileRepository;
+        public RoleUpdatedNotificationHandler(IHubContextProvider hubContextProvider,
+            IAppDbContext context,
+            IServerProfileRepository profileRepository)
+            : base(hubContextProvider, context)
         {
+            _profileRepository = profileRepository;
         }
 
         public async Task Handle(RoleUpdatedEvent notification, CancellationToken cancellationToken)

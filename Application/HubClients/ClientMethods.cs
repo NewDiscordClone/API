@@ -19,6 +19,8 @@
         public const string UserUpdated = "UserUpdated";
         public const string RoleUpdated = "RoleUpdated";
         public const string RoleDeleted = "RoleDeleted";
+        public const string ProfileUpdated = "ProfileUpdated";
+        public const string ProfileDeleted = "ProfileDeleted";
 #pragma warning restore IDE1006 // Naming Styles
     }
 }
