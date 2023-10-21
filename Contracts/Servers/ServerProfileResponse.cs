@@ -1,4 +1,5 @@
-﻿using Sparkle.Contracts.Roles;
+﻿using Sparkle.Application.Models;
+using Sparkle.Contracts.Roles;
 
 namespace Sparkle.Contracts.Servers
 {
@@ -7,6 +8,9 @@ namespace Sparkle.Contracts.Servers
         public string Id { get; init; }
         public string Name { get; init; }
         public string UserId { get; init; }
+        public string? AvatarUrl { get; set; }
+        public string? TextStatus { get; set; }
+        public UserStatus Status { get; set; }
         public RoleResponse MainRole { get; init; }
     }
 
@@ -15,6 +19,9 @@ namespace Sparkle.Contracts.Servers
         public string Id { get; init; }
         public string Name { get; init; }
         public string UserId { get; init; }
+        public string? AvatarUrl { get; set; }
+        public string? TextStatus { get; set; }
+        public UserStatus Status { get; set; }
         public List<RoleResponse> Roles { get; init; }
     }
 }

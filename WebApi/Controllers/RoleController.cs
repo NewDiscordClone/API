@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
 using Sparkle.Application.Servers.Roles.Commands.ChangeColor;
 using Sparkle.Application.Servers.Roles.Commands.ChangeName;
 using Sparkle.Application.Servers.Roles.Commands.ChangePriority;
@@ -71,6 +72,8 @@ namespace Sparkle.WebApi.Controllers
             CreateRoleCommand command = Mapper.Map<CreateRoleCommand>((serverId, request));
             Role role = await Mediator.Send(command);
 
+            await Mediator.Publish(new RoleCreatedEvent(role));
+
             return CreatedAtAction(nameof(GetRole), new { serverId, roleId = role.Id }, role.Id);
         }
 
@@ -88,7 +91,10 @@ namespace Sparkle.WebApi.Controllers
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
         public async Task<ActionResult> DeleteRole(Guid roleId)
         {
-            await Mediator.Send(new DeleteRoleCommand { RoleId = roleId });
+            Role role = await Mediator.Send(new DeleteRoleCommand { RoleId = roleId });
+
+            await Mediator.Publish(new RoleDeletedEvent(role));
+
             return NoContent();
         }
 
@@ -104,7 +110,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> UpdateRole(Guid roleId, UpdateRoleRequest request)
         {
             UpdateRoleCommand command = Mapper.Map<UpdateRoleCommand>((roleId, request));
-            await Mediator.Send(command);
+            Role role = await Mediator.Send(command);
+
+            await Mediator.Publish(new RoleUpdatedEvent(role));
 
             return NoContent();
         }
@@ -121,7 +129,9 @@ namespace Sparkle.WebApi.Controllers
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
         public async Task<ActionResult> UpdateRoleName(Guid roleId, string name)
         {
-            await Mediator.Send(new ChangeRoleNameCommand { RoleId = roleId, Name = name });
+            Role role = await Mediator.Send(new ChangeRoleNameCommand { RoleId = roleId, Name = name });
+
+            await Mediator.Publish(new RoleUpdatedEvent(role));
 
             return NoContent();
         }
@@ -138,7 +148,8 @@ namespace Sparkle.WebApi.Controllers
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
         public async Task<ActionResult> UpdateRoleColor(Guid roleId, string color)
         {
-            await Mediator.Send(new ChangeRoleColorCommand { RoleId = roleId, Color = color });
+            Role role = await Mediator.Send(new ChangeRoleColorCommand { RoleId = roleId, Color = color });
+            await Mediator.Publish(new RoleUpdatedEvent(role));
 
             return NoContent();
         }
@@ -155,7 +166,8 @@ namespace Sparkle.WebApi.Controllers
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
         public async Task<ActionResult> UpdateRolePriority(Guid roleId, int priority)
         {
-            await Mediator.Send(new ChangeRolePriorityCommand { RoleId = roleId });
+            Role role = await Mediator.Send(new ChangeRolePriorityCommand { RoleId = roleId, Priority = priority });
+            await Mediator.Publish(new RoleUpdatedEvent(role));
             return NoContent();
         }
 
@@ -172,7 +184,8 @@ namespace Sparkle.WebApi.Controllers
             List<IdentityRoleClaim<Guid>> identityClaims = claims
                 .ConvertAll(claimRequest => Mapper.Map<IdentityRoleClaim<Guid>>((roleId, claimRequest)));
 
-            await Mediator.Send(new UpdateRoleClaimsCommand { RoleId = roleId, Claims = identityClaims });
+            Role role = await Mediator.Send(new UpdateRoleClaimsCommand { RoleId = roleId, Claims = identityClaims });
+            await Mediator.Publish(new RoleUpdatedEvent(role));
 
             return NoContent();
         }

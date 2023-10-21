@@ -2,6 +2,7 @@
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
 {

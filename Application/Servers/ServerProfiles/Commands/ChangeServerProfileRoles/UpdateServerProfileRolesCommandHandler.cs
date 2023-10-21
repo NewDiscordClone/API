@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles
 {
-    public class UpdateServerProfileRolesCommandHandler : IRequestHandler<UpdateServerProfileRolesCommand>
+    public class UpdateServerProfileRolesCommandHandler : IRequestHandler<UpdateServerProfileRolesCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         public UpdateServerProfileRolesCommandHandler(IServerProfileRepository serverProfileRepository)
@@ -12,7 +13,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
             _serverProfileRepository = serverProfileRepository;
         }
 
-        public async Task Handle(UpdateServerProfileRolesCommand command, CancellationToken cancellationToken)
+        public async Task<ServerProfile> Handle(UpdateServerProfileRolesCommand command, CancellationToken cancellationToken)
         {
             Guid profileId = command.ProfileId;
 
@@ -31,6 +32,8 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
 
             if (rolesToAdd.Count > 0)
                 await _serverProfileRepository.AddRolesAsync(profileId, rolesToAdd.ToArray());
+
+            return await _serverProfileRepository.FindAsync(profileId, cancellationToken);
         }
     }
 }

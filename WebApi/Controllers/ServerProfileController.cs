@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
+using Sparkle.Application.Models.LookUps;
 using Sparkle.Application.Servers.ServerProfiles.Commands.BanUser;
 using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName;
 using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles;
@@ -24,21 +26,21 @@ namespace Sparkle.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ServerProfileLookupResponse>>> GetServerProfiles(string serverId)
+        public async Task<ActionResult<ServerProfileLookup>> GetServerProfiles(string serverId)
         {
             ServerProfilesQuery query = new() { ServerId = serverId };
-            List<ServerProfile> profiles = await Mediator.Send(query);
+            List<ServerProfileLookup> profiles = await Mediator.Send(query);
 
-            return Ok(profiles.ConvertAll(Mapper.Map<ServerProfileLookupResponse>));
+            return Ok(profiles);
         }
 
         [HttpGet("{profileId}")]
-        public async Task<ActionResult<ServerProfileResponse>> GetServerProfile(Guid profileId)
+        public async Task<ActionResult<ServerProfileViewModel>> GetServerProfile(Guid profileId)
         {
-            ServerProfileDetailsQuery query = new() { ProfileId = profileId };
-            ServerProfile profile = await Mediator.Send(query);
+            ServerProfileDetailsQuery query = new(profileId);
+            ServerProfileViewModel profile = await Mediator.Send(query);
 
-            return Ok(Mapper.Map<ServerProfileResponse>(profile));
+            return Ok(profile);
         }
 
         /// <summary>
@@ -60,7 +62,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> KickUser(string serverId, Guid profileId)
         {
             LeaveServerCommand command = new() { ServerId = serverId, ProfileId = profileId };
-            await Mediator.Send(command);
+            ServerProfile profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileDeletedEvent(profile));
 
             return NoContent();
         }
@@ -85,7 +89,10 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> BanUser(string serverId, Guid profileId)
         {
             BanUserCommand command = new() { ServerId = serverId, ProfileId = profileId };
-            await Mediator.Send(command);
+
+            ServerProfile profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileDeletedEvent(profile));
 
             return NoContent();
         }
@@ -106,11 +113,13 @@ namespace Sparkle.WebApi.Controllers
         [ServerAuthorize]
         public async Task<ActionResult> LeaveServer(string serverId, Guid profileId)
         {
-            await Mediator.Send(new LeaveServerCommand()
+            ServerProfile profile = await Mediator.Send(new LeaveServerCommand()
             {
                 ServerId = serverId,
                 ProfileId = profileId
             });
+
+            await Mediator.Publish(new ProfileDeletedEvent(profile));
 
             return NoContent();
         }
@@ -161,7 +170,9 @@ namespace Sparkle.WebApi.Controllers
                 ProfileId = profileId,
                 NewDisplayName = newName
             };
-            await Mediator.Send(command);
+            ServerProfile profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileUpdatedEvent(profile));
 
             return NoContent();
         }
@@ -186,7 +197,9 @@ namespace Sparkle.WebApi.Controllers
         {
             UpdateServerProfileRolesCommand command = Mapper
                 .Map<UpdateServerProfileRolesCommand>((profileId, request));
-            await Mediator.Send(command);
+            ServerProfile profile = await Mediator.Send(command);
+
+            await Mediator.Publish(new ProfileUpdatedEvent(profile));
 
             return NoContent();
         }

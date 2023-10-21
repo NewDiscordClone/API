@@ -24,10 +24,5 @@
         /// Priority that indicates how high the role is in the hierarchy
         /// </summary>
         public int Priority { get; set; }
-
-        /// <summary>
-        /// Claims of the role
-        /// </summary>
-        public IEnumerable<ClaimRequest>? Claims { get; set; }
     }
 }

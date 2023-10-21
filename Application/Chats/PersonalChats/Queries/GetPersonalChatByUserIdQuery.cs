@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Sparkle.Application.Chats.Queries.PrivateChatDetails;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Chats.PersonalChats.Queries
 {

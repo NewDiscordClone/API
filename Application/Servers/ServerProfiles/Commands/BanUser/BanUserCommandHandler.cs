@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.BanUser
 {
-    public class BanUserCommandHandler : RequestHandlerBase, IRequestHandler<BanUserCommand>
+    public class BanUserCommandHandler : RequestHandlerBase, IRequestHandler<BanUserCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         public BanUserCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IServerProfileRepository serverProfileRepository) : base(context, userProvider)
@@ -14,13 +14,13 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.BanUser
             _serverProfileRepository = serverProfileRepository;
         }
 
-        public async Task Handle(BanUserCommand command, CancellationToken cancellationToken)
+        public async Task<ServerProfile> Handle(BanUserCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
             Server server = await Context.Servers.FindAsync(command.ServerId, cancellationToken);
 
             if (!server.Profiles.Contains(command.ProfileId))
-                return;
+                throw new InvalidOperationException($"Server {command.ServerId} does not contains profile {command.ProfileId}");
 
             if (_serverProfileRepository.IsServerOwner(command.ProfileId))
                 throw new NoPermissionsException("Server's owner cant be banned from server");
@@ -31,6 +31,8 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.BanUser
             server.Profiles.Remove(profileToRemove.Id);
             server.BannedUsers.Add(profileToRemove.UserId);
             await Context.Servers.UpdateAsync(server, cancellationToken);
+
+            return profileToRemove;
         }
     }
 }

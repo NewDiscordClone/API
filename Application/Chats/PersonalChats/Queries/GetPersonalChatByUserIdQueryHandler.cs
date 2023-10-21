@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Sparkle.Application.Chats.Queries.PrivateChatDetails;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Chats.PersonalChats.Queries
 {
