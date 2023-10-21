@@ -112,7 +112,7 @@ namespace Sparkle.WebApi.Attributes
                 ?? throw new InvalidOperationException();
 
             UserProfile? profile = await userRepository
-                .FindOrDefaultByChatIdAndUserIdAsync(chatId, userProvider.GetUserId());
+                .FindOrDefaultByChatIdAndUserIdAsync(chatId, userProvider.GetUserId(), false);
 
             profile ??= await serverRepository.FindProfileByChannelIdAsync(chatId, userProvider.GetUserId());
 

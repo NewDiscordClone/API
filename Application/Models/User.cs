@@ -57,7 +57,7 @@ namespace Sparkle.Application.Models
         /// </summary>
         [DefaultValue("I'm Good")]
         [StringLength(96, MinimumLength = 1)]
-        public string? TextStatus { get; init; }
+        public string? TextStatus { get; set; }
         public List<UserProfile> UserProfiles { get; set; }
     }
 }
