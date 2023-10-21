@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Users;
+using Sparkle.Application.HubClients.Users.RelationshipDeleted;
+using Sparkle.Application.HubClients.Users.RelationshipUpdated;
+using Sparkle.Application.HubClients.Users.UserUpdated;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Commands;
 using Sparkle.Application.Users.Queries;
@@ -64,6 +66,38 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> UpdateDisplayName(string? displayName)
         {
             ChangeDisplayNameCommand command = new() { DisplayName = displayName };
+            User user = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Changes the current user's username
+        /// </summary>
+        /// <param name="username">New username name</param>
+        /// <respose code="204">The username was changed successfully</respose>
+        [HttpPatch("username")]
+        public async Task<ActionResult> UpdateUserName(string username)
+        {
+            ChangeUserNameCommand command = new(username);
+            User user = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Changes the current user's avatar
+        /// </summary>
+        /// <param name="avatar">New avatar. Send null to remove</param>
+        /// <respose code="204">The avatar was changed successfully</respose>
+        [HttpPatch("avatar")]
+        public async Task<ActionResult> UpdateAvatarName(string? avatar)
+        {
+            ChangeAvatarCommand command = new(avatar);
             User user = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
