@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.Users.Relationships.Commands.SendFriendRequest
+namespace Sparkle.Application.Users.Relationships.Commands
 {
     public class CreateFriendRequestCommandValidator : AbstractValidator<CreateFriendRequestCommand>
     {

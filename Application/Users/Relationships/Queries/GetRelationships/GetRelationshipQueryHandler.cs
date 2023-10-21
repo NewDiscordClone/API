@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
+namespace Sparkle.Application.Users.Relationships.Queries
 {
     public class GetRelationshipQueryHandler : RequestHandlerBase,
         IRequestHandler<GetRelationshipQuery, List<RelationshipViewModel>>
