@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Sparkle.Application.Users.Relationships.Commands.CancelFriendRequest
+namespace Sparkle.Application.Users.Relationships.Commands
 {
     public class CancelFriendRequestCommandValidator : AbstractValidator<CancelFriendRequestCommand>
     {

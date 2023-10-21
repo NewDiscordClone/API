@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.Application.Users.Relationships.Queries.GetRelationships;
+using Sparkle.Application.Users.Relationships.Queries;
 
 namespace Sparkle.Application.Common.Convertor
 {

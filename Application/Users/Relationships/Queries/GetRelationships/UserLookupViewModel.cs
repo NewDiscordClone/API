@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Relationships.Queries.GetRelationships
+namespace Sparkle.Application.Users.Relationships.Queries
 {
 
     public record UserLookupViewModel : IMapWith<User>

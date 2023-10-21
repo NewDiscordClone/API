@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
-namespace Sparkle.Application.HubClients.Users.FriendRequest
+namespace Sparkle.Application.HubClients.Users
 {
     public class NotifyFriendRequestRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyFriendRequestRequest>
     {
@@ -17,7 +17,7 @@ namespace Sparkle.Application.HubClients.Users.FriendRequest
             SetToken(cancellationToken);
             User user = await Context.SqlUsers.FindAsync(UserId);
 
-            await SendAsync(ClientMethods.FriendRequest, Mapper.Map<UserViewModel>(user), GetConnections(request.UserId));
+            await SendAsync(ClientMethods, Mapper.Map<UserViewModel>(user), GetConnections(request.UserId));
         }
     }
 }

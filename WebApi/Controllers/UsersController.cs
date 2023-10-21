@@ -1,18 +1,12 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Users.RelationshipDeleted;
-using Sparkle.Application.HubClients.Users.RelationshipUpdated;
-using Sparkle.Application.HubClients.Users.UserUpdated;
+using Sparkle.Application.HubClients.Users;
 using Sparkle.Application.Models;
-using Sparkle.Application.Users.Commands.ChangeDisplayName;
-using Sparkle.Application.Users.Queries.GetUserByUserName;
-using Sparkle.Application.Users.Queries.GetUserDetails;
-using Sparkle.Application.Users.Relationships.Commands.AcceptFriendRequest;
-using Sparkle.Application.Users.Relationships.Commands.CancelFriendRequest;
-using Sparkle.Application.Users.Relationships.Commands.DeleteFriend;
-using Sparkle.Application.Users.Relationships.Commands.SendFriendRequest;
-using Sparkle.Application.Users.Relationships.Queries.GetRelationships;
+using Sparkle.Application.Users.Commands;
+using Sparkle.Application.Users.Queries;
+using Sparkle.Application.Users.Relationships.Commands;
+using Sparkle.Application.Users.Relationships.Queries;
 
 namespace Sparkle.WebApi.Controllers
 {
