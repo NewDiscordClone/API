@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Users.Common.Validation;
+using static Sparkle.Application.Common.Constants.Constants;
 
 namespace Sparkle.Application.Users.Commands
 {
@@ -7,7 +8,8 @@ namespace Sparkle.Application.Users.Commands
     {
         public ChangeUserNameCommandValidator()
         {
-            RuleFor(x => x.Username).NotNull().Username();
+            RuleFor(x => x.Username).NotNull().Username().
+                MaximumLength(User.UserNameMaxLength);
         }
     }
 }

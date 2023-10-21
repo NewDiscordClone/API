@@ -76,12 +76,27 @@ namespace Sparkle.WebApi.Controllers
         /// <summary>
         /// Changes the current user's username
         /// </summary>
-        /// <param name="username">New username name</param>
+        /// <param name="username">New username</param>
         /// <respose code="204">The username was changed successfully</respose>
         [HttpPatch("username")]
         public async Task<ActionResult> UpdateUserName(string username)
         {
             ChangeUserNameCommand command = new(username);
+            User user = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+
+            return NoContent();
+        }
+        /// <summary>
+        /// Changes the current user's status
+        /// </summary>
+        /// <param name="status">New user status </param>
+        /// <respose code="204">The status was changed successfully</respose>
+        [HttpPatch("status")]
+        public async Task<ActionResult> UpdateUserStatus(string? status)
+        {
+            ChangeTextStatusCommand command = new(status);
             User user = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
