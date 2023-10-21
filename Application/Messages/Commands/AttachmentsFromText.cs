@@ -6,7 +6,7 @@ namespace Sparkle.Application.Messages.Commands
 {
     internal static partial class AttachmentsFromText
     {
-        private static readonly Regex _urlRegEx = Regexes.UrlRegex();
+        private static readonly Regex _urlRegEx = Regexes.UrlRegex;
         public static void GetAttachments(string input, Action<Attachment> onGet)
         {
             MatchCollection urlCollection = _urlRegEx.Matches(input);

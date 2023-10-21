@@ -9,7 +9,7 @@ namespace Sparkle.Application.Servers.Roles.Common.Validation
         public static IRuleBuilderOptions<T, string> Color<T>(
                        this IRuleBuilder<T, string> ruleBuilder)
         {
-            return ruleBuilder.Matches(Regexes.ColorRegex())
+            return ruleBuilder.Matches(Regexes.ColorRegex)
                 .WithMessage("Color must be in #RRGGBB format");
         }
 
