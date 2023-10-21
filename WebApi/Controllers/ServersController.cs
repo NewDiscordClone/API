@@ -54,7 +54,7 @@ namespace Sparkle.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> GetServers()
+        public async Task<ActionResult<List<ServerLookUpDto>>> GetServers()
         {
             ServersListQuery get = new();
             List<ServerLookUpDto> servers = await Mediator.Send(get);

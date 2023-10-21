@@ -69,7 +69,7 @@ namespace Sparkle.WebApi.Controllers
         [HttpPost("upload")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult> Upload(List<IFormFile> file)
+        public async Task<ActionResult<List<string>>> Upload(List<IFormFile> file)
         {
             if (file == null || file.Count == 0)
                 return BadRequest("No file uploaded.");
