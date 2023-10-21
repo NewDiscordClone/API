@@ -24,7 +24,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetServerProfiles(string serverId)
+        public async Task<ActionResult<List<ServerProfileLookupResponse>>> GetServerProfiles(string serverId)
         {
             ServerProfilesQuery query = new() { ServerId = serverId };
             List<ServerProfile> profiles = await Mediator.Send(query);
@@ -33,7 +33,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
         [HttpGet("{profileId}")]
-        public async Task<ActionResult> GetServerProfile(Guid profileId)
+        public async Task<ActionResult<ServerProfileResponse>> GetServerProfile(Guid profileId)
         {
             ServerProfileDetailsQuery query = new() { ProfileId = profileId };
             ServerProfile profile = await Mediator.Send(query);
