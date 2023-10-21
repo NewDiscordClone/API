@@ -37,6 +37,20 @@ namespace Sparkle.DataAccess.Repositories
                 && profile.UserId == userId,
                 cancellationToken: cancellationToken);
         }
+        public async Task<UserProfile?> FindOrDefaultByChatIdAndUserIdAsync(string chatId,
+            Guid userId,
+            bool includeRoles = false,
+            CancellationToken cancellationToken = default)
+        {
+            if (includeRoles)
+                return await DbSet
+                    .Include(profile => profile.Roles)
+                    .SingleOrDefaultAsync(profile => profile.ChatId == chatId
+                    && profile.UserId == userId,
+                    cancellationToken: cancellationToken);
+
+            return await FindOrDefaultByChatIdAndUserIdAsync(chatId, userId, cancellationToken);
+        }
 
         public async Task DeleteGroupChatOwner(Guid profileId, CancellationToken cancellationToken = default)
         {
