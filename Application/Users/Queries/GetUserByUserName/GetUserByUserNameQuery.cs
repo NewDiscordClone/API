@@ -1,8 +1,7 @@
-﻿using System.ComponentModel;
-using MediatR;
-using Sparkle.Application.Users.Queries.GetUserDetails;
+﻿using MediatR;
+using System.ComponentModel;
 
-namespace Sparkle.Application.Users.Queries.GetUserByUserName
+namespace Sparkle.Application.Users.Queries
 {
     public record GetUserByUserNameQuery : IRequest<GetUserDetailsDto>
     {

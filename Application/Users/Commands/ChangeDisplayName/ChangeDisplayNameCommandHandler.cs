@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Commands.ChangeDisplayName
+namespace Sparkle.Application.Users.Commands
 {
     public class ChangeDisplayNameCommandHandler : RequestHandlerBase, IRequestHandler<ChangeDisplayNameCommand, User>
     {

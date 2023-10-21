@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Constants;
 
-namespace Sparkle.Application.Users.Commands.ChangeDisplayName
+namespace Sparkle.Application.Users.Commands
 {
     public class ChangeDisplayNameCommandValidator : AbstractValidator<ChangeDisplayNameCommand>
     {

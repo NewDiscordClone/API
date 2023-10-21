@@ -2,9 +2,8 @@
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
 
-namespace Sparkle.Application.Users.Commands.ChangeStatus
+namespace Sparkle.Application.Users.Commands
 {
     public class ChangeStatusCommandHandler : RequestHandlerBase, IRequestHandler<ChangeStatusCommand>
     {

@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using System.ComponentModel;
 
-namespace Sparkle.Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries
 {
     public record GetUserDetailsRolesDto : IMapWith<Role>
     {
