@@ -49,6 +49,16 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the user profile if found, null otherwise.</returns>
         Task<UserProfile?> FindOrDefaultByChatIdAndUserIdAsync(string chatId, Guid userId, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// Finds a user profile by chat ID and user ID, or returns null if not found.
+        /// </summary>
+        /// <param name="chatId">The ID of the chat to find the user profile for.</param>
+        /// <param name="userId">The ID of the user to find the user profile for.</param>
+        /// <param name="includeRoles">If true profile will returned include roles</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the user profile if found, null otherwise.</returns>
+        Task<UserProfile?> FindOrDefaultByChatIdAndUserIdAsync(string chatId, Guid userId, bool includeRoles = false,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Sets the group chat owner.

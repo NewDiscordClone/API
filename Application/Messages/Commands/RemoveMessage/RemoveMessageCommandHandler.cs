@@ -23,7 +23,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveMessage
             Chat chat = await Context.Chats.FindAsync(message.ChatId, cancellationToken);
 
             UserProfile? profile = await _profileRepository
-             .FindOrDefaultByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
+             .FindOrDefaultByChatIdAndUserIdAsync(chat.Id, UserId, true, cancellationToken);
 
             profile ??= await _serverProfileRepository
                 .FindProfileByChannelIdAsync(chat.Id, UserId, cancellationToken);
