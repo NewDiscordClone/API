@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Users.Queries.GetUserDetails;
+using Sparkle.Application.Users.Queries;
 using Sparkle.WebApi.Authorization.Requirements;
 
 namespace Sparkle.WebApi.Authorization.Handlers

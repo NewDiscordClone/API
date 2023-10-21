@@ -19,7 +19,8 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
 
         public async Task<ServerProfile> Handle(ChangeServerProfileDisplayNameCommand command, CancellationToken cancellationToken)
         {
-            ServerProfile serverProfile = await _serverProfileRepository.FindAsync(command.ProfileId, cancellationToken);
+            ServerProfile serverProfile = await _serverProfileRepository.FindOrDefaultAsync(command.ProfileId, cancellationToken, true)
+                ?? throw new EntityNotFoundException(command.ProfileId);
 
             bool hasPermission = false;
 
