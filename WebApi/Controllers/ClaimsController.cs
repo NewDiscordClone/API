@@ -12,7 +12,7 @@ namespace Sparkle.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetClaims()
+        public async Task<ActionResult<IEnumerable<string>>> GetClaims()
         {
             IEnumerable<string> claims = await Mediator.Send(new GetClaimsQuery());
             return Ok(claims);

@@ -39,7 +39,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ServerAuthorize]
-        public async Task<ActionResult> GetRoles(string serverId)
+        public async Task<ActionResult<IEnumerable<RoleResponse>>> GetRoles(string serverId)
         {
             List<Role> roles = await Mediator.Send(new ServerRolesListQuery { ServerId = serverId });
             IEnumerable<RoleResponse> response = roles.ConvertAll(Mapper.Map<RoleResponse>);
@@ -53,7 +53,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="200">OK. Role details</response>
         /// <response code="404">Not Found. The role is not found</response>
         [HttpGet("{roleId}")]
-        public async Task<ActionResult> GetRole(Guid roleId)
+        public async Task<ActionResult<RoleResponse>> GetRole(Guid roleId)
         {
             Role role = await Mediator.Send(new RoleDetailsQuery { RoleId = roleId });
             RoleResponse response = Mapper.Map<RoleResponse>(role);
