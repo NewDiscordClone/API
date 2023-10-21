@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries
 {
     public class GetUserDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GetUserDetailsQuery, GetUserDetailsDto>
     {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Sparkle.Application.Common.Validation;
 
-namespace Sparkle.Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries
 {
     public class GetUserDetailsQueryValidator : AbstractValidator<GetUserDetailsQuery>
     {

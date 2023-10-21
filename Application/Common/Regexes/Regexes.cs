@@ -23,5 +23,9 @@ namespace Sparkle.Application.Common.RegularExpressions
         [GeneratedRegex("[a-z0-9]{24}")]
         private static partial Regex GetObjectIdRegex();
         public static Regex ObjectIdRegex => GetObjectIdRegex();
+
+        [GeneratedRegex("^[0-9a-z_.]*$")]
+        private static partial Regex GetUserNameRegex();
+        public static Regex UserNameRegex => GetUserNameRegex();
     }
 }

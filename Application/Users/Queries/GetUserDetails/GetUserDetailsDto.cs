@@ -4,7 +4,7 @@ using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sparkle.Application.Users.Queries.GetUserDetails
+namespace Sparkle.Application.Users.Queries
 {
     public record GetUserDetailsDto : IMapWith<User>
     {

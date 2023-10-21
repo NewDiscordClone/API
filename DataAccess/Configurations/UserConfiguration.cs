@@ -9,6 +9,13 @@ namespace Sparkle.DataAccess.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            AddDefaultData(builder);
+
+            builder.HasIndex(user => user.UserName).IsUnique();
+        }
+
+        private static void AddDefaultData(EntityTypeBuilder<User> builder)
+        {
             builder.HasData(
                 new User
                 {
