@@ -4,19 +4,24 @@ namespace Sparkle.Application.Common.RegularExpressions
     public static partial class Regexes
     {
         [GeneratedRegex("^https?://(www.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}/api/media/[a-z0-9]{24}\\.[a-zA-Z0-9]+$")]
-        public static partial Regex MediaUrlRegex();
+        private static partial Regex GetMediaUrlRegex();
 
+        public static Regex MediaUrlRegex => GetMediaUrlRegex();
 
         [GeneratedRegex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$")]
-        public static partial Regex ColorRegex();
+        private static partial Regex GetColorRegex();
+        public static Regex ColorRegex => GetColorRegex();
 
         [GeneratedRegex("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)")]
-        public static partial Regex UrlRegex();
+        private static partial Regex GetUrlRegex();
+        public static Regex UrlRegex => GetUrlRegex();
 
         [GeneratedRegex(":\\w+:")]
-        public static partial Regex EmojiRegex();
+        private static partial Regex GetEmojiRegex();
+        public static Regex EmojiRegex => GetEmojiRegex();
 
         [GeneratedRegex("[a-z0-9]{24}")]
-        public static partial Regex ObjectIdRegex();
+        private static partial Regex GetObjectIdRegex();
+        public static Regex ObjectIdRegex => GetObjectIdRegex();
     }
 }

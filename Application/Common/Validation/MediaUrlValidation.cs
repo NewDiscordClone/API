@@ -7,7 +7,7 @@ namespace Sparkle.Application.Common.Validation
     {
         public static IRuleBuilderOptions<T, string> IsMedia<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
-            return ruleBuilder.Matches(Regexes.MediaUrlRegex())
+            return ruleBuilder.Matches(Regexes.MediaUrlRegex)
                 .WithMessage("{PropertyValue} is not Media url");
         }
     }
