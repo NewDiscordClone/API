@@ -21,7 +21,7 @@ namespace Sparkle.Application.HubClients.Servers.Profiles
             List<Guid> userIds = await _repository
                 .GetUserIdsFromServer(notification.Profile.ServerId, cancellationToken);
 
-            await SendAsync(ClientMethods.ProfileUpdated, notification.Profile, userIds);
+            await SendAsync(ClientMethods.ProfileSaved, notification.Profile, userIds);
         }
     }
 }

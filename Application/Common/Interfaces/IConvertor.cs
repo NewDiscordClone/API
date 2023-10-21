@@ -1,5 +1,4 @@
-﻿using Sparkle.Application.Chats.Queries.PrivateChatDetails;
-using Sparkle.Application.Models;
+﻿using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 using Sparkle.Application.Users.Relationships.Queries.GetRelationships;
 

@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
 
-namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
+namespace Sparkle.Application.Models.LookUps
 {
     public class PrivateChatViewModel : IMapWith<PersonalChat>
     {
@@ -28,20 +27,6 @@ namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
                         model.Image ??= groupChat.Image;
                     }
                 });
-        }
-    }
-
-    public class UserProfileViewModel : IMapWith<UserProfile>
-    {
-        public Guid Id { get; init; }
-        public Guid UserId { get; init; }
-        public string Name { get; set; }
-        public string? AvatarUrl { get; set; }
-        public string? TextStatus { get; set; }
-        public UserStatus Status { get; set; }
-        public void Mapping(Profile profile)
-        {
-            profile.CreateMap<UserProfile, UserProfileViewModel>();
         }
     }
 }

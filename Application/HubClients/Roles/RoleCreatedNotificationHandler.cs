@@ -21,7 +21,7 @@ namespace Sparkle.Application.HubClients.Roles
             List<Guid> userIds = await _profileRepository
                 .GetUserIdsFromServer(notification.Role.ServerId!, cancellationToken);
 
-            await SendAsync(ClientMethods.RoleUpdated, notification.Role, userIds);
+            await SendAsync(ClientMethods.RoleSaved, notification.Role, userIds);
         }
     }
 }
