@@ -7,7 +7,7 @@ namespace Sparkle.Application.Users.Commands
     {
         public ChangeAvatarCommandValidator()
         {
-            RuleFor(c => c.AvatarUrl).NotNull().Matches(Regexes.UrlRegex)
+            RuleFor(c => c.AvatarUrl).Matches(Regexes.UrlRegex)
                 .WithMessage("{PropertyValue} is not url");
         }
     }
