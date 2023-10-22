@@ -21,6 +21,8 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
                 {
                     ServerTemplates.Study => _serverFactory.StudyServer(command.Title, command.Image),
                     ServerTemplates.Gaming => _serverFactory.GamingServer(command.Title, command.Image),
+                    ServerTemplates.School => _serverFactory.SchoolServer(command.Title, command.Image),
+                    ServerTemplates.Friends => _serverFactory.FriendsServer(command.Title, command.Image),
                     ServerTemplates.Default or _ => _serverFactory.DefaultServer(command.Title, command.Image)
                 };
 

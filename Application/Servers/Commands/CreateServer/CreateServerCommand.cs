@@ -25,6 +25,8 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
     {
         Default,
         Gaming,
-        Study
+        Study,
+        School,
+        Friends
     }
 }
