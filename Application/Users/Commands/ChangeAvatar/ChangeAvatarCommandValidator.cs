@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Sparkle.Application.Common.RegularExpressions;
+using Sparkle.Application.Common.Validation;
 
 namespace Sparkle.Application.Users.Commands
 {
@@ -7,7 +7,7 @@ namespace Sparkle.Application.Users.Commands
     {
         public ChangeAvatarCommandValidator()
         {
-            RuleFor(c => c.AvatarUrl).Matches(Regexes.UrlRegex)
+            RuleFor(c => c.AvatarUrl)!.IsMedia()
                 .WithMessage("{PropertyValue} is not url");
         }
     }
