@@ -33,9 +33,9 @@ namespace Sparkle.Application
                 config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
             });
 
-            services.AddScoped<IRoleFactory, RoleFactory>();
             services.AddScoped<IConvertor, Convertor>();
 
+            services.AddScoped<IRoleFactory, RoleFactory>();
             services.AddScoped<ServerFactory>();
 
             return services;
