@@ -98,5 +98,39 @@ namespace Sparkle.Application.Common.Factories
 
             return (server, owner, channels);
         }
+        public (Server Server, ServerProfile Owner, List<Channel> Channels) SchoolServer(string title, string? image)
+        {
+            (Server server, ServerProfile owner, List<Channel> channels) = DefaultServer(title, image);
+
+            Channel CreateFunc(string title) => CreateChannel(server, owner, title);
+
+            List<Channel> newChannels = new()
+            {
+                CreateFunc("common"),
+                CreateFunc("notification"),
+                CreateFunc("resources"),
+                CreateFunc("meetings"),
+                CreateFunc("offtopic")
+            };
+            channels.AddRange(newChannels);
+
+            return (server, owner, channels);
+        }
+        public (Server Server, ServerProfile Owner, List<Channel> Channels) FriendsServer(string title, string? image)
+        {
+            (Server server, ServerProfile owner, List<Channel> channels) = DefaultServer(title, image);
+
+            Channel CreateFunc(string title) => CreateChannel(server, owner, title);
+
+            List<Channel> newChannels = new()
+            {
+                CreateFunc("common"),
+                CreateFunc("games"),
+                CreateFunc("music"),
+            };
+            channels.AddRange(newChannels);
+
+            return (server, owner, channels);
+        }
     }
 }
