@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Sparkle.Application.Common.Factories;
 using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -18,5 +19,6 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
         [DataType(DataType.ImageUrl)]
         [DefaultValue("https://localhost:7060/api/media/5f95a3c3d0ddad0017ea9291")]
         public string? Image { get; init; }
+        public ServerType? Template { get; init; } = ServerType.Default;
     }
 }

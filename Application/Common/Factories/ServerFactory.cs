@@ -39,20 +39,70 @@ namespace Sparkle.Application.Common.Factories
             return (server, owner);
         }
 
-        public (Server Server, ServerProfile Owner, Channel Channel) DefaultServer(string title, string? image)
+        public (Server Server, ServerProfile Owner, List<Channel> Channels) DefaultServer(string title, string? image)
         {
             (Server server, ServerProfile owner) = BaseServer(title, image);
 
-            Channel welcomeChannel = new()
+            Channel welcomeChannel = CreateChannel(server, owner, Constants.Constants.Channel.WelcomeChannelTitle);
+            List<Channel> channels = new() { welcomeChannel };
+
+            return (server, owner, channels);
+        }
+
+        private static Channel CreateChannel(Server server, ServerProfile owner, string title)
+        {
+            return new()
             {
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now,
                 ServerId = server.Id,
                 Profiles = { owner.Id },
-                Title = Constants.Constants.Channel.WelcomeChannelName
+                Title = title
             };
-
-            return (server, owner, welcomeChannel);
         }
+
+        public (Server Server, ServerProfile Owner, List<Channel> Channels) GamingServer(string title, string? image)
+        {
+            (Server server, ServerProfile owner, List<Channel> channels) = DefaultServer(title, image);
+
+            Channel CreateFunc(string title) => CreateChannel(server, owner, title);
+
+            Channel common = CreateFunc("common");
+            Channel lobby = CreateFunc("lobby");
+            Channel games = CreateFunc("game");
+            Channel bestMoments = CreateFunc("best-moments");
+
+            List<Channel> newChannels = new()
+            {
+                common, lobby, games, bestMoments
+            };
+            channels.AddRange(newChannels);
+
+            return (server, owner, channels);
+        }
+
+        public (Server Server, ServerProfile Owner, List<Channel> Channels) StudyServer(string title, string? image)
+        {
+            (Server server, ServerProfile owner, List<Channel> channels) = DefaultServer(title, image);
+
+            Channel CreateFunc(string title) => CreateChannel(server, owner, title);
+
+            Channel common = CreateFunc("common");
+            Channel homework = CreateFunc("help-with-homework");
+
+            List<Channel> newChannels = new()
+            {
+                common, homework
+            };
+            channels.AddRange(newChannels);
+
+            return (server, owner, channels);
+        }
+    }
+    public enum ServerType
+    {
+        Default,
+        Gaming,
+        Study
     }
 }
