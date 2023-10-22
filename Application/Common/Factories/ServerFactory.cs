@@ -99,10 +99,4 @@ namespace Sparkle.Application.Common.Factories
             return (server, owner, channels);
         }
     }
-    public enum ServerType
-    {
-        Default,
-        Gaming,
-        Study
-    }
 }

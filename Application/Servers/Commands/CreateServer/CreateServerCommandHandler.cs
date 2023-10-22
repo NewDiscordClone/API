@@ -14,14 +14,14 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
         {
             Context.SetToken(cancellationToken);
 
-            ServerType template = command.Template ?? ServerType.Default;
+            ServerTemplates template = command.Template ?? ServerTemplates.Default;
 
             (Server server, ServerProfile owner, List<Channel> channels) =
                 template switch
                 {
-                    ServerType.Study => _serverFactory.StudyServer(command.Title, command.Image),
-                    ServerType.Gaming => _serverFactory.GamingServer(command.Title, command.Image),
-                    ServerType.Default or _ => _serverFactory.DefaultServer(command.Title, command.Image)
+                    ServerTemplates.Study => _serverFactory.StudyServer(command.Title, command.Image),
+                    ServerTemplates.Gaming => _serverFactory.GamingServer(command.Title, command.Image),
+                    ServerTemplates.Default or _ => _serverFactory.DefaultServer(command.Title, command.Image)
                 };
 
             await _serverProfileRepository.AddAsync(owner, cancellationToken);
