@@ -74,45 +74,45 @@ namespace Sparkle.Application.Common.Factories
 
         private readonly Role _groupChatOwnerRole = new()
         {
-            Id = Constants.Constants.Roles.GroupChatOwnerId,
-            Name = Constants.Constants.Roles.GroupChatOwnerName,
-            Color = Constants.Constants.Roles.DefaultColor,
+            Id = Roles.GroupChatOwnerId,
+            Name = Roles.GroupChatOwnerName,
+            Color = Roles.DefaultColor,
             ServerId = null,
             Priority = 1,
         };
 
         private readonly Role _groupChatMemberRole = new()
         {
-            Id = Constants.Constants.Roles.GroupChatMemberId,
-            Name = Constants.Constants.Roles.GroupChatMemberName,
-            Color = Constants.Constants.Roles.DefaultColor,
+            Id = Roles.GroupChatMemberId,
+            Name = Roles.GroupChatMemberName,
+            Color = Roles.DefaultColor,
             ServerId = null,
             Priority = 0,
         };
 
         private readonly Role _personalChatMemberRole = new()
         {
-            Id = Constants.Constants.Roles.PrivateChatMemberId,
-            Name = Constants.Constants.Roles.PrivateChatMemberName,
-            Color = Constants.Constants.Roles.DefaultColor,
+            Id = Roles.PrivateChatMemberId,
+            Name = Roles.PrivateChatMemberName,
+            Color = Roles.DefaultColor,
             ServerId = null,
             Priority = 0,
         };
 
         private readonly Role _serverOwnerRole = new()
         {
-            Id = Constants.Constants.Roles.ServerOwnerId,
-            Name = Constants.Constants.Roles.ServerOwnerName,
-            Color = Constants.Constants.Roles.DefaultColor,
+            Id = Roles.ServerOwnerId,
+            Name = Roles.ServerOwnerName,
+            Color = Roles.DefaultColor,
             ServerId = null,
             Priority = 100,
         };
 
         private readonly Role _serverMemberRole = new()
         {
-            Id = Constants.Constants.Roles.ServerMemberId,
-            Name = Constants.Constants.Roles.ServerMemberName,
-            Color = Constants.Constants.Roles.DefaultColor,
+            Id = Roles.ServerMemberId,
+            Name = Roles.ServerMemberName,
+            Color = Roles.DefaultColor,
             ServerId = null,
             Priority = 0,
         };

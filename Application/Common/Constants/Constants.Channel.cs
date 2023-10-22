@@ -4,7 +4,10 @@
     {
         public static class Channel
         {
+#pragma warning disable IDE1006 // Naming Styles
             public const int TitleMaxLength = 100;
+            public const string WelcomeChannelName = "welcome";
+#pragma warning restore IDE1006 // Naming Styles
         }
     }
 }

@@ -36,6 +36,8 @@ namespace Sparkle.Application
             services.AddScoped<IRoleFactory, RoleFactory>();
             services.AddScoped<IConvertor, Convertor>();
 
+            services.AddScoped<ServerFactory>();
+
             return services;
         }
     }
