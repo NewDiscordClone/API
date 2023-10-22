@@ -104,6 +104,8 @@ namespace Sparkle.WebApi.Controllers
         {
             Server server = await Mediator.Send(command);
 
+            await Mediator.Send(new NotifyServerUpdatedQuery { ServerId = server.Id });
+
             return CreatedAtAction(nameof(GetServerDetails), new { serverId = server.Id }, server.Id);
         }
 
