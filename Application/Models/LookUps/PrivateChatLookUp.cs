@@ -23,12 +23,15 @@ namespace Sparkle.Application.Models.LookUps
     }
     public class PersonalChatLookup : PrivateChatLookUp, IMapWith<User>
     {
+        public Guid UserId { get; init; }
         public UserStatus UserStatus { get; init; }
         public string UserTextStatus { get; init; }
 
         public override void Mapping(Profile profile)
         {
             profile.CreateMap<(User User, PersonalChat Chat), PersonalChatLookup>()
+                .ForMember(dto => dto.UserId, opt => opt
+                .MapFrom(src => src.User.Id))
                 .ForMember(dto => dto.UserStatus, opt => opt
                 .MapFrom(src => src.User.Status))
                 .ForMember(dto => dto.UserTextStatus, opt => opt
