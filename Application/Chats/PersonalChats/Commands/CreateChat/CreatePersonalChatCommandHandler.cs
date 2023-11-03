@@ -27,8 +27,17 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
             Relationship? relationship = await _relationshipRepository
                 .FindOrDefaultAsync((command.UserId, UserId), cancellationToken);
 
-            if (relationship is not null && relationship.PersonalChatId != null)
+            if (relationship != null && relationship.PersonalChatId != null)
                 throw new InvalidOperationException("Chat already exists");
+
+            if (relationship == RelationshipTypes.Blocked)
+            {
+                string exceptionMessage = relationship.Active == UserId ?
+                    "You block this user" :
+                    "You blocked by this user";
+
+                throw new InvalidOperationException(exceptionMessage);
+            }
 
             PersonalChat chat = new()
             {

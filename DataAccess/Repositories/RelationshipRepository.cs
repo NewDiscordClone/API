@@ -94,5 +94,8 @@ namespace Sparkle.DataAccess.Repositories
 
             return relationship;
         }
+
+        public async Task<Relationship> FindByChatIdAsync(string chatId, CancellationToken cancellationToken)
+            => await DbSet.SingleAsync(relationship => relationship.PersonalChatId == chatId, cancellationToken);
     }
 }
