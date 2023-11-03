@@ -212,5 +212,15 @@ namespace Sparkle.WebApi.Controllers
             await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
             return NoContent();
         }
+
+        [HttpPost("block")]
+        public async Task<ActionResult> BlockUser(Guid userId)
+        {
+            BlockUserCommand command = new(userId);
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
+            return NoContent();
+        }
     }
 }
