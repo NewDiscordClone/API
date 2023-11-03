@@ -130,9 +130,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<RelationshipViewModel>>> GetRelationships()
+        public async Task<ActionResult<List<RelationshipViewModel>>> GetRelationships(bool includeAcquaintance = false)
         {
-            return Ok(await Mediator.Send(new GetRelationshipQuery()));
+            return Ok(await Mediator.Send(new GetRelationshipQuery(includeAcquaintance)));
         }
 
         /// <summary>
