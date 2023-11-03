@@ -22,9 +22,10 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
                 .SelectMany(user => user.UserProfiles)
                 .ToListAsync(cancellationToken);
 
-            List<Chat> chats = await Context.Chats
-                .FilterAsync(chat => profiles.Any(profile =>
-                profile.ChatId == chat.Id), cancellationToken);
+
+            IEnumerable<string?> chatIds = profiles.Select(profile => profile.ChatId);
+            List<PersonalChat> chats = await Context.PersonalChats
+                .FilterAsync(chat => chatIds.Contains(chat.Id), cancellationToken);
 
             List<string> connections = new();
 
@@ -33,16 +34,16 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
                 connections.AddRange(GetConnections(chat));
             }
 
+            IEnumerable<string> serverIds = profiles.OfType<ServerProfile>().Select(profile => profile.ServerId);
             List<Server> servers = await Context.Servers
-                .FilterAsync(server => profiles.OfType<ServerProfile>()
-                .Any(profile => profile.ServerId == server.Id), cancellationToken);
+                .FilterAsync(server => serverIds.Contains(server.Id), cancellationToken);
 
             foreach (Server server in servers)
             {
                 connections.AddRange(GetConnections(server));
             }
 
-            UserViewModel notifyArg = Mapper.Map<UserViewModel>(profiles);
+            UserViewModel notifyArg = Mapper.Map<UserViewModel>(query.UpdatedUser);
 
             await SendAsync(ClientMethods.UserUpdated, notifyArg, GetConnections(UserId));
             await SendAsync(ClientMethods.UserUpdated, notifyArg, connections);
