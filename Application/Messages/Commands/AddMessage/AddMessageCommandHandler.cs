@@ -27,7 +27,7 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
                     ?? throw new EntityNotFoundException(message: $"User {UserId} profile not found" +
                     $" in server {channel.ServerId}", "");
             }
-            else if (chat is PersonalChat personalChat)
+            else if (chat is PersonalChat personalChat && chat is not GroupChat)
             {
                 Relationship relationship = await _relationshipRepository
                     .FindByChatIdAsync(chat.Id, cancellationToken);
