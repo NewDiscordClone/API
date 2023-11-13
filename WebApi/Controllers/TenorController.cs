@@ -2,27 +2,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Medias.Commands.UploadMedia;
-using Sparkle.Application.Medias.Queries.GetMedia;
-using Sparkle.Application.Models;
 using Sparkle.WebApi.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/tenor")]
-    public class TenorController : ApiControllerBase
+    [Authorize]
+    [ApiController]
+    public class TenorController : ControllerBase
     {
         private const string _apiKey = "AIzaSyBYNFPq5V6xgmldbiM3crpKAOpeuhYcouA";
         private const int _limit = 10;
         private const string _baseUrl = "https://g.tenor.com/v2";
 
-        public TenorController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(
-            mediator,
-            userProvider)
-        {
-        }
         [HttpGet("categories")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [AllowAnonymous]
