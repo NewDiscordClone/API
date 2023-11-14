@@ -34,6 +34,17 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
                 connections.AddRange(GetConnections(chat));
             }
 
+            List<Relationship> relationships = await Context.Relationships
+                .Where(r => r.Active == UserId || r.Passive == UserId)
+                .ToListAsync(cancellationToken);
+
+            foreach (Relationship relationship in relationships)
+            {
+                connections.AddRange(GetConnections(
+                    relationship.Active != UserId ? relationship.Active : relationship.Passive
+                ));
+            }
+
             IEnumerable<string> serverIds = profiles.OfType<ServerProfile>().Select(profile => profile.ServerId);
             List<Server> servers = await Context.Servers
                 .FilterAsync(server => serverIds.Contains(server.Id), cancellationToken);
@@ -47,7 +58,6 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
 
             await SendAsync(ClientMethods.UserUpdated, notifyArg, GetConnections(UserId));
             await SendAsync(ClientMethods.UserUpdated, notifyArg, connections);
-
         }
     }
 }
