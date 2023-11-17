@@ -30,7 +30,7 @@ public class Role : IdentityRole<Guid>
     /// <summary>
     /// Gets or sets the priority of the role. Higher priority roles take precedence in permission checks.
     /// </summary>
-    public int Priority { get; set; }
+    public int Priority { get; set; } = 1;
     public Role()
     {
         Id = Guid.NewGuid();
