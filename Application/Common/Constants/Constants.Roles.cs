@@ -5,6 +5,12 @@
         public static class Roles
         {
 #pragma warning disable IDE1006 // Naming Styles
+
+
+            public const int RoleNameMaxLength = 100;
+            public const string DefaultMemberRoleName = "Member";
+            public const string DefaultOwnerRoleName = "Owner";
+
             public static readonly Guid GroupChatOwnerId = Guid.Parse("0b7b7f0c-fd18-4cdc-b2d1-c862c77bfdd5");
             public const string GroupChatOwnerName = "GROUP-CHAT-OWNER";
 
