@@ -11,7 +11,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.ChangeName
         {
             RuleFor(c => c.RoleId).NotDefaultRoleId();
 
-            RuleFor(c => c.Name).RequiredMaximumLength(Constants.ServerProfile.RoleNameMaxLength)
+            RuleFor(c => c.Name).RequiredMaximumLength(Constants.Roles.RoleNameMaxLength)
                 .NotDefaultRoleName();
         }
     }

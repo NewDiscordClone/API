@@ -12,7 +12,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.Update
             RuleFor(c => c.Id).NotDefaultRoleId();
 
             RuleFor(c => c.Name).RequiredMaximumLength(
-               Constants.ServerProfile.RoleNameMaxLength)
+               Constants.Roles.RoleNameMaxLength)
                 .NotDefaultRoleName();
 
             RuleFor(c => c.Color).NotNull().NotEmpty();

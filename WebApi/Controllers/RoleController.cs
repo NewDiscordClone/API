@@ -188,12 +188,9 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="404">Not Found. Some roles are not found.</response>
         [HttpPatch("{roleId}/priorities")]
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
-        public async Task<ActionResult> UpdateRolePriorities(IEnumerable<(Guid roleId, int priority)> priorities)
+        public async Task<ActionResult> UpdateRolePriorities(Dictionary<Guid, int> priorities)
         {
-            Dictionary<Guid, int> prioritiesDictionary =
-                priorities.ToDictionary(p => p.roleId, p => p.priority);
-
-            ChangeRangePriorityCommand command = new(prioritiesDictionary);
+            ChangeRangePriorityCommand command = new(priorities);
             IEnumerable<Role> roles = await Mediator.Send(command);
 
             foreach (Role role in roles)

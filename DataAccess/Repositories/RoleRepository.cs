@@ -37,7 +37,7 @@ namespace Sparkle.DataAccess.Repositories
         {
             return await DbSet
                 .SingleAsync(role => role.ServerId == serverId
-                && role.Name == Constants.ServerProfile.DefaultMemberRoleName,
+                && role.Name == Constants.Roles.DefaultMemberRoleName,
                 cancellationToken);
         }
 
