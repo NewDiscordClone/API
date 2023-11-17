@@ -46,9 +46,9 @@ services.AddAuthentication(config =>
     })
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "https://localhost:7198";
+        options.Authority = "https://sparkle.net.ua/auth";
         options.Audience = "MessageApi";
-        options.RequireHttpsMetadata = false;
+        options.MetadataAddress = "https://sparkle.net.ua/auth/.well-known/openid-configuration";
     });
 
 services.AddAuthorization();
@@ -70,7 +70,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("http://localhost:8080", "https://sparkle.net.ua", "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -109,4 +109,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
 app.Run();
+

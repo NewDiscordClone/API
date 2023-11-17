@@ -20,7 +20,6 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
             UserViewModel notifyArg = Mapper.Map<UserViewModel>(user);
 
             await SendAsync(ClientMethods.UserUpdated, notifyArg, GetConnections(UserId));
-
         }
     }
 }
