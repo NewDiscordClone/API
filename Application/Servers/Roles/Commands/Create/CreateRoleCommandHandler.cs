@@ -24,9 +24,6 @@ namespace Sparkle.Application.Servers.Roles.Commands.Create
 
             Role role = Mapper.Map<Role>(command);
 
-            if (!_roleRepository.IsPriorityUniqueInServer(role.ServerId!, role.Priority))
-                throw new InvalidOperationException("Priority must be unique in server");
-
             await _roleFactory.CreateServerRoleAsync(role, command.Claims);
 
             server.Roles.Add(role.Id);
