@@ -18,10 +18,16 @@ namespace Sparkle.Application.Users.Relationships.Queries
 
         public async Task<List<RelationshipViewModel>> Handle(GetRelationshipQuery query, CancellationToken cancellationToken)
         {
-            List<Relationship> relationships = await Context.Relationships
-                .Where(relationship => relationship.Active == UserId || relationship.Passive == UserId
-                && relationship.RelationshipType != RelationshipTypes.Acquaintance)
-                .ToListAsync(cancellationToken);
+            IQueryable<Relationship> relationshipsQuery = Context.Relationships
+                .Where(relationship => relationship.Active == UserId || relationship.Passive == UserId);
+
+            if (!query.IncludeAcquaintance)
+            {
+                relationshipsQuery = relationshipsQuery.Where(relationship
+                    => relationship.RelationshipType != RelationshipTypes.Acquaintance);
+            }
+
+            List<Relationship> relationships = await relationshipsQuery.ToListAsync(cancellationToken);
 
             return relationships.ConvertAll(relationship => _convertor.Convert(relationship));
         }

@@ -9,7 +9,7 @@ namespace Sparkle.Application.Messages.Queries.GetMessages
 {
     public class GetMessagesQueryHandler : RequestHandlerBase, IRequestHandler<GetMessagesQuery, List<MessageDto>>
     {
-        private const int _pageSize = 25;
+        private const int _pageSize = 50;
 
         public async Task<List<MessageDto>> Handle(GetMessagesQuery query, CancellationToken cancellationToken)
         {

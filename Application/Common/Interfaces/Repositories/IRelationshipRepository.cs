@@ -7,6 +7,8 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
     /// </summary>
     public interface IRelationshipRepository : IRepository<Relationship, (Guid Active, Guid Passive)>
     {
+        Task<Relationship> FindByChatIdAsync(string chatId, CancellationToken cancellationToken);
+
         /// <summary>
         /// Updates the relationship with ability to swap keys .
         /// </summary>
