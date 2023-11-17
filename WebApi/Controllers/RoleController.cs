@@ -9,6 +9,7 @@ using Sparkle.Application.Models.Events;
 using Sparkle.Application.Servers.Roles.Commands.ChangeColor;
 using Sparkle.Application.Servers.Roles.Commands.ChangeName;
 using Sparkle.Application.Servers.Roles.Commands.ChangePriority;
+using Sparkle.Application.Servers.Roles.Commands.ChangeRangePriority;
 using Sparkle.Application.Servers.Roles.Commands.Create;
 using Sparkle.Application.Servers.Roles.Commands.Delete;
 using Sparkle.Application.Servers.Roles.Commands.Update;
@@ -168,6 +169,33 @@ namespace Sparkle.WebApi.Controllers
         {
             Role role = await Mediator.Send(new ChangeRolePriorityCommand { RoleId = roleId, Priority = priority });
             await Mediator.Publish(new RoleUpdatedEvent(role));
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Update roles' priorities.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint allows updating priorities for multiple roles simultaneously.
+        /// </remarks>
+        /// <param name="priorities">Collection of role IDs and their corresponding new priorities.
+        /// Priorities must be between 1 and 99 and unique</param>
+        /// <response code="204">Operation is successful.</response>
+        /// <response code="400">Bad Request. Invalid input data.</response>
+        /// <response code="404">Not Found. Some roles are not found.</response>
+        [HttpPatch("{roleId}/priorities")]
+        [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
+        public async Task<ActionResult> UpdateRolePriorities(IEnumerable<(Guid roleId, int priority)> priorities)
+        {
+            Dictionary<Guid, int> prioritiesDictionary =
+                priorities.ToDictionary(p => p.roleId, p => p.priority);
+
+            ChangeRangePriorityCommand command = new(prioritiesDictionary);
+            IEnumerable<Role> roles = await Mediator.Send(command);
+
+            foreach (Role role in roles)
+                await Mediator.Publish(new RoleUpdatedEvent(role));
+
             return NoContent();
         }
 
