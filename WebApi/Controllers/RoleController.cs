@@ -56,8 +56,11 @@ namespace Sparkle.WebApi.Controllers
         [HttpGet("{roleId}")]
         public async Task<ActionResult<RoleResponse>> GetRole(Guid roleId)
         {
-            Role role = await Mediator.Send(new RoleDetailsQuery { RoleId = roleId });
-            RoleResponse response = Mapper.Map<RoleResponse>(role);
+            (Role role, List<IdentityRoleClaim<Guid>> claims) =
+                await Mediator.Send(new RoleDetailsQuery(roleId));
+
+            RoleResponse response = Mapper.Map<RoleResponse>((role, claims));
+
             return Ok(response);
         }
 
@@ -207,7 +210,7 @@ namespace Sparkle.WebApi.Controllers
         /// <returns></returns>
         [HttpPatch("{roleId}/claims")]
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
-        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, List<ClaimRequest> claims)
+        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, List<Claim> claims)
         {
             List<IdentityRoleClaim<Guid>> identityClaims = claims
                 .ConvertAll(claimRequest => Mapper.Map<IdentityRoleClaim<Guid>>((roleId, claimRequest)));

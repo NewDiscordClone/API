@@ -17,6 +17,6 @@
         /// <summary>
         /// Claims of the role
         /// </summary>
-        public IEnumerable<ClaimRequest> Claims { get; init; }
+        public IEnumerable<Claim> Claims { get; init; }
     }
 }
