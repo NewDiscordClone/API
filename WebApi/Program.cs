@@ -65,6 +65,7 @@ services.AddScoped<IAuthorizationHandler, ProfileRoleRequirementHandler>();
 services.AddScoped<IActionFilter, ServerAuthorizeAttribute>();
 
 services.AddHttpContextAccessor();
+services.AddHttpClient();
 
 builder.Services.AddCors(options =>
 {

@@ -130,9 +130,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<List<RelationshipViewModel>>> GetRelationships()
+        public async Task<ActionResult<List<RelationshipViewModel>>> GetRelationships(bool includeAcquaintance = false)
         {
-            return Ok(await Mediator.Send(new GetRelationshipQuery()));
+            return Ok(await Mediator.Send(new GetRelationshipQuery(includeAcquaintance)));
         }
 
         /// <summary>
@@ -207,6 +207,26 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> DeleteFriendRequest(Guid friendId)
         {
             DeleteFriendCommand command = new() { FriendId = friendId };
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            return NoContent();
+        }
+
+        [HttpPost("block")]
+        public async Task<ActionResult> BlockUser(Guid userId)
+        {
+            BlockUserCommand command = new(userId);
+            Relationship relationship = await Mediator.Send(command);
+
+            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
+            return NoContent();
+        }
+
+        [HttpDelete("block")]
+        public async Task<ActionResult> UnblockUser(Guid userId)
+        {
+            UnblockUserCommand command = new(userId);
             Relationship relationship = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });

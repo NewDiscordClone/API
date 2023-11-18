@@ -37,14 +37,12 @@ namespace Sparkle.DataAccess.Repositories
         {
             return await DbSet
                 .SingleAsync(role => role.ServerId == serverId
-                && role.Name == Constants.ServerProfile.DefaultMemberRoleName,
+                && role.Name == Constants.Roles.DefaultMemberRoleName,
                 cancellationToken);
         }
 
         public bool IsPriorityUniqueInServer(string serverId, int priority)
-        {
-            return !DbSet.Any(role => role.ServerId == serverId && priority == role.Priority);
-        }
+            => !DbSet.Any(role => role.ServerId == serverId && priority == role.Priority);
 
         public async Task RemoveClaimFromRoleAsync(Role role, IdentityRoleClaim<Guid> claim, CancellationToken cancellationToken = default)
         {
@@ -73,5 +71,17 @@ namespace Sparkle.DataAccess.Repositories
             await Context.SaveChangesAsync(cancellationToken);
         }
 
+        public override async Task<Role> AddAsync(Role newRole, CancellationToken cancellationToken = default)
+        {
+            List<Role> roles = await DbSet.Where(role => role.ServerId == newRole.ServerId)
+                .ToListAsync(cancellationToken: cancellationToken);
+
+            foreach (Role role in roles)
+                role.Priority++;
+
+            newRole.Priority = 1;
+
+            return await base.AddAsync(newRole, cancellationToken);
+        }
     }
 }

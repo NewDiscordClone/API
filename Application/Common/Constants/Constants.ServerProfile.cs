@@ -5,9 +5,6 @@
         public static class ServerProfile
         {
             public const int DisplayNameMaxLength = 32;
-            public const int RoleNameMaxLength = 100;
-            public const string DefaultMemberRoleName = "Member";
-            public const string DefaultOwnerRoleName = "Owner";
         }
     }
 }

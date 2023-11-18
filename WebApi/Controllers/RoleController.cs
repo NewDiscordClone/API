@@ -9,6 +9,7 @@ using Sparkle.Application.Models.Events;
 using Sparkle.Application.Servers.Roles.Commands.ChangeColor;
 using Sparkle.Application.Servers.Roles.Commands.ChangeName;
 using Sparkle.Application.Servers.Roles.Commands.ChangePriority;
+using Sparkle.Application.Servers.Roles.Commands.ChangeRangePriority;
 using Sparkle.Application.Servers.Roles.Commands.Create;
 using Sparkle.Application.Servers.Roles.Commands.Delete;
 using Sparkle.Application.Servers.Roles.Commands.Update;
@@ -55,8 +56,11 @@ namespace Sparkle.WebApi.Controllers
         [HttpGet("{roleId}")]
         public async Task<ActionResult<RoleResponse>> GetRole(Guid roleId)
         {
-            Role role = await Mediator.Send(new RoleDetailsQuery { RoleId = roleId });
-            RoleResponse response = Mapper.Map<RoleResponse>(role);
+            (Role role, List<IdentityRoleClaim<Guid>> claims) =
+                await Mediator.Send(new RoleDetailsQuery(roleId));
+
+            RoleResponse response = Mapper.Map<RoleResponse>((role, claims));
+
             return Ok(response);
         }
 
@@ -172,6 +176,30 @@ namespace Sparkle.WebApi.Controllers
         }
 
         /// <summary>
+        /// Update roles' priorities.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint allows updating priorities for multiple roles simultaneously.
+        /// </remarks>
+        /// <param name="priorities">Collection of role IDs and their corresponding new priorities.
+        /// Priorities must be between 1 and 99 and unique</param>
+        /// <response code="204">Operation is successful.</response>
+        /// <response code="400">Bad Request. Invalid input data.</response>
+        /// <response code="404">Not Found. Some roles are not found.</response>
+        [HttpPatch("priorities")]
+        [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
+        public async Task<ActionResult> UpdateRolePriorities(Dictionary<Guid, int> priorities)
+        {
+            ChangeRangePriorityCommand command = new(priorities);
+            IEnumerable<Role> roles = await Mediator.Send(command);
+
+            foreach (Role role in roles)
+                await Mediator.Publish(new RoleUpdatedEvent(role));
+
+            return NoContent();
+        }
+
+        /// <summary>
         /// Updates the permissions of the role
         /// </summary>
         /// <param name="roleId">Id of the role to update claims</param>
@@ -179,7 +207,7 @@ namespace Sparkle.WebApi.Controllers
         /// <returns></returns>
         [HttpPatch("{roleId}/claims")]
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
-        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, List<ClaimRequest> claims)
+        public async Task<ActionResult> UpdateRoleClaims(Guid roleId, List<Claim> claims)
         {
             List<IdentityRoleClaim<Guid>> identityClaims = claims
                 .ConvertAll(claimRequest => Mapper.Map<IdentityRoleClaim<Guid>>((roleId, claimRequest)));

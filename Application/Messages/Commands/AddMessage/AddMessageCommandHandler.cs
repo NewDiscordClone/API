@@ -10,22 +10,40 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
 {
     public class AddMessageCommandHandler : RequestHandlerBase, IRequestHandler<AddMessageCommand, MessageDto>
     {
-        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
         private readonly IServerProfileRepository _serverProfileRepository;
+        private readonly IRelationshipRepository _relationshipRepository;
 
         public async Task<MessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
             Chat chat = await Context.Chats.FindAsync(request.ChatId, cancellationToken);
-            UserProfile profile;
+            UserProfile? profile = null;
             if (chat is Channel channel)
             {
-                profile = await _serverProfileRepository.FindUserProfileOnServerAsync(channel.ServerId, UserId, cancellationToken)
-                    ?? throw new EntityNotFoundException(message: $"User {UserId} profile not found in server {channel.ServerId}", "");
+                profile = await _serverProfileRepository.
+                    FindUserProfileOnServerAsync(channel.ServerId, UserId, cancellationToken)
+                    ?? throw new EntityNotFoundException(message: $"User {UserId} profile not found" +
+                    $" in server {channel.ServerId}", "");
             }
-            else
-                profile = await _userProfileRepository.FindByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
+            else if (chat is PersonalChat personalChat && chat is not GroupChat)
+            {
+                Relationship relationship = await _relationshipRepository
+                    .FindByChatIdAsync(chat.Id, cancellationToken);
+
+                if (relationship == RelationshipTypes.Blocked)
+                {
+                    string exceptionMessage = relationship.Active == UserId ?
+                    "You block this user" :
+                    "You blocked by this user";
+
+                    throw new InvalidOperationException(exceptionMessage);
+                }
+            }
+
+            profile ??= await _userProfileRepository
+                .FindByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
 
             List<Attachment> attachments = new();
 
@@ -71,11 +89,16 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             return dto;
         }
 
-        public AddMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository, IServerProfileRepository serverProfileRepository) :
-            base(context, userProvider, mapper)
+        public AddMessageCommandHandler(IAppDbContext context,
+            IAuthorizedUserProvider userProvider,
+            IMapper mapper,
+            IUserProfileRepository userProfileRepository,
+            IServerProfileRepository serverProfileRepository,
+            IRelationshipRepository relationshipRepository) : base(context, userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;
             _serverProfileRepository = serverProfileRepository;
+            _relationshipRepository = relationshipRepository;
         }
     }
 }

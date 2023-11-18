@@ -10,15 +10,13 @@ namespace Sparkle.Application.Servers.Roles.Commands.Create
         public CreateRoleCommandValidator()
         {
             RuleFor(c => c.Name).RequiredMaximumLength(
-                Constants.ServerProfile.RoleNameMaxLength)
+                Constants.Roles.RoleNameMaxLength)
                 .NotDefaultRoleName();
 
             RuleFor(c => c.Color).NotNull().NotEmpty();
             RuleFor(c => c.Color).Color();
 
             RuleFor(c => c.ServerId).NotNull().IsObjectId();
-
-            RuleFor(c => c.Priority).NotNull().GreaterThan(0).LessThan(100);
 
             RuleFor(c => c.Claims).NotNull();
             RuleForEach(c => c.Claims).SetValidator(new ClaimValidator());
