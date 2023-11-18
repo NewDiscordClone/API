@@ -186,7 +186,7 @@ namespace Sparkle.WebApi.Controllers
         /// <response code="204">Operation is successful.</response>
         /// <response code="400">Bad Request. Invalid input data.</response>
         /// <response code="404">Not Found. Some roles are not found.</response>
-        [HttpPatch("{roleId}/priorities")]
+        [HttpPatch("priorities")]
         [ServerAuthorize(Claims = Constants.Claims.ManageRoles)]
         public async Task<ActionResult> UpdateRolePriorities(Dictionary<Guid, int> priorities)
         {
