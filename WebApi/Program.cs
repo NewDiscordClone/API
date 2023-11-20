@@ -43,6 +43,12 @@ JwtOptions jwtOptions = new();
 builder.Configuration.GetSection(JwtOptions.SectionName).Bind(jwtOptions);
 services.AddSingleton(jwtOptions);
 
+
+Console.WriteLine(jwtOptions.Authority);
+Console.WriteLine(jwtOptions.Audience);
+Console.WriteLine(jwtOptions.MetadataAddress);
+Console.WriteLine(jwtOptions.JwksUri);
+
 services.AddAuthentication(config =>
     {
         config.DefaultAuthenticateScheme =
