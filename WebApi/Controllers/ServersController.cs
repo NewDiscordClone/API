@@ -5,7 +5,7 @@ using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Servers.ServerDeleted;
 using Sparkle.Application.HubClients.Servers.ServerUpdated;
-using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
 using Sparkle.Application.Servers.Commands.CreateServer;
 using Sparkle.Application.Servers.Commands.DeleteServer;
 using Sparkle.Application.Servers.Commands.JoinServer;
@@ -40,7 +40,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> JoinServer(string invitationId)
         {
-            await Mediator.Send(new JoinServerCommand() { InvitationId = invitationId });
+            Application.Models.ServerProfile profile = await Mediator
+                .Send(new JoinServerCommand() { InvitationId = invitationId });
+
+            await Mediator.Publish(new ProfileUpdatedEvent(profile));
 
             return NoContent();
         }
@@ -102,7 +105,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<string>> CreateServer(CreateServerCommand command)
         {
-            Server server = await Mediator.Send(command);
+            Application.Models.Server server = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyServerUpdatedQuery { ServerId = server.Id });
 
@@ -164,7 +167,7 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> DeleteServer(string serverId)
         {
             DeleteServerCommand command = new() { ServerId = serverId };
-            (Server server, IEnumerable<Guid> userIds) = await Mediator.Send(command);
+            (Application.Models.Server server, IEnumerable<Guid> userIds) = await Mediator.Send(command);
 
             await Mediator.Publish(new NotifyServerDeletedEvent(server, userIds));
 
