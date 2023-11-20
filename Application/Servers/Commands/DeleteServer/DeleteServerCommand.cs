@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Sparkle.Application.Servers.Commands.DeleteServer
 {
-    public record DeleteServerCommand : IRequest<Server>
+    public record DeleteServerCommand : IRequest<(Server Server, IEnumerable<Guid> UserIds)>
     {
         /// <summary>
         /// Id of the server to delete

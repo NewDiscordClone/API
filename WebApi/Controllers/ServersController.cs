@@ -164,9 +164,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> DeleteServer(string serverId)
         {
             DeleteServerCommand command = new() { ServerId = serverId };
-            Server server = await Mediator.Send(command);
+            (Server server, IEnumerable<Guid> userIds) = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyServerDeletedQuery { Server = server });
+            await Mediator.Publish(new NotifyServerDeletedEvent(server, userIds));
 
             return NoContent();
         }

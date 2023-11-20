@@ -3,8 +3,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.Servers.ServerDeleted
 {
-    public record NotifyServerDeletedQuery : IRequest
+    public record NotifyServerDeletedEvent(Server Server, IEnumerable<Guid> UserIds) : INotification
     {
-        public Server Server { get; init; }
     }
 }
