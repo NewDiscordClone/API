@@ -4,11 +4,10 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
-using Sparkle.Application.Servers.Queries.ServerDetails;
 
 namespace Sparkle.Application.Servers.Commands.JoinServer
 {
-    public class JoinServerCommandHandler : RequestHandlerBase, IRequestHandler<JoinServerCommand, ServerDetailsDto>
+    public class JoinServerCommandHandler : RequestHandlerBase, IRequestHandler<JoinServerCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         private readonly IRoleFactory _roleFactory;
@@ -18,7 +17,7 @@ namespace Sparkle.Application.Servers.Commands.JoinServer
             _roleFactory = roleFactory;
         }
 
-        public async Task<ServerDetailsDto> Handle(JoinServerCommand command, CancellationToken cancellationToken)
+        public async Task<ServerProfile> Handle(JoinServerCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
@@ -55,7 +54,7 @@ namespace Sparkle.Application.Servers.Commands.JoinServer
             await _serverProfileRepository.AddAsync(profile, cancellationToken);
             await Context.Servers.UpdateAsync(server, cancellationToken);
 
-            return Mapper.Map<ServerDetailsDto>(await Context.Servers.UpdateAsync(server, cancellationToken));
+            return profile;
         }
     }
 }
