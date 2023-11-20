@@ -11,6 +11,7 @@ using Sparkle.WebApi;
 using Sparkle.WebApi.Attributes;
 using Sparkle.WebApi.Authorization.Handlers;
 using Sparkle.WebApi.Common.Mapping;
+using Sparkle.WebApi.Common.Options;
 using Sparkle.WebApi.Common.Parsers;
 using Sparkle.WebApi.Hubs;
 using Sparkle.WebApi.Providers;
@@ -38,6 +39,16 @@ services.AddDatabase(builder.Configuration);
 
 services.AddMapping();
 
+JwtOptions jwtOptions = new();
+builder.Configuration.GetSection(JwtOptions.SectionName).Bind(jwtOptions);
+services.AddSingleton(jwtOptions);
+
+
+Console.WriteLine(jwtOptions.Authority);
+Console.WriteLine(jwtOptions.Audience);
+Console.WriteLine(jwtOptions.MetadataAddress);
+Console.WriteLine(jwtOptions.JwksUri);
+
 services.AddAuthentication(config =>
     {
         config.DefaultAuthenticateScheme =
@@ -46,9 +57,9 @@ services.AddAuthentication(config =>
     })
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = "https://localhost:7198";
-        options.Audience = "MessageApi";
-        options.RequireHttpsMetadata = false;
+        options.Authority = jwtOptions.Authority;
+        options.Audience = jwtOptions.Audience;
+        options.MetadataAddress = jwtOptions.MetadataAddress;
     });
 
 services.AddAuthorization();
@@ -71,7 +82,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
+        policy.WithOrigins("https://sparkle.net.ua", "http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -110,4 +121,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
 app.Run();
+
