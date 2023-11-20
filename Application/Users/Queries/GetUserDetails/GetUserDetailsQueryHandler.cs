@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
@@ -20,7 +21,17 @@ namespace Sparkle.Application.Users.Queries
             {
                 ServerProfile? serverProfile = await _serverProfileRepository
                     .FindUserProfileOnServerAsync(query.ServerId, query.UserId, cancellationToken);
-                userDto.ServerProfile = Mapper.Map<GetUserDetailsServerProfileDto>(serverProfile);
+
+                if (serverProfile != null)
+                {
+                    serverProfile = await _serverProfileRepository.
+                        FindOrDefaultAsync(serverProfile.Id, cancellationToken, true);
+
+                    serverProfile!.Roles = serverProfile.Roles
+                        .ExceptBy(Constants.Roles.DefaultRoleIds, role => role.Id).ToList();
+
+                    userDto.ServerProfile = Mapper.Map<GetUserDetailsServerProfileDto>(serverProfile);
+                }
             }
             return userDto;
         }

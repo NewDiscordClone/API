@@ -17,7 +17,7 @@ namespace Sparkle.Application.Users.Queries
         /// <summary>
         /// List of user's roles on this server.
         /// </summary>
-        public virtual List<GetUserDetailsRolesDto> Roles { get; set; }
+        public List<GetUserDetailsRolesDto> Roles { get; set; }
 
         public void Mapping(Profile profile)
         {

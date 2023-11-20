@@ -23,6 +23,7 @@ namespace Sparkle.Application.Users.Queries
         /// </summary>
         [DefaultValue("#FF0000")]
         public string Color { get; set; }
+        public int Priority { get; set; }
 
         public void Mapping(Profile profile)
         {
