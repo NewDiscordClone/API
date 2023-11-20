@@ -11,9 +11,10 @@ namespace Sparkle.WebApi.Common.Mapping.Configuration
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<Claim, IdentityRoleClaim<Guid>>()
-                .Map(dest => dest.ClaimType, src => src.Type)
-                .Map(dest => dest.ClaimValue, src => src.Value.ToString());
+            config.NewConfig<(Guid RoleId, Claim Claim), IdentityRoleClaim<Guid>>()
+                .Map(dest => dest.ClaimType, src => src.Claim.Type)
+                .Map(dest => dest.RoleId, src => src.RoleId)
+                .Map(dest => dest.ClaimValue, src => src.Claim.Value.ToString());
 
             config.NewConfig<IdentityRoleClaim<Guid>, Claim>()
                 .Map(dest => dest.Type, src => src.ClaimType)
