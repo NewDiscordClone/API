@@ -19,7 +19,8 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
 
         public async Task<ServerProfile> Handle(ChangeServerProfileDisplayNameCommand command, CancellationToken cancellationToken)
         {
-            ServerProfile serverProfile = await _serverProfileRepository.FindOrDefaultAsync(command.ProfileId, cancellationToken, true)
+            ServerProfile serverProfile = await _serverProfileRepository
+                .FindOrDefaultAsync(command.ProfileId, cancellationToken, true)
                 ?? throw new EntityNotFoundException(command.ProfileId);
 
             bool hasPermission = false;
@@ -29,9 +30,20 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
             {
                 hasPermission = true;
             }
-            else if (UserProvider.HasClaims(serverProfile, Constants.Claims.ChangeSomeoneServerName))
+            else
             {
-                hasPermission = true;
+                ServerProfile? currentUserProfile = await _serverProfileRepository
+                    .FindUserProfileOnServerAsync(serverProfile.ServerId, UserId, cancellationToken);
+
+                currentUserProfile = await _serverProfileRepository
+                .FindOrDefaultAsync(currentUserProfile!.Id, cancellationToken, true);
+
+                if (currentUserProfile is not null && (UserProvider.HasClaims(currentUserProfile,
+                    Constants.Claims.ChangeSomeoneServerName)
+                    || UserProvider.IsAdmin(currentUserProfile)))
+                {
+                    hasPermission = true;
+                }
             }
 
             if (!hasPermission)
