@@ -130,7 +130,8 @@ namespace Sparkle.DataAccess.Repositories
                     .Include(profile => profile.Roles)
                     .FirstOrDefaultAsync(profile => profile.Id == id, cancellationToken);
 
-            return await FindOrDefaultAsync(id, cancellationToken);
+            return await DbSet
+                .FirstOrDefaultAsync(profile => profile.Id == id, cancellationToken);
         }
     }
 }
