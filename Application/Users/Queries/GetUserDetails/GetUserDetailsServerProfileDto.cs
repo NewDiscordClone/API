@@ -12,7 +12,7 @@ namespace Sparkle.Application.Users.Queries
         /// User's username displayed on this server.
         /// </summary>
         [DefaultValue("𝕾𝖊𝖗𝖛𝖊𝖗 𝕯𝖎𝖘𝖕𝖑𝖆𝖞𝕹𝖆𝖒𝖊")]
-        public string? DisplayName { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// List of user's roles on this server.
@@ -21,7 +21,8 @@ namespace Sparkle.Application.Users.Queries
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<ServerProfile, GetUserDetailsServerProfileDto>();
+            profile.CreateMap<ServerProfile, GetUserDetailsServerProfileDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DisplayName));
         }
     }
 }
