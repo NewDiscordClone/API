@@ -10,7 +10,7 @@ namespace Sparkle.DataAccess.Repositories
     /// </summary>
     public class RelationshipRepository : BaseSqlRepository<Relationship, (Guid Active, Guid Passive)>, IRelationshipRepository
     {
-        public RelationshipRepository(AppDbContext context) : base(context)
+        public RelationshipRepository(PostgresDbContext context) : base(context)
         {
         }
 

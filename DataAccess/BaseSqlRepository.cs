@@ -14,19 +14,19 @@ namespace Sparkle.DataAccess
     public class BaseSqlRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
         public DbSet<TEntity> DbSet => _dbSet;
-        public AppDbContext Context => _context;
+        public PostgresDbContext Context => _context;
 
 
         private readonly DbSet<TEntity> _dbSet;
-        private readonly AppDbContext _context;
+        private readonly PostgresDbContext _context;
 
-        public BaseSqlRepository(DbSet<TEntity> original, AppDbContext context)
+        public BaseSqlRepository(DbSet<TEntity> original, PostgresDbContext context)
         {
             _dbSet = original;
             _context = context;
         }
 
-        public BaseSqlRepository(AppDbContext context)
+        public BaseSqlRepository(PostgresDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();

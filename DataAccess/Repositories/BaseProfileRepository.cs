@@ -17,7 +17,7 @@ namespace Sparkle.DataAccess.Repositories
         /// Initializes a new instance of the <see cref="BaseProfileRepository{TProfile}"/> class.
         /// </summary>
         /// <param name="context">The database context.</param>
-        protected BaseProfileRepository(AppDbContext context) : base(context)
+        protected BaseProfileRepository(PostgresDbContext context) : base(context)
         {
         }
 

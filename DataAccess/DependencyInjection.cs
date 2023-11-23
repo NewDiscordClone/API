@@ -12,7 +12,7 @@ namespace Sparkle.DataAccess
         public static IServiceCollection AddDatabase(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<PostgresDbContext>(options =>
             {
                 string connectionString = configuration.GetConnectionString("Postgres")
                     ?? throw new Exception("Connection doesn't exist");
@@ -20,7 +20,12 @@ namespace Sparkle.DataAccess
                 options.UseNpgsql(connectionString);
             });
 
-            services.AddScoped<IAppDbContext, AppDbContext>();
+            string mongoConnection = configuration.GetConnectionString("MongoDB")!;
+
+            string connectionString = mongoConnection.Split(';')[0];
+            string dbName = mongoConnection.Split(";")[1];
+
+            services.AddMongoDB<MongoDbContext>(connectionString, dbName);
 
             services.AddRepositories();
 

@@ -8,7 +8,7 @@ namespace Sparkle.DataAccess.Repositories
 {
     public class UserProfileRepository : BaseProfileRepository<UserProfile>, IUserProfileRepository
     {
-        public UserProfileRepository(AppDbContext context) : base(context)
+        public UserProfileRepository(PostgresDbContext context) : base(context)
         {
         }
 

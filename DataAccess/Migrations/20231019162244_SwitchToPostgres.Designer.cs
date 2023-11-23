@@ -11,7 +11,7 @@ using Sparkle.DataAccess;
 
 namespace Sparkle.DataAccess.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(PostgresDbContext))]
     [Migration("20231019162244_SwitchToPostgres")]
     partial class SwitchToPostgres
     {

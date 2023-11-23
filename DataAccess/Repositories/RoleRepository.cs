@@ -8,7 +8,7 @@ namespace Sparkle.DataAccess.Repositories
 {
     internal class RoleRepository : BaseSqlRepository<Role, Guid>, IRoleRepository
     {
-        public RoleRepository(AppDbContext context) : base(context)
+        public RoleRepository(PostgresDbContext context) : base(context)
         {
         }
         public async Task AddClaimsToRoleAsync(Role role, IEnumerable<IdentityRoleClaim<Guid>> claims, CancellationToken cancellationToken = default)

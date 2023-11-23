@@ -7,7 +7,7 @@ namespace Sparkle.DataAccess.Repositories
 {
     public class ServerProfileRepository : BaseProfileRepository<ServerProfile>, IServerProfileRepository
     {
-        public ServerProfileRepository(AppDbContext context) : base(context)
+        public ServerProfileRepository(PostgresDbContext context) : base(context)
         {
         }
 
