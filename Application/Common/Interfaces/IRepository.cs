@@ -1,5 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Exceptions;
+using System.Linq.Expressions;
 
 namespace Sparkle.Application.Common.Interfaces
 {
@@ -41,10 +42,17 @@ namespace Sparkle.Application.Common.Interfaces
         /// <summary>
         /// Filters the entities based on a predicate.
         /// </summary>
-        /// <param name="expression">The predicate used to filter the entities.</param>
+        /// <param name="query">The predicate used to filter the entities.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities that satisfy the predicate.</returns>
+        List<TEntity> ExecuteCustomQuery(Func<DbSet<TEntity>, IQueryable<TEntity>> query);
+
+        /// <summary>
+        /// Filters the entities based on a predicate.
+        /// </summary>
+        /// <param name="query">The predicate used to filter the entities.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities that satisfy the predicate.</returns>
-        Task<List<TEntity>> FilterAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+        Task<List<TEntity>> ExecuteCustomQueryAsync(Func<DbSet<TEntity>, IQueryable<TEntity>> query, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Finds a single entity that satisfies a predicate.
@@ -103,10 +111,10 @@ namespace Sparkle.Application.Common.Interfaces
         /// <summary>
         /// Deletes multiple entities from the repository based on a predicate.
         /// </summary>
-        /// <param name="expression">The predicate used to filter the entities to delete.</param>
+        /// <param name="query">The predicate used to filter the entities to delete.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task DeleteManyAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default);
+        Task DeleteManyAsync(Func<DbSet<TEntity>, IQueryable<TEntity>> query, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes multiple entities from the repository.

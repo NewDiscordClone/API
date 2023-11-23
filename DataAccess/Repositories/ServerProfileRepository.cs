@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver.Linq;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
-    public class ServerProfileRepository : BaseProfileRepository<ServerProfile>, IServerProfileRepository
+    public class ServerProfileRepository(PostgresDbContext context, MongoDbContext mongoContext)
+        : BaseProfileRepository<ServerProfile>(context), IServerProfileRepository
     {
-        public ServerProfileRepository(PostgresDbContext context) : base(context)
-        {
-        }
+        private readonly MongoDbContext _mongoContext = mongoContext;
 
         public async Task RemoveRolesAsync(Guid profileId, params Guid[] roleIds)
         {
@@ -55,7 +55,8 @@ namespace Sparkle.DataAccess.Repositories
         public async Task<ServerProfile?> FindProfileByChannelIdAsync(string channelId, Guid userId,
             CancellationToken cancellationToken = default)
         {
-            Channel channel = await Context.Channels.FindAsync(channelId, cancellationToken);
+            Channel channel = await _mongoContext.Chats.OfType<Channel>()
+                .FirstAsync(channel => channel.Id == channelId, cancellationToken);
 
             return await FindUserProfileOnServerAsync(channel.ServerId, userId, cancellationToken);
         }

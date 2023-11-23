@@ -2,18 +2,16 @@
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
+using RelationshipId = (System.Guid Active, System.Guid Passive);
 
 namespace Sparkle.DataAccess.Repositories
 {
     /// <summary>
     /// Repository for managing <see cref="Relationship"/> entities.
     /// </summary>
-    public class RelationshipRepository : BaseSqlRepository<Relationship, (Guid Active, Guid Passive)>, IRelationshipRepository
+    public class RelationshipRepository(PostgresDbContext context)
+        : BaseRepository<PostgresDbContext, Relationship, RelationshipId>(context), IRelationshipRepository
     {
-        public RelationshipRepository(PostgresDbContext context) : base(context)
-        {
-        }
-
         public override void AddMany(IEnumerable<Relationship> entities)
         {
             throw new InvalidOperationException($"{nameof(AddMany)} method forbidden for " +
@@ -26,7 +24,7 @@ namespace Sparkle.DataAccess.Repositories
              $"{nameof(Relationship)}s. Use {nameof(AddAsync)} instead");
         }
 
-        public override async Task DeleteAsync((Guid Active, Guid Passive) id, CancellationToken cancellationToken = default)
+        public override async Task DeleteAsync(RelationshipId id, CancellationToken cancellationToken = default)
         {
             Relationship relationship = await FindAsync(id, cancellationToken);
 
@@ -47,7 +45,7 @@ namespace Sparkle.DataAccess.Repositories
             }
         }
 
-        public override async Task<Relationship> FindAsync((Guid Active, Guid Passive) id, CancellationToken cancellationToken = default)
+        public override async Task<Relationship> FindAsync(RelationshipId id, CancellationToken cancellationToken = default)
         {
             return await FindOrDefaultAsync(id, cancellationToken)
                 ?? throw new EntityNotFoundException("Relationship not found", id);
@@ -59,11 +57,11 @@ namespace Sparkle.DataAccess.Repositories
         /// <param name="id">The IDs of the relationship to find.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The found relationship, or null if not found.</returns>
-        public async Task<Relationship?> FindOrDefaultAsync((Guid Active, Guid Passive) id,
+        public async Task<Relationship?> FindOrDefaultAsync(RelationshipId id,
             CancellationToken cancellationToken = default)
         {
-            Relationship? relationship = await DbSet.FindAsync(new object?[] { id.Active, id.Passive }, cancellationToken: cancellationToken);
-            return relationship ?? await DbSet.FindAsync(new object?[] { id.Passive, id.Active }, cancellationToken: cancellationToken);
+            Relationship? relationship = await DbSet.FindAsync([id.Active, id.Passive], cancellationToken: cancellationToken);
+            return relationship ?? await DbSet.FindAsync([id.Passive, id.Active], cancellationToken: cancellationToken);
         }
 
         /// <summary>
