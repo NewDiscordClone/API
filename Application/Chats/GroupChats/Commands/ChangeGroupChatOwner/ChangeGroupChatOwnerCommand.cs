@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
 {
-    public record ChangeGroupChatOwnerCommand : IRequest<Chat>
+    public record ChangeGroupChatOwnerCommand : IRequest<GroupChat>
     {
         /// <summary>
         /// The unique identifier of the group chat to change an owner in.

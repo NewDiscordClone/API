@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
@@ -10,27 +11,31 @@ namespace Sparkle.Application.Chats.Queries.PrivateChatsList
         IRequestHandler<PrivateChatsQuery, List<PrivateChatLookUp>>
     {
         private readonly IConvertor _convertor;
+        private readonly IChatRepository _chatRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
         public PrivateChatsQueryHandler(
-            IAppDbContext appDbContext,
             IAuthorizedUserProvider userProvider,
-            IConvertor convertor)
-            : base(appDbContext, userProvider)
+            IConvertor convertor,
+            IUserProfileRepository userProfileRepository)
+            : base(userProvider)
         {
             _convertor = convertor;
+            _userProfileRepository = userProfileRepository;
         }
 
         public async Task<List<PrivateChatLookUp>> Handle(PrivateChatsQuery query, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            List<string?> chatIds = await Context.UserProfiles.
-                Where(profile => profile.UserId == UserId && profile.ChatId != null)
-                .Select(profile => profile.ChatId)
+            List<string?> chatIds = await _userProfileRepository.ExecuteCustomQuery(profiles =>
+                profiles.Where(profile => profile.UserId == UserId && profile.ChatId != null)
+                .Select(profile => profile.ChatId))
                 .ToListAsync(cancellationToken);
 
-            List<PersonalChat> chats = await Context.PersonalChats
-                .FilterAsync(chat => chatIds.Contains(chat.Id), cancellationToken);
+            List<PersonalChat> chats = await _chatRepository.ExecuteCustomQuery
+                (chats => chats
+                    .Where(chat => chatIds.Contains(chat.Id))
+                    .OfType<PersonalChat>())
+                .ToListAsync(cancellationToken);
 
             List<PrivateChatLookUp> chatDtos = chats.ConvertAll(_convertor.Convert);
 

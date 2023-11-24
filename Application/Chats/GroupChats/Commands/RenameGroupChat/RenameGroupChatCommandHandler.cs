@@ -1,27 +1,21 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RenameGroupChat
 {
-    public class RenameGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RenameGroupChatCommand, Chat>
+    public class RenameGroupChatCommandHandler(IChatRepository chatRepository) : IRequestHandler<RenameGroupChatCommand, GroupChat>
     {
-        public async Task<Chat> Handle(RenameGroupChatCommand command, CancellationToken cancellationToken)
+        private readonly IChatRepository _chatRepository = chatRepository;
+        public async Task<GroupChat> Handle(RenameGroupChatCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId, cancellationToken);
+            GroupChat chat = await _chatRepository.FindAsync<GroupChat>(command.ChatId, cancellationToken);
 
             chat.Title = command.NewTitle;
 
-            await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+            await _chatRepository.UpdateAsync(chat, cancellationToken);
 
             return chat;
-        }
-
-        public RenameGroupChatCommandHandler(IAppDbContext context) : base(
-            context)
-        {
         }
     }
 }

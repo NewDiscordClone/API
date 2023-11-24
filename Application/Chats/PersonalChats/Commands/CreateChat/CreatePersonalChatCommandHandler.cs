@@ -10,16 +10,19 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
         private readonly IRoleFactory _roleFactory;
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IRelationshipRepository _relationshipRepository;
-        public CreatePersonalChatCommandHandler(IAppDbContext context,
-            IAuthorizedUserProvider userProvider,
+        private readonly IChatRepository _chatRepository;
+
+        public CreatePersonalChatCommandHandler(IAuthorizedUserProvider userProvider,
             IUserProfileRepository userProfileRepository,
             IRoleFactory roleFactory,
-            IRelationshipRepository relationshipRepository)
-            : base(context, userProvider)
+            IRelationshipRepository relationshipRepository,
+            IChatRepository chatRepository)
+            : base(userProvider)
         {
             _userProfileRepository = userProfileRepository;
             _roleFactory = roleFactory;
             _relationshipRepository = relationshipRepository;
+            _chatRepository = chatRepository;
         }
 
         public async Task<PersonalChat> Handle(CreatePersonalChatCommand command, CancellationToken cancellationToken)
@@ -45,8 +48,8 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
                 UpdatedDate = DateTime.UtcNow,
             };
 
-            List<UserProfile> profiles = new()
-            {
+            List<UserProfile> profiles =
+            [
                 new UserProfile
                 {
                     UserId = command.UserId,
@@ -59,7 +62,7 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
                     Roles = { _roleFactory.PersonalChatMemberRole },
                     ChatId = chat.Id
                 }
-            };
+            ];
 
             if (relationship is not null)
             {
@@ -82,7 +85,7 @@ namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
             chat.Profiles = profiles.Select(profile => profile.Id).ToList();
 
             await _userProfileRepository.AddManyAsync(profiles, cancellationToken);
-            await Context.PersonalChats.AddAsync(chat, cancellationToken);
+            await _chatRepository.AddAsync(chat, cancellationToken);
 
             return chat;
         }

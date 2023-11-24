@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
-    public record RemoveUserFromGroupChatCommand : IRequest<RemoveUserFromGroupChatCommandResult>
+    public record RemoveUserFromGroupChatCommand : IRequest<(GroupChat Chat, Guid RemovedUserId)>
     {
         /// <summary>
         /// The unique identifier of the group chat to leave from.

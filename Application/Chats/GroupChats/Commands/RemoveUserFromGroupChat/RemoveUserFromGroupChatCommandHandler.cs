@@ -1,24 +1,22 @@
 ﻿using MediatR;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
+using RemoveChatUserResult = (Sparkle.Application.Models.GroupChat Chat, System.Guid RemovedUserId);
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
-    public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand,
-RemoveUserFromGroupChatCommandResult>
+    public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand, RemoveChatUserResult>
     {
 
-        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IChatRepository _chatRepository;
+        private readonly IMessageRepository _messageRepository;
 
-        public async Task<RemoveUserFromGroupChatCommandResult> Handle(RemoveUserFromGroupChatCommand command, CancellationToken cancellationToken)
+        public async Task<RemoveChatUserResult> Handle(RemoveUserFromGroupChatCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            GroupChat pchat = await Context.GroupChats.FindAsync(command.ChatId, cancellationToken);
-            if (pchat is not GroupChat chat)
-                throw new InvalidOperationException("This is not group chat");
-
+            GroupChat chat = await _chatRepository.FindAsync<GroupChat>(command.ChatId, cancellationToken);
 
             UserProfile profile;
             if (command.ProfileId is not null)
@@ -32,13 +30,14 @@ RemoveUserFromGroupChatCommandResult>
                     .FindByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
             }
 
-
             await _userProfileRepository.DeleteAsync(profile, cancellationToken);
 
             if (chat.Profiles.Count <= 1)
             {
-                await Context.GroupChats.DeleteAsync(chat, cancellationToken);
-                await Context.Messages.DeleteManyAsync(message => message.ChatId == chat.Id, cancellationToken);
+                await _chatRepository.DeleteAsync(chat, cancellationToken);
+                await _messageRepository.DeleteManyAsync(message
+                    => message.ChatId == chat.Id, cancellationToken);
+
                 return new(chat, profile.UserId);
             }
 
@@ -49,15 +48,19 @@ RemoveUserFromGroupChatCommandResult>
                 await _userProfileRepository.SetGroupChatOwner(chat.OwnerId, cancellationToken);
             }
 
-            await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+            await _chatRepository.UpdateAsync(chat, cancellationToken);
 
             return new(chat, profile.UserId);
         }
 
-        public RemoveUserFromGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(
-            context, userProvider)
+        public RemoveUserFromGroupChatCommandHandler(IAuthorizedUserProvider userProvider,
+            IUserProfileRepository userProfileRepository,
+            IChatRepository chatRepository,
+            IMessageRepository messageRepository) : base(userProvider)
         {
             _userProfileRepository = userProfileRepository;
+            _chatRepository = chatRepository;
+            _messageRepository = messageRepository;
         }
     }
 }

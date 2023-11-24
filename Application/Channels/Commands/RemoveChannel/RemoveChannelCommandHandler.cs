@@ -18,8 +18,7 @@ namespace Sparkle.Application.Channels.Commands.RemoveChannel
             Channel channel = await _chatRepository.FindAsync<Channel>(command.ChatId, cancellationToken);
 
             await _chatRepository.DeleteAsync(channel, cancellationToken);
-            await _messageRepository.DeleteManyAsync(messages =>
-                messages.Where(message => message.ChatId == channel.Id), cancellationToken);
+            await _messageRepository.DeleteManyAsync(message => message.ChatId == channel.Id, cancellationToken);
 
             return channel;
         }

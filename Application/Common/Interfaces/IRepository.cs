@@ -34,15 +34,7 @@ namespace Sparkle.Application.Common.Interfaces
         /// </summary>
         /// <param name="query">The predicate used to filter the entities.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities that satisfy the predicate.</returns>
-        List<TEntity> ExecuteCustomQuery(Func<DbSet<TEntity>, IQueryable<TEntity>> query);
-
-        /// <summary>
-        /// Filters the entities based on a predicate.
-        /// </summary>
-        /// <param name="query">The predicate used to filter the entities.</param>
-        /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result contains a list of entities that satisfy the predicate.</returns>
-        Task<List<TEntity>> ExecuteCustomQueryAsync(Func<DbSet<TEntity>, IQueryable<TEntity>> query, CancellationToken cancellationToken = default);
+        IQueryable<T> ExecuteCustomQuery<T>(Func<DbSet<TEntity>, IQueryable<T>> query);
 
         /// <summary>
         /// Finds a single entity that satisfies a predicate.
@@ -101,10 +93,10 @@ namespace Sparkle.Application.Common.Interfaces
         /// <summary>
         /// Deletes multiple entities from the repository based on a predicate.
         /// </summary>
-        /// <param name="query">The predicate used to filter the entities to delete.</param>
+        /// <param name="predicate">The predicate used to filter the entities to delete.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task DeleteManyAsync(Func<DbSet<TEntity>, IQueryable<TEntity>> query, CancellationToken cancellationToken = default);
+        Task DeleteManyAsync(Func<TEntity, bool> predicate, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes multiple entities from the repository.

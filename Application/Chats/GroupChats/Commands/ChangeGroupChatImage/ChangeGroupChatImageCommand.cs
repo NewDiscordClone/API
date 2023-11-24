@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
 {
-    public record ChangeGroupChatImageCommand : IRequest<Chat>
+    public record ChangeGroupChatImageCommand : IRequest<GroupChat>
     {
         /// <summary>
         /// The unique identifier of the group chat to change the image for

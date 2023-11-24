@@ -8,12 +8,11 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
 {
     public class CreateGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatCommand, GroupChat>
     {
-        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
         private readonly IRoleFactory _roleFactory;
+        private readonly IChatRepository _chatRepository;
         public async Task<GroupChat> Handle(CreateGroupChatCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
             GroupChat chat = new()
             {
                 Title = command.Title,
@@ -41,15 +40,20 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
             chat.OwnerId = ownerProfile.Id;
 
             await _userProfileRepository.AddManyAsync(profiles, cancellationToken);
-            await Context.GroupChats.AddAsync(chat, cancellationToken);
+            await _chatRepository.AddAsync(chat, cancellationToken);
 
             return chat;
         }
 
-        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository, IRoleFactory roleFactory) : base(context, userProvider, mapper)
+        public CreateGroupChatCommandHandler(IAuthorizedUserProvider userProvider,
+            IMapper mapper,
+            IUserProfileRepository userProfileRepository,
+            IRoleFactory roleFactory,
+            IChatRepository chatRepository) : base(userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;
             _roleFactory = roleFactory;
+            _chatRepository = chatRepository;
         }
     }
 }

@@ -6,15 +6,14 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
 {
-    public class AddMemberToGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<AddMemberToGroupChatCommand, Chat>
+    public class AddMemberToGroupChatCommandHandler : IRequestHandler<AddMemberToGroupChatCommand, GroupChat>
     {
         private readonly IUserProfileRepository _repository;
         private readonly IRoleFactory _roleFactory;
-        public async Task<Chat> Handle(AddMemberToGroupChatCommand command, CancellationToken cancellationToken)
+        private readonly IChatRepository _chatRepository;
+        public async Task<GroupChat> Handle(AddMemberToGroupChatCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId, cancellationToken);
+            GroupChat chat = await _chatRepository.FindAsync<GroupChat>(command.ChatId, cancellationToken);
 
             if (await _repository.ChatContainsUserAsync(chat.Id, command.NewMemberId, cancellationToken))
                 throw new NoPermissionsException("User is already a member of the chat");
@@ -28,16 +27,18 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.AddMemberToGroupChat
 
             chat.Profiles.Add(profile.Id);
             await _repository.AddAsync(profile, cancellationToken);
-            await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+            await _chatRepository.UpdateAsync(chat, cancellationToken);
 
             return chat;
         }
 
-        public AddMemberToGroupChatCommandHandler(IAppDbContext context, Common.Interfaces.Repositories.IUserProfileRepository repository, IRoleFactory roleFactory)
-            : base(context)
+        public AddMemberToGroupChatCommandHandler(IUserProfileRepository repository,
+            IRoleFactory roleFactory,
+            IChatRepository chatRepository)
         {
             _repository = repository;
             _roleFactory = roleFactory;
+            _chatRepository = chatRepository;
         }
     }
 }

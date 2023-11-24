@@ -1,30 +1,29 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
 {
-    public class ChangeGroupChatImageCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatImageCommand, Chat>
+    public class ChangeGroupChatImageCommandHandler(IChatRepository chatRepository)
+        : IRequestHandler<ChangeGroupChatImageCommand, GroupChat>
     {
-        public async Task<Chat> Handle(ChangeGroupChatImageCommand command, CancellationToken cancellationToken)
+        private readonly IChatRepository _chatRepository = chatRepository;
+        public async Task<GroupChat> Handle(ChangeGroupChatImageCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            GroupChat chat = await _chatRepository.FindAsync<GroupChat>(command.ChatId, cancellationToken);
 
-            GroupChat chat = await Context.GroupChats.FindAsync(command.ChatId, cancellationToken);
+            if (chat is not GroupChat groupChat)
+                throw new InvalidOperationException();
 
-            string? oldImage = chat.Image;
-            chat.Image = command.NewImage;
+            string? oldImage = groupChat.Image;
+            groupChat.Image = command.NewImage;
 
-            await Context.GroupChats.UpdateAsync(chat, cancellationToken);
+            await _chatRepository.UpdateAsync(groupChat, cancellationToken);
 
             if (oldImage != null)
                 await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/') - 1)..]);
 
-            return chat;
-        }
-
-        public ChangeGroupChatImageCommandHandler(IAppDbContext context) : base(context)
-        {
+            return groupChat;
         }
     }
 }

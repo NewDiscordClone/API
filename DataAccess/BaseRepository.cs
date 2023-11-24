@@ -31,15 +31,9 @@ namespace Sparkle.DataAccess
         public async Task<TEntity?> FindOrDefaultAsync(TKey id, CancellationToken cancellationToken = default)
             => await DbSet.FindAsync([id], cancellationToken);
 
-        public List<TEntity> ExecuteCustomQuery(Func<DbSet<TEntity>, IQueryable<TEntity>> query)
+        public IQueryable<T> ExecuteCustomQuery<T>(Func<DbSet<TEntity>, IQueryable<T>> query)
         {
-            return query(DbSet).ToList();
-        }
-        public async Task<List<TEntity>> ExecuteCustomQueryAsync(Func<DbSet<TEntity>,
-            IQueryable<TEntity>> query,
-            CancellationToken cancellationToken = default)
-        {
-            return await query(DbSet).ToListAsync(cancellationToken);
+            return query(DbSet);
         }
 
         public virtual void AddMany(IEnumerable<TEntity> entities)
@@ -80,9 +74,9 @@ namespace Sparkle.DataAccess
             await Context.SaveChangesAsync(cancellationToken);
         }
 
-        public virtual async Task DeleteManyAsync(Func<DbSet<TEntity>, IQueryable<TEntity>> query, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteManyAsync(Func<TEntity, bool> predicate, CancellationToken cancellationToken = default)
         {
-            DbSet.RemoveRange(await ExecuteCustomQueryAsync(query, cancellationToken));
+            DbSet.RemoveRange(DbSet.Where(predicate));
             await Context.SaveChangesAsync(cancellationToken);
         }
 
