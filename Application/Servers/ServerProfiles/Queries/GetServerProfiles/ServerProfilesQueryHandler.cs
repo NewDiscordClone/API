@@ -2,28 +2,23 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Constants;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles
 {
-    public class ServerProfilesQueryHandler : IRequestHandler<ServerProfilesQuery, List<ServerProfileLookup>>
+    public class ServerProfilesQueryHandler(IMapper mapper, IServerProfileRepository repository, IUserRepository userRepository) :
+        RequestHandlerBase(mapper), IRequestHandler<ServerProfilesQuery, List<ServerProfileLookup>>
     {
-        private readonly IAppDbContext _context;
-        private readonly IMapper _mapper;
-        public ServerProfilesQueryHandler(IAppDbContext context, IMapper mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+        private readonly IServerProfileRepository _repository = repository;
+        private readonly IUserRepository _userRepository = userRepository;
 
         public async Task<List<ServerProfileLookup>> Handle(ServerProfilesQuery request, CancellationToken cancellationToken)
         {
-            List<ServerProfile> profiles = await _context.UserProfiles
-                .OfType<ServerProfile>()
+            List<ServerProfile> profiles = await _repository.ExecuteCustomQuery(profiles => profiles
                 .Where(x => x.ServerId == request.ServerId)
-                .Include(x => x.Roles)
+                .Include(x => x.Roles))
                 .ToListAsync(cancellationToken);
 
             Dictionary<ServerProfile, User> profileUserDictionary = await GetProfileUserDictionaryAsync(profiles, cancellationToken);
@@ -40,7 +35,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles
                 if (mainRole != null)
                     profile.Roles.Add(mainRole);
 
-                return _mapper.Map<ServerProfileLookup>((profile, user));
+                return Mapper.Map<ServerProfileLookup>((profile, user));
             }).ToList();
 
             return lookups;
@@ -51,8 +46,8 @@ namespace Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles
         {
             List<Guid> userIds = profiles.Select(profile => profile.UserId).ToList();
 
-            List<User> users = await _context.Users
-                .Where(user => userIds.Contains(user.Id))
+            List<User> users = await _userRepository.ExecuteCustomQuery(users => users
+                .Where(user => userIds.Contains(user.Id)))
                 .ToListAsync(cancellationToken);
 
             Dictionary<ServerProfile, User> profileUserDictionary = new();

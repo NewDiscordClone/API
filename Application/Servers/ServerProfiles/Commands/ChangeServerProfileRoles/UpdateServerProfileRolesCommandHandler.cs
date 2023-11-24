@@ -5,13 +5,10 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles
 {
-    public class UpdateServerProfileRolesCommandHandler : IRequestHandler<UpdateServerProfileRolesCommand, ServerProfile>
+    public class UpdateServerProfileRolesCommandHandler(IServerProfileRepository serverProfileRepository)
+        : IRequestHandler<UpdateServerProfileRolesCommand, ServerProfile>
     {
-        private readonly IServerProfileRepository _serverProfileRepository;
-        public UpdateServerProfileRolesCommandHandler(IServerProfileRepository serverProfileRepository)
-        {
-            _serverProfileRepository = serverProfileRepository;
-        }
+        private readonly IServerProfileRepository _serverProfileRepository = serverProfileRepository;
 
         public async Task<ServerProfile> Handle(UpdateServerProfileRolesCommand command, CancellationToken cancellationToken)
         {

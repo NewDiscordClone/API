@@ -1,23 +1,20 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.UnbanUser
 {
-    public class UnbanUserRequestHandler : RequestHandlerBase, IRequestHandler<UnbanUserCommand>
+    public class UnbanUserRequestHandler(IServerRepository repository) : IRequestHandler<UnbanUserCommand>
     {
-        public UnbanUserRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
-        {
-        }
+        private readonly IServerRepository _repository = repository;
 
         public async Task Handle(UnbanUserCommand request, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-            Server server = await Context.Servers.FindAsync(request.ServerId);
+            Server server = await _repository.FindAsync(request.ServerId, cancellationToken);
 
             server.BannedUsers.Remove(request.UserId);
 
-            await Context.Servers.UpdateAsync(server);
+            await _repository.UpdateAsync(server, cancellationToken);
         }
     }
 }

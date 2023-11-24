@@ -11,11 +11,6 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
         IRequestHandler<ChangeServerProfileDisplayNameCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
-        public ChangeServerProfileDisplayNameCommandHandler(IServerProfileRepository serverProfileRepository, IAuthorizedUserProvider userProvider)
-            : base(userProvider)
-        {
-            _serverProfileRepository = serverProfileRepository;
-        }
 
         public async Task<ServerProfile> Handle(ChangeServerProfileDisplayNameCommand command, CancellationToken cancellationToken)
         {
@@ -54,6 +49,13 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
             await _serverProfileRepository.UpdateAsync(serverProfile, cancellationToken);
 
             return serverProfile;
+        }
+
+        public ChangeServerProfileDisplayNameCommandHandler(IServerProfileRepository serverProfileRepository,
+            IAuthorizedUserProvider userProvider)
+            : base(userProvider)
+        {
+            _serverProfileRepository = serverProfileRepository;
         }
     }
 }
