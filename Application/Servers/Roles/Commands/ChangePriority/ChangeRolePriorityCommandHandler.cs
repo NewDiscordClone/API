@@ -4,13 +4,9 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Commands.ChangePriority
 {
-    public class ChangeRolePriorityCommandHandler : IRequestHandler<ChangeRolePriorityCommand, Role>
+    public class ChangeRolePriorityCommandHandler(IRoleRepository roleRepository) : IRequestHandler<ChangeRolePriorityCommand, Role>
     {
-        private readonly IRoleRepository _roleRepository;
-        public ChangeRolePriorityCommandHandler(IRoleRepository roleRepository)
-        {
-            _roleRepository = roleRepository;
-        }
+        private readonly IRoleRepository _roleRepository = roleRepository;
 
         public async Task<Role> Handle(ChangeRolePriorityCommand command, CancellationToken cancellationToken)
         {

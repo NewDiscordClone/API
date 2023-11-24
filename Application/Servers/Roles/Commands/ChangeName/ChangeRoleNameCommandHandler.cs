@@ -1,23 +1,19 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Commands.ChangeName
 {
-    public class ChangeRoleNameCommandHandler : RequestHandlerBase, IRequestHandler<ChangeRoleNameCommand, Role>
+    public class ChangeRoleNameCommandHandler(IRoleRepository repository) : IRequestHandler<ChangeRoleNameCommand, Role>
     {
-        public ChangeRoleNameCommandHandler(IAppDbContext context) : base(context)
-        {
-        }
+        private readonly IRoleRepository _repository = repository;
 
         public async Task<Role> Handle(ChangeRoleNameCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            Role role = await Context.SqlRoles.FindAsync(command.RoleId);
+            Role role = await _repository.FindAsync(command.RoleId, cancellationToken);
             role.Name = command.Name;
 
-            await Context.SqlRoles.UpdateAsync(role);
+            await _repository.UpdateAsync(role, cancellationToken);
             return role;
         }
     }

@@ -4,13 +4,10 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Commands.Update
 {
-    public class UpdateRoleCommandHandler : IRequestHandler<UpdateRoleCommand, Role>
+    public class UpdateRoleCommandHandler(IRoleRepository roleRepository)
+        : IRequestHandler<UpdateRoleCommand, Role>
     {
-        private readonly IRoleRepository _roleRepository;
-        public UpdateRoleCommandHandler(IRoleRepository roleRepository)
-        {
-            _roleRepository = roleRepository;
-        }
+        private readonly IRoleRepository _roleRepository = roleRepository;
 
         public async Task<Role> Handle(UpdateRoleCommand command, CancellationToken cancellationToken)
         {

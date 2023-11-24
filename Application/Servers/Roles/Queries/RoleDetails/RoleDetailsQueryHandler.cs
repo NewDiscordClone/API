@@ -5,13 +5,10 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Queries.RoleDetails
 {
-    public class RoleDetailsQueryHandler : IRequestHandler<RoleDetailsQuery, (Role, List<IdentityRoleClaim<Guid>>)>
+    public class RoleDetailsQueryHandler(IRoleRepository roleRepository)
+        : IRequestHandler<RoleDetailsQuery, (Role, List<IdentityRoleClaim<Guid>>)>
     {
-        private readonly IRoleRepository _roleRepository;
-        public RoleDetailsQueryHandler(IRoleRepository roleRepository)
-        {
-            _roleRepository = roleRepository;
-        }
+        private readonly IRoleRepository _roleRepository = roleRepository;
 
         public async Task<(Role, List<IdentityRoleClaim<Guid>>)> Handle(RoleDetailsQuery query, CancellationToken cancellationToken)
         {

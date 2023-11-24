@@ -1,35 +1,31 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Commands.Delete
 {
-    public class DeleteRoleCommandHandler : RequestHandlerBase, IRequestHandler<DeleteRoleCommand, Role>
+    public class DeleteRoleCommandHandler(IServerProfileRepository serverProfileRepository,
+        IServerRepository serverRepository,
+        IRoleRepository roleRepository) : IRequestHandler<DeleteRoleCommand, Role>
     {
-        private readonly IServerProfileRepository _serverProfileRepository;
-        public DeleteRoleCommandHandler(IAppDbContext context, IServerProfileRepository serverProfileRepository) : base(context)
-        {
-            _serverProfileRepository = serverProfileRepository;
-        }
+        private readonly IServerProfileRepository _serverProfileRepository = serverProfileRepository;
+        private readonly IServerRepository _serverRepository = serverRepository;
+        private readonly IRoleRepository _roleRepository = roleRepository;
 
         public async Task<Role> Handle(DeleteRoleCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            Role role = await Context.SqlRoles.FindAsync(command.RoleId);
+            Role role = await _roleRepository.FindAsync(command.RoleId, cancellationToken);
 
             if (role.ServerId is null)
                 throw new InvalidOperationException("Role is not associated with a server");
 
-            Server server = await Context.Servers.FindAsync(role.ServerId);
+            Server server = await _serverRepository.FindAsync(role.ServerId, cancellationToken);
 
             server.Roles.Remove(role.Id);
             await _serverProfileRepository.RemoveRoleFromServerProfilesAsync(role, server.Id, cancellationToken);
-            Context.Roles.Remove(role);
+            await _roleRepository.DeleteAsync(role, cancellationToken);
 
-            await Context.SaveChangesAsync();
-            await Context.Servers.UpdateAsync(server);
+            await _serverRepository.UpdateAsync(server, cancellationToken);
 
             return role;
         }

@@ -1,23 +1,19 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Commands.ChangeColor
 {
-    public class ChangeRoleColorCommandHandler : RequestHandlerBase, IRequestHandler<ChangeRoleColorCommand, Role>
+    public class ChangeRoleColorCommandHandler(IRoleRepository repository) : IRequestHandler<ChangeRoleColorCommand, Role>
     {
-        public ChangeRoleColorCommandHandler(IAppDbContext context) : base(context)
-        {
-        }
+        private readonly IRoleRepository _repository = repository;
 
         public async Task<Role> Handle(ChangeRoleColorCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            Role role = await Context.SqlRoles.FindAsync(command.RoleId);
+            Role role = await _repository.FindAsync(command.RoleId, cancellationToken);
             role.Color = command.Color;
 
-            await Context.SqlRoles.UpdateAsync(role);
+            await _repository.UpdateAsync(role, cancellationToken);
             return role;
         }
     }

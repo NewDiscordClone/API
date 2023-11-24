@@ -1,20 +1,21 @@
 ﻿using MediatR;
-using Sparkle.Application.Common.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Roles.Queries.ServerRolesList
 {
-    public class ServerRolesListQueryHandler : RequestHandlerBase, IRequestHandler<ServerRolesListQuery, List<Role>>
+    public class ServerRolesListQueryHandler(IRoleRepository roleRepository)
+        : IRequestHandler<ServerRolesListQuery, List<Role>>
     {
-        public ServerRolesListQueryHandler(IAppDbContext context) : base(context)
-        {
-        }
+        private readonly IRoleRepository _roleRepository = roleRepository;
 
         public async Task<List<Role>> Handle(ServerRolesListQuery query, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            List<Role> roles = await _roleRepository.ExecuteCustomQuery(roles => roles
+            .Where(role => role.ServerId == query.ServerId))
+            .ToListAsync(cancellationToken);
 
-            List<Role> roles = await Context.SqlRoles.FilterAsync(role => role.ServerId == query.ServerId);
             return roles;
         }
     }
