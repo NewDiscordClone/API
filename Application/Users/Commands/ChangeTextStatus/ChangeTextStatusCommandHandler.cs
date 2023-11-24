@@ -1,16 +1,15 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Commands
 {
-    public class ChangeTextStatusCommandHandler : RequestHandlerBase, IRequestHandler<ChangeTextStatusCommand, User>
+    public class ChangeTextStatusCommandHandler(IAuthorizedUserProvider userProvider,
+        IUserRepository repository)
+        : RequestHandlerBase(userProvider), IRequestHandler<ChangeTextStatusCommand, User>
     {
-        private readonly IRepository<User, Guid> _repository;
-        public ChangeTextStatusCommandHandler(IAuthorizedUserProvider userProvider, IRepository<User, Guid> repository) : base(userProvider)
-        {
-            _repository = repository;
-        }
+        private readonly IUserRepository _repository = repository;
 
         public async Task<User> Handle(ChangeTextStatusCommand command, CancellationToken cancellationToken)
         {

@@ -9,9 +9,8 @@ namespace Sparkle.Application.Users.Relationships.Commands
     {
         private readonly IRelationshipRepository _relationshipRepository;
 
-        public BlockUserCommandHandler(IAppDbContext context,
-            IAuthorizedUserProvider userProvider,
-            IRelationshipRepository relationshipRepository) : base(context, userProvider)
+        public BlockUserCommandHandler(IAuthorizedUserProvider userProvider,
+            IRelationshipRepository relationshipRepository) : base(userProvider)
         {
             _relationshipRepository = relationshipRepository;
         }

@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Sparkle.Application.Common.Exceptions;
-using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
@@ -11,29 +9,33 @@ namespace Sparkle.Application.Users.Queries
         IRequestHandler<GetUserByUserNameQuery, GetUserDetailsDto>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
-        public GetUserByUserNameQueryHandler(IAppDbContext context, IMapper mapper, IServerProfileRepository serverProfileRepository) : base(context, mapper)
-        {
-            _serverProfileRepository = serverProfileRepository;
-        }
+        private readonly IUserRepository _userRepository;
+        private readonly IServerRepository _serverRepository;
 
         public async Task<GetUserDetailsDto> Handle(GetUserByUserNameQuery query, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            User user = await _userRepository.SingleAsync(user => user.UserName == query.UserName, cancellationToken);
 
-            User user = (await Context.SqlUsers
-                            .FilterAsync(u => u.UserName == query.UserName))
-                        .FirstOrDefault()
-                        ??
-                        throw new EntityNotFoundException($"There is no User with {query.UserName} user name", query.UserName);
             GetUserDetailsDto userDto = Mapper.Map<GetUserDetailsDto>(user);
 
             if (query.ServerId is not null)
             {
-                Server server = await Context.Servers.FindAsync(query.ServerId);
-                ServerProfile? serverProfile = await _serverProfileRepository.SingleAsync(profile => profile.UserId == user.Id);
+                Server server = await _serverRepository.FindAsync(query.ServerId, cancellationToken);
+                ServerProfile? serverProfile = await _serverProfileRepository.SingleAsync(profile => profile.UserId == user.Id
+                 && profile.ServerId == server.Id, cancellationToken);
                 userDto.ServerProfile = Mapper.Map<GetUserDetailsServerProfileDto>(serverProfile);
             }
             return userDto;
+        }
+
+        public GetUserByUserNameQueryHandler(IMapper mapper,
+            IServerProfileRepository serverProfileRepository,
+            IUserRepository userRepository,
+            IServerRepository serverRepository) : base(mapper)
+        {
+            _serverProfileRepository = serverProfileRepository;
+            _userRepository = userRepository;
+            _serverRepository = serverRepository;
         }
     }
 }

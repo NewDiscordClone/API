@@ -1,25 +1,23 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Commands
 {
-    public class ChangeStatusCommandHandler : RequestHandlerBase, IRequestHandler<ChangeStatusCommand>
+    public class ChangeStatusCommandHandler(IAuthorizedUserProvider userProvider, IUserRepository userRepository)
+        : RequestHandlerBase(userProvider), IRequestHandler<ChangeStatusCommand, User>
     {
-        public ChangeStatusCommandHandler(
-            IAppDbContext context,
-            IAuthorizedUserProvider userProvider, IMapper mapper) :
-            base(context, userProvider, mapper)
-        {
-        }
+        private readonly IUserRepository _userRepository = userRepository;
 
-        public async Task Handle(ChangeStatusCommand command, CancellationToken cancellationToken)
+        public async Task<User> Handle(ChangeStatusCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-            User user = await Context.SqlUsers.FindAsync(UserId);
+            User user = await _userRepository.FindAsync(UserId, cancellationToken);
             user.Status = command.Status;
-            await Context.SqlUsers.UpdateAsync(user);
+
+            await _userRepository.UpdateAsync(user, cancellationToken);
+
+            return user;
         }
     }
 }

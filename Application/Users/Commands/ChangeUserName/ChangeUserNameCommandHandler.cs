@@ -1,18 +1,14 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Commands.ChangeUserName
 {
-    public class ChangeUserNameCommandHandler : RequestHandlerBase, IRequestHandler<ChangeUserNameCommand, User>
+    public class ChangeUserNameCommandHandler(IAuthorizedUserProvider userProvider,
+        IUserRepository repository) : RequestHandlerBase(userProvider), IRequestHandler<ChangeUserNameCommand, User>
     {
-        private readonly IRepository<User, Guid> _repository;
-        public ChangeUserNameCommandHandler(IAuthorizedUserProvider userProvider,
-            IRepository<User, Guid> repository)
-            : base(userProvider)
-        {
-            _repository = repository;
-        }
+        private readonly IUserRepository _repository = repository;
 
         public async Task<User> Handle(ChangeUserNameCommand command, CancellationToken cancellationToken)
         {

@@ -10,11 +10,11 @@ namespace Sparkle.Application.Users.Queries
     public class GetUserDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GetUserDetailsQuery, GetUserDetailsDto>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
+        private readonly IUserRepository _userRepository;
+
         public async Task<GetUserDetailsDto> Handle(GetUserDetailsQuery query, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            User user = await Context.SqlUsers.FindAsync(query.UserId, cancellationToken);
+            User user = await _userRepository.FindAsync(query.UserId, cancellationToken);
             GetUserDetailsDto userDto = Mapper.Map<GetUserDetailsDto>(user);
 
             if (query.ServerId is not null)
@@ -36,9 +36,13 @@ namespace Sparkle.Application.Users.Queries
             return userDto;
         }
 
-        public GetUserDetailsQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, IServerProfileRepository serverProfileRepository) : base(context, userProvider, mapper)
+        public GetUserDetailsQueryHandler(IAuthorizedUserProvider userProvider,
+            IMapper mapper,
+            IServerProfileRepository serverProfileRepository,
+            IUserRepository userRepository) : base(userProvider, mapper)
         {
             _serverProfileRepository = serverProfileRepository;
+            _userRepository = userRepository;
         }
     }
 }
