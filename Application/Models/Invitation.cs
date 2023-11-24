@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Models
 {
-    public class Invitation
+    public record Invitation
     {
         /// <summary>
         /// Unique Id as an string representation of an ObjectId type
@@ -26,5 +26,10 @@ namespace Sparkle.Application.Models
         public string ServerId { get; set; }
 
         public DateTime? ExpireTime { get; set; }
+
+        public Invitation()
+        {
+            Id = ObjectId.GenerateNewId().ToString();
+        }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Invitations.Commands.CreateInvitation
 {
-    public record CreateInvitationCommand : IRequest<string>
+    public record CreateInvitationCommand : IRequest<Invitation>
     {
         /// <summary>
         /// The unique identifier of the server to create an invitation for.

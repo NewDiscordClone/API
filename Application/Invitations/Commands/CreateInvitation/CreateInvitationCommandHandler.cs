@@ -1,26 +1,28 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Invitations.Commands.CreateInvitation
 {
-    public class CreateInvitationCommandHandler : RequestHandlerBase, IRequestHandler<CreateInvitationCommand, string>
+    public class CreateInvitationCommandHandler(IAuthorizedUserProvider userProvider,
+        IInvitationRepository invitationRepository)
+        : RequestHandlerBase(userProvider), IRequestHandler<CreateInvitationCommand, Invitation>
     {
-        public CreateInvitationCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
-        {
-        }
+        private readonly IInvitationRepository _invitationRepository = invitationRepository;
 
-        public async Task<string> Handle(CreateInvitationCommand command, CancellationToken cancellationToken)
+        public async Task<Invitation> Handle(CreateInvitationCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
             Invitation invitation = new()
             {
                 ServerId = command.ServerId,
                 ExpireTime = command.ExpireTime,
                 UserId = command.IncludeUser ? UserId : null
             };
-            return (await Context.Invitations.AddAsync(invitation, cancellationToken)).Id;
+
+            await _invitationRepository.AddAsync(invitation, cancellationToken);
+
+            return invitation;
         }
     }
 }
