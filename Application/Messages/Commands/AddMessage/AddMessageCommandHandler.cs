@@ -13,19 +13,21 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IServerProfileRepository _serverProfileRepository;
         private readonly IRelationshipRepository _relationshipRepository;
+        private readonly IMessageRepository _messageRepository;
+        private readonly IChatRepository _chatRepository;
+        private readonly IUserRepository _userRepository;
 
         public async Task<MessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            Chat chat = await Context.Chats.FindAsync(request.ChatId, cancellationToken);
+            Chat chat = await _chatRepository.FindAsync(request.ChatId, cancellationToken);
             UserProfile? profile = null;
+
             if (chat is Channel channel)
             {
                 profile = await _serverProfileRepository.
                     FindUserProfileOnServerAsync(channel.ServerId, UserId, cancellationToken)
                     ?? throw new EntityNotFoundException(message: $"User {UserId} profile not found" +
-                    $" in server {channel.ServerId}", "");
+                        $" in server {channel.ServerId}", "");
             }
             else if (chat is PersonalChat personalChat && chat is not GroupChat)
             {
@@ -45,9 +47,9 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             profile ??= await _userProfileRepository
                 .FindByChatIdAndUserIdAsync(chat.Id, UserId, cancellationToken);
 
-            List<Attachment> attachments = new();
+            List<Attachment> attachments = [];
 
-            AttachmentsFromText.GetAttachments(request.Text, a => attachments.Add(a));
+            request.Text.GetAttachments(attachments.Add);
 
             request.Attachments?.ForEach(a =>
             {
@@ -69,14 +71,14 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
                 Attachments = attachments
             };
 
-            await Context.Messages.AddAsync(message, cancellationToken);
+            await _messageRepository.AddAsync(message, cancellationToken);
 
             chat.UpdatedDate = message.SendTime;
-            await Context.Chats.UpdateAsync(chat, cancellationToken);
+            await _chatRepository.UpdateAsync(chat, cancellationToken);
 
             MessageDto dto = Mapper.Map<MessageDto>(message);
 
-            User? user = await Context.Users.FindAsync(new object?[] { UserId }, cancellationToken: cancellationToken)!;
+            User? user = await _userRepository.FindAsync(UserId, cancellationToken);
 
             dto.Author = Mapper.Map<UserViewModel>(user);
 
@@ -89,16 +91,21 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             return dto;
         }
 
-        public AddMessageCommandHandler(IAppDbContext context,
-            IAuthorizedUserProvider userProvider,
+        public AddMessageCommandHandler(IAuthorizedUserProvider userProvider,
             IMapper mapper,
             IUserProfileRepository userProfileRepository,
             IServerProfileRepository serverProfileRepository,
-            IRelationshipRepository relationshipRepository) : base(context, userProvider, mapper)
+            IRelationshipRepository relationshipRepository,
+            IMessageRepository messageRepository,
+            IChatRepository chatRepository,
+            IUserRepository userRepository) : base(userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;
             _serverProfileRepository = serverProfileRepository;
             _relationshipRepository = relationshipRepository;
+            _messageRepository = messageRepository;
+            _chatRepository = chatRepository;
+            _userRepository = userRepository;
         }
     }
 }

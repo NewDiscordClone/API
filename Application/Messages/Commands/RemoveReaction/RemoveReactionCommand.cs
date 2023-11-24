@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.RemoveReaction
 {
-    public class RemoveReactionCommand : IRequest
+    public class RemoveReactionCommand : IRequest<Message>
     {
         /// <summary>
         /// Id of the message to which the reaction is attached

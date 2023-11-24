@@ -1,27 +1,24 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Commands.UnpinMessage
 {
-    public class UnpinMessageCommandHandler : RequestHandlerBase, IRequestHandler<UnpinMessageCommand, MessageDto>
+    public class UnpinMessageCommandHandler(IAuthorizedUserProvider userProvider,
+        IMessageRepository messageRepository) : RequestHandlerBase(userProvider), IRequestHandler<UnpinMessageCommand, Message>
     {
-        public async Task<MessageDto> Handle(UnpinMessageCommand request, CancellationToken cancellationToken)
-        {
-            Context.SetToken(cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(request.MessageId);
+        private readonly IMessageRepository _messageRepository = messageRepository;
+
+        public async Task<Message> Handle(UnpinMessageCommand request, CancellationToken cancellationToken)
+        {
+            Message message = await _messageRepository.FindAsync(request.MessageId, cancellationToken);
 
             message.IsPinned = false;
+            await _messageRepository.UpdateAsync(message, cancellationToken);
 
-            return Mapper.Map<MessageDto>(await Context.Messages.UpdateAsync(message));
-        }
-
-        public UnpinMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
-            : base(context, userProvider, mapper)
-        {
+            return message;
         }
     }
 }

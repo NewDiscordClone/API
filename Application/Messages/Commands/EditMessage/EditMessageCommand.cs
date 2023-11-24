@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.EditMessage
 {
-    public record EditMessageCommand : IRequest
+    public record EditMessageCommand : IRequest<Message>
     {
         /// <summary>
         /// Id of the message to edit

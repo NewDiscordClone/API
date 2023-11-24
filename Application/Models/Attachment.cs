@@ -6,7 +6,7 @@ namespace Sparkle.Application.Models;
 /// <summary>
 /// Represents url attachment
 /// </summary>
-public class Attachment
+public record Attachment
 {
     /// <summary>
     /// <see langword="True"/> if url are in the message text

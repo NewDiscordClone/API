@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
@@ -11,38 +11,46 @@ namespace Sparkle.Application.Messages.Queries.GetMessages
     {
         private const int _pageSize = 50;
 
+        private readonly IMessageRepository _messageRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserProfileRepository _profileRepository;
+
         public async Task<List<MessageDto>> Handle(GetMessagesQuery query, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            List<MessageDto> result = [];
 
-            List<MessageDto> result = new();
-            foreach (Message message in await Context.GetMessagesAsync(query.ChatId, query.MessagesCount, _pageSize))
+            foreach (Message message in await _messageRepository.GetMessagesInChatAsync(query.ChatId, query.MessagesCount, _pageSize))
             {
-                MessageDto res = Mapper.Map<MessageDto>(message);
+                MessageDto dto = Mapper.Map<MessageDto>(message);
 
-                UserProfile? userProfile = await Context.UserProfiles
-                    .FindAsync(new object?[] { message.AuthorProfile }, cancellationToken: cancellationToken)
-                    ?? throw new EntityNotFoundException(message.AuthorProfile);
+                UserProfile? userProfile = await _profileRepository
+                    .FindAsync(message.AuthorProfile, cancellationToken);
 
-                User? user = await Context.Users.FindAsync(new object?[] { userProfile.UserId }, cancellationToken: cancellationToken) ??
-                    throw new EntityNotFoundException(userProfile.UserId);
+                User? user = await _userRepository.FindAsync(userProfile.UserId, cancellationToken);
 
-                res.Author = Mapper.Map<UserViewModel>(user);
+                dto.Author = Mapper.Map<UserViewModel>(user);
 
                 if (userProfile is not null and ServerProfile serverProfile)
                 {
-                    res.Author.DisplayName = serverProfile.DisplayName
-                        ?? res.Author.DisplayName;
+                    dto.Author.DisplayName = serverProfile.DisplayName
+                        ?? dto.Author.DisplayName;
                 }
 
-                result.Add(res);
+                result.Add(dto);
             }
             return result;
         }
 
-        public GetMessagesQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
-            base(context, userProvider, mapper)
+        public GetMessagesQueryHandler(IAuthorizedUserProvider userProvider,
+            IMapper mapper,
+            IMessageRepository messageRepository,
+            IUserProfileRepository profileRepository,
+            IUserRepository userRepository) :
+            base(userProvider, mapper)
         {
+            _messageRepository = messageRepository;
+            _profileRepository = profileRepository;
+            _userRepository = userRepository;
         }
     }
 }

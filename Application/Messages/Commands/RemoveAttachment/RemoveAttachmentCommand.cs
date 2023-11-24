@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAttachment
 {
-    public record RemoveAttachmentCommand : IRequest
+    public record RemoveAttachmentCommand : IRequest<Message>
     {
         /// <summary>
         /// Id of the message to which the attachment is attached

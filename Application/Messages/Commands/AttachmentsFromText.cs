@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace Sparkle.Application.Messages.Commands
 {
-    internal static partial class AttachmentsFromText
+    internal static class AttachmentsFromText
     {
         private static readonly Regex _urlRegEx = Regexes.UrlRegex;
-        public static void GetAttachments(string input, Action<Attachment> onGet)
+        public static void GetAttachments(this string input, Action<Attachment> onGet)
         {
             MatchCollection urlCollection = _urlRegEx.Matches(input);
             foreach (Match match in urlCollection)

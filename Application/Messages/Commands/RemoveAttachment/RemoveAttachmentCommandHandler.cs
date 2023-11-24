@@ -6,14 +6,14 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAttachment
 {
-    public class RemoveAttachmentCommandHandler : RequestHandlerBase, IRequestHandler<RemoveAttachmentCommand>
+    public class RemoveAttachmentCommandHandler : RequestHandlerBase, IRequestHandler<RemoveAttachmentCommand, Message>
     {
-        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
-        public async Task Handle(RemoveAttachmentCommand command, CancellationToken cancellationToken)
-        {
-            Context.SetToken(cancellationToken);
+        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IMessageRepository _messageRepository;
 
-            Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
+        public async Task<Message> Handle(RemoveAttachmentCommand command, CancellationToken cancellationToken)
+        {
+            Message message = await _messageRepository.FindAsync(command.MessageId, cancellationToken);
 
             if (message.Author != UserId)
                 throw new NoPermissionsException("This isn't your reaction");
@@ -28,16 +28,23 @@ namespace Sparkle.Application.Messages.Commands.RemoveAttachment
             {
                 throw new InvalidOperationException($"Attachment by {command.AttachmentIndex} index does not exists");
             }
+
             message.Attachments.RemoveAt(command.AttachmentIndex);
 
-            await Context.Messages.UpdateAsync(message, cancellationToken);
-            await Context.CheckRemoveMedia(path[(path.LastIndexOf('/') - 1)..]);
+            await _messageRepository.UpdateAsync(message, cancellationToken);
+
+            //TODO Remove media
+            //await Context.CheckRemoveMedia(path[(path.LastIndexOf('/') - 1)..]);
+
+            return message;
         }
 
-        public RemoveAttachmentCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(context,
-            userProvider)
+        public RemoveAttachmentCommandHandler(IAuthorizedUserProvider userProvider,
+            IUserProfileRepository userProfileRepository,
+            IMessageRepository messageRepository) : base(userProvider)
         {
             _userProfileRepository = userProfileRepository;
+            _messageRepository = messageRepository;
         }
     }
 }

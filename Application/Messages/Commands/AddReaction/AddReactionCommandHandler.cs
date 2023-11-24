@@ -1,17 +1,20 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.AddReaction
 {
-    public class AddReactionCommandHandler : RequestHandlerBase, IRequestHandler<AddReactionCommand>
+    public class AddReactionCommandHandler(IAuthorizedUserProvider userProvider,
+        IMapper mapper,
+        IMessageRepository messageRepository)
+        : RequestHandlerBase(userProvider, mapper), IRequestHandler<AddReactionCommand, Message>
     {
-        public async Task Handle(AddReactionCommand command, CancellationToken cancellationToken)
+        private readonly IMessageRepository _messageRepository = messageRepository;
+        public async Task<Message> Handle(AddReactionCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
+            Message message = await _messageRepository.FindAsync(command.MessageId, cancellationToken);
 
             Reaction reaction = new()
             {
@@ -24,12 +27,9 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
 
             message.Reactions.Add(reaction);
 
-            await Context.Messages.UpdateAsync(message, cancellationToken);
-        }
+            await _messageRepository.UpdateAsync(message, cancellationToken);
 
-        public AddReactionCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) :
-            base(context, userProvider, mapper)
-        {
+            return message;
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.UnpinMessage
 {
-    public record UnpinMessageCommand : IRequest<MessageDto>
+    public record UnpinMessageCommand : IRequest<Message>
     {
         /// <summary>
         /// Id of message to be unpinned

@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.AddReaction
 {
-    public record AddReactionCommand : IRequest
+    public record AddReactionCommand : IRequest<Message>
     {
         /// <summary>
         /// Id of the message to add a reaction to

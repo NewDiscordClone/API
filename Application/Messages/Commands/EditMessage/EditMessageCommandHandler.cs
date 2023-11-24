@@ -1,17 +1,19 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.EditMessage
 {
-    public class EditMessageCommandHandler : RequestHandlerBase, IRequestHandler<EditMessageCommand>
+    public class EditMessageCommandHandler(IAuthorizedUserProvider userProvider, IMessageRepository messageRepository)
+        : RequestHandlerBase(userProvider), IRequestHandler<EditMessageCommand, Message>
     {
-        public async Task Handle(EditMessageCommand command, CancellationToken cancellationToken)
-        {
-            Context.SetToken(cancellationToken);
+        private readonly IMessageRepository _messageRepository = messageRepository;
 
-            Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
+        public async Task<Message> Handle(EditMessageCommand command, CancellationToken cancellationToken)
+        {
+            Message message = await _messageRepository.FindAsync(command.MessageId, cancellationToken);
 
             if (message.Author != UserId)
                 throw new NoPermissionsException("You don't have permission to edit the message");
@@ -19,17 +21,14 @@ namespace Sparkle.Application.Messages.Commands.EditMessage
             message.Text = command.NewText;
             message.Attachments.RemoveAll(a => a.IsInText);
 
-            List<Attachment> attachments = new();
-            AttachmentsFromText.GetAttachments(command.NewText, a => attachments.Add(a));
+            List<Attachment> attachments = [];
+            command.NewText.GetAttachments(attachments.Add);
             attachments.AddRange(message.Attachments);
             message.Attachments = attachments;
 
-            await Context.Messages.UpdateAsync(message, cancellationToken);
-        }
+            await _messageRepository.UpdateAsync(message, cancellationToken);
 
-        public EditMessageCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider)
-            : base(context, userProvider)
-        {
+            return message;
         }
     }
 }

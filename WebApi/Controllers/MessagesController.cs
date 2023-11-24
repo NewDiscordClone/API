@@ -260,10 +260,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveMessage(string messageId, string chatId)
         {
-
             RemoveMessageCommand command = new() { MessageId = messageId, ChatId = chatId };
-            Chat chat = await Mediator.Send(command);
-            await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = messageId, ChatId = chat.Id });
+
+            Message message = await Mediator.Send(command);
+            await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = messageId, ChatId = message.ChatId });
 
             return NoContent();
         }

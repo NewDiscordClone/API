@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
 {
-    public record RemoveAllReactionsCommand : IRequest
+    public record RemoveAllReactionsCommand : IRequest<Message>
     {
         /// <summary>
         /// Id of the message for which all reactions should be removed

@@ -1,26 +1,27 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
 {
-    public class RemoveAllReactionsCommandHandler : RequestHandlerBase, IRequestHandler<RemoveAllReactionsCommand>
+    public class RemoveAllReactionsCommandHandler(IAuthorizedUserProvider userProvider,
+        IMessageRepository messageRepository)
+        : RequestHandlerBase(userProvider), IRequestHandler<RemoveAllReactionsCommand, Message>
     {
-        public async Task Handle(RemoveAllReactionsCommand command, CancellationToken cancellationToken)
+
+        private readonly IMessageRepository _messageRepository = messageRepository;
+        private readonly IChatRepository _chatRepository;
+
+        public async Task<Message> Handle(RemoveAllReactionsCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            Message message = await _messageRepository.FindAsync(command.MessageId, cancellationToken);
+            Chat chat = await _chatRepository.FindAsync(message.ChatId, cancellationToken);
 
-            Message message = await Context.Messages.FindAsync(command.MessageId);
-            Chat chat = await Context.Chats.FindAsync(message.ChatId);
+            message.Reactions = [];
 
-            message.Reactions = new List<Reaction>();
-
-            await Context.Messages.UpdateAsync(message);
-        }
-
-        public RemoveAllReactionsCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(
-            context, userProvider)
-        {
+            await _messageRepository.UpdateAsync(message, cancellationToken);
+            return message;
         }
     }
 }

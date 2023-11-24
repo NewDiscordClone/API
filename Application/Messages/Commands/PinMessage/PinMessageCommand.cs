@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.PinMessage
 {
-    public record PinMessageCommand : IRequest
+    public record PinMessageCommand : IRequest<Message>
     {
         /// <summary>
         /// Id of the message to be pinned

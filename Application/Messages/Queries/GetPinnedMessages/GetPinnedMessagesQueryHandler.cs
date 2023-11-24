@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Sparkle.Application.Common.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
@@ -11,15 +11,21 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
     public class GetPinnedMessagesQueryHandler : RequestHandlerBase,
         IRequestHandler<GetPinnedMessagesQuery, List<MessageDto>>
     {
-        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
-        public async Task<List<MessageDto>> Handle(GetPinnedMessagesQuery query,
-            CancellationToken cancellationToken)
+
+        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IChatRepository _chatRepository;
+        private readonly IMessageRepository _messageRepository;
+
+        public async Task<List<MessageDto>> Handle(GetPinnedMessagesQuery query, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            Chat chat = await _chatRepository.FindAsync(query.ChatId, cancellationToken);
 
-            Chat chat = await Context.Chats.FindAsync(query.ChatId, cancellationToken);
+            List<Message> messages = await _messageRepository.ExecuteCustomQuery(messages => messages
+                .Where(message => message.ChatId == query.ChatId
+                 && message.IsPinned))
+                .ToListAsync(cancellationToken);
 
-            List<Message> messages = await Context.GetPinnedMessagesAsync(chat.Id);
             List<MessageDto> dtos = messages.ConvertAll(Mapper.Map<MessageDto>);
 
             for (int i = 0; i < messages.Count; i++)
@@ -28,8 +34,7 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
                 MessageDto dto = dtos[i];
 
                 UserProfile profile = await _userProfileRepository.FindAsync(message.AuthorProfile, cancellationToken);
-                User user = await Context.Users.FindAsync(new object?[] { profile.UserId }, cancellationToken: cancellationToken)
-                    ?? throw new EntityNotFoundException(profile.UserId);
+                User user = await _userRepository.FindAsync(profile.UserId, cancellationToken);
 
                 dto.Author = Mapper.Map<UserViewModel>(user);
 
@@ -44,11 +49,17 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
         }
 
 
-        public GetPinnedMessagesQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
-            IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(
-            context, userProvider, mapper)
+        public GetPinnedMessagesQueryHandler(IAuthorizedUserProvider userProvider,
+            IMapper mapper,
+            IUserProfileRepository userProfileRepository,
+            IChatRepository chatRepository,
+            IMessageRepository messageRepository,
+            IUserRepository userRepository) : base(userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;
+            _chatRepository = chatRepository;
+            _messageRepository = messageRepository;
+            _userRepository = userRepository;
         }
     }
 }
