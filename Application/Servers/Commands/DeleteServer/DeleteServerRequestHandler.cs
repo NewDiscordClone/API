@@ -10,36 +10,40 @@ namespace Sparkle.Application.Servers.Commands.DeleteServer
     {
         private readonly IRoleRepository _roleRepository;
         private readonly IServerProfileRepository _serverProfileRepository;
-
-        public IAppDbContext GetContext()
-        {
-            return Context;
-        }
+        private readonly IServerRepository _serverRepository;
+        private readonly IChatRepository _chatRepository;
 
         public async Task<(Server Server, IEnumerable<Guid> UserIds)> Handle(DeleteServerCommand request, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            Server server = await _serverRepository.FindAsync(request.ServerId, cancellationToken);
 
-            Server server = await Context.Servers.FindAsync(request.ServerId, cancellationToken);
-            Guid[] userIds = await Context.UserProfiles
-                .OfType<ServerProfile>()
+            Guid[] userIds = await _serverProfileRepository.ExecuteCustomQuery(profiles => profiles
                 .Where(profile => profile.ServerId == server.Id)
-                .Select(profile => profile.UserId)
-                .ToArrayAsync();
+                .Select(profile => profile.UserId))
+                .ToArrayAsync(cancellationToken);
 
 
             await _roleRepository.DeleteManyAsync(role => role.ServerId == request.ServerId, cancellationToken);
             await _serverProfileRepository.DeleteManyAsync(profile => profile.ServerId == request.ServerId, cancellationToken);
-            await Context.Servers.DeleteAsync(server, cancellationToken);
-            await Context.Channels.DeleteManyAsync(c => c.ServerId == request.ServerId, cancellationToken);
+            await _serverRepository.DeleteAsync(server, cancellationToken);
+
+            IQueryable<Channel> channelsToDelete = _chatRepository.Channels
+                .Where(channel => channel.ServerId == request.ServerId);
+            await _chatRepository.DeleteManyAsync(channelsToDelete, cancellationToken);
 
             return (server, userIds);
         }
 
-        public DeleteServerRequestHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IRoleRepository roleRepository, IServerProfileRepository serverProfileRepository) : base(context, userProvider)
+        public DeleteServerRequestHandler(IAuthorizedUserProvider userProvider,
+            IRoleRepository roleRepository,
+            IServerProfileRepository serverProfileRepository,
+            IServerRepository serverRepository,
+            IChatRepository chatRepository) : base(userProvider)
         {
             _roleRepository = roleRepository;
             _serverProfileRepository = serverProfileRepository;
+            _serverRepository = serverRepository;
+            _chatRepository = chatRepository;
         }
     }
 }

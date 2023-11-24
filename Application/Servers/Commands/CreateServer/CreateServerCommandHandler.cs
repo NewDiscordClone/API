@@ -9,11 +9,12 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
     public class CreateServerCommandHandler : RequestHandlerBase, IRequestHandler<CreateServerCommand, Server>
     {
         private readonly ServerFactory _serverFactory;
+        private readonly IServerRepository _serverRepository;
         private readonly IServerProfileRepository _serverProfileRepository;
+        private readonly IChatRepository _chatRepository;
+
         public async Task<Server> Handle(CreateServerCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
             ServerTemplates template = command.Template ?? ServerTemplates.Default;
 
             (Server server, ServerProfile owner, List<Channel> channels) =
@@ -27,20 +28,24 @@ namespace Sparkle.Application.Servers.Commands.CreateServer
                 };
 
             await _serverProfileRepository.AddAsync(owner, cancellationToken);
-            await Context.Servers.AddAsync(server, cancellationToken);
-            await Context.Channels.AddManyAsync(channels, cancellationToken);
+            await _serverRepository.AddAsync(server, cancellationToken);
+            await _chatRepository.AddManyAsync(channels, cancellationToken);
 
             return server;
         }
 
-        public CreateServerCommandHandler(IAppDbContext context,
+        public CreateServerCommandHandler(
             IAuthorizedUserProvider userProvider,
             ServerFactory serverFactory,
-            IServerProfileRepository serverProfileRepository)
-            : base(context, userProvider)
+            IServerProfileRepository serverProfileRepository,
+            IServerRepository serverRepository,
+            IChatRepository chatRepository)
+            : base(userProvider)
         {
             _serverFactory = serverFactory;
             _serverProfileRepository = serverProfileRepository;
+            _serverRepository = serverRepository;
+            _chatRepository = chatRepository;
         }
     }
 }

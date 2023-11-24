@@ -1,10 +1,11 @@
 using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sparkle.Application.Servers.Commands.UpdateServer
 {
-    public record UpdateServerCommand : IRequest
+    public record UpdateServerCommand : IRequest<Server>
     {
         /// <summary>
         /// Id of the server to update

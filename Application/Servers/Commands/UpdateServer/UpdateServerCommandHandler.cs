@@ -1,29 +1,33 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Commands.UpdateServer
 {
-    public class UpdateServerCommandHandler : RequestHandlerBase, IRequestHandler<UpdateServerCommand>
+    public class UpdateServerCommandHandler : RequestHandlerBase, IRequestHandler<UpdateServerCommand, Server>
     {
-        public async Task Handle(UpdateServerCommand command, CancellationToken cancellationToken)
+        private readonly IServerRepository _serverRepository;
+
+        public async Task<Server> Handle(UpdateServerCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            Server server = await _serverRepository.FindAsync(command.ServerId, cancellationToken);
 
-            Server server = await Context.Servers.FindAsync(command.ServerId, cancellationToken);
-
-            if (command.Image != null && server.Image != null)
-                await Context.CheckRemoveMedia(server.Image[(server.Image.LastIndexOf('/') - 1)..]);
+            //TODO Remove image
+            //if (command.Image != null && server.Image != null)
+            //    await Context.CheckRemoveMedia(server.Image[(server.Image.LastIndexOf('/') - 1)..]);
 
             server.Title = command.Title ?? server.Title;
             server.Image = command.Image ?? server.Image;
 
-            await Context.Servers.UpdateAsync(server, cancellationToken);
+            await _serverRepository.UpdateAsync(server, cancellationToken);
+            return server;
         }
 
-        public UpdateServerCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
-            userProvider)
+        public UpdateServerCommandHandler(IAuthorizedUserProvider userProvider,
+            IServerRepository serverRepository) : base(userProvider)
         {
+            _serverRepository = serverRepository;
         }
     }
 }
