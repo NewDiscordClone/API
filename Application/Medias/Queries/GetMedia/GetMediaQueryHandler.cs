@@ -1,21 +1,18 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Medias.Queries.GetMedia
 {
-    public class GetMediaQueryHandler : RequestHandlerBase, IRequestHandler<GetMediaQuery, Media>
+    public class GetMediaQueryHandler(IAuthorizedUserProvider userProvider, IMediaRepository mediaRepository)
+        : RequestHandlerBase(userProvider), IRequestHandler<GetMediaQuery, Media>
     {
-        public GetMediaQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context,
-            userProvider)
-        {
-        }
+        private readonly IMediaRepository _mediaRepository = mediaRepository;
 
         public async Task<Media> Handle(GetMediaQuery query, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
-
-            Media media = await Context.Media.FindAsync(query.Id);
+            Media media = await _mediaRepository.FindAsync(query.Id);
             return /*media.Extension == request.Extension ? */media/*: 
             throw new EntityNotFoundException($"There is no Media file {request.Id}.{request.Extension}")*/;
         }

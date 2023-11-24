@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Sparkle.Application.Models
 {
 
-    public class Media
+    public record Media
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -19,5 +19,10 @@ namespace Sparkle.Application.Models
         public string ContentType { get; set; }
 
         [NonSerialized] public byte[] Data;
+
+        public Media()
+        {
+            Id = ObjectId.GenerateNewId().ToString();
+        }
     }
 }

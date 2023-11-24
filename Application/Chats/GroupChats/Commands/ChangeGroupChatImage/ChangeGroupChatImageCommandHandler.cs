@@ -5,10 +5,10 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
 {
     public class ChangeGroupChatImageCommandHandler(IChatRepository chatRepository)
-        : IRequestHandler<ChangeGroupChatImageCommand, GroupChat>
+        : IRequestHandler<ChangeGroupChatImageCommand, (GroupChat, string?)>
     {
         private readonly IChatRepository _chatRepository = chatRepository;
-        public async Task<GroupChat> Handle(ChangeGroupChatImageCommand command, CancellationToken cancellationToken)
+        public async Task<(GroupChat, string?)> Handle(ChangeGroupChatImageCommand command, CancellationToken cancellationToken)
         {
             GroupChat chat = await _chatRepository.FindAsync<GroupChat>(command.ChatId, cancellationToken);
 
@@ -19,11 +19,8 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
             groupChat.Image = command.NewImage;
 
             await _chatRepository.UpdateAsync(groupChat, cancellationToken);
-
-            if (oldImage != null)
-                await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/') - 1)..]);
-
-            return groupChat;
+            //TODO Remove old image
+            return (groupChat, oldImage);
         }
     }
 }

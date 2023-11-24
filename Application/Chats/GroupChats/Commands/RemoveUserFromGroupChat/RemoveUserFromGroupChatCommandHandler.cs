@@ -37,7 +37,7 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
                 await _chatRepository.DeleteAsync(chat, cancellationToken);
                 await _messageRepository.DeleteManyAsync(message
                     => message.ChatId == chat.Id, cancellationToken);
-
+                //TODO Remove chat image
                 return new(chat, profile.UserId);
             }
 
