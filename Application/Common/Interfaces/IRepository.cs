@@ -27,17 +27,7 @@ namespace Sparkle.Application.Common.Interfaces
         /// <param name="id">The identifier of the entity to find.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the entity with the specified identifier, or null if the entity was not found.</returns>
-        async Task<TEntity?> FindOrDefaultAsync(TId id, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                return await FindAsync(id, cancellationToken);
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        Task<TEntity?> FindOrDefaultAsync(TId id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Filters the entities based on a predicate.

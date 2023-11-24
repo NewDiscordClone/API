@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Sparkle.Application.Models;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Channels.Commands.CreateChannel
 {
-    public class CreateChannelCommand : IRequest<string>
+    public class CreateChannelCommand : IRequest<Channel>
     {
         /// <summary>
         /// Name of the channel 

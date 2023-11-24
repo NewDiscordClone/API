@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using MongoDB.Driver;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;
@@ -26,9 +24,12 @@ namespace Sparkle.DataAccess
 
         public virtual async Task<TEntity> FindAsync(TKey id, CancellationToken cancellationToken = default)
         {
-            return await DbSet.FindAsync([id], cancellationToken: cancellationToken) ??
+            return await DbSet.FindAsync([id], cancellationToken) ??
                    throw new EntityNotFoundException($"Entity {typeof(TEntity).Name} ({id}) not found", id!);
         }
+
+        public async Task<TEntity?> FindOrDefaultAsync(TKey id, CancellationToken cancellationToken = default)
+            => await DbSet.FindAsync([id], cancellationToken);
 
         public List<TEntity> ExecuteCustomQuery(Func<DbSet<TEntity>, IQueryable<TEntity>> query)
         {

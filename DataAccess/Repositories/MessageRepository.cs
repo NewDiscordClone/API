@@ -1,6 +1,8 @@
-﻿namespace Sparkle.DataAccess.Repositories
+﻿using Sparkle.Application.Models;
+
+namespace Sparkle.DataAccess.Repositories
 {
-    public class MessageRepository
+    public class MessageRepository(MongoDbContext context) : BaseRepository<MongoDbContext, Message, string>(context)
     {
         //public async Task<List<Message>> GetMessagesAsync(
         // string chatId,
@@ -22,5 +24,6 @@
         //    )
         //    .SortByDescending(m => m.PinnedTime)
         //    .ToListAsync(_token);
+
     }
 }

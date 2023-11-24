@@ -1,17 +1,22 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Channels.Commands.CreateChannel
 {
-    public class CreateChannelCommandHandler : RequestHandlerBase, IRequestHandler<CreateChannelCommand, string>
+    public class CreateChannelCommandHandler(IAuthorizedUserProvider userProvider,
+        IMapper mapper)
+        : RequestHandlerBase(userProvider, mapper), IRequestHandler<CreateChannelCommand, Channel>
     {
-        public async Task<string> Handle(CreateChannelCommand command, CancellationToken cancellationToken)
-        {
-            Context.SetToken(cancellationToken);
 
-            Server server = await Context.Servers.FindAsync(command.ServerId, cancellationToken);
+        private readonly IServerRepository _serverRepository;
+        private readonly IChatRepository _chatRepository;
+
+        public async Task<Channel> Handle(CreateChannelCommand command, CancellationToken cancellationToken)
+        {
+            Server server = await _serverRepository.FindAsync(command.ServerId, cancellationToken);
 
             Channel channel = new()
             {
@@ -22,13 +27,8 @@ namespace Sparkle.Application.Channels.Commands.CreateChannel
                 UpdatedDate = DateTime.UtcNow
             };
 
-            await Context.Channels.AddAsync(channel, cancellationToken);
-            return channel.Id;
-        }
-
-        public CreateChannelCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper)
-            : base(context, userProvider, mapper)
-        {
+            await _chatRepository.AddAsync(channel, cancellationToken);
+            return channel;
         }
     }
 }

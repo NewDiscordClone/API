@@ -1,23 +1,21 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Channels.Commands.RenameChannel
 {
-    public class RenameChannelCommandHandler : RequestHandlerBase, IRequestHandler<RenameChannelCommand>
+    public class RenameChannelCommandHandler(IAuthorizedUserProvider userProvider, IChatRepository chatRepository)
+        : RequestHandlerBase(userProvider), IRequestHandler<RenameChannelCommand, Channel>
     {
-        public async Task Handle(RenameChannelCommand command, CancellationToken cancellationToken)
+        private readonly IChatRepository _chatRepository = chatRepository;
+        public async Task<Channel> Handle(RenameChannelCommand command, CancellationToken cancellationToken)
         {
-            Context.SetToken(cancellationToken);
+            Channel channel = await _chatRepository.FindAsync<Channel>(command.ChatId, cancellationToken);
+            channel.Title = command.NewTitle;
 
-            Channel chat = await Context.Channels.FindAsync(command.ChatId, cancellationToken);
-            chat.Title = command.NewTitle;
-
-            await Context.Channels.UpdateAsync(chat);
-        }
-
-        public RenameChannelCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider) : base(context, userProvider)
-        {
+            await _chatRepository.UpdateAsync(channel, cancellationToken);
+            return channel;
         }
     }
 }
