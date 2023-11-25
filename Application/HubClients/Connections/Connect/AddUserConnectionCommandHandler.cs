@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.Connections.Connect
 {
-    public class AddUserConnectionCommandHandler : HubRequestHandlerBase, IRequestHandler<AddUserConnectionCommand, User?>
+    public class AddUserConnectionCommandHandler : HubHandler, IRequestHandler<AddUserConnectionCommand, User?>
     {
         private readonly IRepository<User, Guid> _userRepository;
         public AddUserConnectionCommandHandler(

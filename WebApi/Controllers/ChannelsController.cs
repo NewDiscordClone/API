@@ -5,7 +5,6 @@ using Sparkle.Application.Channels.Commands.RemoveChannel;
 using Sparkle.Application.Channels.Commands.RenameChannel;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Channels.ChannelCreated;
 using Sparkle.Application.HubClients.Channels.ChannelRemoved;
 using Sparkle.Application.HubClients.Channels.ChannelUpdated;
 using Sparkle.WebApi.Attributes;
@@ -43,7 +42,7 @@ namespace Sparkle.WebApi.Controllers
             };
             string chatId = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyChannelCreatedRequest { ChannelId = chatId });
+            await Mediator.Send(new ChannelCreatedEvent { ChannelId = chatId });
 
             return Created("", chatId);
         }

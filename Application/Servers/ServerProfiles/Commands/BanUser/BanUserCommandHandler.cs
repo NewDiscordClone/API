@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.BanUser
 {
-    public class BanUserCommandHandler : RequestHandlerBase, IRequestHandler<BanUserCommand, ServerProfile>
+    public class BanUserCommandHandler : RequestHandler, IRequestHandler<BanUserCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         private readonly IServerRepository _serverRepository;

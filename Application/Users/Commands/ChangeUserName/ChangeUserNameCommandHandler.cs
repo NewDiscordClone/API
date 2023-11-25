@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Users.Commands.ChangeUserName
 {
     public class ChangeUserNameCommandHandler(IAuthorizedUserProvider userProvider,
-        IUserRepository repository) : RequestHandlerBase(userProvider), IRequestHandler<ChangeUserNameCommand, User>
+        IUserRepository repository) : RequestHandler(userProvider), IRequestHandler<ChangeUserNameCommand, User>
     {
         private readonly IUserRepository _repository = repository;
 

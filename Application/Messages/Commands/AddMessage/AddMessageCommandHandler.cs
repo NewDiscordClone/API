@@ -8,7 +8,7 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Commands.AddMessage
 {
-    public class AddMessageCommandHandler : RequestHandlerBase, IRequestHandler<AddMessageCommand, MessageDto>
+    public class AddMessageCommandHandler : RequestHandler, IRequestHandler<AddMessageCommand, MessageDto>
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IServerProfileRepository _serverProfileRepository;

@@ -3,14 +3,12 @@ using Microsoft.AspNetCore.SignalR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.HubClients
+namespace Sparkle.Application.HubClients.Common
 {
-    public abstract class HubRequestHandlerBase : RequestHandlerBase
+    public abstract class HubHandler : RequestHandler
     {
         private readonly IHubContextProvider _hubContextProvider;
         protected IHubClients Clients => _hubContextProvider.Clients;
-
-        private CancellationToken _token;
 
         protected IEnumerable<string> GetConnections(Guid userId)
         {
@@ -66,16 +64,10 @@ namespace Sparkle.Application.HubClients
             return GetConnections(userIds);
         }
 
-        protected void SetToken(CancellationToken cancellationToken)
-        {
-            _token = cancellationToken;
-            Context?.SetToken(cancellationToken);
-        }
-
-        protected async Task SendAsync<T>(string method, T arg, IEnumerable<string> connections)
+        protected async Task SendAsync<T>(string method, T arg, IEnumerable<string> connections, CancellationToken cancellationToken = default)
         {
             IReadOnlyList<string> readOnlyConnections = connections.ToList().AsReadOnly();
-            await Clients.Clients(readOnlyConnections).SendAsync(method, arg, _token);
+            await Clients.Clients(readOnlyConnections).SendAsync(method, arg, cancellationToken);
         }
         protected async Task SendAsync<T>(string method, T arg, IEnumerable<Guid> userIds)
         {
@@ -83,24 +75,24 @@ namespace Sparkle.Application.HubClients
             await SendAsync(method, arg, connections);
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context) : base(context)
+        protected HubHandler(IHubContextProvider hubContextProvider, IAppDbContext context) : base(context)
         {
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) :
+        protected HubHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IMapper mapper) :
             base(context, mapper)
         {
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context,
+        protected HubHandler(IHubContextProvider hubContextProvider, IAppDbContext context,
             IAuthorizedUserProvider userProvider) : base(context, userProvider)
         {
             _hubContextProvider = hubContextProvider;
         }
 
-        protected HubRequestHandlerBase(IHubContextProvider hubContextProvider, IAppDbContext context,
+        protected HubHandler(IHubContextProvider hubContextProvider, IAppDbContext context,
             IAuthorizedUserProvider userProvider, IMapper mapper) : base(context, userProvider, mapper)
         {
             _hubContextProvider = hubContextProvider;

@@ -3,7 +3,7 @@ using Sparkle.Application.Common.Interfaces;
 
 namespace Sparkle.Application
 {
-    public abstract class RequestHandlerBase
+    public abstract class RequestHandler
     {
         private readonly IAuthorizedUserProvider _userProvider;
         private readonly IMapper? _mapper;
@@ -12,16 +12,16 @@ namespace Sparkle.Application
         public IAuthorizedUserProvider UserProvider => _userProvider;
         protected IMapper Mapper => _mapper ?? throw new Exception("There is no constructor with IMapper");
 
-        public RequestHandlerBase(IMapper mapper)
+        public RequestHandler(IMapper mapper)
         {
             _mapper = mapper;
         }
-        public RequestHandlerBase(IAuthorizedUserProvider userProvider)
+        public RequestHandler(IAuthorizedUserProvider userProvider)
         {
             _userProvider = userProvider;
         }
 
-        public RequestHandlerBase(IAuthorizedUserProvider userProvider, IMapper mapper)
+        public RequestHandler(IAuthorizedUserProvider userProvider, IMapper mapper)
         {
             _userProvider = userProvider;
             _mapper = mapper;

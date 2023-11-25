@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.RemoveAttachment
 {
-    public class RemoveAttachmentCommandHandler : RequestHandlerBase, IRequestHandler<RemoveAttachmentCommand, Message>
+    public class RemoveAttachmentCommandHandler : RequestHandler, IRequestHandler<RemoveAttachmentCommand, Message>
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IMessageRepository _messageRepository;

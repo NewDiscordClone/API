@@ -8,7 +8,7 @@ namespace Sparkle.Application.Channels.Commands.CreateChannel
 {
     public class CreateChannelCommandHandler(IAuthorizedUserProvider userProvider,
         IMapper mapper)
-        : RequestHandlerBase(userProvider, mapper), IRequestHandler<CreateChannelCommand, Channel>
+        : RequestHandler(userProvider, mapper), IRequestHandler<CreateChannelCommand, Channel>
     {
 
         private readonly IServerRepository _serverRepository;

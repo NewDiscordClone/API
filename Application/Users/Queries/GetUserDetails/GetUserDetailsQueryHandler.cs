@@ -7,7 +7,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Queries
 {
-    public class GetUserDetailsQueryHandler : RequestHandlerBase, IRequestHandler<GetUserDetailsQuery, GetUserDetailsDto>
+    public class GetUserDetailsQueryHandler : RequestHandler, IRequestHandler<GetUserDetailsQuery, GetUserDetailsDto>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         private readonly IUserRepository _userRepository;

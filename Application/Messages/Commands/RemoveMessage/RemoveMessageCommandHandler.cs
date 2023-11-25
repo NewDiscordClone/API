@@ -7,7 +7,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.RemoveMessage
 {
-    public class RemoveMessageCommandHandler : RequestHandlerBase, IRequestHandler<RemoveMessageCommand, Message>
+    public class RemoveMessageCommandHandler : RequestHandler, IRequestHandler<RemoveMessageCommand, Message>
     {
         private readonly IUserProfileRepository _profileRepository;
         private readonly IServerProfileRepository _serverProfileRepository;

@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Medias.Commands.UploadMedia
 {
     public class UploadMediaCommandHandler(IAuthorizedUserProvider userProvider, IMediaRepository mediaRepository) :
-        RequestHandlerBase(userProvider), IRequestHandler<UploadMediaCommand, Media>
+        RequestHandler(userProvider), IRequestHandler<UploadMediaCommand, Media>
     {
         private readonly IMediaRepository _mediaRepository = mediaRepository;
 

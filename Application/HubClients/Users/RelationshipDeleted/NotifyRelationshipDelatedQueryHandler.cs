@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Relationships.Queries;
 
 namespace Sparkle.Application.HubClients.Users.RelationshipDeleted
 {
-    public class NotifyRelationshipDelatedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyRelationshipDelatedQuery>
+    public class NotifyRelationshipDelatedQueryHandler : HubHandler, IRequestHandler<NotifyRelationshipDelatedQuery>
     {
         private readonly IConvertor _convertor;
         public NotifyRelationshipDelatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context,

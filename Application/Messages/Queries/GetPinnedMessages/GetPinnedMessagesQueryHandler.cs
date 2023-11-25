@@ -8,7 +8,7 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 {
-    public class GetPinnedMessagesQueryHandler : RequestHandlerBase,
+    public class GetPinnedMessagesQueryHandler : RequestHandler,
         IRequestHandler<GetPinnedMessagesQuery, List<MessageDto>>
     {
 

@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Channels.Commands.RenameChannel
 {
     public class RenameChannelCommandHandler(IAuthorizedUserProvider userProvider, IChatRepository chatRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<RenameChannelCommand, Channel>
+        : RequestHandler(userProvider), IRequestHandler<RenameChannelCommand, Channel>
     {
         private readonly IChatRepository _chatRepository = chatRepository;
         public async Task<Channel> Handle(RenameChannelCommand command, CancellationToken cancellationToken)

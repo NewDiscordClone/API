@@ -9,7 +9,7 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
     public class AddReactionCommandHandler(IAuthorizedUserProvider userProvider,
         IMapper mapper,
         IMessageRepository messageRepository)
-        : RequestHandlerBase(userProvider, mapper), IRequestHandler<AddReactionCommand, Message>
+        : RequestHandler(userProvider, mapper), IRequestHandler<AddReactionCommand, Message>
     {
         private readonly IMessageRepository _messageRepository = messageRepository;
         public async Task<Message> Handle(AddReactionCommand command, CancellationToken cancellationToken)

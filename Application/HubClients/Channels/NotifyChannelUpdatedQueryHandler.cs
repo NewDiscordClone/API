@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 
-namespace Sparkle.Application.HubClients.Channels.ChannelUpdated
+namespace Sparkle.Application.HubClients.Channels
 {
-    public class NotifyChannelUpdatedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyChannelUpdatedQuery>
+    public class NotifyChannelUpdatedQueryHandler : HubHandler, IRequestHandler<NotifyChannelUpdatedQuery>
     {
         public NotifyChannelUpdatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context) : base(hubContextProvider, context)
         {

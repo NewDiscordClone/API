@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Commands.DeleteServer
 {
-    public class DeleteServerRequestHandler : RequestHandlerBase, IRequestHandler<DeleteServerCommand, (Server Server, IEnumerable<Guid> UserIds)>
+    public class DeleteServerRequestHandler : RequestHandler, IRequestHandler<DeleteServerCommand, (Server Server, IEnumerable<Guid> UserIds)>
     {
         private readonly IRoleRepository _roleRepository;
         private readonly IServerProfileRepository _serverProfileRepository;

@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Commands.CreateServer
 {
-    public class CreateServerCommandHandler : RequestHandlerBase, IRequestHandler<CreateServerCommand, Server>
+    public class CreateServerCommandHandler : RequestHandler, IRequestHandler<CreateServerCommand, Server>
     {
         private readonly ServerFactory _serverFactory;
         private readonly IServerRepository _serverRepository;

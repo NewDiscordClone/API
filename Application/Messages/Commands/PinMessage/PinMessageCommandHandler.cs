@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Messages.Commands.PinMessage
 {
     public class PinMessageCommandHandler(IAuthorizedUserProvider userProvider, IMessageRepository messageRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<PinMessageCommand, Message>
+        : RequestHandler(userProvider), IRequestHandler<PinMessageCommand, Message>
     {
         private readonly IMessageRepository _messageRepository = messageRepository;
 

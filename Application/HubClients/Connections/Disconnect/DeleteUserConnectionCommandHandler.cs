@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.HubClients.Connections.Disconnect
 {
-    public class DeleteUserConnectionCommandHandler : HubRequestHandlerBase, IRequestHandler<DeleteUserConnectionCommand, User?>
+    public class DeleteUserConnectionCommandHandler : HubHandler, IRequestHandler<DeleteUserConnectionCommand, User?>
     {
         private readonly IRepository<User, Guid> _userRepository;
         public DeleteUserConnectionCommandHandler(

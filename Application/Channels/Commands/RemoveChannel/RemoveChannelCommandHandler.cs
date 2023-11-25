@@ -8,7 +8,7 @@ namespace Sparkle.Application.Channels.Commands.RemoveChannel
     public class RemoveChannelCommandHandler(IAuthorizedUserProvider userProvider,
         IChatRepository chatRepository,
         IMessageRepository messageRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<RemoveChannelCommand, Channel>
+        : RequestHandler(userProvider), IRequestHandler<RemoveChannelCommand, Channel>
     {
         private readonly IChatRepository _chatRepository = chatRepository;
         private readonly IMessageRepository _messageRepository = messageRepository;

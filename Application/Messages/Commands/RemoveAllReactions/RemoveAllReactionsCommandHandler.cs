@@ -7,7 +7,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveAllReactions
 {
     public class RemoveAllReactionsCommandHandler(IAuthorizedUserProvider userProvider,
         IMessageRepository messageRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<RemoveAllReactionsCommand, Message>
+        : RequestHandler(userProvider), IRequestHandler<RemoveAllReactionsCommand, Message>
     {
 
         private readonly IMessageRepository _messageRepository = messageRepository;

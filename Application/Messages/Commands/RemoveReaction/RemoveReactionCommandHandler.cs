@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Messages.Commands.RemoveReaction
 {
-    public class RemoveReactionCommandHandler : RequestHandlerBase, IRequestHandler<RemoveReactionCommand, Message>
+    public class RemoveReactionCommandHandler : RequestHandler, IRequestHandler<RemoveReactionCommand, Message>
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IMessageRepository _messageRepository;

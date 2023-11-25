@@ -9,7 +9,7 @@ namespace Sparkle.Application.Servers.Roles.Commands.Create
     public class CreateRoleCommandHandler(IMapper mapper,
         IRoleFactory roleFactory,
         IServerRepository serverRepository,
-        IRoleRepository roleRepository) : RequestHandlerBase(mapper), IRequestHandler<CreateRoleCommand, Role>
+        IRoleRepository roleRepository) : RequestHandler(mapper), IRequestHandler<CreateRoleCommand, Role>
     {
         private readonly IRoleFactory _roleFactory = roleFactory;
         private readonly IRoleRepository _roleRepository = roleRepository;

@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.PersonalChats.Commands.CreateChat
 {
-    public class CreatePersonalChatCommandHandler : RequestHandlerBase, IRequestHandler<CreatePersonalChatCommand, PersonalChat>
+    public class CreatePersonalChatCommandHandler : RequestHandler, IRequestHandler<CreatePersonalChatCommand, PersonalChat>
     {
         private readonly IRoleFactory _roleFactory;
         private readonly IUserProfileRepository _userProfileRepository;

@@ -7,7 +7,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileDisplayName
 {
-    public class ChangeServerProfileDisplayNameCommandHandler : RequestHandlerBase,
+    public class ChangeServerProfileDisplayNameCommandHandler : RequestHandler,
         IRequestHandler<ChangeServerProfileDisplayNameCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;

@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Relationships.Commands
 {
-    public class DeleteFriendCommandHandler : RequestHandlerBase, IRequestHandler<DeleteFriendCommand, Relationship>
+    public class DeleteFriendCommandHandler : RequestHandler, IRequestHandler<DeleteFriendCommand, Relationship>
     {
         private readonly IRelationshipRepository _relationshipsRepository;
         public DeleteFriendCommandHandler(IAuthorizedUserProvider userProvider, IRelationshipRepository relationshipsRepository) : base(userProvider)

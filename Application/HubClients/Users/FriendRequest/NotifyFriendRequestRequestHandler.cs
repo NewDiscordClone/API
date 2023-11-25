@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.HubClients.Users
 {
-    public class NotifyFriendRequestRequestHandler : HubRequestHandlerBase, IRequestHandler<NotifyFriendRequestRequest>
+    public class NotifyFriendRequestRequestHandler : HubHandler, IRequestHandler<NotifyFriendRequestRequest>
     {
         public NotifyFriendRequestRequestHandler(IHubContextProvider hubContextProvider, IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper) : base(hubContextProvider, context, userProvider, mapper)
         {

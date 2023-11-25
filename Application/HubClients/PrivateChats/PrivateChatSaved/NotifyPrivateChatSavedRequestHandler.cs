@@ -2,12 +2,13 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
 {
-    public class NotifyPrivateChatSavedQueryHandler : HubRequestHandlerBase,
+    public class NotifyPrivateChatSavedQueryHandler : HubHandler,
         IRequestHandler<NotifyPrivateChatSavedQuery>
     {
         private readonly IConvertor _convertor;

@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatOwner
 {
-    public class ChangeGroupChatOwnerCommandHandler : RequestHandlerBase, IRequestHandler<ChangeGroupChatOwnerCommand, GroupChat>
+    public class ChangeGroupChatOwnerCommandHandler : RequestHandler, IRequestHandler<ChangeGroupChatOwnerCommand, GroupChat>
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IChatRepository _chatRepository;

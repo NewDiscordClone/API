@@ -7,7 +7,7 @@ namespace Sparkle.Application.Invitations.Commands.CreateInvitation
 {
     public class CreateInvitationCommandHandler(IAuthorizedUserProvider userProvider,
         IInvitationRepository invitationRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<CreateInvitationCommand, Invitation>
+        : RequestHandler(userProvider), IRequestHandler<CreateInvitationCommand, Invitation>
     {
         private readonly IInvitationRepository _invitationRepository = invitationRepository;
 

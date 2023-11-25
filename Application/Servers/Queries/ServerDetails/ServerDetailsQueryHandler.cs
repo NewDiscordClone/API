@@ -7,7 +7,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Queries.ServerDetails
 {
-    public class ServerDetailsQueryHandler : RequestHandlerBase,
+    public class ServerDetailsQueryHandler : RequestHandler,
         IRequestHandler<ServerDetailsQuery, ServerDetailsDto>
     {
         private readonly IServerRepository _serverRepository;

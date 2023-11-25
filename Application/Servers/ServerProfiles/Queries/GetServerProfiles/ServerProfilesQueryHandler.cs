@@ -9,7 +9,7 @@ using Sparkle.Application.Models.LookUps;
 namespace Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles
 {
     public class ServerProfilesQueryHandler(IMapper mapper, IServerProfileRepository repository, IUserRepository userRepository) :
-        RequestHandlerBase(mapper), IRequestHandler<ServerProfilesQuery, List<ServerProfileLookup>>
+        RequestHandler(mapper), IRequestHandler<ServerProfilesQuery, List<ServerProfileLookup>>
     {
         private readonly IServerProfileRepository _repository = repository;
         private readonly IUserRepository _userRepository = userRepository;

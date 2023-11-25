@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 
-namespace Sparkle.Application.HubClients.Channels.ChannelRemoved
+namespace Sparkle.Application.HubClients.Channels
 {
-    public class NotifyChannelRemovedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyChannelRemovedQuery>
+    public class NotifyChannelRemovedQueryHandler : HubHandler, IRequestHandler<NotifyChannelRemovedQuery>
     {
         public NotifyChannelRemovedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context) : base(hubContextProvider, context)
         {

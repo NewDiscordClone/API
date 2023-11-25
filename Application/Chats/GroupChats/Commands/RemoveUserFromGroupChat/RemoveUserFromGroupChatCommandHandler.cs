@@ -7,7 +7,7 @@ using RemoveChatUserResult = (Sparkle.Application.Models.GroupChat Chat, System.
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {
-    public class RemoveUserFromGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<RemoveUserFromGroupChatCommand, RemoveChatUserResult>
+    public class RemoveUserFromGroupChatCommandHandler : RequestHandler, IRequestHandler<RemoveUserFromGroupChatCommand, RemoveChatUserResult>
     {
 
         private readonly IUserProfileRepository _userProfileRepository;

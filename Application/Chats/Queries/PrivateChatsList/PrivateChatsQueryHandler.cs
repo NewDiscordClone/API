@@ -7,7 +7,7 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Chats.Queries.PrivateChatsList
 {
-    public class PrivateChatsQueryHandler : RequestHandlerBase,
+    public class PrivateChatsQueryHandler : RequestHandler,
         IRequestHandler<PrivateChatsQuery, List<PrivateChatLookUp>>
     {
         private readonly IConvertor _convertor;

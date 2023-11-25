@@ -7,7 +7,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Messages.Commands.EditMessage
 {
     public class EditMessageCommandHandler(IAuthorizedUserProvider userProvider, IMessageRepository messageRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<EditMessageCommand, Message>
+        : RequestHandler(userProvider), IRequestHandler<EditMessageCommand, Message>
     {
         private readonly IMessageRepository _messageRepository = messageRepository;
 

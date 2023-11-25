@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Relationships.Commands
 {
-    public class BlockUserCommandHandler : RequestHandlerBase, IRequestHandler<BlockUserCommand, Relationship>
+    public class BlockUserCommandHandler : RequestHandler, IRequestHandler<BlockUserCommand, Relationship>
     {
         private readonly IRelationshipRepository _relationshipRepository;
 

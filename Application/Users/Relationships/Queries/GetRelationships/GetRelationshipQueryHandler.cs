@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Relationships.Queries
 {
-    public class GetRelationshipQueryHandler : RequestHandlerBase,
+    public class GetRelationshipQueryHandler : RequestHandler,
         IRequestHandler<GetRelationshipQuery, List<RelationshipViewModel>>
     {
         private readonly IConvertor _convertor;

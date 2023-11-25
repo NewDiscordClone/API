@@ -7,7 +7,7 @@ namespace Sparkle.Application.Users.Commands
 {
     public class ChangeDisplayNameCommandHandler(IAuthorizedUserProvider userProvider,
         IUserRepository userRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<ChangeDisplayNameCommand, User>
+        : RequestHandler(userProvider), IRequestHandler<ChangeDisplayNameCommand, User>
     {
         private readonly IUserRepository _userRepository = userRepository;
 

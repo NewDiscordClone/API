@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 
 namespace Sparkle.Application.HubClients.Servers.ServerDeleted
 {
-    public class ServerDeletedNotificationHandler : HubRequestHandlerBase, INotificationHandler<NotifyServerDeletedEvent>
+    public class ServerDeletedNotificationHandler : HubHandler, INotificationHandler<NotifyServerDeletedEvent>
     {
         public ServerDeletedNotificationHandler(IHubContextProvider hubContextProvider, IAppDbContext context) : base(hubContextProvider, context)
         {

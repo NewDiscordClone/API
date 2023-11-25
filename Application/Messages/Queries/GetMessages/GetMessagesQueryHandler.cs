@@ -7,7 +7,7 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Queries.GetMessages
 {
-    public class GetMessagesQueryHandler : RequestHandlerBase, IRequestHandler<GetMessagesQuery, List<MessageDto>>
+    public class GetMessagesQueryHandler : RequestHandler, IRequestHandler<GetMessagesQuery, List<MessageDto>>
     {
         private const int _pageSize = 50;
 

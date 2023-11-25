@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
 {
-    public class CreateGroupChatCommandHandler : RequestHandlerBase, IRequestHandler<CreateGroupChatCommand, GroupChat>
+    public class CreateGroupChatCommandHandler : RequestHandler, IRequestHandler<CreateGroupChatCommand, GroupChat>
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IRoleFactory _roleFactory;

@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models.Events;
 
 namespace Sparkle.Application.HubClients.Roles
 {
-    public class RoleUpdatedNotificationHandler : HubRequestHandlerBase, INotificationHandler<RoleUpdatedEvent>
+    public class RoleUpdatedNotificationHandler : HubHandler, INotificationHandler<RoleUpdatedEvent>
     {
         private readonly IServerProfileRepository _profileRepository;
         public RoleUpdatedNotificationHandler(IHubContextProvider hubContextProvider,

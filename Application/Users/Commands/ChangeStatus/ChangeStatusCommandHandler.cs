@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Users.Commands
 {
     public class ChangeStatusCommandHandler(IAuthorizedUserProvider userProvider, IUserRepository userRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<ChangeStatusCommand, User>
+        : RequestHandler(userProvider), IRequestHandler<ChangeStatusCommand, User>
     {
         private readonly IUserRepository _userRepository = userRepository;
 

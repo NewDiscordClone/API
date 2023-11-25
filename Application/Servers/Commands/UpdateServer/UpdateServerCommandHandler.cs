@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Commands.UpdateServer
 {
-    public class UpdateServerCommandHandler : RequestHandlerBase, IRequestHandler<UpdateServerCommand, Server>
+    public class UpdateServerCommandHandler : RequestHandler, IRequestHandler<UpdateServerCommand, Server>
     {
         private readonly IServerRepository _serverRepository;
 

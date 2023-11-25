@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Messages.Commands.UnpinMessage
 {
     public class UnpinMessageCommandHandler(IAuthorizedUserProvider userProvider,
-        IMessageRepository messageRepository) : RequestHandlerBase(userProvider), IRequestHandler<UnpinMessageCommand, Message>
+        IMessageRepository messageRepository) : RequestHandler(userProvider), IRequestHandler<UnpinMessageCommand, Message>
     {
 
         private readonly IMessageRepository _messageRepository = messageRepository;

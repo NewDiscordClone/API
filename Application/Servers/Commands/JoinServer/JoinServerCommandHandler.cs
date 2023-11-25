@@ -8,7 +8,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Commands.JoinServer
 {
-    public class JoinServerCommandHandler : RequestHandlerBase, IRequestHandler<JoinServerCommand, ServerProfile>
+    public class JoinServerCommandHandler : RequestHandler, IRequestHandler<JoinServerCommand, ServerProfile>
     {
         private readonly IServerProfileRepository _serverProfileRepository;
         private readonly IInvitationRepository _invitationRepository;

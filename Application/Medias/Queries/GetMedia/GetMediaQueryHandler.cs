@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Medias.Queries.GetMedia
 {
     public class GetMediaQueryHandler(IAuthorizedUserProvider userProvider, IMediaRepository mediaRepository)
-        : RequestHandlerBase(userProvider), IRequestHandler<GetMediaQuery, Media>
+        : RequestHandler(userProvider), IRequestHandler<GetMediaQuery, Media>
     {
         private readonly IMediaRepository _mediaRepository = mediaRepository;
 

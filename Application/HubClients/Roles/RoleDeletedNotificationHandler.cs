@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models.Events;
 
 namespace Sparkle.Application.HubClients.Roles
 {
-    public class RoleDeletedNotificationHandler : HubRequestHandlerBase, INotificationHandler<RoleDeletedEvent>
+    public class RoleDeletedNotificationHandler : HubHandler, INotificationHandler<RoleDeletedEvent>
     {
         private readonly IServerProfileRepository _profileRepository;
 

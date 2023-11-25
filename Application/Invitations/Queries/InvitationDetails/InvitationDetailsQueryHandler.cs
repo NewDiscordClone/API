@@ -8,7 +8,7 @@ using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Invitations.Queries.InvitationDetails
 {
-    public class InvitationDetailsQueryHandler : RequestHandlerBase, IRequestHandler<InvitationDetailsQuery, InvitationDetailsDto>
+    public class InvitationDetailsQueryHandler : RequestHandler, IRequestHandler<InvitationDetailsQuery, InvitationDetailsDto>
     {
         private readonly IInvitationRepository _invitationRepository;
         private readonly IUserRepository _userRepository;

@@ -1,12 +1,13 @@
 using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.HubClients.Messages.MessageUpdated
 {
-    public class NotifyMessageUpdatedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyMessageUpdatedQuery>
+    public class NotifyMessageUpdatedQueryHandler : HubHandler, IRequestHandler<NotifyMessageUpdatedQuery>
     {
         public async Task Handle(NotifyMessageUpdatedQuery query, CancellationToken cancellationToken)
         {

@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 using Sparkle.Application.Users.Relationships.Queries;
 
 namespace Sparkle.Application.HubClients.Users.RelationshipUpdated
 {
-    public class NotifyRelationshipUpdatedQueryHandler : HubRequestHandlerBase, IRequestHandler<NotifyRelationshipUpdatedQuery>
+    public class NotifyRelationshipUpdatedQueryHandler : HubHandler, IRequestHandler<NotifyRelationshipUpdatedQuery>
     {
         private readonly IConvertor _convertor;
         public NotifyRelationshipUpdatedQueryHandler(IHubContextProvider hubContextProvider, IAppDbContext context,

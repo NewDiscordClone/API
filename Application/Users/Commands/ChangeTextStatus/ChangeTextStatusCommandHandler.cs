@@ -7,7 +7,7 @@ namespace Sparkle.Application.Users.Commands
 {
     public class ChangeTextStatusCommandHandler(IAuthorizedUserProvider userProvider,
         IUserRepository repository)
-        : RequestHandlerBase(userProvider), IRequestHandler<ChangeTextStatusCommand, User>
+        : RequestHandler(userProvider), IRequestHandler<ChangeTextStatusCommand, User>
     {
         private readonly IUserRepository _repository = repository;
 

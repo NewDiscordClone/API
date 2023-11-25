@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Relationships.Commands
 {
-    public class AcceptFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<AcceptFriendRequestCommand, Relationship>
+    public class AcceptFriendRequestCommandHandler : RequestHandler, IRequestHandler<AcceptFriendRequestCommand, Relationship>
     {
         private readonly IRelationshipRepository _relationshipRepository;
         public AcceptFriendRequestCommandHandler(IAuthorizedUserProvider userProvider, IRelationshipRepository relationshipRepository)

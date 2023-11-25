@@ -8,7 +8,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Servers.Queries.ServersList
 {
-    public class ServersListQueryHandler : RequestHandlerBase,
+    public class ServersListQueryHandler : RequestHandler,
         IRequestHandler<ServersListQuery, List<ServerLookUpDto>>
     {
         private readonly IServerRepository _serverRepository;

@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.Application.Users.Commands
 {
     public class ChangeAvatarCommandHandler(IAuthorizedUserProvider userProvider,
-        IUserRepository repository) : RequestHandlerBase(userProvider), IRequestHandler<ChangeAvatarCommand, User>
+        IUserRepository repository) : RequestHandler(userProvider), IRequestHandler<ChangeAvatarCommand, User>
     {
         private readonly IUserRepository _repository = repository;
 

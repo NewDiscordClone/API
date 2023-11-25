@@ -5,7 +5,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Relationships.Commands
 {
-    public class CancelFriendRequestCommandHandler : RequestHandlerBase, IRequestHandler<CancelFriendRequestCommand, Relationship>
+    public class CancelFriendRequestCommandHandler : RequestHandler, IRequestHandler<CancelFriendRequestCommand, Relationship>
     {
         private readonly IRelationshipRepository _relationshipRepository;
 
