@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.HubClients.Common;
 using Sparkle.Application.Models;
 
@@ -8,21 +9,11 @@ namespace Sparkle.Application.HubClients.Connections.Disconnect
 {
     public class DeleteUserConnectionCommandHandler : HubHandler, IRequestHandler<DeleteUserConnectionCommand, User?>
     {
-        private readonly IRepository<User, Guid> _userRepository;
-        public DeleteUserConnectionCommandHandler(
-            IHubContextProvider hubContextProvider,
-            IAppDbContext context,
-            IAuthorizedUserProvider userProvider,
-            IMapper mapper,
-            IRepository<User, Guid> userRepository) :
-            base(hubContextProvider, context, userProvider, mapper)
-        {
-            _userRepository = userRepository;
-        }
+        private readonly IUserRepository _userRepository;
 
         public async Task<User?> Handle(DeleteUserConnectionCommand command, CancellationToken cancellationToken)
         {
-            UserConnections? userConnections = await Context.UserConnections
+            UserConnections? userConnections = await ConnectionsRepository
                 .FindOrDefaultAsync(UserId, cancellationToken)!;
 
             User? user = null;
@@ -33,17 +24,28 @@ namespace Sparkle.Application.HubClients.Connections.Disconnect
             userConnections.Connections.Remove(command.ConnectionId);
             if (userConnections.Connections.Count == 0)
             {
-                await Context.UserConnections.DeleteAsync(userConnections, cancellationToken);
+                await ConnectionsRepository.DeleteAsync(userConnections, cancellationToken);
 
                 user = await _userRepository.FindAsync(UserId, cancellationToken);
                 user.Status = UserStatus.Offline;
 
-                await Context.SqlUsers.UpdateAsync(user, cancellationToken);
+                await _userRepository.UpdateAsync(user, cancellationToken);
             }
             else
-                await Context.UserConnections.UpdateAsync(userConnections, cancellationToken);
+                await ConnectionsRepository.UpdateAsync(userConnections, cancellationToken);
 
             return user;
+        }
+
+        public DeleteUserConnectionCommandHandler(
+          IHubContextProvider hubContextProvider,
+          IAuthorizedUserProvider userProvider,
+          IMapper mapper,
+          IUserRepository userRepository,
+          IConnectionsRepository connectionsRepository) :
+          base(hubContextProvider, userProvider, mapper, connectionsRepository)
+        {
+            _userRepository = userRepository;
         }
     }
 }

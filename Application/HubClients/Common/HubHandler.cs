@@ -18,7 +18,7 @@ namespace Sparkle.Application.HubClients.Common
         }
         protected async Task SendAsync<T>(string method, T arg, IEnumerable<Guid> userIds, CancellationToken cancellationToken = default)
         {
-            IEnumerable<string> connections = await ConnectionsRepository.FindAsync(userIds, cancellationToken);
+            IEnumerable<string> connections = await ConnectionsRepository.FindConnectionsAsync(userIds, cancellationToken);
             await SendAsync(method, arg, connections, cancellationToken);
         }
 

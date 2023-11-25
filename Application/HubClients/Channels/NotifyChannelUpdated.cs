@@ -19,7 +19,7 @@ namespace Sparkle.Application.HubClients.Channels
         {
             Channel channel = notification.Channel;
             IEnumerable<string> connections = await ConnectionsRepository
-                .FindAsync(channel, cancellationToken);
+                .FindConnectionsAsync(channel, cancellationToken);
 
             await SendAsync(ClientMethods.ChannelUpdated, channel, connections, cancellationToken);
         }

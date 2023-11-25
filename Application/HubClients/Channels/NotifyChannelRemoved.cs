@@ -17,7 +17,7 @@ namespace Sparkle.Application.HubClients.Channels
         public async Task Handle(ChannelRemovedEvent notification, CancellationToken cancellationToken)
         {
             IEnumerable<string> connections = await ConnectionsRepository
-                .FindAsync(notification.Channel, cancellationToken);
+                .FindConnectionsAsync(notification.Channel, cancellationToken);
 
             await SendAsync(ClientMethods.ChannelDeleted, notification.Channel, connections, cancellationToken);
         }
