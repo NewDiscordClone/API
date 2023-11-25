@@ -1,23 +1,24 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.HubClients.Common;
-using Sparkle.Application.Models;
 using Sparkle.Application.Models.Events;
 
 namespace Sparkle.Application.HubClients.Channels
 {
-    public class NotifyChannelCreated : HubHandler, IRequestHandler<ChannelCreatedEvent>
+    public class NotifyChannelCreated : HubHandler, INotificationHandler<ChannelCreatedEvent>
     {
-        public NotifyChannelCreated(IHubContextProvider hubContextProvider, IAppDbContext context) : base(hubContextProvider, context)
+        public NotifyChannelCreated(IHubContextProvider hubContextProvider, IConnectionsRepository connectionsRepository)
+            : base(hubContextProvider, connectionsRepository)
         {
         }
 
-        public async Task Handle(ChannelCreatedEvent request, CancellationToken cancellationToken)
+        public async Task Handle(ChannelCreatedEvent createdEvent, CancellationToken cancellationToken)
         {
-            SetToken(cancellationToken);
-            Channel channel = await Context.Channels.FindAsync(request.ChannelId);
+            Models.Channel channel = createdEvent.Channel;
+            IEnumerable<string> connections = await ConnectionsRepository.FindAsync(channel, cancellationToken);
 
-            await SendAsync(ClientMethods.ChannelCreated, channel, GetConnections(channel));
+            await SendAsync(ClientMethods.ChannelCreated, channel, connections, cancellationToken);
         }
     }
 }

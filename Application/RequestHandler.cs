@@ -26,5 +26,9 @@ namespace Sparkle.Application
             _userProvider = userProvider;
             _mapper = mapper;
         }
+        public RequestHandler()
+        {
+
+        }
     }
 }
