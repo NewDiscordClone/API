@@ -107,7 +107,7 @@ namespace Sparkle.WebApi.Controllers
         {
             Application.Models.Server server = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyServerUpdatedQuery { ServerId = server.Id });
+            await Mediator.Send(new ServerUpdatedEvent { ServerId = server.Id });
 
             return CreatedAtAction(nameof(GetServerDetails), new { serverId = server.Id }, server.Id);
         }
@@ -141,7 +141,7 @@ namespace Sparkle.WebApi.Controllers
             UpdateServerCommand command = _mapper.Map<UpdateServerCommand>((request, serverId));
 
             await Mediator.Send(command);
-            await Mediator.Send(new NotifyServerUpdatedQuery { ServerId = command.ServerId });
+            await Mediator.Send(new ServerUpdatedEvent { ServerId = command.ServerId });
 
             return NoContent();
         }
@@ -169,7 +169,7 @@ namespace Sparkle.WebApi.Controllers
             DeleteServerCommand command = new() { ServerId = serverId };
             (Application.Models.Server server, IEnumerable<Guid> userIds) = await Mediator.Send(command);
 
-            await Mediator.Publish(new NotifyServerDeletedEvent(server, userIds));
+            await Mediator.Publish(new ServerDeletedEvent(server, userIds));
 
             return NoContent();
         }
