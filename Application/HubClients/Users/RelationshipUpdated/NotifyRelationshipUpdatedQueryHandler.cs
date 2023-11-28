@@ -26,8 +26,8 @@ namespace Sparkle.Application.HubClients.Users.RelationshipUpdated
             RelationshipViewModel modelForCurrentUser = _convertor.Convert(relationship);
             RelationshipViewModel modelForOtherUser = _convertor.Convert(relationship, notCurrentUserId);
 
-            await SendAsync(ClientMethods.RelationshipsUpdated, modelForCurrentUser, GetConnections(UserId));
-            await SendAsync(ClientMethods.RelationshipsUpdated, modelForOtherUser, GetConnections(notCurrentUserId));
+            await SendAsync(ClientMethods.RelationshipsUpdated, modelForCurrentUser, GetConnectionsAsync(UserId));
+            await SendAsync(ClientMethods.RelationshipsUpdated, modelForOtherUser, GetConnectionsAsync(notCurrentUserId));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Sparkle.Application.HubClients.Servers.ServerDeleted
         {
             SetToken(cancellationToken);
 
-            await SendAsync(ClientMethods.ServerDeleted, query.Server.Id, GetConnections(query.UserIds));
+            await SendAsync(ClientMethods.ServerDeleted, query.Server.Id, GetConnectionsAsync(query.UserIds));
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
             };
 
             lookUp.Title ??= await _convertor.FillChatTitleAsync(userIds, cancellationToken);
-            await SendAsync(ClientMethods.PrivateChatSaved, lookUp, GetConnections(userIds));
+            await SendAsync(ClientMethods.PrivateChatSaved, lookUp, GetConnectionsAsync(userIds));
         }
     }
 }

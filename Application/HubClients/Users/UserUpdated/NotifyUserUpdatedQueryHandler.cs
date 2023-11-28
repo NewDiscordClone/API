@@ -41,7 +41,7 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
 
             foreach (Relationship relationship in relationships)
             {
-                connections.AddRange(GetConnections(
+                connections.AddRange(GetConnectionsAsync(
                     relationship.Active != UserId ? relationship.Active : relationship.Passive
                 ));
             }
@@ -57,7 +57,7 @@ namespace Sparkle.Application.HubClients.Users.UserUpdated
 
             UserViewModel notifyArg = Mapper.Map<UserViewModel>(query.UpdatedUser);
 
-            await SendAsync(ClientMethods.UserUpdated, notifyArg, GetConnections(UserId));
+            await SendAsync(ClientMethods.UserUpdated, notifyArg, GetConnectionsAsync(UserId));
             await SendAsync(ClientMethods.UserUpdated, notifyArg, connections);
         }
     }

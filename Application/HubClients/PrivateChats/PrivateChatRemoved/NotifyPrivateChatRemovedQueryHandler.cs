@@ -12,7 +12,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatRemoved
 
         public async Task Handle(NotifyPrivateChatRemovedQuery query, CancellationToken cancellationToken)
         {
-            await SendAsync(ClientMethods.PrivateChatRemoved, query.ChatId, GetConnections(query.UserId));
+            await SendAsync(ClientMethods.PrivateChatRemoved, query.ChatId, GetConnectionsAsync(query.UserId));
         }
     }
 }

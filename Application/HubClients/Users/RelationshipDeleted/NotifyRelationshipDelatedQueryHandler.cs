@@ -26,8 +26,8 @@ namespace Sparkle.Application.HubClients.Users.RelationshipDeleted
             RelationshipViewModel modelForCurrentUser = _convertor.Convert(relationship);
             RelationshipViewModel modelForOtherUser = _convertor.Convert(relationship, notCurrentUserId);
 
-            await SendAsync(ClientMethods.RelationshipsDeleted, modelForCurrentUser, GetConnections(UserId));
-            await SendAsync(ClientMethods.RelationshipsDeleted, modelForOtherUser, GetConnections(notCurrentUserId));
+            await SendAsync(ClientMethods.RelationshipsDeleted, modelForCurrentUser, GetConnectionsAsync(UserId));
+            await SendAsync(ClientMethods.RelationshipsDeleted, modelForOtherUser, GetConnectionsAsync(notCurrentUserId));
         }
     }
 }

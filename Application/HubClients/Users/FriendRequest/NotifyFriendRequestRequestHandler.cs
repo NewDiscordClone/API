@@ -18,7 +18,7 @@ namespace Sparkle.Application.HubClients.Users
             SetToken(cancellationToken);
             User user = await Context.SqlUsers.FindAsync(UserId);
 
-            await SendAsync(ClientMethods.FriendRequest, Mapper.Map<UserViewModel>(user), GetConnections(request.UserId));
+            await SendAsync(ClientMethods.FriendRequest, Mapper.Map<UserViewModel>(user), GetConnectionsAsync(request.UserId));
         }
     }
 }
