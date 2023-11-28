@@ -11,9 +11,9 @@ namespace Sparkle.Application.HubClients.Roles
         private readonly IServerProfileRepository _profileRepository;
 
         public RoleDeletedNotificationHandler(IHubContextProvider hubContextProvider,
-            IAppDbContext context,
-            IServerProfileRepository profileRepository)
-            : base(hubContextProvider, context)
+            IServerProfileRepository profileRepository,
+            IConnectionsRepository connectionsRepository)
+            : base(hubContextProvider, connectionsRepository)
         {
             _profileRepository = profileRepository;
         }
@@ -23,7 +23,7 @@ namespace Sparkle.Application.HubClients.Roles
             List<Guid> userIds = await _profileRepository
               .GetUserIdsFromServer(notification.Role.ServerId!, cancellationToken);
 
-            await SendAsync(ClientMethods.RoleDeleted, notification.Role, userIds);
+            await SendAsync(ClientMethods.RoleDeleted, notification.Role, userIds, cancellationToken);
         }
     }
 }
