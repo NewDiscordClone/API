@@ -6,23 +6,23 @@ using Sparkle.Application.Models.Events;
 
 namespace Sparkle.Application.HubClients.Servers.Profiles
 {
-    public class ServerProfileUpdatedNotificationHandler : HubHandler, INotificationHandler<ProfileUpdatedEvent>
+    public class NotifyServerProfileDeleted : HubHandler, INotificationHandler<ProfileDeletedEvent>
     {
         private readonly IServerProfileRepository _repository;
-        public ServerProfileUpdatedNotificationHandler(IHubContextProvider hubContextProvider,
-            IAppDbContext context,
+        public NotifyServerProfileDeleted(IHubContextProvider hubContextProvider,
+            IConnectionsRepository connectionRepository,
             IServerProfileRepository repository)
-            : base(hubContextProvider, context)
+            : base(hubContextProvider, connectionRepository)
         {
             _repository = repository;
         }
 
-        public async Task Handle(ProfileUpdatedEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(ProfileDeletedEvent notification, CancellationToken cancellationToken)
         {
             List<Guid> userIds = await _repository
                 .GetUserIdsFromServer(notification.Profile.ServerId, cancellationToken);
 
-            await SendAsync(ClientMethods.ProfileSaved, notification.Profile, userIds);
+            await SendAsync(ClientMethods.ProfileDeleted, notification.Profile, userIds, cancellationToken);
         }
     }
 }
