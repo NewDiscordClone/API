@@ -3,9 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Messages.MessageAdded;
-using Sparkle.Application.HubClients.Messages.MessageRemoved;
-using Sparkle.Application.HubClients.Messages.MessageUpdated;
 using Sparkle.Application.Messages.Commands.AddMessage;
 using Sparkle.Application.Messages.Commands.AddReaction;
 using Sparkle.Application.Messages.Commands.EditMessage;
@@ -18,6 +15,7 @@ using Sparkle.Application.Messages.Commands.UnpinMessage;
 using Sparkle.Application.Messages.Queries.GetMessages;
 using Sparkle.Application.Messages.Queries.GetPinnedMessages;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
 using Sparkle.Application.Models.LookUps;
 using Sparkle.Contracts.Messages;
 using Sparkle.WebApi.Attributes;
@@ -27,16 +25,9 @@ namespace Sparkle.WebApi.Controllers
 {
     [Route("api/chats/{chatId}/messages")]
     [ServerAuthorize]
-    public class MessagesController : ApiControllerBase
+    public class MessagesController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper)
+        : ApiControllerBase(mediator, userProvider, mapper)
     {
-        public MessagesController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator,
-            userProvider)
-        {
-            _mapper = mapper;
-        }
-
-        private readonly IMapper _mapper;
-
         /// <summary>
         /// Returns a list of messages to show in the chat
         /// </summary>
@@ -96,10 +87,10 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> AddMessage(string chatId, AddMessageRequest request)
         {
-            AddMessageCommand command = _mapper.Map<AddMessageCommand>((request, chatId));
-            MessageDto message = await Mediator.Send(command);
+            AddMessageCommand command = Mapper.Map<AddMessageCommand>((request, chatId));
+            Message message = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyMessageAddedQuery { MessageDto = message });
+            await Mediator.Publish(new MessageSentEvent(message));
 
             //TODO: Create GetMessage request and send it to the client
             return Created("", message);
@@ -123,9 +114,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> AddReaction(string messageId, string reaction)
         {
             AddReactionCommand command = new() { Emoji = reaction, MessageId = messageId };
-            await Mediator.Send(command);
+            Message message = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+            await Mediator.Publish(new MessageUpdatedEvent(message));
 
             return NoContent();
         }
@@ -151,9 +142,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> EditMessage(string messageId, [FromBody] string newMessage)
         {
             EditMessageCommand command = new() { MessageId = messageId, NewText = newMessage };
-            await Mediator.Send(command);
+            Message message = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+            await Mediator.Publish(new MessageUpdatedEvent(message));
 
             return NoContent();
         }
@@ -178,9 +169,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> PinMessage(string messageId)
         {
             PinMessageCommand command = new() { MessageId = messageId };
-            await Mediator.Send(command);
+            Message message = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+            await Mediator.Publish(new MessageUpdatedEvent(message));
 
             return NoContent();
         }
@@ -206,8 +197,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> RemoveAllReactions(string messageId)
         {
             RemoveAllReactionsCommand command = new() { MessageId = messageId };
-            await Mediator.Send(command);
-            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+            Message message = await Mediator.Send(command);
+
+            await Mediator.Publish(new MessageUpdatedEvent(message));
 
             return NoContent();
         }
@@ -233,9 +225,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> RemoveAttachment(string messageId, [Required] int attachmentIndex)
         {
             RemoveAttachmentCommand command = new() { MessageId = messageId, AttachmentIndex = attachmentIndex };
-            await Mediator.Send(command);
+            Message message = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+            await Mediator.Publish(new MessageUpdatedEvent(message));
 
             return NoContent();
         }
@@ -261,9 +253,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> RemoveMessage(string messageId, string chatId)
         {
             RemoveMessageCommand command = new() { MessageId = messageId, ChatId = chatId };
-
             Message message = await Mediator.Send(command);
-            await Mediator.Send(new NotifyMessageRemovedRequest { MessageId = messageId, ChatId = message.ChatId });
+
+            await Mediator.Publish(new MessageRemovedEvent(message));
 
             return NoContent();
         }
@@ -289,9 +281,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> RemoveReaction(string messageId, [Required] int reactionIndex)
         {
             RemoveReactionCommand command = new() { MessageId = messageId, ReactionIndex = reactionIndex };
-            await Mediator.Send(command);
+            Message message = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+            await Mediator.Publish(new MessageUpdatedEvent(message));
 
             return NoContent();
         }
@@ -315,9 +307,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> UnpinMessage(string messageId)
         {
             UnpinMessageCommand command = new() { MessageId = messageId };
-            await Mediator.Send(command);
+            Message message = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });
+            await Mediator.Publish(new MessageUpdatedEvent(message));
 
             return NoContent();
         }

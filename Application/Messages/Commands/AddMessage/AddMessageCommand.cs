@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.AddMessage
 {
-    public record AddMessageCommand : IRequest<MessageDto>
+    public record AddMessageCommand : IRequest<Message>
     {
         /// <summary>
         /// Text of the message. Can include links

@@ -5,8 +5,8 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Connections.Connect;
 using Sparkle.Application.HubClients.Connections.Disconnect;
-using Sparkle.Application.HubClients.Users.UserUpdated;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
 
 namespace Sparkle.WebApi.Hubs;
 
@@ -35,7 +35,7 @@ public class ChatHub : Hub
         _logger.LogDebug($"User {UserId} connected");
 
         if (user != null)
-            await _mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+            await _mediator.Publish(new UserUpdatedEvent(user));
 
         await base.OnConnectedAsync();
 
@@ -50,7 +50,7 @@ public class ChatHub : Hub
         _logger.LogDebug($"User {UserId} disconnected");
 
         if (user != null)
-            await _mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+            await _mediator.Publish(new UserUpdatedEvent(user));
 
         await base.OnDisconnectedAsync(exception);
     }

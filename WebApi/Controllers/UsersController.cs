@@ -1,10 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Users.RelationshipDeleted;
-using Sparkle.Application.HubClients.Users.RelationshipUpdated;
-using Sparkle.Application.HubClients.Users.UserUpdated;
 using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
 using Sparkle.Application.Users.Commands;
 using Sparkle.Application.Users.Queries;
 using Sparkle.Application.Users.Relationships.Commands;
@@ -13,11 +11,9 @@ using Sparkle.Application.Users.Relationships.Queries;
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/users")]
-    public class UsersController : ApiControllerBase
+    public class UsersController(IMediator mediator, IAuthorizedUserProvider userProvider)
+        : ApiControllerBase(mediator, userProvider)
     {
-        public UsersController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
-        {
-        }
 
         /// <summary>
         /// Gets detailed information about the provided user, including it's ServerProfile if ServerId is provided
@@ -68,7 +64,7 @@ namespace Sparkle.WebApi.Controllers
             ChangeDisplayNameCommand command = new() { DisplayName = displayName };
             User user = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+            await Mediator.Publish(new UserUpdatedEvent(user));
 
             return NoContent();
         }
@@ -84,7 +80,7 @@ namespace Sparkle.WebApi.Controllers
             ChangeUserNameCommand command = new(username);
             User user = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+            await Mediator.Publish(new UserUpdatedEvent(user));
 
             return NoContent();
         }
@@ -99,7 +95,7 @@ namespace Sparkle.WebApi.Controllers
             ChangeTextStatusCommand command = new(status);
             User user = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+            await Mediator.Publish(new UserUpdatedEvent(user));
 
             return NoContent();
         }
@@ -115,7 +111,7 @@ namespace Sparkle.WebApi.Controllers
             ChangeAvatarCommand command = new(avatar);
             User user = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyUserUpdatedQuery() { UpdatedUser = user });
+            await Mediator.Publish(new UserUpdatedEvent(user));
 
             return NoContent();
         }
@@ -151,7 +147,7 @@ namespace Sparkle.WebApi.Controllers
             CreateFriendRequestCommand request = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(request);
 
-            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
+            await Mediator.Publish(new RelationshipUpdatedEvent(relationship));
 
             return NoContent();
         }
@@ -174,7 +170,7 @@ namespace Sparkle.WebApi.Controllers
             AcceptFriendRequestCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
+            await Mediator.Publish(new RelationshipUpdatedEvent(relationship));
 
             return NoContent();
         }
@@ -192,7 +188,7 @@ namespace Sparkle.WebApi.Controllers
             CancelFriendRequestCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            await Mediator.Publish(new RelationshipDeletedEvent(relationship));
 
             return NoContent();
         }
@@ -209,7 +205,7 @@ namespace Sparkle.WebApi.Controllers
             DeleteFriendCommand command = new() { FriendId = friendId };
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            await Mediator.Publish(new RelationshipDeletedEvent(relationship));
             return NoContent();
         }
 
@@ -219,7 +215,7 @@ namespace Sparkle.WebApi.Controllers
             BlockUserCommand command = new(userId);
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipUpdatedQuery() { Relationship = relationship });
+            await Mediator.Publish(new RelationshipUpdatedEvent(relationship));
             return NoContent();
         }
 
@@ -229,7 +225,7 @@ namespace Sparkle.WebApi.Controllers
             UnblockUserCommand command = new(userId);
             Relationship relationship = await Mediator.Send(command);
 
-            await Mediator.Send(new NotifyRelationshipDelatedQuery() { Relationship = relationship });
+            await Mediator.Publish(new RelationshipDeletedEvent(relationship));
             return NoContent();
         }
     }

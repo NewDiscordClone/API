@@ -22,11 +22,9 @@ using Sparkle.WebApi.Attributes;
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/servers/{serverId}/roles")]
-    public class RoleController : ApiControllerBase
+    public class RoleController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper)
+        : ApiControllerBase(mediator, userProvider, mapper)
     {
-        public RoleController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator, userProvider, mapper)
-        {
-        }
 
         /// <summary>
         /// Returns all roles of the server

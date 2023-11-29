@@ -36,12 +36,11 @@ services.AddControllers(options =>
 });
 
 services.AddDatabase(builder.Configuration);
-
+services.AddOptions(builder.Configuration);
 services.AddMapping();
 
-JwtOptions jwtOptions = new();
-builder.Configuration.GetSection(JwtOptions.SectionName).Bind(jwtOptions);
-services.AddSingleton(jwtOptions);
+JwtOptions jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()
+    ?? throw new Exception("No jwt options provided");
 
 services.AddAuthentication(config =>
     {

@@ -6,6 +6,7 @@ using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Invitations.Commands.CreateInvitation;
 using Sparkle.Application.Invitations.Queries.InvitationDetails;
+using Sparkle.Application.Models;
 using Sparkle.Contracts.Invitations;
 using Sparkle.WebApi.Attributes;
 
@@ -13,11 +14,9 @@ namespace Sparkle.WebApi.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class InvitationsController : ApiControllerBase
+    public class InvitationsController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper)
+        : ApiControllerBase(mediator, userProvider, mapper)
     {
-        public InvitationsController(IMediator mediator, IAuthorizedUserProvider userProvider, IMapper mapper) : base(mediator, userProvider, mapper)
-        {
-        }
 
         /// <summary>
         /// Gets Invitation details
@@ -60,9 +59,9 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult<string>> Invite(string serverId, CreateInvitationRequest request)
         {
             CreateInvitationCommand command = Mapper.Map<CreateInvitationCommand>((serverId, request));
-            string id = await Mediator.Send(command);
+            Invitation invitation = await Mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetInvitation), new { id }, id);
+            return CreatedAtAction(nameof(GetInvitation), new { id = invitation.Id }, invitation.Id);
         }
     }
 }

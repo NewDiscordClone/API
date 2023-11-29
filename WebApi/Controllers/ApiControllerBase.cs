@@ -14,7 +14,6 @@ namespace Sparkle.WebApi.Controllers
         private readonly IAuthorizedUserProvider _userProvider;
         protected Guid UserId => _userProvider.GetUserId();
         protected readonly IMapper Mapper;
-        private IMediator _mediator;
 
         protected ApiControllerBase(IMediator mediator, IAuthorizedUserProvider userProvider)
         {

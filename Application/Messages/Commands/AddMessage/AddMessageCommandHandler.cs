@@ -4,11 +4,10 @@ using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
 using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
 
 namespace Sparkle.Application.Messages.Commands.AddMessage
 {
-    public class AddMessageCommandHandler : RequestHandler, IRequestHandler<AddMessageCommand, MessageDto>
+    public class AddMessageCommandHandler : RequestHandler, IRequestHandler<AddMessageCommand, Message>
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IServerProfileRepository _serverProfileRepository;
@@ -17,7 +16,7 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
         private readonly IChatRepository _chatRepository;
         private readonly IUserRepository _userRepository;
 
-        public async Task<MessageDto> Handle(AddMessageCommand request, CancellationToken cancellationToken)
+        public async Task<Message> Handle(AddMessageCommand request, CancellationToken cancellationToken)
         {
             Chat chat = await _chatRepository.FindAsync(request.ChatId, cancellationToken);
             UserProfile? profile = null;
@@ -76,19 +75,7 @@ namespace Sparkle.Application.Messages.Commands.AddMessage
             chat.UpdatedDate = message.SendTime;
             await _chatRepository.UpdateAsync(chat, cancellationToken);
 
-            MessageDto dto = Mapper.Map<MessageDto>(message);
-
-            User? user = await _userRepository.FindAsync(UserId, cancellationToken);
-
-            dto.Author = Mapper.Map<UserViewModel>(user);
-
-            if (profile is not null and ServerProfile serverProfile)
-            {
-                dto.Author.DisplayName = serverProfile.DisplayName
-                    ?? dto.Author.DisplayName;
-            }
-
-            return dto;
+            return message;
         }
 
         public AddMessageCommandHandler(IAuthorizedUserProvider userProvider,

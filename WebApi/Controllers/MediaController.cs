@@ -9,14 +9,9 @@ using Sparkle.Application.Models;
 namespace Sparkle.WebApi.Controllers
 {
     [Route("api/media")]
-    public class MediaController : ApiControllerBase
+    public class MediaController(IMediator mediator, IAuthorizedUserProvider userProvider)
+        : ApiControllerBase(mediator, userProvider)
     {
-
-        public MediaController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(
-            mediator,
-            userProvider)
-        {
-        }
 
         /// <summary>
         /// Gets a media by it's id
@@ -74,7 +69,7 @@ namespace Sparkle.WebApi.Controllers
             if (file == null || file.Count == 0)
                 return BadRequest("No file uploaded.");
 
-            List<string> paths = new();
+            List<string> paths = [];
 
             foreach (IFormFile formFile in file)
             {

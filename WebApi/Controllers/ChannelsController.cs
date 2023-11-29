@@ -5,8 +5,8 @@ using Sparkle.Application.Channels.Commands.RemoveChannel;
 using Sparkle.Application.Channels.Commands.RenameChannel;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.HubClients.Channels.ChannelRemoved;
-using Sparkle.Application.HubClients.Channels.ChannelUpdated;
+using Sparkle.Application.Models;
+using Sparkle.Application.Models.Events;
 using Sparkle.WebApi.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,11 +15,9 @@ namespace Sparkle.WebApi.Controllers
 
     [Route("api/servers/{serverId}/channels")]
     [ServerAuthorize(Claims = Constants.Claims.ManageChannels)]
-    public class ChannelsController : ApiControllerBase
+    public class ChannelsController(IMediator mediator, IAuthorizedUserProvider userProvider) :
+        ApiControllerBase(mediator, userProvider)
     {
-        public ChannelsController(IMediator mediator, IAuthorizedUserProvider userProvider) : base(mediator, userProvider)
-        {
-        }
 
         /// <summary>
         /// Create a text channel attached to a server
@@ -40,11 +38,11 @@ namespace Sparkle.WebApi.Controllers
                 ServerId = serverId,
                 Title = name
             };
-            string chatId = await Mediator.Send(command);
+            Channel channel = await Mediator.Send(command);
 
-            await Mediator.Send(new ChannelCreatedEvent { ChannelId = chatId });
+            await Mediator.Publish(new ChannelCreatedEvent(channel));
 
-            return Created("", chatId);
+            return Created("", channel.Id);
         }
 
         /// <summary>
@@ -69,12 +67,13 @@ namespace Sparkle.WebApi.Controllers
         {
             RenameChannelCommand command = new()
             { ChatId = channelId, NewTitle = name };
-            await Mediator.Send(command);
+            Channel channel = await Mediator.Send(command);
 
-            NotifyChannelUpdatedQuery query = new() { ChannelId = channelId };
-            await Mediator.Send(query);
+            await Mediator.Publish(new ChannelUpdatedEvent(channel));
+
             return NoContent();
         }
+
         /// <summary>
         /// A request to remove the provided channel by it's id
         /// </summary>
@@ -90,9 +89,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveChannel(string channelId)
         {
-            Application.Models.Channel channel = await Mediator.Send(new RemoveChannelCommand { ChatId = channelId });
+            Channel channel = await Mediator.Send(new RemoveChannelCommand { ChatId = channelId });
 
-            await Mediator.Send(new NotifyChannelRemovedQuery() { Channel = channel });
+            await Mediator.Send(new ChannelRemovedEvent(channel));
 
             return NoContent();
         }
