@@ -9,33 +9,29 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
     public class RemoveReactionCommandHandler : RequestHandlerBase, IRequestHandler<RemoveReactionCommand>
     {
         private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
+
         public async Task Handle(RemoveReactionCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
 
             Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
-            Reaction reaction;
+            Reaction? reaction = message.Reactions.Find(e => e.Emoji == command.Emoji);
+            if (reaction == null)
+                throw new InvalidOperationException($"Reaction {command.Emoji} does not exists");
 
-            try
-            {
-                reaction = message.Reactions[command.ReactionIndex];
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                throw new InvalidOperationException($"Reaction by {command.ReactionIndex} index does not exists");
-            }
 
             UserProfile profile = await _userProfileRepository.FindAsync(reaction.AuthorProfile, cancellationToken);
 
             if (UserId != profile.UserId)
                 throw new NoPermissionsException("This isn't your reaction");
 
-            message.Reactions.RemoveAt(command.ReactionIndex);
+            message.Reactions.Remove(reaction);
 
             await Context.Messages.UpdateAsync(message, cancellationToken);
         }
 
-        public RemoveReactionCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(context,
+        public RemoveReactionCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
+            Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(context,
             userProvider)
         {
             _userProfileRepository = userProfileRepository;

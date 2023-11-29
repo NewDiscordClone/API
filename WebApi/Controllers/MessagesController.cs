@@ -275,7 +275,7 @@ namespace Sparkle.WebApi.Controllers
         /// this action can only be performed by the owner of the reaction
         /// </remarks>
         /// <param name="messageId">string ObjectId representation of the message to remove the reaction from</param>
-        /// <param name="reactionIndex">the index of the reaction to remove</param>
+        /// <param name="emoji">the emoji of the reaction to remove</param>
         /// <returns>Ok if the operation is successful</returns>
         /// <response code="204">No Content. Operation is successful</response>
         /// <response code="400">Bad Request. The requested message or reaction is not found</response>
@@ -286,9 +286,9 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult> RemoveReaction(string messageId, [Required] int reactionIndex)
+        public async Task<ActionResult> RemoveReaction(string messageId, [Required] string emoji)
         {
-            RemoveReactionCommand command = new() { MessageId = messageId, ReactionIndex = reactionIndex };
+            RemoveReactionCommand command = new() { MessageId = messageId, Emoji = emoji };
             await Mediator.Send(command);
 
             await Mediator.Send(new NotifyMessageUpdatedQuery { MessageId = messageId });

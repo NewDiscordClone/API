@@ -16,9 +16,9 @@ namespace Sparkle.Application.Common.RegularExpressions
         private static partial Regex GetUrlRegex();
         public static Regex UrlRegex => GetUrlRegex();
 
-        [GeneratedRegex(":\\w+:")]
-        private static partial Regex GetEmojiRegex();
-        public static Regex EmojiRegex => GetEmojiRegex();
+        // [GeneratedRegex(":\\w+:")]
+        // private static partial Regex GetEmojiRegex();
+        // public static Regex EmojiRegex => GetEmojiRegex();
 
         [GeneratedRegex("[a-z0-9]{24}")]
         private static partial Regex GetObjectIdRegex();

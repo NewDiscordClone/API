@@ -8,7 +8,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
         public RemoveReactionCommandValidator()
         {
             RuleFor(c => c.MessageId).NotNull().IsObjectId();
-            RuleFor(c => c.ReactionIndex).GreaterThanOrEqualTo(0);
+            // RuleFor(c => c.ReactionIndex).GreaterThanOrEqualTo(0);
         }
     }
 }

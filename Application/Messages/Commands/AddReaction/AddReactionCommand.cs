@@ -12,9 +12,9 @@ namespace Sparkle.Application.Messages.Commands.AddReaction
         public string MessageId { get; init; }
 
         /// <summary>
-        /// Emoji code
+        /// Emoji
         /// </summary>
-        [DefaultValue(":smile:")]
+        [DefaultValue("😀")]
         public string Emoji { get; init; }
     }
 
