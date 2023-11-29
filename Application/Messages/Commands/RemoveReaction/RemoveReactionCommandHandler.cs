@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
@@ -15,15 +16,18 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
             Context.SetToken(cancellationToken);
 
             Message message = await Context.Messages.FindAsync(command.MessageId, cancellationToken);
-            Reaction? reaction = message.Reactions.Find(e => e.Emoji == command.Emoji);
+            Channel? channel = await Context.Channels.FindOrDefaultAsync(message.ChatId, cancellationToken);
+            UserProfile profile;
+            if (channel == null)
+                profile = await Context.UserProfiles
+                    .FirstAsync(p => p.UserId == UserId && p.ChatId == message.ChatId, cancellationToken);
+            else
+                profile = await Context.UserProfiles.OfType<ServerProfile>()
+                    .FirstAsync(p => p.UserId == UserId && p.ServerId == channel.ServerId, cancellationToken);
+            
+            Reaction? reaction = message.Reactions.Find(e => e.Emoji == command.Emoji && e.AuthorProfile == profile.Id);
             if (reaction == null)
                 throw new InvalidOperationException($"Reaction {command.Emoji} does not exists");
-
-
-            UserProfile profile = await _userProfileRepository.FindAsync(reaction.AuthorProfile, cancellationToken);
-
-            if (UserId != profile.UserId)
-                throw new NoPermissionsException("This isn't your reaction");
 
             message.Reactions.Remove(reaction);
 
