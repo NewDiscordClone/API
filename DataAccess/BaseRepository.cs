@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using System.Linq.Expressions;

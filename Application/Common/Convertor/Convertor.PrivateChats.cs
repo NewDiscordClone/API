@@ -1,6 +1,5 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
 using Sparkle.Application.Models.LookUps;
@@ -26,15 +25,13 @@ namespace Sparkle.Application.Common.Convertor
 
         private async Task<PersonalChatLookup> GetDtoFromPersonalChat(PersonalChat chat, CancellationToken cancellationToken)
         {
-            Guid otherUserId = await _context.UserProfiles
+            Guid otherUserId = await _userProfileRepository.ExecuteCustomQuery(profiles => profiles
                 .Where(profile => profile.ChatId == chat.Id && profile.UserId != UserId)
-                .Select(profile => profile.UserId)
+                .Select(profile => profile.UserId))
                 .SingleAsync(cancellationToken);
 
 
-            User? otherUser = await _context.Users.FindAsync(new object[] { otherUserId },
-                cancellationToken: cancellationToken)
-                ?? throw new EntityNotFoundException(message: $"User {otherUserId} not found", otherUserId);
+            User otherUser = await _userRepository.FindAsync(otherUserId, cancellationToken: cancellationToken);
 
             return _mapper.Map<(User User, PersonalChat Chat), PersonalChatLookup>((otherUser, chat));
         }
@@ -43,9 +40,9 @@ namespace Sparkle.Application.Common.Convertor
         {
             GroupChatLookup lookUp = _mapper.Map<GroupChatLookup>(groupChat);
 
-            List<Guid> userIds = await _context.UserProfiles
+            List<Guid> userIds = await _userProfileRepository.ExecuteCustomQuery(profiles => profiles
                 .Where(profile => profile.ChatId == groupChat.Id)
-                .Select(profile => profile.UserId)
+                .Select(profile => profile.UserId))
                 .ToListAsync(cancellationToken);
 
             if (string.IsNullOrWhiteSpace(groupChat.Title))
@@ -58,9 +55,9 @@ namespace Sparkle.Application.Common.Convertor
 
         public async Task<string> FillChatTitleAsync(List<Guid> userIds, CancellationToken cancellationToken)
         {
-            List<string> userDisplayNames = await _context.Users
+            List<string> userDisplayNames = await _userRepository.ExecuteCustomQuery(users => users
                 .Where(user => user.Id != UserId && userIds.Contains(user.Id))
-                .Select(u => u.DisplayName ?? u.UserName!)
+                .Select(u => u.DisplayName ?? u.UserName!))
                 .ToListAsync(cancellationToken);
 
             return string.Join(", ", userDisplayNames);
@@ -70,16 +67,14 @@ namespace Sparkle.Application.Common.Convertor
         {
             PrivateChatViewModel viewModel = _mapper.Map<PrivateChatViewModel>(chat);
 
-            List<UserProfileViewModel> profiles = await _context.UserProfiles
+            List<UserProfileViewModel> profiles = await _userProfileRepository.ExecuteCustomQuery(profiles => profiles
                 .Where(profile => profile.ChatId == chat.Id)
-                .ProjectTo<UserProfileViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<UserProfileViewModel>(_mapper.ConfigurationProvider))
                 .ToListAsync(cancellationToken);
 
             foreach (UserProfileViewModel profile in profiles)
             {
-                User user = await _context.Users
-                    .Where(u => u.Id == profile.UserId)
-                    .SingleAsync(cancellationToken);
+                User user = await _userRepository.FindAsync(profile.UserId, cancellationToken);
 
                 profile.Name = user.DisplayName ?? user.UserName;
                 profile.AvatarUrl = user.Avatar;

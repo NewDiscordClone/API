@@ -30,7 +30,7 @@ namespace Sparkle.Application
             {
                 config.AddProfile(new AssemblyMappingProfile(
                     Assembly.GetExecutingAssembly()));
-                config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
+                config.AddProfile(new AssemblyMappingProfile(typeof(DependencyInjection).Assembly));
             });
 
             services.AddScoped<IConvertor, Convertor>();
