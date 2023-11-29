@@ -12,9 +12,9 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
         public string MessageId { get; init; }
 
         /// <summary>
-        /// Index of the reaction in the message's reactions collection
+        /// Emoji
         /// </summary>
-        [DefaultValue(0)]
-        public int ReactionIndex { get; init; }
+        [DefaultValue("😀")]
+        public string Emoji { get; init; }
     }
 }
