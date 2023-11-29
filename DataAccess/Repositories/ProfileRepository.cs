@@ -9,15 +9,15 @@ namespace Sparkle.DataAccess.Repositories
     /// Base repository for profiles with CRUD operations.
     /// </summary>
     /// <typeparam name="TProfile">Type of profile entity. Must inherit from <see cref="UserProfile"/> </typeparam>
-    public abstract class BaseProfileRepository<TProfile> : BaseRepository<PostgresDbContext, TProfile, Guid>, IProfileRepository<TProfile>
+    public abstract class ProfileRepository<TProfile> : Repository<PostgresDbContext, TProfile, Guid>, IProfileRepository<TProfile>
         where TProfile : UserProfile
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseProfileRepository{TProfile}"/> class.
+        /// Initializes a new instance of the <see cref="ProfileRepository{TProfile}"/> class.
         /// </summary>
         /// <param name="context">The database context.</param>
-        protected BaseProfileRepository(PostgresDbContext context) : base(context)
+        protected ProfileRepository(PostgresDbContext context) : base(context)
         {
         }
 

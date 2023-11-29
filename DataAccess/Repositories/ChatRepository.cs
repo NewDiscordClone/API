@@ -4,7 +4,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.DataAccess.Repositories
 {
     public class ChatRepository(MongoDbContext context) :
-        BaseRepository<MongoDbContext, Chat, string>(context), IChatRepository
+        Repository<MongoDbContext, Chat, string>(context), IChatRepository
     {
         public IQueryable<Channel> Channels => DbSet.OfType<Channel>();
 

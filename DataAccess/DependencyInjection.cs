@@ -38,6 +38,13 @@ namespace Sparkle.DataAccess
             services.AddScoped<IServerProfileRepository, ServerProfileRepository>();
             services.AddScoped<IRelationshipRepository, RelationshipRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IConnectionsRepository, ConnectionsRepository>();
+            services.AddScoped<IInvitationRepository, InvitationRepository>();
+            services.AddScoped<IMediaRepository, MediaRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IServerRepository, ServerRepository>();
 
             return services;
         }

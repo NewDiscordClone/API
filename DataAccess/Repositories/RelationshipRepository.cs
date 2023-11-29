@@ -10,7 +10,7 @@ namespace Sparkle.DataAccess.Repositories
     /// Repository for managing <see cref="Relationship"/> entities.
     /// </summary>
     public class RelationshipRepository(PostgresDbContext context)
-        : BaseRepository<PostgresDbContext, Relationship, RelationshipId>(context), IRelationshipRepository
+        : Repository<PostgresDbContext, Relationship, RelationshipId>(context), IRelationshipRepository
     {
         public override void AddMany(IEnumerable<Relationship> entities)
         {

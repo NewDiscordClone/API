@@ -6,7 +6,7 @@ using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
-    public class UserProfileRepository : BaseProfileRepository<UserProfile>, IUserProfileRepository
+    public class UserProfileRepository : ProfileRepository<UserProfile>, IUserProfileRepository
     {
         public UserProfileRepository(PostgresDbContext context) : base(context)
         {

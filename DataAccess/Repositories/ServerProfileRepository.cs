@@ -7,7 +7,7 @@ using Sparkle.Application.Models;
 namespace Sparkle.DataAccess.Repositories
 {
     public class ServerProfileRepository(PostgresDbContext context, MongoDbContext mongoContext)
-        : BaseProfileRepository<ServerProfile>(context), IServerProfileRepository
+        : ProfileRepository<ServerProfile>(context), IServerProfileRepository
     {
         private readonly MongoDbContext _mongoContext = mongoContext;
 

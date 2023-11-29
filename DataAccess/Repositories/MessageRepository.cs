@@ -1,29 +1,19 @@
-﻿using Sparkle.Application.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.Models;
 
 namespace Sparkle.DataAccess.Repositories
 {
-    public class MessageRepository(MongoDbContext context) : BaseRepository<MongoDbContext, Message, string>(context)
+    public class MessageRepository(MongoDbContext context)
+        : Repository<MongoDbContext, Message, string>(context), IMessageRepository
     {
-        //public async Task<List<Message>> GetMessagesAsync(
-        // string chatId,
-        // int skip,
-        // int take)
-        // => await MongoDb.GetCollection<Message>("messages")
-        //     .Find(Builders<Message>.Filter.Eq("ChatId", chatId))
-        //     .SortByDescending(m => m.SendTime)
-        //.Skip(skip)
-        //     .Limit(take)
-        //     .ToListAsync(_token);
-
-        //public async Task<List<Message>> GetPinnedMessagesAsync(
-        //    string chatId
-        //) => await MongoDb.GetCollection<Message>("messages")
-        //    .Find(
-        //        Builders<Message>.Filter.Eq("ChatId", chatId) &
-        //        Builders<Message>.Filter.Eq("IsPinned", true)
-        //    )
-        //    .SortByDescending(m => m.PinnedTime)
-        //    .ToListAsync(_token);
-
+        public async Task<IEnumerable<Message>> GetMessagesInChatAsync(string chatId, int skip, int take,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .Where(message => message.ChatId == chatId)
+                .Skip(skip).Take(take)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

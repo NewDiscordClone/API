@@ -4,6 +4,6 @@ namespace Sparkle.Application.Common.Interfaces.Repositories
 {
     public interface IMessageRepository : IRepository<Message, string>
     {
-        Task<IEnumerable<Message>> GetMessagesInChatAsync(string chatId, int messagesCount, int pageSize);
+        Task<IEnumerable<Message>> GetMessagesInChatAsync(string chatId, int skip, int take, CancellationToken cancellationToken = default);
     }
 }

@@ -11,13 +11,13 @@ namespace Sparkle.DataAccess
     /// </summary>
     /// <typeparam name="TEntity">The type of entity being accessed.</typeparam>
     /// <typeparam name="TKey">The type of the entity's primary key.</typeparam>
-    public class BaseRepository<TContext, TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
+    public abstract class Repository<TContext, TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
         where TContext : DbContext
     {
         protected readonly DbSet<TEntity> DbSet;
         protected readonly TContext Context;
 
-        public BaseRepository(TContext context)
+        public Repository(TContext context)
         {
             Context = context;
             DbSet = Context.Set<TEntity>();

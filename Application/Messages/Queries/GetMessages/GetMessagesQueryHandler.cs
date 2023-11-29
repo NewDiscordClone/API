@@ -19,7 +19,8 @@ namespace Sparkle.Application.Messages.Queries.GetMessages
         {
             List<MessageDto> result = [];
 
-            foreach (Message message in await _messageRepository.GetMessagesInChatAsync(query.ChatId, query.MessagesCount, _pageSize))
+            foreach (Message message in await _messageRepository.GetMessagesInChatAsync(query.ChatId,
+                query.MessagesCount, _pageSize, cancellationToken))
             {
                 MessageDto dto = Mapper.Map<MessageDto>(message);
 
