@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.RegularExpressions;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Users.Commands
@@ -23,7 +25,12 @@ namespace Sparkle.Application.Users.Commands
             await _repository.UpdateAsync(user, cancellationToken);
 
             if (oldImage != null)
-                await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/') - 1)..]);
+            {
+                string id = Regexes.ObjectIdRegex.Match(oldImage).Value;
+
+                if (!Constants.User.DefaultAvatarIds.Contains(id))
+                    await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/') - 1)..]);
+            }
 
             return user;
         }
