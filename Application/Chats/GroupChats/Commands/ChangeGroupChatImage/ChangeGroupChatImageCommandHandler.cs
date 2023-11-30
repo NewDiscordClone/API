@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.RegularExpressions;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
@@ -18,7 +20,11 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.ChangeGroupChatImage
             await Context.GroupChats.UpdateAsync(chat, cancellationToken);
 
             if (oldImage != null)
-                await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/') - 1)..]);
+            {
+                string id = Regexes.ObjectIdRegex.Match(oldImage).Value;
+                if (!Constants.Chats.DefaultImages.Contains(id))
+                    await Context.CheckRemoveMedia(oldImage[(oldImage.LastIndexOf('/') - 1)..]);
+            }
 
             return chat;
         }
