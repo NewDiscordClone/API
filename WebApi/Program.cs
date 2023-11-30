@@ -6,6 +6,7 @@ using Serilog;
 using Sparkle.Application;
 using Sparkle.Application.Common.Convertors;
 using Sparkle.Application.Common.Interfaces;
+using Sparkle.Application.Common.Options;
 using Sparkle.DataAccess;
 using Sparkle.WebApi;
 using Sparkle.WebApi.Attributes;
@@ -38,6 +39,8 @@ services.AddControllers(options =>
 services.AddDatabase(builder.Configuration);
 
 services.AddMapping();
+
+services.Configure<ApiOptions>(builder.Configuration.GetSection(ApiOptions.SectionName));
 
 JwtOptions jwtOptions = new();
 builder.Configuration.GetSection(JwtOptions.SectionName).Bind(jwtOptions);

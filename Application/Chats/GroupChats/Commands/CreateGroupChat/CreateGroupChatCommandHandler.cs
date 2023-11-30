@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Options;
+using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Common.Interfaces.Repositories;
+using Sparkle.Application.Common.Options;
 using Sparkle.Application.Models;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
@@ -10,6 +12,8 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
     {
         private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
         private readonly IRoleFactory _roleFactory;
+        private readonly string _apiUri;
+
         public async Task<GroupChat> Handle(CreateGroupChatCommand command, CancellationToken cancellationToken)
         {
             Context.SetToken(cancellationToken);
@@ -17,7 +21,7 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
             GroupChat chat = new()
             {
                 Title = command.Title,
-                Image = command.Image,
+                Image = command.Image ?? GetDefaultImage(),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             };
@@ -46,10 +50,22 @@ namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
             return chat;
         }
 
-        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository, IRoleFactory roleFactory) : base(context, userProvider, mapper)
+        private string GetDefaultImage()
+        {
+            Random random = new();
+            string[] defaultImageIds = Constants.Chats.DefaultImages;
+            int randomIndex = random.Next(0, defaultImageIds.Length);
+            string imageId = defaultImageIds[randomIndex].ToString();
+
+            return _apiUri + $"/api/media/{imageId}.png";
+        }
+
+        public CreateGroupChatCommandHandler(IAppDbContext context, IAuthorizedUserProvider userProvider, IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository, IRoleFactory roleFactory, IOptions<ApiOptions> options)
+            : base(context, userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;
             _roleFactory = roleFactory;
+            _apiUri = options.Value.ApiUri;
         }
     }
 }
