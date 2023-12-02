@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Medias.Commands.UploadMedia;
 using Sparkle.Application.Medias.Queries.GetMedia;
+using Sparkle.Application.Medias.Queries.GetStickers;
 using Sparkle.Application.Models;
 
 namespace Sparkle.WebApi.Controllers
@@ -46,6 +47,20 @@ namespace Sparkle.WebApi.Controllers
             Media media = await Mediator.Send(new GetMediaQuery() { Id = id });
 
             return details ? Ok(media) : File(media.Data, media.ContentType);
+        }
+
+        /// <summary>
+        /// Returns stickers uris
+        /// </summary>
+        /// <responce code="200">Stickers media uris in format api/media/objectId.png</responce>
+        [HttpGet("stickers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
+        public async Task<ActionResult<string[]>> GetStickers()
+        {
+            string[] stickerUris = await Mediator.Send(new StickersQuery());
+
+            return Ok(stickerUris);
         }
 
 
