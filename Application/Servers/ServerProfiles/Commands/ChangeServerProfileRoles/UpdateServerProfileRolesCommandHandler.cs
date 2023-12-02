@@ -33,7 +33,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfil
             if (rolesToAdd.Count > 0)
                 await _serverProfileRepository.AddRolesAsync(profileId, rolesToAdd.ToArray());
 
-            return await _serverProfileRepository.FindAsync(profileId, cancellationToken);
+            return await _serverProfileRepository.FindAsync(profileId, true, cancellationToken);
         }
     }
 }

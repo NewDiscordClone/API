@@ -21,6 +21,8 @@ namespace Sparkle.DataAccess.Repositories
         {
         }
 
+
+
         /// <summary>
         /// Adds a new profile to the database.
         /// </summary>
@@ -132,6 +134,16 @@ namespace Sparkle.DataAccess.Repositories
 
             return await DbSet
                 .FirstOrDefaultAsync(profile => profile.Id == id, cancellationToken);
+        }
+
+        public async Task<TProfile> FindAsync(Guid id, bool includeRoles = false, CancellationToken cancellationToken = default)
+        {
+            if (includeRoles)
+                return await DbSet
+                    .Include(profile => profile.Roles)
+                    .FirstAsync(profile => profile.Id == id, cancellationToken);
+
+            return await base.FindAsync(id, cancellationToken);
         }
     }
 }

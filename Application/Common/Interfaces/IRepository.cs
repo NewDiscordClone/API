@@ -1,5 +1,5 @@
-﻿using System.Linq.Expressions;
-using Sparkle.Application.Common.Exceptions;
+﻿using Sparkle.Application.Common.Exceptions;
+using System.Linq.Expressions;
 
 namespace Sparkle.Application.Common.Interfaces
 {

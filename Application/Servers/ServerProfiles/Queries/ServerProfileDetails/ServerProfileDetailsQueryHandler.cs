@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Models;
@@ -34,7 +33,7 @@ namespace Sparkle.Application.Servers.ServerProfiles.Queries.ServerProfileDetail
             if (user == null || profile == null)
                 throw new EntityNotFoundException(request.ProfileId);
 
-            profile.Roles = profile.Roles.ExceptBy(Constants.Roles.DefaultRoleIds, role => role.Id).ToList();
+            // profile.Roles = profile.Roles.ExceptBy(Constants.Roles.DefaultRoleIds, role => role.Id).ToList();
 
             return _mapper.Map<ServerProfileViewModel>((profile, user));
         }
