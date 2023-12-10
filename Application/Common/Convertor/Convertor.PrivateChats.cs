@@ -65,6 +65,15 @@ namespace Sparkle.Application.Common.Convertor
 
             return string.Join(", ", userDisplayNames);
         }
+        public async Task<string> FillChatTitleAsync(List<Guid> userIds, Guid receiverId, CancellationToken cancellationToken)
+        {
+            List<string> userDisplayNames = await _context.Users
+                .Where(user => user.Id != receiverId && userIds.Contains(user.Id))
+                .Select(u => u.DisplayName ?? u.UserName!)
+                .ToListAsync(cancellationToken);
+
+            return string.Join(", ", userDisplayNames);
+        }
 
         public async Task<PrivateChatViewModel> ConvertToViewModelAsync(PersonalChat chat, CancellationToken cancellationToken = default)
         {
