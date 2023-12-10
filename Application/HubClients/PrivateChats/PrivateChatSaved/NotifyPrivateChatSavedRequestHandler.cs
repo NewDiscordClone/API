@@ -37,26 +37,52 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
 
         private async Task SendToUser(Chat chat, List<Guid> userIds, CancellationToken cancellationToken)
         {
-            PrivateChatLookUp lookUp;
             switch (chat)
             {
                 case GroupChat gChat:
-                    lookUp = Mapper.Map<GroupChatLookup>(gChat);
+                    await SendToGroupChat(gChat, userIds, cancellationToken);
                     break;
                 case PersonalChat pChat:
-                    User other = await Context.Users
-                        .SingleAsync(user => user.UserProfiles
-                        .Any(profile => profile.ChatId == chat.Id && user.Id != UserId),
-                        cancellationToken: cancellationToken);
-
-                    lookUp = Mapper.Map<PersonalChatLookup>((other, pChat));
+                    await SendToPersonalChat(userIds, pChat, cancellationToken);
                     break;
                 default:
                     throw new ArgumentException("the given chat is not an private chat");
             };
+        }
 
-            lookUp.Title ??= await _convertor.FillChatTitleAsync(userIds, cancellationToken);
-            await SendAsync(ClientMethods.PrivateChatSaved, lookUp, GetConnections(userIds));
+        private async Task SendToPersonalChat(List<Guid> userIds, PersonalChat pChat, CancellationToken cancellationToken)
+        {
+            PrivateChatLookUp lookUp1 = await GetOtherDto(pChat, UserId, cancellationToken);
+
+            Guid otherUserId = userIds
+                .Except(new Guid[] { UserId })
+                .Single();
+            PrivateChatLookUp lookUp2 = await GetOtherDto(pChat, otherUserId, cancellationToken);
+
+            lookUp1.Title ??= await _convertor.FillChatTitleAsync(userIds, UserId, cancellationToken);
+            lookUp1.Title ??= await _convertor.FillChatTitleAsync(userIds, otherUserId, cancellationToken);
+
+            await SendAsync(ClientMethods.PrivateChatSaved, lookUp1, GetConnections(otherUserId));
+            await SendAsync(ClientMethods.PrivateChatSaved, lookUp2, GetConnections(UserId));
+        }
+
+        private async Task SendToGroupChat(GroupChat chat, List<Guid> userIds, CancellationToken cancellationToken)
+        {
+            GroupChatLookup lookup = Mapper.Map<GroupChatLookup>(chat);
+
+            lookup.Title ??= await _convertor.FillChatTitleAsync(userIds, cancellationToken);
+
+            await SendAsync(ClientMethods.PrivateChatSaved, lookup, userIds);
+        }
+
+        private async Task<PrivateChatLookUp> GetOtherDto(PersonalChat chat, Guid resiverId, CancellationToken cancellationToken)
+        {
+            User other = await Context.Users
+                .SingleAsync(user => user.UserProfiles
+                .Any(profile => profile.ChatId == chat.Id && user.Id != resiverId),
+                cancellationToken: cancellationToken);
+
+            return Mapper.Map<PersonalChatLookup>((other, chat));
         }
     }
 }
