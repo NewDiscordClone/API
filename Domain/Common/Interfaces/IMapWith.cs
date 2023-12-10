@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Sparkle.Application.Common.Interfaces
+namespace Sparkle.Domain.Common.Interfaces
 {
     /// <summary>
     /// Interface for mapping objects using AutoMapper.
