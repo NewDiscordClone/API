@@ -1,5 +1,5 @@
 ﻿using Sparkle.Application.Common.RegularExpressions;
-using Sparkle.Application.Models;
+using Sparkle.Domain.Messages.ValueObjects;
 using System.Text.RegularExpressions;
 
 namespace Sparkle.Application.Messages.Commands

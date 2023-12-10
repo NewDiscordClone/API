@@ -1,5 +1,5 @@
-﻿using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
+﻿using Sparkle.Domain;
+using Sparkle.Domain.LookUps;
 using Sparkle.Application.Users.Relationships.Queries;
 
 namespace Sparkle.Application.Common.Interfaces

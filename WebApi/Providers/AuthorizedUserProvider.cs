@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using System.Security.Claims;
 
 namespace Sparkle.WebApi.Providers

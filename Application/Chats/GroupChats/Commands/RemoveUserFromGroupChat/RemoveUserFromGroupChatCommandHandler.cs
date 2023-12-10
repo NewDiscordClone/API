@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {

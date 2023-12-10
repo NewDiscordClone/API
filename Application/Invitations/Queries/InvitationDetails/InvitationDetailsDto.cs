@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.Models.LookUps;
+﻿using Sparkle.Domain.LookUps;
 
 namespace Sparkle.Application.Invitations.Queries.InvitationDetails
 {

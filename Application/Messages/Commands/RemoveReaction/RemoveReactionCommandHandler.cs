@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
+using Sparkle.Domain.Messages;
+using Sparkle.Domain.Messages.ValueObjects;
 
 namespace Sparkle.Application.Messages.Commands.RemoveReaction
 {
@@ -24,7 +24,7 @@ namespace Sparkle.Application.Messages.Commands.RemoveReaction
             else
                 profile = await Context.UserProfiles.OfType<ServerProfile>()
                     .FirstAsync(p => p.UserId == UserId && p.ServerId == channel.ServerId, cancellationToken);
-            
+
             Reaction? reaction = message.Reactions.Find(e => e.Emoji == command.Emoji && e.AuthorProfile == profile.Id);
             if (reaction == null)
                 throw new InvalidOperationException($"Reaction {command.Emoji} does not exists");

@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.Application.Servers.Queries.ServersList
 {

@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.Models;
+﻿using Sparkle.Domain.Messages.ValueObjects;
 using System.ComponentModel;
 
 namespace Sparkle.Contracts.Messages

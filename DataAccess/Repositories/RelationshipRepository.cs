@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.DataAccess.Repositories
 {

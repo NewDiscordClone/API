@@ -15,8 +15,8 @@ using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatRemoved;
 using Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved;
-using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Domain;
+using Sparkle.Domain.LookUps;
 using Sparkle.Contracts.PrivateChats;
 using Sparkle.WebApi.Attributes;
 

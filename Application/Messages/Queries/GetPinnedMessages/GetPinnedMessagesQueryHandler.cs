@@ -3,15 +3,16 @@ using MediatR;
 using Sparkle.Application.Common.Exceptions;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Domain;
+using Sparkle.Domain.LookUps;
+using Sparkle.Domain.Messages;
 
 namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 {
     public class GetPinnedMessagesQueryHandler : RequestHandlerBase,
         IRequestHandler<GetPinnedMessagesQuery, List<MessageDto>>
     {
-        private readonly Common.Interfaces.Repositories.IUserProfileRepository _userProfileRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
         public async Task<List<MessageDto>> Handle(GetPinnedMessagesQuery query,
             CancellationToken cancellationToken)
         {
@@ -45,7 +46,7 @@ namespace Sparkle.Application.Messages.Queries.GetPinnedMessages
 
 
         public GetPinnedMessagesQueryHandler(IAppDbContext context, IAuthorizedUserProvider userProvider,
-            IMapper mapper, Common.Interfaces.Repositories.IUserProfileRepository userProfileRepository) : base(
+            IMapper mapper, IUserProfileRepository userProfileRepository) : base(
             context, userProvider, mapper)
         {
             _userProfileRepository = userProfileRepository;

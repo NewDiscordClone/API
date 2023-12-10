@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.Application.Servers.Roles.Queries.RoleDetails
 {

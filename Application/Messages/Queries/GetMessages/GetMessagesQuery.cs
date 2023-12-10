@@ -1,5 +1,5 @@
 using MediatR;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Domain.LookUps;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Queries.GetMessages

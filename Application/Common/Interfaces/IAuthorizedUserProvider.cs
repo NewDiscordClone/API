@@ -1,4 +1,4 @@
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using System.Security.Claims;
 
 namespace Sparkle.Application.Common.Interfaces

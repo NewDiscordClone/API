@@ -1,5 +1,5 @@
 ﻿using Mapster;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using Sparkle.Application.Servers.Commands.UpdateServer;
 using Sparkle.Application.Servers.ServerProfiles.Commands.ChangeServerProfileRoles;
 using Sparkle.Contracts.Servers;

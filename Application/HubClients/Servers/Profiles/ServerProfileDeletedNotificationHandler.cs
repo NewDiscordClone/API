@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models.Events;
+using Sparkle.Domain.Events;
 
 namespace Sparkle.Application.HubClients.Servers.Profiles
 {

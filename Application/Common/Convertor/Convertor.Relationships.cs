@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using Sparkle.Application.Users.Relationships.Queries;
 
 namespace Sparkle.Application.Common.Convertor

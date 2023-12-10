@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.Application.Common.Interfaces.Repositories
 {

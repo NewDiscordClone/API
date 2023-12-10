@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Sparkle.Application.Common.Constants;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.DataAccess.Configurations
 {

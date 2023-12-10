@@ -5,7 +5,8 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
+using Sparkle.Domain.Messages;
 
 namespace Sparkle.DataAccess
 {

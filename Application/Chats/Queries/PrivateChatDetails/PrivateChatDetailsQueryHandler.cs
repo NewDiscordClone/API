@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Domain;
+using Sparkle.Domain.LookUps;
 
 namespace Sparkle.Application.Chats.Queries.PrivateChatDetails
 {
