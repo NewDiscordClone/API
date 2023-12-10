@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using static Sparkle.Application.Common.Constants.Constants;
 
 namespace Sparkle.Application.Common.Factories

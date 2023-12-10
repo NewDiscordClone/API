@@ -2,7 +2,7 @@
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.RegularExpressions;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.Application.Users.Commands
 {

@@ -1,5 +1,5 @@
 using MediatR;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Servers.Commands.DeleteServer

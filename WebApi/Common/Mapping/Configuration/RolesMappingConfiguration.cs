@@ -1,6 +1,6 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Identity;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using Sparkle.Application.Servers.Roles.Commands.Create;
 using Sparkle.Application.Servers.Roles.Commands.Update;
 using Sparkle.Contracts.Roles;

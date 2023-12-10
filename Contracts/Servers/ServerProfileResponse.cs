@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.Models;
+﻿using Sparkle.Domain;
 using Sparkle.Contracts.Roles;
 
 namespace Sparkle.Contracts.Servers

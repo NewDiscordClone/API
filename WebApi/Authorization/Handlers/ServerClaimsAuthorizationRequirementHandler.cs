@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Interfaces.Repositories;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using Sparkle.WebApi.Authorization.Requirements;
 
 namespace Sparkle.WebApi.Authorization.Handlers

@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.Models;
+﻿using Sparkle.Domain;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.RemoveUserFromGroupChat
 {

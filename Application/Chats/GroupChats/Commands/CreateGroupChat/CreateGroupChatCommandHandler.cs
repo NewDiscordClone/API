@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Common.Options;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.Application.Chats.GroupChats.Commands.CreateGroupChat
 {

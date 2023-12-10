@@ -3,8 +3,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Domain;
+using Sparkle.Domain.LookUps;
 
 namespace Sparkle.Application.Servers.ServerProfiles.Queries.GetServerProfiles
 {

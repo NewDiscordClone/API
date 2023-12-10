@@ -1,4 +1,4 @@
-﻿using Sparkle.Application.Models.LookUps;
+﻿using Sparkle.Domain.LookUps;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

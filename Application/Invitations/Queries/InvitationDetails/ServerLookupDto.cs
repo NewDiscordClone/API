@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
+using Sparkle.Domain.Common.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

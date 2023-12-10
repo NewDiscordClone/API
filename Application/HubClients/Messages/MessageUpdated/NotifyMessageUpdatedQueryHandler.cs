@@ -1,8 +1,9 @@
 using AutoMapper;
 using MediatR;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Domain;
+using Sparkle.Domain.LookUps;
+using Sparkle.Domain.Messages;
 
 namespace Sparkle.Application.HubClients.Messages.MessageUpdated
 {

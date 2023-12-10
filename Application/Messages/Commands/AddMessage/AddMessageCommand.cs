@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using Sparkle.Application.Models;
-using Sparkle.Application.Models.LookUps;
+using Sparkle.Domain.LookUps;
+using Sparkle.Domain.Messages.ValueObjects;
 using System.ComponentModel;
 
 namespace Sparkle.Application.Messages.Commands.AddMessage

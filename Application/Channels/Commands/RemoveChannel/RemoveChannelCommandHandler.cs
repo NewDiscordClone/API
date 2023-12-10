@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.Application.Channels.Commands.RemoveChannel
 {

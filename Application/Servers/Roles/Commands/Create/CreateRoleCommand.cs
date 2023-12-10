@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Sparkle.Application.Common.Interfaces;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
+using Sparkle.Domain.Common.Interfaces;
 
 namespace Sparkle.Application.Servers.Roles.Commands.Create
 {

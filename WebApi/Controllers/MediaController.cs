@@ -5,7 +5,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.Medias.Commands.UploadMedia;
 using Sparkle.Application.Medias.Queries.GetMedia;
 using Sparkle.Application.Medias.Queries.GetStickers;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.WebApi.Controllers
 {

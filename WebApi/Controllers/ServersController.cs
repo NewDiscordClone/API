@@ -5,7 +5,6 @@ using Sparkle.Application.Common.Constants;
 using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Servers.ServerDeleted;
 using Sparkle.Application.HubClients.Servers.ServerUpdated;
-using Sparkle.Application.Models.Events;
 using Sparkle.Application.Servers.Commands.CreateServer;
 using Sparkle.Application.Servers.Commands.DeleteServer;
 using Sparkle.Application.Servers.Commands.JoinServer;
@@ -13,6 +12,8 @@ using Sparkle.Application.Servers.Commands.UpdateServer;
 using Sparkle.Application.Servers.Queries.ServerDetails;
 using Sparkle.Application.Servers.Queries.ServersList;
 using Sparkle.Contracts.Servers;
+using Sparkle.Domain;
+using Sparkle.Domain.Events;
 using Sparkle.WebApi.Attributes;
 
 namespace Sparkle.WebApi.Controllers
@@ -40,7 +41,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> JoinServer(string invitationId)
         {
-            Application.Models.ServerProfile profile = await Mediator
+            ServerProfile profile = await Mediator
                 .Send(new JoinServerCommand() { InvitationId = invitationId });
 
             await Mediator.Publish(new ProfileUpdatedEvent(profile));
@@ -105,7 +106,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<string>> CreateServer(CreateServerCommand command)
         {
-            Application.Models.Server server = await Mediator.Send(command);
+            Server server = await Mediator.Send(command);
 
             await Mediator.Send(new NotifyServerUpdatedQuery { ServerId = server.Id });
 
@@ -167,7 +168,7 @@ namespace Sparkle.WebApi.Controllers
         public async Task<ActionResult> DeleteServer(string serverId)
         {
             DeleteServerCommand command = new() { ServerId = serverId };
-            (Application.Models.Server server, IEnumerable<Guid> userIds) = await Mediator.Send(command);
+            (Server server, IEnumerable<Guid> userIds) = await Mediator.Send(command);
 
             await Mediator.Publish(new NotifyServerDeletedEvent(server, userIds));
 

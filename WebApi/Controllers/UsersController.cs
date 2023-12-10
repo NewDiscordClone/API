@@ -4,7 +4,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Users.RelationshipDeleted;
 using Sparkle.Application.HubClients.Users.RelationshipUpdated;
 using Sparkle.Application.HubClients.Users.UserUpdated;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 using Sparkle.Application.Users.Commands;
 using Sparkle.Application.Users.Queries;
 using Sparkle.Application.Users.Relationships.Commands;

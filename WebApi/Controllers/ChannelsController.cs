@@ -8,6 +8,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Channels.ChannelCreated;
 using Sparkle.Application.HubClients.Channels.ChannelRemoved;
 using Sparkle.Application.HubClients.Channels.ChannelUpdated;
+using Sparkle.Domain;
 using Sparkle.WebApi.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -91,7 +92,7 @@ namespace Sparkle.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> RemoveChannel(string channelId)
         {
-            Application.Models.Channel channel = await Mediator.Send(new RemoveChannelCommand { ChatId = channelId });
+            Channel channel = await Mediator.Send(new RemoveChannelCommand { ChatId = channelId });
 
             await Mediator.Send(new NotifyChannelRemovedQuery() { Channel = channel });
 

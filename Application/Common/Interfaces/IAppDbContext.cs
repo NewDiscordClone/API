@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
+using Sparkle.Domain.Messages;
 
 namespace Sparkle.Application.Common.Interfaces;
 

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Sparkle.Application.Common.Interfaces;
+using Sparkle.Domain.Common.Interfaces;
 using System.Reflection;
 
 namespace Sparkle.Application.Common.Mapping

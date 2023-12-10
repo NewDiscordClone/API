@@ -6,7 +6,7 @@ using Sparkle.Application.Common.Interfaces;
 using Sparkle.Application.HubClients.Connections.Connect;
 using Sparkle.Application.HubClients.Connections.Disconnect;
 using Sparkle.Application.HubClients.Users.UserUpdated;
-using Sparkle.Application.Models;
+using Sparkle.Domain;
 
 namespace Sparkle.WebApi.Hubs;
 
