@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Sparkle.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class SwitchToPostgres : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -188,7 +188,7 @@ namespace Sparkle.DataAccess.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ChatId = table.Column<string>(type: "text", nullable: true),
-                    ProfileType = table.Column<string>(type: "text", nullable: false),
+                    ProfileType = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false),
                     DisplayName = table.Column<string>(type: "text", nullable: true),
                     ServerId = table.Column<string>(type: "text", nullable: true)
                 },
@@ -310,6 +310,12 @@ namespace Sparkle.DataAccess.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_UserName",
+                table: "AspNetUsers",
+                column: "UserName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

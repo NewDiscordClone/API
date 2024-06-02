@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using MongoDB.EntityFrameworkCore.Extensions;
 using Sparkle.Application.Models;
+using Sparkle.DataAccess.Configurations;
 
 namespace Sparkle.DataAccess
 {
@@ -23,7 +24,8 @@ namespace Sparkle.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new ChatConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConnectionsConfiguration());
 
             modelBuilder.Entity<Server>().ToCollection("servers");
             modelBuilder.Entity<UserConnections>().ToCollection("userConnections");
@@ -31,6 +33,8 @@ namespace Sparkle.DataAccess
             modelBuilder.Entity<Chat>().ToCollection("chats");
             modelBuilder.Entity<Media>().ToCollection("media");
             modelBuilder.Entity<Invitation>().ToCollection("invitations");
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sparkle.DataAccess;
@@ -11,13 +12,15 @@ using Sparkle.DataAccess;
 namespace Sparkle.DataAccess.Migrations
 {
     [DbContext(typeof(PostgresDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240602134746_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.12")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -267,6 +270,7 @@ namespace Sparkle.DataAccess.Migrations
             modelBuilder.Entity("Sparkle.Application.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("Color")
@@ -438,6 +442,9 @@ namespace Sparkle.DataAccess.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
+                    b.HasIndex("UserName")
+                        .IsUnique();
+
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
@@ -506,7 +513,8 @@ namespace Sparkle.DataAccess.Migrations
 
                     b.Property<string>("ProfileType")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");

@@ -1,11 +1,5 @@
-﻿using System.Net.Http.Headers;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Json.Utilities;
-using Sparkle.Application.Common.Interfaces;
-using Sparkle.WebApi.Models;
-using Newtonsoft.Json.Linq;
 
 namespace Sparkle.WebApi.Controllers
 {
