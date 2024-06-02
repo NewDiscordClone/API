@@ -28,8 +28,7 @@ namespace Sparkle.Application
 
             services.AddAutoMapper(config =>
             {
-                config.AddProfile(new AssemblyMappingProfile(
-                    Assembly.GetExecutingAssembly()));
+                config.AddProfile(new AssemblyMappingProfile(typeof(Domain.LookUps.MessageDto).Assembly));
                 config.AddProfile(new AssemblyMappingProfile(typeof(IAppDbContext).Assembly));
             });
 

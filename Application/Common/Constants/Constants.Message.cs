@@ -11,15 +11,15 @@ namespace Sparkle.Application.Common.Constants
 
             public static class Stickers
             {
-                public const string Sticker1Id = "656b3377a05b37a590db4d6a";
-                public const string Sticker2Id = "656b3390a05b37a590db4d6b";
-                public const string Sticker3Id = "656b3395a05b37a590db4d6c";
-                public const string Sticker4Id = "656b339ba05b37a590db4d6d";
-                public const string Sticker5Id = "656b33a0a05b37a590db4d6e";
-                public const string Sticker6Id = "656b33a5a05b37a590db4d6f";
-                public const string Sticker7Id = "656b33aba05b37a590db4d70";
-                public const string Sticker8Id = "656b33bba05b37a590db4d72";
-                public const string Sticker9Id = "656b33c0a05b37a590db4d73";
+                public const string Sticker1Id = "665c86f6266a546febcc0b15";
+                public const string Sticker2Id = "665c8708266a546febcc0b16";
+                public const string Sticker3Id = "665c8712266a546febcc0b17";
+                public const string Sticker4Id = "665c8720266a546febcc0b18";
+                public const string Sticker5Id = "665c8731266a546febcc0b19";
+                public const string Sticker6Id = "665c873e266a546febcc0b1a";
+                public const string Sticker7Id = "665c874c266a546febcc0b1b";
+                public const string Sticker8Id = "665c8757266a546febcc0b1c";
+                public const string Sticker9Id = "665c8762266a546febcc0b1d";
             }
 
             public static string[] StickerIds
