@@ -60,7 +60,7 @@ namespace Sparkle.Application.HubClients.PrivateChats.PrivateChatSaved
             PrivateChatLookUp lookUp2 = await GetOtherDto(pChat, otherUserId, cancellationToken);
 
             lookUp1.Title ??= await _convertor.FillChatTitleAsync(userIds, UserId, cancellationToken);
-            lookUp1.Title ??= await _convertor.FillChatTitleAsync(userIds, otherUserId, cancellationToken);
+            lookUp2.Title ??= await _convertor.FillChatTitleAsync(userIds, otherUserId, cancellationToken);
 
             await SendAsync(ClientMethods.PrivateChatSaved, lookUp1, GetConnections(otherUserId));
             await SendAsync(ClientMethods.PrivateChatSaved, lookUp2, GetConnections(UserId));
